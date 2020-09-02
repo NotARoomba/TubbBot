@@ -19,16 +19,16 @@ for(const file of commandFiles){
 client.once('ready' , () => {
     console.log('Tubb is online!');
 })
+
 client.on('guildMemberAdd', member => {
-    const channel = member.guild.channels.cache.find(channel => channel.name === 750092480279740420);
+    const channel = member.guild.channels.find(channel => channel.name === "welcome")
     if(!channel) return;
-    
-    channel.send(`Welcome to Corona, ${member}!`);
+
+    channel.send(`Welcome to Corona ${member}`)
 });
 
 client.on('message', message => {
     if(!message.content.startsWith(prefix) || message.author.bot) return;
-
 
 const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
