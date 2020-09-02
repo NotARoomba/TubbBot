@@ -26,11 +26,11 @@ client.once('ready' , () => {
 client.on('message', message => {
     if(!message.content.startsWith(prefix) || message.author.bot) return;
 
-    client.on("guildMemberAdd", member => {
+client.on("guildMemberAdd", member => {
         const welcomeChannel = member.guild.channels.cache.find(channel => channel.name === 'welcome')
-        welcomeChannel.send (`Welcome, ${member} to Corona!`);
+        welcomeChannel.send (`Welcome, ${member} to Corona!`)
 
-    });
+});
 
 
 const args = message.content.slice(prefix.length).split(/ +/);
