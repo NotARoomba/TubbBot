@@ -7,8 +7,6 @@ const prefix = '*'
 const fs = require('fs');
 const { execute } = require('./commands/ping');
 
-
-
 client.commands = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -20,16 +18,16 @@ for(const file of commandFiles){
 
 client.once('ready' , () => {
     console.log('Tubb is online!');
+})
+client.on('guildMemberadd', member =>{
+    const channel = member.guild.channels.cache.find(channel => channel.name === "750092480279740420");
+    if(!channel) return;
+    
+    channel.send(`Welcome to Corona, ${member}!`);
 });
 
 client.on('message', message => {
     if(!message.content.startsWith(prefix) || message.author.bot) return;
-
-client.on('guildMemberAdd', member => {
-        member.guild.channels.get('750092480279740420').send("Welcome"); 
-    });
-
-})
 
 
 const args = message.content.slice(prefix.length).split(/ +/);
@@ -38,6 +36,6 @@ const args = message.content.slice(prefix.length).split(/ +/);
     if(command === 'ping'){
         client.commands.get('ping').execute(message, args);
     } 
-
+});
 
 client.login(process.env.token);
