@@ -19,8 +19,8 @@ for(const file of commandFiles){
 client.once('ready' , () => {
     console.log('Tubb is online!');
 })
-client.on('guildMemberadd', member =>{
-    const channel = member.guild.channels.cache.find(channel => channel.name === "750092480279740420");
+client.on('guildMemberAdd', member => {
+    const channel = member.guild.channels.cache.find(channel => channel.name === 750092480279740420);
     if(!channel) return;
     
     channel.send(`Welcome to Corona, ${member}!`);
