@@ -8,7 +8,6 @@ const fs = require('fs');
 const { execute } = require('./commands/ping');
 
 
-welcome(client);
 
 client.commands = new Discord.Collection();
 
