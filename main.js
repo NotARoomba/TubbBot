@@ -25,9 +25,9 @@ client.once('ready' , () => {
 client.on('message', message => {
     if(!message.content.startsWith(prefix) || message.author.bot) return;
 
-client.on("guildMemberAdd", member => {
-        const welcomeChannel = member.guild.channels.cache.find(channel => channel.name === 'general')
-        welcomeChannel.send(`Welcome, <${member}> to Corona!`)
+client.on('guildMemberAdd', member => {
+        member.guild.channels.get('channelID').send("Welcome"); 
+    });
 
 })
 
