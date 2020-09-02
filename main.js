@@ -34,9 +34,7 @@ const args = message.content.slice(prefix.length).split(/ +/);
 
     if(command === 'ping'){
         client.commands.get('ping').execute(message, args);
-    } else if(command === 'play'){
-        client.commands.get('play').execute(message, args);
-    }
+    } 
 });
 
 client.login(process.env.token);
