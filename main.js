@@ -26,7 +26,7 @@ client.on('message', message => {
     if(!message.content.startsWith(prefix) || message.author.bot) return;
 
 client.on('guildMemberAdd', member => {
-        member.guild.channels.get('channelID').send("Welcome"); 
+        member.guild.channels.get('750092480279740420').send("Welcome"); 
     });
 
 })
@@ -38,6 +38,6 @@ const args = message.content.slice(prefix.length).split(/ +/);
     if(command === 'ping'){
         client.commands.get('ping').execute(message, args);
     } 
-});
+
 
 client.login(process.env.token);
