@@ -57,7 +57,9 @@ const args = message.content.slice(prefix.length).split(/ +/);
     else if(command === 'help'){
         client.commands.get('help').execute(message, args);
     }
-    
+    else if(command === 'bal'){
+        client.commands.get('bal').get(message, args);
+    }
 });
 
 client.login(process.env.token);
