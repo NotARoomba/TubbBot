@@ -2,6 +2,7 @@ const Discord = require('discord.js')
 const client = new Discord.Client()
 const config = require('./config.json')
 const command = require('./command.js')
+
 client.on('ready', () => {
   console.log('Tubb is online!')
   client.user.setActivity('|-help|');
@@ -18,6 +19,24 @@ const welcomeEmbed = new Discord.MessageEmbed()
 
 channel.send(welcomeEmbed);
 
+});
+
+command(client, 'help', message => {
+
+        const helpEmbed = new Discord.MessageEmbed()
+    .setColor('#00FF00')
+    .setTitle(`Help`)
+    .setDescription(`This is the help command use -help to view it.
+    
+    List of commands:
+    
+    -help, what you're viewing right now
+    
+    -ping, shows ping to Tubb
+    
+    More commands in development!`)
+
+    message.reply(helpEmbed);
 });
 
 //client.login('NzUwMTIzNjc3NzM5MTIyODE5.X019HQ.1_2Ti4y-h9PJljBHzotdA36p7vY')
