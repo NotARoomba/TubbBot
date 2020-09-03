@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const economy = require('.')
+const economy = require('../../economy')
 
 module.exports = {
   name: ['balance', 'bal'],
