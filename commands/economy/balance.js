@@ -1,9 +1,10 @@
 const economy = require('../economy')
 
 module.exports = {
-    name: 'bal',
-    description: "this is the bal command!",
-    execute(message, args){
+    commands: ('bal', 'balance'),
+    maxArgs: 1,
+    expectedArgs: "[Target user's @]",
+    callback: async (message) => {
         const target = message.mentions.users.first() || message.author
         const targetId = target.targetId
 
