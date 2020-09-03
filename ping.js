@@ -3,9 +3,8 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 
 module.exports = {
-    name: 'ping',
-    description: "this is a ping command!",
-    callback(message, args){
+    commands: 'ping',
+    callback: (message, arguments, text, client) => {
         
 const waitEmbed = new Discord.MessageEmbed()
     .setColor('#C0C0C0')
