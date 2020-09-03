@@ -30,7 +30,6 @@ command(client, 'ping', message => {
    
    :alarm_clock: Your ping is ${Date.now() - message.createdTimestamp} ms`)
     message.reply(waitEmbed).then((resultMessage) => {
-        target=_blank
     })
 });
 
