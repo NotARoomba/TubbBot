@@ -1,19 +1,18 @@
-const economy = require('../economy')
+const economy = require('../../economy')
 
 module.exports = {
-    commands: ('bal', 'balance'),
-    maxArgs: 1,
-    expectedArgs: "[Target user's @]",
-    callback: async (message) => {
-        const target = message.mentions.users.first() || message.author
-        const targetId = target.targetId
+  commands: ['balance', 'bal'],
+  maxArgs: 1,
+  expectedArgs: "[Target user's @]",
+  callback: async (message) => {
+    const target = message.mentions.users.first() || message.author
+    const targetId = target.id
 
+    const guildId = message.guild.id
+    const userId = target.id
 
-        const guildId = message.guild.guildId
-        const userId = target.id
+    const coins = await economy.getCoins(guildId, userId)
 
-       const coint = await economy.getCoins(guildId, userId)
-        
-        message.reply(`That user has ${coins} coins`)
-    },
+    message.reply(`That user has ${coins} coins!`)
+  },
 }
