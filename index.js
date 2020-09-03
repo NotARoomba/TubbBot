@@ -4,9 +4,18 @@ const config = require('./config.json')
 const command = require('./command.js')
 const economy = require('./economy')
 
-client.on('ready', () => {
+client.on('ready', async () => {
   console.log('Tubb is online!')
   client.user.setActivity('|-help|');
+
+  await mongo().then((mongoose) => {
+    try {
+      console.log('Connected to mongo!')
+    } finally {
+      mongoose.connection.close()
+    }
+  })
+
 });
 
 
