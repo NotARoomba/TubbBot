@@ -6,7 +6,7 @@ const prefix = '-'
 
 const fs = require('fs')
 const mongo = require('./mongo')
-const { execute } = require('./commands');
+const { callback } = require('./commands/ping');
 
 client.commands = new Discord.Collection();
 
@@ -52,7 +52,7 @@ const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
 
     if(command === 'ping'){
-        client.commands.get('ping').execute(message, args);
+        client.commands.get('ping').callback(message, args);
     } 
     else if(command === 'help'){
         client.commands.get('help').execute(message, args);

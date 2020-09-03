@@ -5,7 +5,7 @@ const client = new Discord.Client();
 module.exports = {
     name: 'ping',
     description: "this is a ping command!",
-    execute(message, args){
+    callback(message, args){
         
 const waitEmbed = new Discord.MessageEmbed()
     .setColor('#C0C0C0')
