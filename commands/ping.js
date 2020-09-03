@@ -14,8 +14,7 @@ const waitEmbed = new Discord.MessageEmbed()
     Your ping is ${Date.now() - message.createdTimestamp} ms`)
 
     message.reply(waitEmbed).then((resultMessage) => {
-    message.reply()
-            target=_blank
+        target=_blank
         })
     }
 };
