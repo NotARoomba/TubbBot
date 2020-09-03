@@ -26,7 +26,7 @@ module.exports = {
             });
         } 
 
-        return message.channel.send(`${bot.user.get(user.id).username} has $${money[user.id].money}.`);
+        return message.channel.send(`${client.user.get(user.id).username} has $${money[user.id].money}.`);
 
     }
 
