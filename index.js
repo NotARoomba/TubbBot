@@ -6,7 +6,7 @@ client.on('ready', () => {
   console.log('Tubb is online!')
 })
 
-await mongo().then(mongoose => {
+await mongo().then(async mongoose => {
     try {
         console.log('Conected to mongo!')
     } finally {
