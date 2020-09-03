@@ -1,3 +1,5 @@
+const { Channel } = require("discord.js");
+
 module.exports = {
     name: 'ping',
     description: "this is a ping command!",
@@ -8,7 +10,7 @@ const pingEmbed = new Discord.MessageEmbed()
     .setTitle(`Ping`)
     .setDescription(`Finding ping to bot!...`)
         
-        message.send(pingEmbed).then((resultMessage) => {
+        channel.send(pingEmbed).then((resultMessage) => {
             message.reply(`Your ping is ${Date.now() - message.createdTimestamp} ms`)
             target=_blank
         })
