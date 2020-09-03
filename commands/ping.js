@@ -12,7 +12,7 @@ const pingEmbed = new Discord.MessageEmbed()
     .setTitle(`Ping`)
     .setDescription(`Finding ping to bot!...`)
         
-        message.send(pingEmbed).then((resultMessage) => {
+        message.reply(pingEmbed).then((resultMessage) => {
             message.reply(`Your ping is ${Date.now() - message.createdTimestamp} ms`)
             target=_blank
         })
