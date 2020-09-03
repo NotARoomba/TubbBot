@@ -4,7 +4,7 @@ const client = new Discord.Client();
 
 module.exports = {
     commands: 'ping',
-    callback: (message, args) => {
+    callback: (message, arguments, text, client) => {
 
         message.reply('lol')
         
