@@ -9,17 +9,7 @@ module.exports = (client, aliases, callback) => {
     const { content } = message
 
     aliases.forEach((alias) => {
-      
-      await mongo().then((mongoose) => {
-        try {
-          console.log('Connected to mongo!')
-        } finally {
-          mongoose.connection.close()
-        }
-      })
-      
       const command = `${prefix}${alias}`
-
       if (content.startsWith(`${command} `) || content === command) {
         console.log(`Running the command ${command}`)
         callback(message)

@@ -7,16 +7,7 @@ client.on('ready', () => {
   console.log('Tubb is online!')
   client.user.setActivity('|-help|');
 });
-const mongoose = require('mongoose')
-const { mongoPath } = require('./config.json')
 
-module.exports = async () => {
-  await mongoose.connect(mongoPath, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  return mongoose
-}
 
 client.on('guildMemberAdd', member => {
     const channel = member.guild.channels.cache.find(channel => channel.name === "welcome");
