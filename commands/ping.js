@@ -10,14 +10,11 @@ module.exports = {
 const waitEmbed = new Discord.MessageEmbed()
     .setColor('#8B0000')
     .setTitle(`Ping`)
-    .setDescription(`Finding ping to bot!...`)
+    .setDescription(`Finding ping to bot!...
+    Your ping is ${Date.now() - message.createdTimestamp} ms`)
 
     message.reply(waitEmbed).then((resultMessage) => {
-    const pingEmbed = new Discord.MessageEmbed()
-        .setColor('#8B0000')
-        .setDescription(`Your ping is ${Date.now() - message.createdTimestamp} ms`)           
-        
-        message.reply(pingEmbed)
+    message.reply()
             target=_blank
         })
     }
