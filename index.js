@@ -4,11 +4,12 @@ const config = require('./config.json')
 
 client.on('ready', () => {
   console.log('Tubb is online!')
+  client.user.setActivity('|-help|');
 });
 
 
 
-client.user.setActivity('|-help|');
+
 
 client.on('guildMemberAdd', member => {
     const channel = member.guild.channels.cache.find(channel => channel.name === "welcome");
