@@ -60,7 +60,7 @@ command(client, 'bal', message => {
     const guildId = message.guild.id
     const userId = target.id
 
-    const coins = await economy.getCoins(guildId, userId)
+    const coins = economy.getCoins(guildId, userId)
 
     message.reply(`That user has ${coins} coins!`)
   }),
