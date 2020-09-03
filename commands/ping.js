@@ -15,7 +15,6 @@ const waitEmbed = new Discord.MessageEmbed()
     message.reply(waitEmbed).then((resultMessage) => {
     const pingEmbed = new Discord.MessageEmbed()
         .setColor('#8B0000')
-        .setTitle(`Ping`)
         .setDescription(`Your ping is ${Date.now() - message.createdTimestamp} ms`)           
         
         message.reply(pingEmbed)
