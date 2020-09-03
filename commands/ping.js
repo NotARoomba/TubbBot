@@ -8,7 +8,7 @@ module.exports = {
     execute(message, args){
         
 const waitEmbed = new Discord.MessageEmbed()
-    .setColor('#8B0000')
+    .setColor('#C0C0C0')
     .setTitle(`Ping`)
     .setDescription(`:apple: Finding ping to bot...
    

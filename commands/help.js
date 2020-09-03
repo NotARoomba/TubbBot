@@ -8,7 +8,7 @@ module.exports = {
     execute(message, args){
 
         const helpEmbed = new Discord.MessageEmbed()
-    .setColor('#8B0000')
+    .setColor('#00FF00')
     .setTitle(`Help`)
     .setDescription(`This is the help command use -help to view it.
     
