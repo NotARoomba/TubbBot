@@ -4,7 +4,7 @@ const client = new Discord.Client();
 
 module.exports = {
     commands: 'help',
-    callback: (message, arguments, text, client) => {
+    callback: (message, args) => {
 
         const helpEmbed = new Discord.MessageEmbed()
     .setColor('#00FF00')

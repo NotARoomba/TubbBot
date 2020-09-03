@@ -7,10 +7,6 @@ client.on('ready', () => {
   client.user.setActivity('|-help|');
 });
 
-
-
-
-
 client.on('guildMemberAdd', member => {
     const channel = member.guild.channels.cache.find(channel => channel.name === "welcome");
     if(!channel) return;
@@ -23,11 +19,5 @@ const welcomeEmbed = new Discord.MessageEmbed()
 channel.send(welcomeEmbed);
 
 });
-
-
-
-  
-
-
 
 client.login(process.env.token)
