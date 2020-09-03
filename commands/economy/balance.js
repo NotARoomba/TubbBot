@@ -1,5 +1,5 @@
 module.exports = {
-    commands: ('balance', 'bal'),
+    commands: ('bal', 'balance'),
     maxArgs: 1,
     expectedArgs: "[Target user's @]",
     callback: (message) => {
