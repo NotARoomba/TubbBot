@@ -18,7 +18,7 @@ module.exports = {
     
     -ping, shows ping to Tubb
     
-    More commands coming soon!`)
+    More commands in development!`)
 
     message.reply(helpEmbed);
 
