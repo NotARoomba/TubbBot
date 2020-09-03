@@ -53,5 +53,19 @@ command(client, 'help', message => {
     message.reply(helpEmbed);
 });
 
+command(client, 'bal', message => {
+    const target = message.mentions.users.first() || message.author
+    const targetId = target.id
+
+    const guildId = message.guild.id
+    const userId = target.id
+
+    const coins = await economy.getCoins(guildId, userId)
+
+    message.reply(`That user has ${coins} coins!`)
+  }),
+
+
+
 //client.login('NzUwMTIzNjc3NzM5MTIyODE5.X019HQ.1_2Ti4y-h9PJljBHzotdA36p7vY')
 client.login(process.env.token);
