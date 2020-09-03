@@ -3,6 +3,7 @@ const client = new Discord.Client()
 const config = require('./config.json')
 const command = require('./command.js')
 const economy = require('./economy')
+const mongo = require('./mongo')
 
 client.on('ready', async () => {
   console.log('Tubb is online!')
