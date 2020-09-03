@@ -4,7 +4,8 @@ const client = new Discord.Client();
 
 const prefix = '-'
 
-const fs = require('fs');
+const fs = require('fs')
+const mongo = require('./mongo')
 const { execute } = require('./commands/ping');
 
 client.commands = new Discord.Collection();
@@ -16,8 +17,16 @@ for(const file of commandFiles){
     client.commands.set(command.name, command);
 }
 
-client.once('ready' , () => {
+client.once('ready' , async () => {
     console.log('Tubb is online!');
+
+    await mongo().then(mongoose => {
+        try {
+            console.log('Conected to mongo!')
+        } finally {
+            mongoose.connection.close()
+        }
+    })
 
     client.user.setActivity('|-help|');
 
