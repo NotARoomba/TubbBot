@@ -18,7 +18,7 @@ module.exports = {
 
         if(!money[user.id]) {
             money[user.id] = {
-                name: client.users.cache.get(user.id).tag,
+                name: client.users.cache.get(user.id),
                 money: 0
             }
             fs.writeFile("./money.json", JSON.stringify(money), (err) => {
