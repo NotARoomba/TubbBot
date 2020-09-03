@@ -10,7 +10,13 @@ module.exports = {
         const helpEmbed = new Discord.MessageEmbed()
     .setColor('#8B0000')
     .setTitle(`Help`)
-    .setDescription(`This is the help command use -help to view it.`)
+    .setDescription(`This is the help command use -help to view it.
+    
+    List of commands:
+    
+    -help, what you're viewing right now
+    
+    -ping, shows ping to Tubb`)
 
     message.reply(helpEmbed);
 
