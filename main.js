@@ -19,7 +19,7 @@ for(const file of commandFiles){
 client.once('ready' , () => {
     console.log('Tubb is online!');
 
-    client.user.setActivity('<-help>');
+    client.user.setActivity('|-help|', { type: 'Utilizing Utilities' });
 })
 
 client.on('guildMemberAdd', member => {
