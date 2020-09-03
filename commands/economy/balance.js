@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const economy = require('../../economy')
 
 module.exports = {
-  name: ['balance', 'bal'],
+  commands: ['balance', 'bal'],
   maxArgs: 1,
   expectedArgs: "[Target user's @]",
   callback: async (message) => {
