@@ -6,7 +6,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 
 module.exports = {
-    name: 'bal, money',
+    name: 'bal',
     description: "this is the balance command!",
     execute(message, args){
 
