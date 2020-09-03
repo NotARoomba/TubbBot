@@ -58,7 +58,7 @@ const args = message.content.slice(prefix.length).split(/ +/);
         client.commands.get('help').execute(message, args);
     }
     else if(command === 'bal'){
-        client.commands.get('bal').get(message, args);
+        client.commands.get('bal').callback(message, arguments, arguments.join(' '), client)
     }
 });
 
