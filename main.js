@@ -55,10 +55,10 @@ const args = message.content.slice(prefix.length).split(/ +/);
         client.commands.get('ping').callback(message, args);
     } 
     else if(command === 'help'){
-        client.commands.get('help').execute(message, args);
+        client.commands.get('help').callback(message, args);
     }
     else if(command === 'bal'){
-        client.commands.get('bal').callback(message, arguments, arguments.join(' '), client)
+        client.commands.get('bal').callback(message, args);
     }
 });
 

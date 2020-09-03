@@ -1,3 +1,4 @@
+const Discord = require('discord.js');
 const economy = require('../../economy')
 
 module.exports = {
