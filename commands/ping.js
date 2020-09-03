@@ -10,9 +10,9 @@ module.exports = {
 const waitEmbed = new Discord.MessageEmbed()
     .setColor('#8B0000')
     .setTitle(`Ping`)
-    .setDescription(`Finding ping to bot...
+    .setDescription(`:apple: Finding ping to bot...
     
-    Your ping is ${Date.now() - message.createdTimestamp} ms`)
+    :alarm_clock: Your ping is ${Date.now() - message.createdTimestamp} ms`)
     message.reply(waitEmbed).then((resultMessage) => {
         target=_blank
         })
