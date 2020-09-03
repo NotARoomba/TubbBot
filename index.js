@@ -4,15 +4,8 @@ const config = require('./config.json')
 
 client.on('ready', () => {
   console.log('Tubb is online!')
-})
+});
 
-await mongo().then(async mongoose => {
-    try {
-        console.log('Conected to mongo!')
-    } finally {
-        mongoose.connection.close()
-    }
-})
 
 client.user.setActivity('|-help|');
 

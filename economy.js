@@ -75,4 +75,4 @@ module.exports.getCoins = async (guildId, userId) => {
       mongoose.connection.close()
     }
   })
-}
+};
