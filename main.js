@@ -6,7 +6,7 @@ const prefix = '-'
 
 const fs = require('fs')
 const mongo = require('./mongo')
-const { execute } = require('./commands/ping');
+const { execute } = require('./commands');
 
 client.commands = new Discord.Collection();
 

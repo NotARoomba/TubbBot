@@ -1,7 +1,7 @@
 const economy = require('../../economy')
 
 module.exports = {
-  commands: ['balance', 'bal'],
+  name: ['balance', 'bal'],
   maxArgs: 1,
   expectedArgs: "[Target user's @]",
   callback: async (message) => {
