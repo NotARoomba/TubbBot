@@ -12,7 +12,6 @@ const waitEmbed = new Discord.MessageEmbed()
     .setTitle(`Ping`)
     .setDescription(`Finding ping to bot!...
     Your ping is ${Date.now() - message.createdTimestamp} ms`)
-
     message.reply(waitEmbed).then((resultMessage) => {
         target=_blank
         })
