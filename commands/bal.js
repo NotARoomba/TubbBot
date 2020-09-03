@@ -13,12 +13,12 @@ module.exports = {
         if(!args[0]) {
             var user = message.author;
         } else {
-            var user = message.mentions.users.first() || client.users.get(args[0]);
+            var user = message.mentions.users.first() || client.user.get(args[0]);
         }
 
         if(!money[user.id]) {
             money[user.id] = {
-                name: client.users.get(user.id).tag,
+                name: client.user.get(user.id).tag,
                 money: 0
             }
             fs.writeFile("./money.json", JSON.stringify(money), (err) => {
