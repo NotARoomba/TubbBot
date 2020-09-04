@@ -4,6 +4,7 @@ const config = require('./config.json')
 const command = require('./command.js')
 const economy = require('./economy')
 const mongo = require('./mongo')
+const path = require('path')
 
 client.on('ready', async () => {
   console.log('Tubb is online!')
