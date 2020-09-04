@@ -5,6 +5,7 @@ const command = require('./command.js')
 const economy = require('./economy')
 const mongo = require('./mongo')
 const path = require('path')
+const fs = require('fs');
 
 client.commands = new Discord.Collection();
  
