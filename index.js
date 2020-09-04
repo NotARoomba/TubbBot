@@ -12,29 +12,12 @@ const prefix = "-"
 client.commands = new Discord.Collection();
 
 
- 
-const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
-for(const file of commandFiles){
-    const command = require(`./commands/${file}`);
- 
-    client.commands.set(command.name, command);
-}
-
 client.on('ready', async () => {
   console.log('Tubb is online!')
   client.user.setActivity('|-help|');
 });
 
-client.on('message', message =>{
-    if(!message.content.startsWith(prefix) || message.author.bot) return;
- 
-    const args = message.content.slice(prefix.length).split(/ +/);
-    const command = args.shift().toLowerCase();
- 
-    if(command === 'ping'){
-        callback(message, arguments);
-    } 
-});
+
 
 
 client.on('guildMemberAdd', member => {
@@ -55,17 +38,7 @@ channel.send(welcomeEmbed);
     
 
 
-command(client, 'bal', message => {
-    const target = message.mentions.users.first() || message.author
-    const targetId = target.id
 
-    const guildId = message.guild.id
-    const userId = target.id
-
-    const coins = economy.getCoins(guildId, userId)
-
-    message.reply(`That user has ${coins} coins!`)
-  }),
 
 
 

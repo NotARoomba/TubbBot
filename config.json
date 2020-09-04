@@ -1,4 +1,4 @@
 {
     "prefix": "-",
-    "mongoPath": "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false"
+    "mongoPath": "mongodb+srv://L061571C5:Password>@tubbbot.oepus.mongodb.net/data?retryWrites=true&w=majority"
 }
