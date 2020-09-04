@@ -20,6 +20,8 @@ List of commands:
 
 -bal, to view your account balance
 
+-pay, to pay others Strands
+
 More commands in development!`)
 
 message.reply(helpEmbed);

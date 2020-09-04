@@ -1,11 +1,11 @@
 const mongo = require('./mongo')
 const profileSchema = require('./schemas/profile-schema')
 
-const coinsCache = {} // { 'guildId-userId': coins }
+const strandsCache = {} // { 'guildId-userId': strands }
 
 module.exports = (client) => {}
 
-module.exports.addCoins = async (guildId, userId, coins) => {
+module.exports.addCoins = async (guildId, userId, strands) => {
   return await mongo().then(async (mongoose) => {
     try {
       console.log('Running findOneAndUpdate()')
@@ -19,7 +19,7 @@ module.exports.addCoins = async (guildId, userId, coins) => {
           guildId,
           userId,
           $inc: {
-            coins,
+            strands,
           },
         },
         {
@@ -30,9 +30,9 @@ module.exports.addCoins = async (guildId, userId, coins) => {
 
       console.log('RESULT:', result)
 
-      coinsCache[`${guildId}-${userId}`] = result.coins
+      strandsCache[`${guildId}-${userId}`] = result.strands
 
-      return result.coins
+      return result.strands
     } finally {
       mongoose.connection.close()
     }
@@ -40,7 +40,7 @@ module.exports.addCoins = async (guildId, userId, coins) => {
 }
 
 module.exports.getCoins = async (guildId, userId) => {
-  const cachedValue = coinsCache[`${guildId}-${userId}`]
+  const cachedValue = strandsCache[`${guildId}-${userId}`]
   if (cachedValue) {
     return cachedValue
   }
@@ -56,21 +56,21 @@ module.exports.getCoins = async (guildId, userId) => {
 
       console.log('RESULT:', result)
 
-      let coins = 0
+      let strands = 0
       if (result) {
-        coins = result.coins
+        strands = result.strands
       } else {
         console.log('Inserting a document')
         await new profileSchema({
           guildId,
           userId,
-          coins,
+          strands,
         }).save()
       }
 
-      coinsCache[`${guildId}-${userId}`] = coins
+      strandsCache[`${guildId}-${userId}`] = strands
 
-      return coins
+      return strands
     } finally {
       mongoose.connection.close()
     }
