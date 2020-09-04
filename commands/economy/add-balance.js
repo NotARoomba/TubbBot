@@ -9,10 +9,7 @@ module.exports = {
   permissions: 'ADMINISTRATOR',
   callback: async (message, arguments) => {
     const mention = message.mentions.users.first() || message.author
-    const targetId = target.id
-
-    const guildId = message.guild.id
-    const userId = target.id
+    
     
     const coins = arguments[1]
     if (isNaN(coins)) {
