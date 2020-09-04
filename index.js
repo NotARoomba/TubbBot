@@ -6,6 +6,7 @@ const economy = require('./economy')
 const mongo = require('./mongo')
 const path = require('path')
 const fs = require('fs');
+const { callback } = require('./commands/economy/balance')
 
 const prefix = "-"
 client.commands = new Discord.Collection();
@@ -57,7 +58,7 @@ client.on('message', message =>{
     const command = args.shift().toLowerCase();
  
     if(command === 'ping'){
-        client.commands.get('ping').callback(message, arguments, arguments.join(' '), client)
+        callback(message)
     } 
 });
 
