@@ -32,7 +32,7 @@ client.on('message', message =>{
     const command = args.shift().toLowerCase();
  
     if(command === 'ping'){
-        client.commands.callback('ping')
+        callback(message, arguments, text);
     } 
 });
 
