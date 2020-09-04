@@ -16,6 +16,15 @@ client.on('ready', async () => {
   console.log('Tubb is online!')
   client.user.setActivity('|-help|');
 
+  await mongo().then(mongoose => {
+    try {
+      console.log('Connected to Mongo!')
+    } finally {
+      mongoose.connection.close()
+    }
+    
+  })
+
   const baseFile = 'command-base.js'
   const commandBase = require(`./commands/${baseFile}`)
 

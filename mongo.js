@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { mongoPath } = require('./config.json')
+const mongoPath = "mongodb+srv://L061571C5:Password>@tubbbot.oepus.mongodb.net/data?retryWrites=true&w=majority"
 
 module.exports = async () => {
   await mongoose.connect(mongoPath, {
