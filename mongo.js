@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const mongoPath = "mongodb://localhost:27017"
+const mongoPath = "mongodb://127.0.0.1:27017/data"
 
 module.exports = async () => {
   await mongoose.connect(mongoPath, {
