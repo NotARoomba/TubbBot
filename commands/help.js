@@ -1,4 +1,11 @@
-command(client, 'help', message => {
+const Discord = require('discord.js')
+const client = new Discord.Client()
+
+module.exports = {
+    commands: 'help',
+    minArgs: 0,
+    maxArgs: 0,
+    callback: (message, arguments, text) => {
 
     const helpEmbed = new Discord.MessageEmbed()
 .setColor('#00FF00')
@@ -14,4 +21,5 @@ List of commands:
 More commands in development!`)
 
 message.reply(helpEmbed);
-});
+    }
+}
