@@ -6,8 +6,8 @@ const economy = require('./economy')
 const mongo = require('./mongo')
 const path = require('path')
 const fs = require('fs');
-const { prefix } = require('./config.json')
 
+const prefix = "-"
 client.commands = new Discord.Collection();
 
 module.exports = (client, aliases, callback) => {
