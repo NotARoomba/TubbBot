@@ -9,7 +9,8 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     callback: async (message, arguments) => {
       const mention = message.mentions.users.first()
-  
+        
+      
       if (!mention) {
         message.reply('Please tag a user to set their account to.')
         return
