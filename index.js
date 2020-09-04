@@ -11,24 +11,7 @@ const { callback } = require('./commands/economy/balance')
 const prefix = "-"
 client.commands = new Discord.Collection();
 
-module.exports = (client, aliases, callback) => {
-    if (typeof aliases === 'string') {
-      aliases = [aliases]
-    }
-  
-    client.on('message', (message) => {
-      const { content } = message
-  
-      aliases.forEach((alias) => {
-        const command = `${prefix}${alias}`
-  
-        if (content.startsWith(`${command} `) || content === command) {
-          console.log(`Running the command ${command}`)
-          callback(message)
-        }
-      })
-    })
-  }
+
  
 const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
 for(const file of commandFiles){
@@ -40,15 +23,6 @@ for(const file of commandFiles){
 client.on('ready', async () => {
   console.log('Tubb is online!')
   client.user.setActivity('|-help|');
-
-  await mongo().then((mongoose) => {
-    try {
-      console.log('Connected to mongo!')
-    } finally {
-      mongoose.connection.close()
-    }
-  })
-  
 });
 
 client.on('message', message =>{
@@ -58,7 +32,7 @@ client.on('message', message =>{
     const command = args.shift().toLowerCase();
  
     if(command === 'ping'){
-        callback(message)
+        client.commands.callback('ping')
     } 
 });
 
@@ -76,6 +50,17 @@ channel.send(welcomeEmbed);
 
 });
 
+command(client, 'ping', message => {
+
+    const waitEmbed = new Discord.MessageEmbed()
+    .setColor('#C0C0C0')
+    .setTitle(`Ping`)
+    .setDescription(`:green_apple: Finding ping to bot...
+   
+   :alarm_clock: Your ping is ${Date.now() - message.createdTimestamp} ms`)
+    message.reply(waitEmbed).then((resultMessage) => {
+    })
+});
 
     
 command(client, 'help', message => {
