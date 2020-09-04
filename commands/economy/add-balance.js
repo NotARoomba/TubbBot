@@ -8,7 +8,7 @@ module.exports = {
   permissionError: 'You must be an administrator to use this command.',
   permissions: 'ADMINISTRATOR',
   callback: async (message, arguments) => {
-    const mention = message.mentions.users.first()
+    const mention = message.mentions.users.first() || message.author
 
     if (!mention) {
       message.reply('Please tag a user to add coins to.')
@@ -17,7 +17,7 @@ module.exports = {
 
     const coins = arguments[1]
     if (isNaN(coins)) {
-      message.reply('Please provide a valid numnber of coins.')
+      message.reply('Please provide a valid number of coins.')
       return
     }
 
