@@ -6,6 +6,15 @@ const economy = require('./economy')
 const mongo = require('./mongo')
 const path = require('path')
 
+client.commands = new Discord.Collection();
+ 
+const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
+for(const file of commandFiles){
+    const command = require(`./commands/${file}`);
+ 
+    client.commands.set(command.name, command);
+}
+
 client.on('ready', async () => {
   console.log('Tubb is online!')
   client.user.setActivity('|-help|');
@@ -17,23 +26,18 @@ client.on('ready', async () => {
       mongoose.connection.close()
     }
   })
-  const baseFile = 'command-base.js'
-  const commandBase = require(`./commands/${baseFile}`)
+  
+});
 
-  const readCommands = (dir) => {
-    const files = fs.readdirSync(path.join(__dirname, dir))
-    for (const file of files) {
-      const stat = fs.lstatSync(path.join(__dirname, dir, file))
-      if (stat.isDirectory()) {
-        readCommands(path.join(dir, file))
-      } else if (file !== baseFile) {
-        const option = require(path.join(__dirname, dir, file))
-        commandBase(client, option)
-      }
-    }
-  }
-
-  readCommands('commands')
+client.on('message', message =>{
+    if(!message.content.startsWith(prefix) || message.author.bot) return;
+ 
+    const args = message.content.slice(prefix.length).split(/ +/);
+    const command = args.shift().toLowerCase();
+ 
+    if(command === 'ping'){
+        client.commands.get('ping').callback(message, arguments, arguments.join(' '), client)
+    } 
 });
 
 
@@ -50,7 +54,17 @@ channel.send(welcomeEmbed);
 
 });
 
+command(client, 'ping', message => {
 
+    const waitEmbed = new Discord.MessageEmbed()
+    .setColor('#C0C0C0')
+    .setTitle(`Ping`)
+    .setDescription(`:green_apple: Finding ping to bot...
+   
+   :alarm_clock: Your ping is ${Date.now() - message.createdTimestamp} ms`)
+    message.reply(waitEmbed).then((resultMessage) => {
+    })
+});
 
     
 command(client, 'help', message => {
