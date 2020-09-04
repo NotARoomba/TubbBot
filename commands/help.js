@@ -18,6 +18,8 @@ List of commands:
 
 -ping, shows ping to Tubb
 
+-bal, to view your account balance
+
 More commands in development!`)
 
 message.reply(helpEmbed);
