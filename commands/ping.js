@@ -1,3 +1,6 @@
+const client = new Discord.Client()
+const Discord = require('discord.js')
+
 module.exports = {
     commands: 'ping',
     minArgs: 0,
