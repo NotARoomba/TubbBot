@@ -11,6 +11,7 @@ const profileSchema = mongoose.Schema({
   strands: {
     type: Number,
     required: true,
+    inventoryItems: reqString,
   },
 })
 

@@ -5,7 +5,7 @@ const strandsCache = {} // { 'guildId-userId': strands }
 
 module.exports = (client) => {}
 
-module.exports.addCoins = async (guildId, userId, strands) => {
+module.exports.addCoins = async (guildId, userId, strands, inventoryItems) => {
   return await mongo().then(async (mongoose) => {
     try {
       console.log('Running findOneAndUpdate()')
@@ -21,6 +21,7 @@ module.exports.addCoins = async (guildId, userId, strands) => {
           $inc: {
             strands,
           },
+          inventoryItems
         },
         {
           upsert: true,
@@ -65,6 +66,7 @@ module.exports.getCoins = async (guildId, userId) => {
           guildId,
           userId,
           strands,
+          inventoryItems,
         }).save()
       }
 
