@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const economy = require('../../economy')
 
 module.exports = {
-  commands: ['balance', 'bal'],
+  commands: ['inventory', 'inv'],
   maxArgs: 1,
   expectedArgs: "[Target user's @]",
   callback: async (message) => {
@@ -12,8 +12,8 @@ module.exports = {
     const guildId = message.guild.id
     const userId = target.id
 
-    const strands = await economy.getCoins(guildId, userId)
+    const inventoryItems = await economy.getCoins(guildId, userId)
 
-    message.reply(`That user has ${strands} Strands!`)
+    message.reply(`That user has ${inventoryItems}!`)
   },
 }
