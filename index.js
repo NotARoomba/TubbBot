@@ -1,4 +1,4 @@
-require(module-alias/register);
+require('module-alias/register');
 const Discord = require('discord.js')
 const client = new Discord.Client()
 const command = require('@util/command.js')
