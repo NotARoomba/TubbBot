@@ -59,7 +59,7 @@ module.exports = (client, commandOptions) => {
     commands = [commands]
   }
 
-  //console.log(`Registering command "${commands[0]}"`)
+  console.log(`Registering command "${commands[0]}"`)
 
  
   if (permissions.length) {
