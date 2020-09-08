@@ -7,6 +7,7 @@ const path = require('path')
 const fs = require('fs');
 const { callback } = require('./commands/economy/balance')
 
+
 const prefix = "-"
 client.commands = new Discord.Collection();
 
