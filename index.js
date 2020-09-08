@@ -6,6 +6,7 @@ const mongo = require('@util/mongo');
 const fs = require('fs');
 const path = require('path');
 const welcome = require('@features/welcome');
+const commandBase = require('./commands/command-base');
 //const Commando = require('discord.js-commando');
 const prefix = "-"
 client.commands = new Discord.Collection();
@@ -34,7 +35,7 @@ client.on('ready', async () => {
   welcome(client)
   loadCommands(client)
   loadFeatures(client)
-
+  commandBase.loadPrefixes(client)
   
 
 });
