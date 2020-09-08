@@ -16,10 +16,8 @@ module.exports = {
 
     const balEmbed = new Discord.MessageEmbed()
         .setColor('#C0C0C0')
-        .setTitle(`Bal`)
-        .setDescription(`Your balance is
-       
-        That user has ${strands} Strands!`)
+        .setTitle(`Balance`)
+        .setDescription(`Your balance is ${strands} Strands!`)
       message.reply(balEmbed)
   },
 }
