@@ -3,13 +3,13 @@ const client = new Discord.Client()
 const command = require('./command.js')
 const mongo = require('./mongo');
 const fs = require('fs');
-const Commando = require('discord.js-commando');
+//const Commando = require('discord.js-commando');
 const prefix = "-"
 client.commands = new Discord.Collection();
 
-const client  = new Commando.CommandoClient({
-  owner: '465917394108547072'
-})
+//const client  = new Commando.CommandoClient({
+ // owner: '465917394108547072'
+//})
 
 
 
