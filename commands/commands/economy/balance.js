@@ -14,6 +14,12 @@ module.exports = {
 
     const strands = await economy.getCoins(guildId, userId)
 
-    message.reply(`That user has ${strands} Strands!`)
+    const balEmbed = new Discord.MessageEmbed()
+        .setColor('#C0C0C0')
+        .setTitle(`Bal`)
+        .setDescription(`Your balance is
+       
+        That user has ${strands} Strands!`)
+      message.reply(balEmbed)
   },
 }
