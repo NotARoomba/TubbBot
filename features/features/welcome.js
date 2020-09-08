@@ -1,3 +1,6 @@
+const Discord = require('discord.js')
+const client = new Discord.Client()
+
 module.exports = (client) => {
     const channelId = '750766854360006676' // welcome channel
     const targetChannelId = '750556623348564038'  // rules and info
