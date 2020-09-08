@@ -32,9 +32,10 @@ module.exports = {
       strandsToGive * -1
     )
     const newBalance = await economy.addCoins(guild.id, target.id, strandsToGive)
-
-    message.reply(
-      `You have given <@${target.id}> ${strandsToGive} Strands! They now have ${newBalance} Strands and you have ${remainingCoins} Strands!`
-    )
+    const payEmbed = new Discord.MessageEmbed()
+        .setColor('#00FFFF')
+        .setTitle(`Pay`)
+        .setDescription(`You have given <@${target.id}> ${strandsToGive} Strands! They now have ${newBalance} Strands and you have ${remainingCoins} Strands!`)
+    message.reply(payEmbed);
   },
 }
