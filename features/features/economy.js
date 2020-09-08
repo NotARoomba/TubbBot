@@ -1,5 +1,5 @@
-const mongo = require('./mongo')
-const profileSchema = require('./schemas/profile-schema')
+const mongo = require('@util/mongo')
+const profileSchema = require('@schemas/profile-schema')
 
 
 const strandsCache = {} // { 'guildId-userId': strands }

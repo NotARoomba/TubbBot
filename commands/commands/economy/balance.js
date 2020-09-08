@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const economy = require('../../economy')
+const economy = require('@features/economy')
 
 module.exports = {
   commands: ['balance', 'bal'],

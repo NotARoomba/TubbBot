@@ -2,8 +2,9 @@ require(module-alias/register);
 const Discord = require('discord.js')
 const client = new Discord.Client()
 const command = require('@util/command.js')
-const mongo = require('./mongo');
+const mongo = require('@util/mongo');
 const fs = require('fs');
+const welcome = require('./welcome')
 //const Commando = require('discord.js-commando');
 const prefix = "-"
 client.commands = new Discord.Collection();
@@ -28,6 +29,8 @@ client.on('ready', async () => {
     }
     
   })
+
+  welcome(client)
 
   const baseFile = 'command-base.js'
   const commandBase = require(`./commands/${baseFile}`)

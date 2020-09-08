@@ -13,5 +13,12 @@
     "discord.js-commando": "git+https://github.com/discordjs/Commando.git",
     "module-alias": "^2.2.2",
     "mongoose": "^5.10.3"
+  },
+  "_moduleAliases": {
+    "@root": ".",
+    "@schemas": "./schemas",
+    "@util": "./util",
+    "@features": "./features/features",
+    "@commands": "./commands/commands"
   }
 }
