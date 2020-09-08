@@ -1,15 +1,22 @@
 const Discord = require('discord.js')
 const client = new Discord.Client()
 const command = require('./command.js')
-const economy = require('./economy')
-const mongo = require('./mongo')
-const path = require('path')
+const economy = require('./economy');
+const mongo = require('./mongo');
+const path = require('path');
 const fs = require('fs');
-const { callback } = require('./commands/economy/balance')
-
-
+const { callback } = require('./commands/economy/balance');
+const Commando = require('discord.js-commando');
 const prefix = "-"
+const path = require('path');
 client.commands = new Discord.Collection();
+
+const client  = new Commando.CommandoClient({
+  owner: '465917394108547072'
+})
+
+
+
 
 
 client.on('ready', async () => {
