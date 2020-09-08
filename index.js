@@ -1,6 +1,7 @@
+require(module-alias/register);
 const Discord = require('discord.js')
 const client = new Discord.Client()
-const command = require('./command.js')
+const command = require('@util/command.js')
 const mongo = require('./mongo');
 const fs = require('fs');
 //const Commando = require('discord.js-commando');
