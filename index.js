@@ -7,6 +7,9 @@ const fs = require('fs');
 const path = require('path');
 const welcome = require('@features/welcome');
 //const Commando = require('discord.js-commando');
+const loadCommands = require('@root/commands/load-commands.js')
+const commandBase = require('@root/commands/command-base.js')
+const loadFeatures = require('@root/features/load-features.js')
 const prefix = "-"
 client.commands = new Discord.Collection();
 
