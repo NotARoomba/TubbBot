@@ -6,6 +6,7 @@ module.exports = {
     commands: 'summon',
     minArgs: 0,
     maxArgs: 0,
+    permissions: 'ADMINISTRATOR',
     callback: (message, arguments, text) => {
         
         const summonEmbed = new Discord.MessageEmbed()
