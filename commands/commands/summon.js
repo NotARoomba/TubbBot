@@ -31,7 +31,7 @@ module.exports = {
 
     const summoningEmbed = new Discord.MessageEmbed()
         .setColor('#9400D3')
-        .setDescription(`<@${userId}>`)
+        .setDescription(`<${target}>`)
         
 
     message.reply(summoningEmbed)
