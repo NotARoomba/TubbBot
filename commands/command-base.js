@@ -1,3 +1,7 @@
+const Discord = require('discord.js')
+const client = new Discord.Client()
+
+
 const mongo = require('@util/mongo')
 const commandPrefixSchema = require('@schemas/command-prefix-schema')
 const { prefix: globalPrefix } = require('@root/config.json')
