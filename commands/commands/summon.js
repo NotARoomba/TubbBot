@@ -1,4 +1,5 @@
 const Discord = require('discord.js')
+const commandBase = require('@root/commands/command-base')
 const client = new Discord.Client()
 //const summoned = '427630841045319701'
 
@@ -9,7 +10,6 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     callback: (message, arguments, text) => {
         const target = message.mentions.users.first()
-        const location = message.mentions.channels.first()
 
       
       const balusrEmbed = new Discord.MessageEmbed()
@@ -25,7 +25,7 @@ module.exports = {
         const summonEmbed = new Discord.MessageEmbed()
         .setColor('#9400D3')
         .setTitle(`Ritual of Summon`)
-        .setDescription(`${target} ${location}`)
+        .setDescription(`${target}`)
         
 
     message.reply(summonEmbed)  
