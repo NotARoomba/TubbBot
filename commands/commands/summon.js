@@ -24,14 +24,14 @@ module.exports = {
         const summonEmbed = new Discord.MessageEmbed()
         .setColor('#9400D3')
         .setTitle(`Ritual of Summon`)
-        .setDescription(`<@${target}>`)
+        .setDescription(`${target}`)
         
 
     message.reply(summonEmbed)  
 
     const summoningEmbed = new Discord.MessageEmbed()
         .setColor('#9400D3')
-        .setDescription(`<${target}>`)
+        .setDescription(`${target}`)
         
 
     message.reply(summoningEmbed)
