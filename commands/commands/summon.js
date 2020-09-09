@@ -9,10 +9,7 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     callback: (message, arguments, text) => {
         const target = message.mentions.users.first()
-    const targetId = target.id
-
-    const guildId = message.guild.id
-    const userId = target.id
+        const userId = target.id
       
       const balusrEmbed = new Discord.MessageEmbed()
             .setColor('#FFFF00')
