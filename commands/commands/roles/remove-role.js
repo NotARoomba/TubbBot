@@ -6,7 +6,14 @@ module.exports = {
     callback: (message, arguments) => {
       const targetUser = message.mentions.users.first()
       if (!targetUser) {
-        message.reply('Please specify someone to give a role to.')
+        
+        const tgtusrEmbed = new Discord.MessageEmbed()
+            .setColor('#FFFF00')
+            .setTitle(`Error`)
+            .setDescription('Please specify someone to denounce.')
+
+        
+        message.reply(tgtusrEmbed)
         return
       }
   
@@ -19,7 +26,14 @@ module.exports = {
         return role.name === roleName
       })
       if (!role) {
-        message.reply(`There is no role with the name "${roleName}"`)
+        
+        const rleusrEmbed = new Discord.MessageEmbed()
+            .setColor('#FFFF00')
+            .setTitle(`Error`)
+            .setDescription(`There is no role with the name "${roleName}"`)
+
+        
+        message.reply(rleusrEmbed)
         return
       }
   
@@ -27,9 +41,23 @@ module.exports = {
   
       if (member.roles.cache.get(role.id)) {
         member.roles.remove(role)
-        message.reply(`That user no longer has the ${roleName} role`)
+        
+        const rleyesEmbed = new Discord.MessageEmbed()
+            .setColor('#228B22')
+            .setTitle(`Success`)
+            .setDescription(`That user no longer has the ${roleName} role`)
+        
+        
+        message.reply(rleyesEmbed)
       } else {
-        message.reply(`That user does not have the ${roleName} role`)
+        
+        const rlenoEmbed = new Discord.MessageEmbed()
+            .setColor('#228B22')
+            .setTitle(`Success`)
+            .setDescription(`That user does not have the ${roleName} role`)
+        
+        
+        message.reply(rlenoEmbed)
       }
     },
   }
