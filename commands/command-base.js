@@ -147,9 +147,14 @@ module.exports = (client, commandOptions) => {
           arguments.length < minArgs ||
           (maxArgs !== null && arguments.length > maxArgs)
         ) {
-          message.reply(
-            `Incorrect syntax! Use ${prefix}${alias} ${expectedArgs}`
-          )
+          
+          const stxerrEmbed = new Discord.MessageEmbed()
+            .setColor('#FFFF00')
+            .setTitle(`Error`)
+            .setDescription(`Incorrect syntax! Use ${prefix}${alias} ${expectedArgs}`)
+
+          
+          message.reply(stxerrEmbed)
           return
         }
 
