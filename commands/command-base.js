@@ -103,9 +103,13 @@ module.exports = (client, commandOptions) => {
             return channel.name === requiredChannel
           })
 
-          message.reply(
-            `You can only run this command inside of <#${foundChannel.id}>.`
-          )
+          const cnlerrEmbed = new Discord.MessageEmbed()
+            .setColor('#FFFF00')
+            .setTitle(`Error`)
+            .setDescription(`You can only run this command inside of <#${foundChannel.id}>.`)
+
+
+          message.reply(cnlerrEmbed)
           return
         }
 
@@ -124,9 +128,13 @@ module.exports = (client, commandOptions) => {
           )
 
           if (!role || !member.roles.cache.has(role.id)) {
-            message.reply(
-              `You must have the "${requiredRole}" role to use this command.`
-            )
+            
+            const rleerrEmbed = new Discord.MessageEmbed()
+            .setColor('#FFFF00')
+            .setTitle(`Error`)
+            .setDescription(`You must have the "${requiredRole}" role to use this command.`)
+            
+            message.reply(rleerrEmbed)
             return
           }
         }
@@ -136,7 +144,13 @@ module.exports = (client, commandOptions) => {
         let cooldownString = `${guild.id}-${member.id}-${commands[0]}`
 
         if (cooldown > 0 && recentlyRan.includes(cooldownString)) {
-          message.reply('You cannot use that command so soon, please wait.')
+          
+          const clderrEmbed = new Discord.MessageEmbed()
+            .setColor('#FFFF00')
+            .setTitle(`Error`)
+            .setDescription('You cannot use that command so soon, please wait.')
+          
+          message.reply(clderrEmbed)
           return
         }
 
