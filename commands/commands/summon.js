@@ -13,22 +13,17 @@ module.exports = {
         .setTitle(`Ritual of Kys`)
         .setDescription(`<@${summoned}>`)
         
-        .setDescription(`<@${summoned}>`)
-        
-        .setDescription(`<@${summoned}>`)
-        
-        .setDescription(`<@${summoned}>`)
-        
-        .setDescription(`<@${summoned}>`)
-       
-        .setDescription(`<@${summoned}>`)
-       
-        .setDescription(`<@${summoned}>`)
-       
-        .setDescription(`<@${summoned}>`)
-        
-        .setDescription(`<@${summoned}>`)
 
     message.reply(summonEmbed)  
+
+    const summoningEmbed = new Discord.MessageEmbed()
+        .setColor('#9400D3')
+        .setDescription(`<@${summoned}>`)
+        
+
+    message.reply(summoningEmbed)
+    message.reply(summoningEmbed)
+    message.reply(summoningEmbed)
+    message.reply(summoningEmbed) 
     }
 }
