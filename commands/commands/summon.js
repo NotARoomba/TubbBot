@@ -8,7 +8,7 @@ module.exports = {
     expectedArgs: "[Target user's @]",
     permissions: 'ADMINISTRATOR',
     callback: (message, arguments, text) => {
-        const target = message.mentions.users.first() || message.author
+        const target = message.mentions.users.first()
     const targetId = target.id
 
     const guildId = message.guild.id
@@ -17,7 +17,7 @@ module.exports = {
       const balusrEmbed = new Discord.MessageEmbed()
             .setColor('#FFFF00')
             .setTitle(`Error`)
-            .setDescription('Please tag a user to SUMMON.')
+            .setDescription('Please tag a user to Summon.')
 
       
       message.reply(balusrEmbed)
@@ -25,7 +25,7 @@ module.exports = {
 
         const summonEmbed = new Discord.MessageEmbed()
         .setColor('#9400D3')
-        .setTitle(`Ritual of Kys`)
+        .setTitle(`Ritual of Summon`)
         .setDescription(`<@${userId}>`)
         
 
