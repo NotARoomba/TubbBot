@@ -1,58 +1,31 @@
 const Discord = require('discord.js')
 const client = new Discord.Client()
-const loadCommands = require('@root/commands/load-commands')
-const { prefix } = require('@root/config.json')
 
 module.exports = {
-  commands: ['help', 'h'],
-  description: "Describes all of this bot's commands",
-  callback: (message, arguments, text) => {
-    let reply = 'I am the tutorial bot, here are my supported commands:\n\n'
+    commands: 'help',
+    minArgs: 0,
+    maxArgs: 0,
+    callback: (message, arguments, text) => {
 
-    const commands = loadCommands()
+    const helpEmbed = new Discord.MessageEmbed()
+.setColor('#00FF00')
+.setTitle(`Help`)
+.setDescription(`This is the help command use -help to view it.
 
-    for (const command of commands) {
-      // Check for permissions
-      let permissions = command.permission
+List of commands:
 
-      if (permissions) {
-        let hasPermission = true
-        if (typeof permissions === 'string') {
-          permissions = [permissions]
-        }
+-help, what you're viewing right now
 
-        for (const permission of permissions) {
-          if (!message.member.hasPermission(permission)) {
-            hasPermission = false
-            break
-          }
-        }
+-ping, shows ping to Tubb
 
-        if (!hasPermission) {
-          continue
-        }
-      }
+-bal, to view your account balance
 
-      // Format the text
-      const mainCommand =
-        typeof command.commands === 'string'
-          ? command.commands
-          : command.commands[0]
-      const args = command.expectedArgs ? ` ${command.expectedArgs}` : ''
-      const { description } = command
+-pay, to pay others Strands
 
-      
-      const helpEmbed = new Discord.MessageEmbed()
-        .setColor('#00FF00')
-        .setTitle(`Help`)
-        .setDescription(`This is the help command use -help to view it.
+-hasrole, to show what roles someone has
 
-        List of commands:
+More commands in development!`)
 
-        **${prefix}${mainCommand}${args}** = ${description}\n`)
-        message.channel.send(helpEmbed)
+message.reply(helpEmbed);
     }
-
-    
-  },
 }
