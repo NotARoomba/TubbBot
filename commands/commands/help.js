@@ -1,7 +1,7 @@
 const Discord = require('discord.js')
 const client = new Discord.Client()
-const loadCommands = require('./load-commands')
-const { prefix } = require('../config.json')
+const loadCommands = require('@root/commands/load-commands')
+const { prefix } = require('@root/config.json')
 
 module.exports = {
   commands: ['help', 'h'],
