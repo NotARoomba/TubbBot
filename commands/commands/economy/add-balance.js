@@ -1,4 +1,6 @@
 const economy = require('@features/economy')
+const Discord = require('discord.js')
+const client = new Discord.Client()
 
 module.exports = {
   commands: ['addbalance', 'addbal'],
