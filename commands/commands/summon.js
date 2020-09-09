@@ -1,5 +1,6 @@
 const Discord = require('discord.js')
 const client = new Discord.Client()
+const summoned = '427630841045319701'
 
 module.exports = {
     commands: 'summon',
@@ -10,7 +11,7 @@ module.exports = {
         const summonEmbed = new Discord.MessageEmbed()
         .setColor('#9400D3')
         .setTitle(`Ritual of Kys`)
-        .mentions('@427630841045319701')
+        .description(`<@${summoned}>`)
 
     message.reply(summonEmbed)  
     }
