@@ -9,14 +9,16 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     callback: (message, arguments, text) => {
         const target = message.mentions.users.first()
-        const userId = target.id
-        if (!target) {
+    const targetId = target.id
+//here work on this
+    const guildId = message.guild.id
+    const userId = target.id
+      
       const balusrEmbed = new Discord.MessageEmbed()
             .setColor('#FFFF00')
             .setTitle(`Error`)
             .setDescription('Please tag a user to Summon.')
-            return
-        }
+
       
       message.reply(balusrEmbed)
   
