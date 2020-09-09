@@ -2,6 +2,7 @@ module.exports = {
     commands: 'giverole',
     minArgs: 2,
     expectedArgs: "<Target user's @> <The role name>",
+    permissions: 'ADMINISTRATOR',
     callback: (message, arguments) => {
       const targetUser = message.mentions.users.first()
       if (!targetUser) {
