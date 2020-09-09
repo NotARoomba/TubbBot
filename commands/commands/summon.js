@@ -9,16 +9,17 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     callback: (message, arguments, text) => {
         const target = message.mentions.users.first()
-//here work on this
+
       
       const balusrEmbed = new Discord.MessageEmbed()
             .setColor('#FFFF00')
             .setTitle(`Error`)
             .setDescription('Please tag a user to Summon.')
-
+            if (!target) {
       
       message.reply(balusrEmbed)
-  
+                return
+            }
 
         const summonEmbed = new Discord.MessageEmbed()
         .setColor('#9400D3')
