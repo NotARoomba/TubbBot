@@ -12,13 +12,21 @@ module.exports = {
         .setColor('#9400D3')
         .setTitle(`Ritual of Kys`)
         .setDescription(`<@${summoned}>`)
+        
         .setDescription(`<@${summoned}>`)
+        
         .setDescription(`<@${summoned}>`)
+        
         .setDescription(`<@${summoned}>`)
+        
         .setDescription(`<@${summoned}>`)
+       
         .setDescription(`<@${summoned}>`)
+       
         .setDescription(`<@${summoned}>`)
+       
         .setDescription(`<@${summoned}>`)
+        
         .setDescription(`<@${summoned}>`)
 
     message.reply(summonEmbed)  
