@@ -1,12 +1,19 @@
 module.exports = {
-    commands: 'giverole',
+    commands: ['giverole', 'addrole'],
     minArgs: 2,
     expectedArgs: "<Target user's @> <The role name>",
     permissions: 'ADMINISTRATOR',
     callback: (message, arguments) => {
       const targetUser = message.mentions.users.first()
       if (!targetUser) {
-        message.reply('Please specify someone to give a role to.')
+        
+        const tgtusrEmbed = new Discord.MessageEmbed()
+            .setColor('#FFFF00')
+            .setTitle(`Error`)
+            .setDescription('Please specify someone to give a role to.')
+
+        
+        message.reply(tgtusrEmbed)
         return
       }
   
@@ -19,13 +26,26 @@ module.exports = {
         return role.name === roleName
       })
       if (!role) {
-        message.reply(`There is no role with the name "${roleName}"`)
+       
+        const rleusrEmbed = new Discord.MessageEmbed()
+        .setColor('#FFFF00')
+        .setTitle(`Error`)
+        .setDescription(`There is no role with the name "${roleName}"`)
+
+       
+        message.reply(rleusrEmbed)
         return
       }
   
       const member = guild.members.cache.get(targetUser.id)
       member.roles.add(role)
   
-      message.reply(`that user now has the "${roleName}" role`)
+      const rlegveEmbed = new Discord.MessageEmbed()
+            .setColor('#228B22')
+            .setTitle(`Success`)
+            .setDescription(`That user now has the "${roleName}" role`)
+
+      
+      message.reply(rlegveEmbed)
     },
   }
