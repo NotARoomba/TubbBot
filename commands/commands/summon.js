@@ -10,7 +10,7 @@ module.exports = {
         const summonEmbed = new Discord.MessageEmbed()
         .setColor('#9400D3')
         .setTitle(`Ritual of Kys`)
-        .setDescription('@kys and i oop')
+        .mentions('@427630841045319701')
 
     message.reply(summonEmbed)  
     }
