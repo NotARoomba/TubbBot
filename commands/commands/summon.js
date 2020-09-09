@@ -9,6 +9,7 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     callback: (message, arguments, text) => {
         const target = message.mentions.users.first()
+        const location = message.mentions.channels.first()
 
       
       const balusrEmbed = new Discord.MessageEmbed()
@@ -24,7 +25,7 @@ module.exports = {
         const summonEmbed = new Discord.MessageEmbed()
         .setColor('#9400D3')
         .setTitle(`Ritual of Summon`)
-        .setDescription(`${target}`)
+        .setDescription(`${target} ${location}`)
         
 
     message.reply(summonEmbed)  
