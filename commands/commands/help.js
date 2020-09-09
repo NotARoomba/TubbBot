@@ -43,13 +43,13 @@ module.exports = {
 
       
       const helpEmbed = new Discord.MessageEmbed()
-.setColor('#00FF00')
-.setTitle(`Help`)
-.setDescription(`This is the help command use -help to view it.
+        .setColor('#00FF00')
+        .setTitle(`Help`)
+        .setDescription(`This is the help command use -help to view it.
 
-List of commands:
+        List of commands:
 
-**${prefix}${mainCommand}${args}** = ${description}\n`)
+        **${prefix}${mainCommand}${args}** = ${description}\n`)
     
     }
 
