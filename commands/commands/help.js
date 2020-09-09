@@ -50,9 +50,9 @@ module.exports = {
         List of commands:
 
         **${prefix}${mainCommand}${args}** = ${description}\n`)
-    
+        message.channel.send(helpEmbed)
     }
 
-    message.channel.send(helpEmbed)
+    
   },
 }
