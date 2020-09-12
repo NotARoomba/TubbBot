@@ -34,7 +34,6 @@ client.on('ready', async () => {
     
   })
 
-  welcome(client)
   loadCommands(client)
   loadFeatures(client)
 
