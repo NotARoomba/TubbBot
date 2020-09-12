@@ -9,6 +9,7 @@ const guildPrefixes = {}
 
 const validatePermissions = (permissions) => {
   const validPermissions = [
+    '465917394108547072',
     'CREATE_INSTANT_INVITE',
     'KICK_MEMBERS',
     'BAN_MEMBERS',
