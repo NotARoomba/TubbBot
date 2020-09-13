@@ -42,9 +42,7 @@ client.on('ready', async () => {
 
     const tag = `<@${member.id}>`
 
-    if (
-      member.hasPermission('ADMINISTRATOR')
-    ) {
+    
       const target = mentions.users.first()
       if (target) {
         const targetMember = message.guild.members.cache.get(target.id)
@@ -53,21 +51,14 @@ client.on('ready', async () => {
       } else {
         message.channel.send(`${tag} Please specify someone to ban.`)
       }
-    } else {
-      message.channel.send(
-        `${tag} You do not have permission to use this command.`
-      )
-    }
+    
   })
 
   command(client, 'kick', (message) => {
     const { member, mentions } = message
 
     const tag = `<@${member.id}>`
-
-    if (
-      member.hasPermission('ADMINISTRATOR')
-    ) {
+ {
       const target = mentions.users.first()
       if (target) {
         const targetMember = message.guild.members.cache.get(target.id)
@@ -76,12 +67,8 @@ client.on('ready', async () => {
       } else {
         message.channel.send(`${tag} Please specify someone to kick.`)
       }
-    } else {
-      message.channel.send(
-        `${tag} You do not have permission to use this command.`
-      )
-    }
-  })
+     
+  }
 
   });
 
