@@ -43,14 +43,13 @@ client.on('ready', async () => {
     const tag = `<@${member.id}>`
 
     if (
-      member.hasPermission('ADMINISTRATOR') ||
-      member.hasPermission('BAN_MEMBERS')
+      member.hasPermission('ADMINISTRATOR')
     ) {
       const target = mentions.users.first()
       if (target) {
         const targetMember = message.guild.members.cache.get(target.id)
         targetMember.ban()
-        message.channel.send(`${tag} That user has been`)
+        message.channel.send(`${tag} That user has been banned`)
       } else {
         message.channel.send(`${tag} Please specify someone to ban.`)
       }
@@ -67,14 +66,13 @@ client.on('ready', async () => {
     const tag = `<@${member.id}>`
 
     if (
-      member.hasPermission('ADMINISTRATOR') ||
-      member.hasPermission('KICK_MEMBERS')
+      member.hasPermission('ADMINISTRATOR')
     ) {
       const target = mentions.users.first()
       if (target) {
         const targetMember = message.guild.members.cache.get(target.id)
         targetMember.kick()
-        message.channel.send(`${tag} That user has kicked`)
+        message.channel.send(`${tag} That user has been kicked`)
       } else {
         message.channel.send(`${tag} Please specify someone to kick.`)
       }
