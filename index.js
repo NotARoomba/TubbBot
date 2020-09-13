@@ -58,7 +58,7 @@ client.on('ready', async () => {
     const { member, mentions } = message
 
     const tag = `<@${member.id}>`
- {
+ 
       const target = mentions.users.first()
       if (target) {
         const targetMember = message.guild.members.cache.get(target.id)
@@ -68,10 +68,11 @@ client.on('ready', async () => {
         message.channel.send(`${tag} Please specify someone to kick.`)
       }
      
-  }
 
+    })
   });
 
 
 //client.login('NzUwMTIzNjc3NzM5MTIyODE5.X019HQ.1_2Ti4y-h9PJljBHzotdA36p7vY')
-client.login(process.env.token);
+client.login(process.env.token)
+
