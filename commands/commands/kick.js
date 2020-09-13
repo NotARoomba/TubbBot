@@ -7,7 +7,7 @@ module.exports = {
     maxArgs: 1,
     expectedArgs: "[Target user's @]",
     permissions: 'ADMINISTRATOR',
-    callback: (message, arguments) => {
+    callback: (message, arguments, text) => {
        
         const tag = `<@${member.id}>`
 
