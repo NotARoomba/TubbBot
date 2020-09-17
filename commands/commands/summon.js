@@ -7,7 +7,6 @@ module.exports = {
     commands: 'summon',
     maxArgs: 1,
     expectedArgs: "[Target user's @]",
-    permissions: 'ADMINISTRATOR',
     callback: (message, arguments, text) => {
         const target = message.mentions.users.first()
 
