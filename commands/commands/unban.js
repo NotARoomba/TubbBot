@@ -5,8 +5,8 @@ const client = new Discord.Client()
 module.exports = {
     commands: 'unban',
     permissions: 'ADMINISTRATOR',
-    callback: async(message, args) => {
-        //const { member, mentions, arguments} = message
+    callback: async(message, client, args) => {
+        
         const member = args[0];
          if (!member) {
              return message.reply(`Please enter a id!`)
