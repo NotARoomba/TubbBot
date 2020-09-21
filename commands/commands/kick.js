@@ -3,8 +3,7 @@ const client = new Discord.Client()
 
 module.exports = {
     commands: 'kick',
-    minArgs: 0,
-    maxArgs: 0,
+    permissions: ADMINISTRATOR,
     callback: (message) => {
         const { member, mentions } = message
 
