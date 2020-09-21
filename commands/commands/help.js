@@ -8,7 +8,8 @@ module.exports = {
   description: "Describes all of this bot's commands",
   callback: (message, arguments, text) => {
     
-    let reply = 'I am TUBB (The Utility (B*tch) Bot):\n\n'
+    const helpEmbed = new Discord.MessageEmbed()
+  .setTitle('I am TUBB (The Utility (B*tch) Bot):\n\n') 
 
     const commands = loadCommands()
 
@@ -42,9 +43,10 @@ module.exports = {
       const args = command.expectedArgs ? ` ${command.expectedArgs}` : ''
       const { description } = command
       
-      reply += `**${prefix}${mainCommand}${args}** = ${description}\n`
+      .setDescription(`**${prefix}${mainCommand}${args}** = ${description}\n`)
+      
     }
 
-    message.channel.send(reply) 
+    message.channel.send(helpEmbed) 
   },
 }
