@@ -10,16 +10,16 @@ module.exports = {
         const member = args[0];
 
         if (!member) {
-             return channel.send(`Please enter a id!`)
+             return message.channel.send(`Please enter a id!`)
         }
 
         try {
             message.guild.fetchBans().then(bans => {
                 message.guild.members.unban(member)
             })
-            await channel.send(`${member} has been unbanned!`)
+            await mesesag.channel.send(`${member} has been unbanned!`)
         } catch (e) {
-            return channel.send(`An error occured!`)
+            return message.channel.send(`An error occured!`)
         }
     }
 }
