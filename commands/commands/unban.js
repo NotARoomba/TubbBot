@@ -1,6 +1,6 @@
 const Discord = require('discord.js')
 const client = new Discord.Client()
-const target = mentions.users.first() 
+ 
 
 module.exports = {
     commands: 'unban',
@@ -8,7 +8,7 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     callback: (message) => {
         
-        
+    const target = mentions.users.first()
       if (target) {
         let userID = args[0]
       msg.guild.fetchBans().then(bans=> {
