@@ -11,16 +11,16 @@ module.exports = {
         
 
         if (!member) {
-             return message.channel.reply(`Please enter a id!`)
+             return channel.reply(`Please enter a id!`)
         }
 
         try {
             message.guild.fetchBans().then(bans => {
                 message.guild.members.unban(member)
             })
-            await message.channel.reply(`${member} has been unbanned!`)
+            await channel.reply(`${member} has been unbanned!`)
         } catch (e) {
-            return message.channel.reply(`An error occured!`)
+            return channel.reply(`An error occured!`)
         }
     }
 }
