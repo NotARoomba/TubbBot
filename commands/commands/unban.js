@@ -8,7 +8,6 @@ module.exports = {
     callback: (message) => {
         
         
-        const target = mentions.users.first()
       if (target) {
         let userID = args[0]
       msg.guild.fetchBans().then(bans=> {
