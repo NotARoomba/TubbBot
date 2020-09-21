@@ -13,7 +13,7 @@ module.exports = {
     let reason = args.slice(1).join(' ');
         if(!reason) return reason = "No reason given.";
     
-    message.delete()
+        if (!message.guild.members.get(bannedMember)) return message.reply("This user is not banned!")
     try {
         message.guild.members.unban(bannedMember, reason);
         message.channel.send(`Succesfully unbanned ${bannedMember}!`)
