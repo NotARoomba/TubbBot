@@ -13,13 +13,13 @@ module.exports = {
     
         try {
             let bans = await message.guild.fetchBans();
-            let banned = bans.get(search) || bans.find(u => u.tag.toLowerCase().includes(search.toLowerCase()));
+            let id = bans.get(search) || bans.find(u => u.tag.toLowerCase().includes(search.toLowerCase()));
             
-            if(!banned) return message.channel.send("I could not find a banned user by this ID or name.");
+            if(!id) return message.channel.send("I could not find a banned user by this ID or name.");
     
-            await message.guild.unban(banned);
+            await message.guild.unban(id);
     
-            message.channel.send(`${banned.tag} has been unbanned.`);
+            message.channel.send(`${id.tag} has been unbanned.`);
         } catch(e) {
             message.channel.send(`Unban failed`)
         }
