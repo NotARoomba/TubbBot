@@ -7,19 +7,36 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     callback: async (message, args) => {
         
-            const member = args[0];
+        
 
-           if (!member) {
-                return message.channel.send(`Please enter a id!`)
-           }
-   
-           try {
-               message.guild.fetchBans().then(bans => {
-                   message.guild.members.unban(member)
-               })
-               await message.channel.send(`${member} has been unbanned!`)
-           } catch (e) {
-               return message.channel.send(`An error occured!`)
-           }
+        if(!args[0]) return message.channel.send("Give me a valid ID"); 
+       
+    
+        let bannedMember;
+        
+        try{                                                            
+            bannedMember = await bot.users.fetch(args[0])
+        }catch(e){
+            if(!bannedMember) return message.channel.send("That's not a valid ID")
+        }
+    
+        
+        try {
+                await message.guild.fetchBan(args[0])
+            } catch(e){
+                message.channel.send('This user is not banned.');
+                return;
+            }
+    
+        let reason = args.slice(1).join(" ")
+        if(!reason) reason = "..."
+    
+        
+        try {
+            message.guild.members.unban(bannedMember, {reason: reason})
+            message.channel.send(`${bannedMember.tag} was readmitted.`)
+        } catch(e) {
+            console.log(e.message)
+    }
     }
 }
