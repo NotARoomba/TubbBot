@@ -12,7 +12,7 @@ module.exports = {
       if (target) {
         const targetMember = message.guild.members.cache.get(target.id)
         targetMember.kick()
-        message.channel.send(`${tag} That user has kicked`)
+        message.channel.send(`${tag} That user has been kicked`)
       } else {
         message.channel.send(`${tag} Please specify someone to kick.`)
       }
