@@ -7,18 +7,20 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     callback: async (message, args) => {
         
-        const member = args[0];
-         if (!member) {
-             return message.reply(`Please enter a id!`)
-        }
-
+        if(isNaN(args[0])) return message.channel.send("You need to provide an ID.")
+        let bannedMember =  client.users.fetch(args[0])
+            if(!bannedMember) return message.channel.send("Please provide a user id to unban someone!")
+    
+        let reason = args.slice(1).join(" ")
+            if(!reason) reason = "No reason given!"
+    
+        if(!message.guild.me.hasPermission(["BAN_MEMBERS"])) return message.channel.send("I dont have permission to perform this command!")|
+        message.delete()
         try {
-            message.guild.fetchBans().then(bans => {
-                message.guild.members.unban(member)
-            })
-            await message.reply(`${member} has been unbanned!`)
-        } catch (e) {
-            return message.reply(`An error occured!`)
+            message.guild.members.unban(bannedMember, reason)
+            message.channel.send(`**${bannedMember.tag}** has been unbanned from the guild!`)
+        } catch(e) {
+            console.log(e.message)
         }
     }
 }
