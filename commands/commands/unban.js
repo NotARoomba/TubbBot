@@ -5,7 +5,7 @@ const client = new Discord.Client()
 module.exports = {
     commands: 'unban',
     permissions: 'ADMINISTRATOR',
-    callback: async(client, message, args) => {
+    callback: async(message, args) => {
         const { member, mentions, arguments} = message
 
         const tag = `<@${member.id}>`
