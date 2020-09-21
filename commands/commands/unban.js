@@ -8,31 +8,25 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     callback: (message) => {
         
-    const target = mentions.users.first()
-      if (target) {
-        let userID = args[0]
-      msg.guild.fetchBans().then(bans=> {
-      if(bans.size == 0) return 
-      let bUser = bans.find(b => b.user.id == userID)
-      if(!bUser) return
-      msg.guild.members.unban(bUser.user)
-})
-
-        const unbyesEmbed = new Discord.MessageEmbed()
-    .setColor('#228B22')
-    .setTitle(`Success`)
-    .setDescription(`${tag} That user has been unbanned`)
-
-
-        message.channel.send(unbyesEmbed)
-      } else {
+        let User = args[0];
+        let Reason = args.slice(1).join(` `);
+        if (!User) return message.reply(`Who are we unbanning?`);
+        if (!Reason) Reason = `Unbanned by ${message.author.tag}`
         
-        const unberrEmbed = new Discord.MessageEmbed()
-            .setColor('#FFFF00')
-            .setTitle(`Error`)
-            .setDescription(`${tag} Please specify someone to unban.`)
+        message.guild.fetchBans()
+        .then(bans => {
+        if (bans.some(u => User.includes(u.username))) {
+        let user = bans.find(user => user.username === User);
         
-        message.channel.send(unberrEmbed)
-      }
+        message.guild.unban(user.id, Reason);
+        }
+        else if (bans.some(u => User.includes(u.id))) {
+        
+        message.guild.unban(User, Reason);
+        }
+        else {
+        return message.reply(`This person is not banned`);
+        }
+        });
     }
 }
