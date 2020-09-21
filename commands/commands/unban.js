@@ -13,7 +13,7 @@ module.exports = {
         const target = mentions.users.first()
       if (target) {
         const targetMember = message.guild.members.cache.get(target.id)
-        targetMember.unban()
+        targetMember.guild.unban()
 
         const unbyesEmbed = new Discord.MessageEmbed()
     .setColor('#228B22')
