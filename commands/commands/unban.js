@@ -8,7 +8,7 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     callback: async (message) => {
         
-        if(!bot.hasPermission(message, "BAN_MEMBERS")) return message.channel.send("You do not have permission to do this.");
+        if(!client.hasPermission(message, "BAN_MEMBERS")) return message.channel.send("You do not have permission to do this.");
 	
         let search = args.join(" ");
         if(!search) return message.channel.send("Please provide a valid ID or name.");
