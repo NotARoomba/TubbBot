@@ -7,20 +7,18 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     callback: async (client, message, args) => {
         
-    if(!message.member.hasPermission(["BAN_MEMBERS", "ADMINISTRATOR"])) return message.channel.send("You can't do that.")
+    
 
     if(!args[0]) return message.channel.send("Give me a valid ID"); 
-    //This if() checks if we typed anything after "!unban"
 
     let bannedMember;
-    //This try...catch solves the problem with the await
+    
     try{                                                            
         bannedMember = await bot.users.fetch(args[0])
     }catch(e){
         if(!bannedMember) return message.channel.send("That's not a valid ID")
     }
 
-    //Check if the user is not banned
     try {
             await message.guild.fetchBan(args[0])
         } catch(e){
