@@ -13,6 +13,8 @@ module.exports = {
 
     let reason = args.slice(1).join(" ")
         if(!reason) reason = "No reason given!"
+        
+        if (!message.guild.members.get(bannedMember)) return message.reply("This user is not banned!")
 
     if(!message.guild.me.hasPermission(["BAN_MEMBERS"])) return message.channel.send("I dont have permission to perform this command!")|
     message.delete()
