@@ -8,7 +8,7 @@ module.exports = {
     callback: async(client, message, args) => {
         const { member, mentions, arguments} = message
 
-        const member = args[0];
+        
 
         if (!member) {
              return message.channel.send(`Please enter a id!`)
