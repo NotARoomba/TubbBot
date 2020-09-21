@@ -6,8 +6,8 @@ module.exports = {
     commands: 'unban',
     permissions: 'ADMINISTRATOR',
     callback: async(message, args) => {
-        const { member, mentions, arguments} = message
-
+        //const { member, mentions, arguments} = message
+        const member = args[0];
          if (!member) {
              return message.reply(`Please enter a id!`)
         }
