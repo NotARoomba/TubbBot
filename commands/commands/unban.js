@@ -7,27 +7,21 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     callback: (message, args) => {
 
-        if (!isNaN(args[0])) {
-            const bannedMember = message.guild.members.cache.get(args[0]) // Get the `member` property instead to recall later.
-            var reason = args.slice(1).join(" ");
-            if(!reason) {
-              reason = "No reason given!"
+        var command = message.content.toLowerCase().split(" ")[0];
+    var args = message.content.toLowerCase().split(" ");
+    var user = message.mentions.users.first()
+   {
+        
+       
+        if(!args[1]) return  message.channel.send('**Mention User Or Type ID**');
+        if(args[1].length < 16) return message.reply('** This ID is not id user!**');
+        message.guild.fetchBans().then(bans => {
+            var Found = bans.find(m => m.id === args[1]);
+            if(!Found) return message.channel.send(`**I Can't Find <@${args[1]}> In The Ban List**`);
+            message.guild.unban(args[1]);
+            message.channel.send(`**<@${args[1]}> Unbanned!**`);
             }
-            if (bannedMember) {
-              bannedMember
-                message.guild.members.unban(bannedMember.id, reason)
-                .then(() => {
-                  message.channel.send(`Successfully unbanned **${bannedMember.user.tag}**`);
-                })
-                .catch(err => {
-                  message.channel.send('I was unable to unban the member');
-                  console.error(err);
-                });
-            } else {
-              message.channel.send("That user isn't in this guild!");
-            }
-          } else {
-            message.channel.send("You need to provide an user ID to unban");
-          }
+
+        )}
+        }
     }
-}
