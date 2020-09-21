@@ -8,20 +8,12 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     callback: async (message, args) => {
 	
-        let search = args.join(" ");
-        if(!search) return message.channel.send("Please provide a valid ID or name.");
-    
-        try {
-            let bans = await message.guild.fetchBans();
-            let id = bans.get(search) || bans.find(u => u.tag.toLowerCase().includes(search.toLowerCase()));
-            
-            if(!id) return message.channel.send("I could not find a banned user by this ID or name.");
-    
-            await message.guild.unban(id);
-    
-            message.channel.send(`${id.tag} has been unbanned.`);
-        } catch(e) {
-            message.channel.send(`Unban failed`)
-        }
+        let userID = args[0]
+        msg.guild.fetchBans().then(bans=> {
+        if(bans.size == 0) return 
+        let bUser = bans.find(b => b.user.id == userID)
+        if(!bUser) return
+        msg.guild.members.unban(bUser.user)
+    })
     }
 }
