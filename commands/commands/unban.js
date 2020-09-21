@@ -6,7 +6,6 @@ module.exports = {
     commands: 'unban',
     permissions: 'ADMINISTRATOR',
     callback: async (client, message, args) => {
-        if(!message.member.hasPermission(["BAN_MEMBERS", "ADMINISTRATOR"])) return message.channel.send("You can't do that.")
 
         if(!args[0]) return message.channel.send("Give me a valid ID"); 
         //This if() checks if we typed anything after "!unban"
