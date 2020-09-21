@@ -6,6 +6,7 @@ module.exports = {
     commands: 'ping',
     minArgs: 0,
     maxArgs: 0,
+    description: 'Find your ping to me!',
     callback: (message, arguments, text) => {
         const waitEmbed = new Discord.MessageEmbed()
         .setColor('#C0C0C0')

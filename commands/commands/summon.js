@@ -6,6 +6,7 @@ const client = new Discord.Client()
 module.exports = {
     commands: 'summon',
     maxArgs: 1,
+    description: '*Holy Music stops*',
     expectedArgs: "[Target user's @]",
     callback: (message, arguments, text) => {
         const target = message.mentions.users.first()

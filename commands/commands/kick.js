@@ -3,6 +3,7 @@ const client = new Discord.Client()
 
 module.exports = {
     commands: 'kick',
+    description: 'Kicks someone somewhere?',
     permissionError: 'You must be an administrator to use this command.',
     permissions: 'ADMINISTRATOR',
     callback: (message) => {

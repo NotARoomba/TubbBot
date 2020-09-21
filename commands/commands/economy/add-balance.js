@@ -6,6 +6,7 @@ module.exports = {
   commands: ['addbalance', 'addbal'],
   minArgs: 2,
   maxArgs: 2,
+  description: 'Money for the Admins!',
   expectedArgs: "<The target's @> <Strand amount>",
   permissionError: 'You must be an administrator to use this command.',
   permissions: 'ADMINISTRATOR',

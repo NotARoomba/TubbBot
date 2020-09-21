@@ -6,6 +6,7 @@ module.exports = {
   commands: 'pay',
   minArgs: 2,
   maxArgs: 2,
+  description: 'Got Cash?',
   expectedArgs: "<Target user's @> <Amount of Strands>",
   callback: async (message, arguments, text) => {
     const { guild, member } = message

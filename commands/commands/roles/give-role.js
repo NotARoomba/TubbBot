@@ -4,6 +4,7 @@ const client = new Discord.Client()
 module.exports = {
     commands: ['giverole', 'addrole'],
     minArgs: 2,
+    description: 'Gives someone a role',
     expectedArgs: "<Target user's @> <The role name>",
     permissions: 'ADMINISTRATOR',
     callback: (message, arguments) => {

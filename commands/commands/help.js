@@ -1,31 +1,47 @@
-const Discord = require('discord.js')
-const client = new Discord.Client()
+const loadCommands = require('./load-commands')
+const { prefix } = require('../config.json')
 
 module.exports = {
-    commands: 'help',
-    minArgs: 0,
-    maxArgs: 0,
-    callback: (message, arguments, text) => {
+  commands: ['help', 'h'],
+  description: "Describes all of this bot's commands",
+  callback: (message, arguments, text) => {
+    let reply = 'I am TUBB (The Utility (B*tch) Bot):\n\n'
 
-    const helpEmbed = new Discord.MessageEmbed()
-.setColor('#00FF00')
-.setTitle(`Help`)
-.setDescription(`This is the help command use -help to view it.
+    const commands = loadCommands()
 
-List of commands:
+    for (const command of commands) {
+      // Check for permissions
+      let permissions = command.permission
 
--help, what you're viewing right now
+      if (permissions) {
+        let hasPermission = true
+        if (typeof permissions === 'string') {
+          permissions = [permissions]
+        }
 
--ping, shows ping to Tubb
+        for (const permission of permissions) {
+          if (!message.member.hasPermission(permission)) {
+            hasPermission = false
+            break
+          }
+        }
 
--bal, to view your account balance
+        if (!hasPermission) {
+          continue
+        }
+      }
 
--pay, to pay others Strands
+      // Format the text
+      const mainCommand =
+        typeof command.commands === 'string'
+          ? command.commands
+          : command.commands[0]
+      const args = command.expectedArgs ? ` ${command.expectedArgs}` : ''
+      const { description } = command
 
--hasrole, to show what roles someone has
-
-More commands in development!`)
-
-message.reply(helpEmbed);
+      reply += `**${prefix}${mainCommand}${args}** = ${description}\n`
     }
+
+    message.channel.send(reply)
+  },
 }

@@ -5,6 +5,7 @@ const client = new Discord.Client()
 module.exports = {
     commands: 'hasrole',
     minArgs: 2,
+    description: 'Who has what?',
     expectedArgs: "<Target user's @> <The role name>",
     permissions: 'ADMINISTRATOR',
     callback: (message, arguments) => {
