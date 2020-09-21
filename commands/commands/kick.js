@@ -6,7 +6,7 @@ module.exports = {
     minArgs: 1,
     maxArgs: 1,
     permissionError: 'You must be an administrator to use this command.',
-    permissions: ADMINISTRATOR,
+    permissions: 'ADMINISTRATOR',
     callback: (message) => {
         const { member, mentions, arguments} = message
 
