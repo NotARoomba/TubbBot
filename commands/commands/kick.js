@@ -14,9 +14,22 @@ module.exports = {
       if (target) {
         const targetMember = message.guild.members.cache.get(target.id)
         targetMember.kick()
-        message.channel.send(`${tag} That user has been kicked`)
+
+        const kikyesEmbed = new Discord.MessageEmbed()
+    .setColor('#228B22')
+    .setTitle(`Success`)
+    .setDescription(`${tag} That user has been kicked`)
+
+
+        message.channel.send(kikyesEmbed)
       } else {
-        message.channel.send(`${tag} Please specify someone to kick.`)
+        
+        const kikerrEmbed = new Discord.MessageEmbed()
+            .setColor('#FFFF00')
+            .setTitle(`Error`)
+            .setDescription(`${tag} Please specify someone to kick.`)
+        
+        message.channel.send(kikerrEmbed)
       }
     }
 }
