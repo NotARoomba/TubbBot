@@ -6,20 +6,21 @@ module.exports = {
     commands: 'unban',
     permissions: 'ADMINISTRATOR',
     callback: async(client, message, args) => {
-        
+        const { member, mentions, arguments} = message
+
         const member = args[0];
 
         if (!member) {
-             return client.channels.get(channel).send(`Please enter a id!`)
+             return message.channel.send(`Please enter a id!`)
         }
 
         try {
             message.guild.fetchBans().then(bans => {
                 message.guild.members.unban(member)
             })
-            await client.channels.get(channel).send(`${member} has been unbanned!`)
+            await message.channel.send(`${member} has been unbanned!`)
         } catch (e) {
-            return client.channels.get(channel).send(`An error occured!`)
+            return message.channel.send(`An error occured!`)
         }
     }
 }
