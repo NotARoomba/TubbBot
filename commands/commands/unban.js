@@ -14,6 +14,7 @@ module.exports = {
         let bUser = bans.find(b => b.user.id == userID)
         if(!bUser) return
         msg.guild.members.unban(bUser.user)
+        message.channel.send(`Unbanned!`)
     })
     }
 }
