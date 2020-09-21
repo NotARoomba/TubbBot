@@ -21,7 +21,7 @@ module.exports = {
     
             message.channel.send(`${banned.tag} has been unbanned.`);
         } catch(e) {
-            message.channel.send(`Unban failed: ${reason}`)
+            message.channel.send(`Unban failed`)
         }
     }
 }
