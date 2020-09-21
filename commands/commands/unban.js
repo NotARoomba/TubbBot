@@ -6,7 +6,7 @@ module.exports = {
     commands: 'unban',
     permissionError: 'You must be an administrator to use this command.',
     permissions: 'ADMINISTRATOR',
-    callback: async (message) => {
+    callback: async (message, args) => {
 	
         let search = args.join(" ");
         if(!search) return message.channel.send("Please provide a valid ID or name.");
