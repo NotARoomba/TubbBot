@@ -5,7 +5,7 @@ const client = new Discord.Client()
 module.exports = {
     commands: 'unban',
     permissions: 'ADMINISTRATOR',
-    callback: async (client, message, args) => {
+    callback: async (message, args) => {
 
         if(!args[0]) return message.channel.send("Give me a valid ID"); 
         //This if() checks if we typed anything after "!unban"
