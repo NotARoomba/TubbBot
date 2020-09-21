@@ -8,19 +8,19 @@ module.exports = {
     callback: async(client, message, args) => {
         const { member, mentions, arguments} = message
 
-        
+        const tag = `<@${member.id}>`
 
-        if (!member) {
-             return channel.reply(`Please enter a id!`)
+         if (!member) {
+             return message.reply(`Please enter a id!`)
         }
 
         try {
             message.guild.fetchBans().then(bans => {
                 message.guild.members.unban(member)
             })
-            await channel.reply(`${member} has been unbanned!`)
+            await message.reply(`${member} has been unbanned!`)
         } catch (e) {
-            return channel.reply(`An error occured!`)
+            return message.reply(`An error occured!`)
         }
     }
 }
