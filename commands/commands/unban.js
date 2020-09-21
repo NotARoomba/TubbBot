@@ -6,9 +6,6 @@ module.exports = {
     permissionError: 'You must be an administrator to use this command.',
     permissions: 'ADMINISTRATOR',
     callback: (message) => {
-        const { member, mentions, arguments} = message
-
-        const tag = `<@${member.id}>`
         
         
         const target = mentions.users.first()
