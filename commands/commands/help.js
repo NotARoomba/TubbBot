@@ -47,13 +47,9 @@ module.exports = {
       const args = command.expectedArgs ? ` ${command.expectedArgs}` : ''
       const { description } = command
       
-      const help2Embed = new Discord.MessageEmbed()
-      .setColor('#C0C0C0')
-      .setTitle(`Help`)
-      .setDescription(`**${prefix}${mainCommand}${args}** = ${description}\n`)
-       
+      reply += `**${prefix}${mainCommand}${args}** = ${description}\n`
     }
 
-    message.channel.send(reply += help2Embed) 
+    message.channel.send(reply) 
   },
 }
