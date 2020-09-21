@@ -1,5 +1,5 @@
 require('module-alias/register');
-require('events').EventEmitter.defaultMaxListeners = infinity;
+require('events').EventEmitter.prototype._maxListeners = 100;
 const Discord = require('discord.js')
 const client = new Discord.Client()
 const command = require('@util/command.js')
