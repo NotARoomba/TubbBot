@@ -7,7 +7,7 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     callback: async (client, message, args) => {
         
-        const member = message.mentions.member.first();
+        const member = message.mentions.members.first();
     
         if(!args[0]) return message.channel.send('Please specify a user');
 
