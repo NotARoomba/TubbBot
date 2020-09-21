@@ -5,7 +5,7 @@ const client = new Discord.Client()
 module.exports = {
     commands: 'unban',
     permissions: 'ADMINISTRATOR',
-    callback: async (message, args) => {
+    callback: (message, args) => {
 
         if (!isNaN(args[0])) {
             const bannedMember = message.guild.members.cache.get(args[0]) // Get the `member` property instead to recall later.
