@@ -18,9 +18,6 @@ client.commands = new Discord.Collection();
 //})
 
 
-
-
-
 client.on('ready', async () => {
   console.log('Tubb is online!')
   client.user.setActivity('|-help|');
