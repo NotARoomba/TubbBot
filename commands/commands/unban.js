@@ -8,8 +8,6 @@ module.exports = {
     callback: async(message, args) => {
         const { member, mentions, arguments} = message
 
-        const tag = `<@${member.id}>`
-
          if (!member) {
              return message.reply(`Please enter a id!`)
         }
