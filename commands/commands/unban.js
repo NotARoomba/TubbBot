@@ -5,24 +5,20 @@ const client = new Discord.Client()
 module.exports = {
     commands: 'unban',
     permissions: 'ADMINISTRATOR',
-    callback: async (client, message, args) => {
+    callback: async (message, args) => {
         
-        const member = message.mentions.members.first();
-    
-        if(!args[0]) return message.channel.send('Please specify a user');
+        const member = args[0];
+         if (!member) {
+             return message.reply(`Please enter a id!`)
+        }
 
-
-
-        message.guild.members.unban(`${id}`)
-        .catch(err => {
-            if(err) return message.channel.send('Something went wrong')
-        })
-
-        const banembed = new Discord.MessageEmbed()
-        .setTitle('Member Unbanned')
-        .addField('User Unbanned', member)
-        .addField('Unbanned by', message.author)
-
-        message.channel.send(banembed);
+        try {
+            message.guild.fetchBans().then(bans => {
+                message.guild.members.unban(member)
+            })
+            await message.reply(`${member} has been unbanned!`)
+        } catch (e) {
+            return message.reply(`An error occured!`)
+        }
     }
 }
