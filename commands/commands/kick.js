@@ -4,7 +4,7 @@ const client = new Discord.Client()
 module.exports = {
     commands: 'kick',
     callback: (message) => {
-        const { member, arguments, text} = message
+        const { member, mentions} = message
 
         const tag = `<@${member.id}>`
         
