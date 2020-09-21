@@ -1,5 +1,6 @@
 const Discord = require('discord.js')
 const client = new Discord.Client()
+const target = mentions.users.first() 
 
 module.exports = {
     commands: 'unban',
