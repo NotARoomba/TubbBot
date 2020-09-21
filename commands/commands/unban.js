@@ -5,7 +5,7 @@ const client = new Discord.Client()
 module.exports = {
     commands: 'unban',
     permissions: 'ADMINISTRATOR',
-    callback: async (client, message, args) => {
+    callback: (client, message, args) => {
         
            if(isNaN(args[0])) return message.channel.send("You need to provide an ID.")
     let bannedMember =  client.users.fetch(args[0])
