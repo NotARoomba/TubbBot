@@ -4,7 +4,6 @@ const client = new Discord.Client()
 
 module.exports = {
     commands: 'unban',
-    permissionError: 'You must be an administrator to use this command.',
     permissions: 'ADMINISTRATOR',
     callback: async (client, message, args) => {
 	    const member = args[0];
