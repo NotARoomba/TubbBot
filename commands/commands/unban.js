@@ -5,7 +5,7 @@ const client = new Discord.Client()
 module.exports = {
     commands: 'unban',
     permissions: 'ADMINISTRATOR',
-    callback: async(message, client, args) => {
+    callback: async(message, arguments) => {
         
         const member = args[0];
          if (!member) {
