@@ -6,7 +6,7 @@ module.exports = {
     commands: 'unban',
     permissionError: 'You must be an administrator to use this command.',
     permissions: 'ADMINISTRATOR',
-    callback: async(message) => {
+    callback: async (message) => {
         
         let User = args[0];
         let Reason = args.slice(1).join(` `);
