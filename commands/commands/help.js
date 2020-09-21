@@ -8,12 +8,7 @@ module.exports = {
   description: "Describes all of this bot's commands",
   callback: (message, arguments, text) => {
     
-    const helpEmbed = new Discord.MessageEmbed()
-    .setColor('#C0C0C0')
-    .setTitle(`Help`)
-    .setDescription('I am TUBB (The Utility (B*tch) Bot):\n\n')
-
-    let reply = helpEmbed
+    let reply = 'I am TUBB (The Utility (B*tch) Bot):\n\n'
 
     const commands = loadCommands()
 
