@@ -7,8 +7,7 @@ module.exports = {
     permissionError: 'You must be an administrator to use this command.',
     permissions: 'ADMINISTRATOR',
     callback: async (client, message, args) => {
-	
-        const member = args[0];
+	    const member = args[0];
 
         if (!member) {
              return message.channel.send(`Please enter a id!`)
