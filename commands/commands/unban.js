@@ -1,8 +1,6 @@
 const Discord = require('discord.js')
 
- 
-
-module.exports = {
+ module.exports = {
     commands: 'unban',
     permissions: 'ADMINISTRATOR',
     callback: async (message, args) => {
@@ -10,16 +8,34 @@ module.exports = {
         const member = args[0];
 
         if (!member) {
-             return message.channel.send(`Please enter a id!`)
+             
+            const iderrEmbed = new Discord.MessageEmbed()
+            .setColor('#FFFF00')
+            .setTitle(`Error`)
+            .setDescription(`Please enter a id!`)
+
+            return message.channel.send(iderrEmbed)
         }
 
         try {
             message.guild.fetchBans().then(bans => {
                 message.guild.members.unban(member)
             })
-            await message.channel.send(`${member} has been unbanned!`)
+            
+            const ubyesEmbed = new Discord.MessageEmbed()
+             .setColor('#228B22')
+             .setTitle(`Success`)
+             .setDescription(`${member} has been unbanned!`)
+
+            await message.channel.send(ubyesEmbed)
         } catch (e) {
-            return message.channel.send(`An error occured!`)
+            
+            const uberrEmbed = new Discord.MessageEmbed()
+            .setColor('#FFFF00')
+            .setTitle(`Error`)
+            .setDescription(`An error occured!`)
+            
+            return message.channel.send(uberrEmbed)
         }
 
     }
