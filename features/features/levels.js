@@ -42,11 +42,7 @@ const addXP = async (guildId, userId, xpToAdd, message) => {
         ++level
         xp -= needed
 
-        const canvas = Canvas.createCanvas(700, 250);
-        const ctx = canvas.getContext('2d');
-        const background = await Canvas.loadImage('@root/wallpaper.jpg');
-        ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-        const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
+        
 
         message.reply(
           `You are now level ${level} with ${xp} experience! You now need ${getNeededXP(
