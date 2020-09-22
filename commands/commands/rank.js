@@ -2,9 +2,8 @@ const { MessageAttachment } = require("discord.js");
 
 
 module.exports = {
-    commands: 'unban',
-    description: 'Reinstatement to this Server!',
-    permissions: 'ADMINISTRATOR',
+    commands: 'rank',
+    description: 'I wanna be the best...',
     callback: async (client, message, args) => {
 
         let user =
