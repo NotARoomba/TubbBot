@@ -1,6 +1,7 @@
+const Discord = require('discord.js');
 const Canvas = require('canvas');
 const client = new Discord.Client();
-const Discord = require('discord.js');
+
 
 const mongo = require('./mongo')
 const profileSchema = require('./schemas/profile-schema')
