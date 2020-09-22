@@ -8,9 +8,17 @@ const reqString = {
 const profileSchema = mongoose.Schema({
   guildId: reqString,
   userId: reqString,
-  strands: {
+  coins: {
     type: Number,
-    required: true,
+    default: 0,
+  },
+  xp: {
+    type: Number,
+    default: 0,
+  },
+  level: {
+    type: Number,
+    default: 1,
   },
 })
 
