@@ -7,7 +7,7 @@ const Discord = require('discord.js');
 module.exports = {
     commands: 'rank',
     description: 'I wanna be the very best...',
-    callback: async(message, args) => {
+    callback: (message, args) => {
 
         const canvas = Canvas.createCanvas(700, 250);
         const ctx = canvas.getContext('2d');
