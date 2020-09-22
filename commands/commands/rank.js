@@ -1,14 +1,12 @@
-const Canvas = require("discord-canvas"),
-const client = new Discord.Client();
 const Discord = require('discord.js')
-
-
+const client = new Discord.Client();
+const Canvas = require("discord-canvas")
 
 
 module.exports = {
     commands: 'rank',
     description: 'I wanna be the very best...',
-    callback: async (client, message, args) => {
+    callback: async (message, args) => {
 
         const image = await new Canvas.Goodbye()
 
