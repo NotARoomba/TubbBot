@@ -2,9 +2,9 @@ const Discord = require('discord.js')
 const client = new Discord.Client()
 
 module.exports = (client) => {
-    const channelId = ['750766854360006676', '757771111374258176']  // welcome channel
-    const rules = ['750556623348564038', '757769773148012655']  // rules and info
-    const roles = ['751559736096456885', '']
+    const channelId = '757771111374258176'  // welcome channel
+    const rules = '757769773148012655'  // rules and info
+    //const roles = '751559736096456885'
     
     client.on('guildMemberAdd', (member) => {
           const welcomeEmbed = new Discord.MessageEmbed()
