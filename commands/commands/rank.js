@@ -10,7 +10,7 @@ const client = new Discord.Client();
 module.exports = {
     commands: 'rank',
     description: 'I wanna be the very best...',
-    callback: (client, message, args) => {
+    callback: async (client, message, args) => {
 
         let WELCOME_MESSAGE_TITLE = `${message.author.username} Just joined!`; 
         let WELCOME_MESSAGE_TEXT = `You are our ${message.guild.members.cache.size}th member!`;
