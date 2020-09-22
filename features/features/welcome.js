@@ -14,6 +14,6 @@ module.exports = (client) => {
             .setDescription(`Welcome to this Server, ${member}! Please read ${member.guild.channels.cache.get(rules).toString()}. Thank you for joining this server and we hope you have a good time!
             (Btw -help)`)
   
-        welcomChannel.send(welcomeEmbed)
+        welcomeChannel.send(welcomeEmbed)
       })
 }
