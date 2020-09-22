@@ -3,7 +3,7 @@ const { MessageAttachment } = require("discord.js");
 
 module.exports = {
     commands: 'rank',
-    description: 'I wanna be the best...',
+    description: 'I wanna be the very best...',
     callback: async (client, message, args) => {
 
         let user =
