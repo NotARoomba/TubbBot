@@ -2,7 +2,6 @@ const Discord = require('discord.js')
 const client = new Discord.Client()
 
 module.exports = (member, message) => {
-  var role = member.guild.roles.find('welcome', 'welcome-channel'); // Variable to get channel ID
     client.on('guildMemberAdd', (member) => {
       const welcomeEmbed = new Discord.MessageEmbed()
             .setColor('#8B0000')
