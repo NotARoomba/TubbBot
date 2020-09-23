@@ -1,6 +1,7 @@
-const Discord = require('discord.js')
+const Discord = require('discord.js');
+const Canvas = require('canvas');
+
 const client = new Discord.Client();
-const Canvas = require("discord-canvas")
 
 
 module.exports = {
@@ -8,12 +9,12 @@ module.exports = {
     description: 'I wanna be the very best...',
     callback: async (message, args) => {
 
-        const image = await new Canvas.Goodbye()
+        const canvas = Canvas.createCanvas(700, 250);
+        const ctx = canvas.getContext('2d');
+        const background = await Canvas.loadImage('https://cdn.discordapp.com/attachments/757768055479861278/758090856325709885/bh.jpeg');
+        ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 
-        .setBackground("https://cdn.discordapp.com/attachments/757768055479861278/758090856325709885/bh.jpeg")
-        .toAttachment();
-
-        const attachment = new Discord.Attachment(image.toBuffer(), "goodbye-image.png");
+        const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
 
     message.channel.send(attachment);
       
