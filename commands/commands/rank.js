@@ -10,8 +10,8 @@ module.exports = {
     callback: async (message, args) => {
 
         let font = await jimp.loadFont(jimp.FONT_SANS_32_BLACK) 
-        welcome.print(font, 508, 200, `Hello!`) 
         let welcome = await jimp.read('https://cdn.discordapp.com/attachments/757768055479861278/758090856325709885/bh.jpeg')
+        welcome.print(font, 508, 200, `Hello!`) 
         welcome.write('Welcome2.png')
         
     message.channel.send(``, { files: ["Welcome2.png"] })
