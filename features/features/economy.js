@@ -1,11 +1,11 @@
 const mongo = require('@util/mongo')
 const profileSchema = require('@schemas/profile-schema')
 
-const strandsCache = {} // { 'guildId-userId': strands }
+const coinsCache = {} // { 'guildId-userId': coins }
 
 module.exports = (client) => {}
 
-module.exports.addCoins = async (guildId, userId, strands) => {
+module.exports.addCoins = async (guildId, userId, coins) => {
   return await mongo().then(async (mongoose) => {
     try {
       console.log('Running findOneAndUpdate()')
@@ -19,7 +19,7 @@ module.exports.addCoins = async (guildId, userId, strands) => {
           guildId,
           userId,
           $inc: {
-            strands,
+            coins,
           },
         },
         {
@@ -27,12 +27,10 @@ module.exports.addCoins = async (guildId, userId, strands) => {
           new: true,
         }
       )
-      console.log('RESULT:', result)
 
-      strandsCache[`${guildId}-${userId}`] = result.strands
+      coinsCache[`${guildId}-${userId}`] = result.coins
 
-
-      return result.strands
+      return result.coins
     } finally {
       mongoose.connection.close()
     }
@@ -40,7 +38,7 @@ module.exports.addCoins = async (guildId, userId, strands) => {
 }
 
 module.exports.getCoins = async (guildId, userId) => {
-  const cachedValue = strandsCache[`${guildId}-${userId}`]
+  const cachedValue = coinsCache[`${guildId}-${userId}`]
   if (cachedValue) {
     return cachedValue
   }
@@ -53,23 +51,22 @@ module.exports.getCoins = async (guildId, userId) => {
         guildId,
         userId,
       })
-      console.log('RESULT:', result)
 
-      let strands = 0
-
+      let coins = 0
       if (result) {
-        strands = result.strands
+        coins = result.coins
       } else {
         console.log('Inserting a document')
         await new profileSchema({
           guildId,
           userId,
-          strands,
+          coins,
         }).save()
       }
-      strandsCache[`${guildId}-${userId}`] = strands
-      
-      return strands
+
+      coinsCache[`${guildId}-${userId}`] = coins
+
+      return coins
     } finally {
       mongoose.connection.close()
     }

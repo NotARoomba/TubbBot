@@ -18,15 +18,15 @@ module.exports = {
     }
 
 
-    const strandsToGive = arguments[1]
-    if (isNaN(strandsToGive)) {
+    const coinsToGive = arguments[1]
+    if (isNaN(coinsToGive)) {
       message.reply('Please provide a valid number of Strands to give.')
       return
     }
 
-    const strandsOwned = await economy.getCoins(guild.id, member.id)
-    if (strandsOwned < strandsToGive) {
-      message.reply(`You do not have ${strandsToGive} Strands!`)
+    const coinsOwned = await economy.getCoins(guild.id, member.id)
+    if (coinsOwned < coinsToGive) {
+      message.reply(`You do not have ${coinsToGive} Strands!`)
 
       return
     }
@@ -34,13 +34,13 @@ module.exports = {
     const remainingCoins = await economy.addCoins(
       guild.id,
       member.id,
-      strandsToGive * -1
+      coinsToGive * -1
     )
-    const newBalance = await economy.addCoins(guild.id, target.id, strandsToGive)
+    const newBalance = await economy.addCoins(guild.id, target.id, coinsToGive)
     const payEmbed = new Discord.MessageEmbed()
         .setColor('#00FFFF')
         .setTitle(`Pay`)
-        .setDescription(`You have given <@${target.id}> ${strandsToGive} Strands! They now have ${newBalance} Strands and you have ${remainingCoins} Strands!`)
+        .setDescription(`You have given <@${target.id}> ${coinsToGive} Strands! They now have ${newBalance} Strands and you have ${remainingCoins} Strands!`)
 
     message.reply(payEmbed);
   },

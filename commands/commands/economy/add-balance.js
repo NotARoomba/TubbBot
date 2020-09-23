@@ -7,7 +7,7 @@ module.exports = {
   minArgs: 2,
   maxArgs: 2,
   description: 'Money for the Admins!',
-  expectedArgs: "<The target's @> <Strand amount>",
+  expectedArgs: "<The target's @> <Coin amount>",
   permissionError: 'You must be an administrator to use this command.',
   permissions: 'ADMINISTRATOR',
   callback: async (message, arguments) => {
@@ -25,8 +25,8 @@ module.exports = {
       return
     }
 
-    const strands = arguments[1]
-    if (isNaN(strands)) {
+    const coins = arguments[1]
+    if (isNaN(coins)) {
       
       const balsadEmbed = new Discord.MessageEmbed()
             .setColor('#FFFF00')
@@ -40,12 +40,12 @@ module.exports = {
     const guildId = message.guild.id
     const userId = mention.id
 
-    const newCoins = await economy.addCoins(guildId, userId, strands)
+    const newCoins = await economy.addCoins(guildId, userId, coins)
 
     const balyesEmbed = new Discord.MessageEmbed()
     .setColor('#228B22')
     .setTitle(`Success`)
-    .setDescription(`You have given <@${userId}> ${strands} Strand(s). They now have ${newCoins} Strand(s)!`)
+    .setDescription(`You have given <@${userId}> ${coins} Strand(s). They now have ${newCoins} Strand(s)!`)
 
     
     message.reply(balyesEmbed)
