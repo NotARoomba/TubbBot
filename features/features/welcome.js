@@ -3,7 +3,6 @@ const client = new Discord.Client()
 
 module.exports = (member, message) => {
   var role = member.guild.roles.find('welcome', 'welcome-channel'); // Variable to get channel ID
-  member.addRole(role); // Adds the default role to members
     client.on('guildMemberAdd', (member) => {
       const welcomeEmbed = new Discord.MessageEmbed()
             .setColor('#8B0000')
