@@ -32,7 +32,7 @@ module.exports.addCoins = async (guildId, userId, tools) => {
 
       return result.tools
     } finally {
-      mongoose.connection.close()
+      
     }
   })
 }
