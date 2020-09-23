@@ -1,12 +1,7 @@
 const mongo = require('@util/mongo')
 const profileSchema = require('@schemas/profile-schema')
 
-<<<<<<< HEAD
-const toolsCache = {} // { 'guildId-userId': tools }
-=======
-
 const strandsCache = {} // { 'guildId-userId': strands }
->>>>>>> parent of 571098a... jbk.
 
 module.exports = (client) => {}
 
@@ -32,14 +27,10 @@ module.exports.addCoins = async (guildId, userId, strands) => {
           new: true,
         }
       )
-
-<<<<<<< HEAD
-      toolsCache[`${guildId}-${userId}`] = result.tools
-=======
       console.log('RESULT:', result)
 
       strandsCache[`${guildId}-${userId}`] = result.strands
->>>>>>> parent of 571098a... jbk.
+
 
       return result.strands
     } finally {
@@ -63,13 +54,11 @@ module.exports.getCoins = async (guildId, userId) => {
         userId,
       })
 
-<<<<<<< HEAD
-      let tools = 0
-=======
+
       console.log('RESULT:', result)
 
       let strands = 0
->>>>>>> parent of 571098a... jbk.
+
       if (result) {
         strands = result.strands
       } else {
@@ -80,14 +69,8 @@ module.exports.getCoins = async (guildId, userId) => {
           strands,
         }).save()
       }
-
-<<<<<<< HEAD
-      toolsCache[`${guildId}-${userId}`] = tools
-=======
       strandsCache[`${guildId}-${userId}`] = strands
       
->>>>>>> parent of 571098a... jbk.
-
       return strands
     } finally {
       mongoose.connection.close()

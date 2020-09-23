@@ -19,11 +19,8 @@ module.exports = {
     const balEmbed = new Discord.MessageEmbed()
         .setColor('#000080')
         .setTitle(`Balance`)
-<<<<<<< HEAD
-        .setDescription(`Your balance is ${tools} Tools!`)
-=======
         .setDescription(`Your balance is ${strands} Strands!`)
->>>>>>> parent of 571098a... jbk.
+
       message.reply(balEmbed)
   },
 }
