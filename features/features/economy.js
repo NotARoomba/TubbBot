@@ -1,11 +1,11 @@
 const mongo = require('@util/mongo')
 const profileSchema = require('@schemas/profile-schema')
 
-const coinsCache = {} // { 'guildId-userId': coins }
+const toolsCache = {} // { 'guildId-userId': tools }
 
 module.exports = (client) => {}
 
-module.exports.addCoins = async (guildId, userId, coins) => {
+module.exports.addCoins = async (guildId, userId, tools) => {
   return await mongo().then(async (mongoose) => {
     try {
       console.log('Running findOneAndUpdate()')
@@ -19,7 +19,7 @@ module.exports.addCoins = async (guildId, userId, coins) => {
           guildId,
           userId,
           $inc: {
-            coins,
+            tools,
           },
         },
         {
@@ -28,9 +28,9 @@ module.exports.addCoins = async (guildId, userId, coins) => {
         }
       )
 
-      coinsCache[`${guildId}-${userId}`] = result.coins
+      toolsCache[`${guildId}-${userId}`] = result.tools
 
-      return result.coins
+      return result.tools
     } finally {
       mongoose.connection.close()
     }
@@ -38,7 +38,7 @@ module.exports.addCoins = async (guildId, userId, coins) => {
 }
 
 module.exports.getCoins = async (guildId, userId) => {
-  const cachedValue = coinsCache[`${guildId}-${userId}`]
+  const cachedValue = toolsCache[`${guildId}-${userId}`]
   if (cachedValue) {
     return cachedValue
   }
@@ -52,21 +52,21 @@ module.exports.getCoins = async (guildId, userId) => {
         userId,
       })
 
-      let coins = 0
+      let tools = 0
       if (result) {
-        coins = result.coins
+        tools = result.tools
       } else {
         console.log('Inserting a document')
         await new profileSchema({
           guildId,
           userId,
-          coins,
+          tools,
         }).save()
       }
 
-      coinsCache[`${guildId}-${userId}`] = coins
+      toolsCache[`${guildId}-${userId}`] = tools
 
-      return coins
+      return tools
     } finally {
       mongoose.connection.close()
     }

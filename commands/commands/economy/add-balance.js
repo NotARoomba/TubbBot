@@ -25,8 +25,8 @@ module.exports = {
       return
     }
 
-    const coins = arguments[1]
-    if (isNaN(coins)) {
+    const tools = arguments[1]
+    if (isNaN(tools)) {
       
       const balsadEmbed = new Discord.MessageEmbed()
             .setColor('#FFFF00')
@@ -40,12 +40,12 @@ module.exports = {
     const guildId = message.guild.id
     const userId = mention.id
 
-    const newCoins = await economy.addCoins(guildId, userId, coins)
+    const newCoins = await economy.addCoins(guildId, userId, tools)
 
     const balyesEmbed = new Discord.MessageEmbed()
     .setColor('#228B22')
     .setTitle(`Success`)
-    .setDescription(`You have given <@${userId}> ${coins} Strand(s). They now have ${newCoins} Strand(s)!`)
+    .setDescription(`You have given <@${userId}> ${tools} Strand(s). They now have ${newCoins} Strand(s)!`)
 
     
     message.reply(balyesEmbed)
