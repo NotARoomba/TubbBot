@@ -2,11 +2,11 @@ const mongo = require('@util/mongo')
 const profileSchema = require('@schemas/profile-schema')
 
 
-const toolsCache = {} // { 'guildId-userId': tools }
+const strandsCache = {} // { 'guildId-userId': strands }
 
 module.exports = (client) => {}
 
-module.exports.addCoins = async (guildId, userId, tools) => {
+module.exports.addCoins = async (guildId, userId, strands) => {
   return await mongo().then(async (mongoose) => {
     try {
       console.log('Running findOneAndUpdate()')
@@ -20,7 +20,7 @@ module.exports.addCoins = async (guildId, userId, tools) => {
           guildId,
           userId,
           $inc: {
-            tools,
+            strands,
           },
         },
         {
@@ -31,9 +31,9 @@ module.exports.addCoins = async (guildId, userId, tools) => {
 
       console.log('RESULT:', result)
 
-      toolsCache[`${guildId}-${userId}`] = result.tools
+      strandsCache[`${guildId}-${userId}`] = result.strands
 
-      return result.tools
+      return result.strands
     } finally {
       mongoose.connection.close()
     }
@@ -41,7 +41,7 @@ module.exports.addCoins = async (guildId, userId, tools) => {
 }
 
 module.exports.getCoins = async (guildId, userId) => {
-  const cachedValue = toolsCache[`${guildId}-${userId}`]
+  const cachedValue = strandsCache[`${guildId}-${userId}`]
   if (cachedValue) {
     return cachedValue
   }
@@ -58,22 +58,22 @@ module.exports.getCoins = async (guildId, userId) => {
 
       console.log('RESULT:', result)
 
-      let tools = 0
+      let strands = 0
       if (result) {
-        tools = result.tools
+        strands = result.strands
       } else {
         console.log('Inserting a document')
         await new profileSchema({
           guildId,
           userId,
-          tools,
+          strands,
         }).save()
       }
 
-      toolsCache[`${guildId}-${userId}`] = tools
+      strandsCache[`${guildId}-${userId}`] = strands
       
 
-      return tools
+      return strands
     } finally {
       mongoose.connection.close()
     }
