@@ -6,7 +6,7 @@ const welcomeSchema = require('@schemas/welcome-schema')
 
 module.exports = (member, message) => {
     
-  client.on('guildMemberAdd', async member => {
+  client.on('guildMemberAdd', async => {
         const { member, channel, content, guild } = message
     
         if (!member.hasPermission('ADMINISTRATOR')) {
@@ -19,7 +19,13 @@ module.exports = (member, message) => {
         const split = text.split(' ')
     
         if (split.length < 2) {
-          channel.send('Please provide a welcome message')
+          
+          const welcomeEmbed = new Discord.MessageEmbed()
+          .setColor('#8B0000')
+          .setTitle(`Welcome`)
+          .setDescription(`Welcome to this Server, ${member}! Please read #rules . Thank you for joining this server and we hope you have a good time!
+          (Btw -help)`)
+          channel.send(welcomeEmbed)
           return
         }
     
