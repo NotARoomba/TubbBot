@@ -2,7 +2,7 @@ const Discord = require('discord.js')
 const client = new Discord.Client()
 
 module.exports = (member, message) => {
-    client.on('guildMemberAdd', (member) => {
+    client.on('guildMemberAdd', member => {
       const welcomeEmbed = new Discord.MessageEmbed()
             .setColor('#8B0000')
             .setTitle(`Welcome`)
