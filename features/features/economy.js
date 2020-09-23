@@ -68,7 +68,7 @@ module.exports.getCoins = async (guildId, userId) => {
 
       return tools
     } finally {
-      mongoose.connection.close()
+      
     }
   })
 }
