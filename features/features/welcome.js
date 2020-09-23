@@ -2,7 +2,7 @@ const Discord = require('discord.js')
 const client = new Discord.Client()
 
 module.exports = (member, message) => {
-  const channel = client.channels.get("757771111374258176")
+  const channel = client.channels.find("757771111374258176")
     const rules = '757769773148012655'  // rules and info
     //const roles = '751559736096456885'
     
