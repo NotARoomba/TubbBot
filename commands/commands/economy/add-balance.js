@@ -45,7 +45,7 @@ module.exports = {
     const balyesEmbed = new Discord.MessageEmbed()
     .setColor('#228B22')
     .setTitle(`Success`)
-    .setDescription(`You have given <@${userId}> ${tools} Strand(s). They now have ${newCoins} Strand(s)!`)
+    .setDescription(`You have given <@${userId}> ${tools} Tool(s). They now have ${newCoins} Tool(s)!`)
 
     
     message.reply(balyesEmbed)
