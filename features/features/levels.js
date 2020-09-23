@@ -55,7 +55,7 @@ const addXP = async (guildId, userId, xpToAdd, message) => {
         )
       }
     } finally {
-      mongoose.connection.close()
+      
     }
   })
 }
