@@ -1,7 +1,10 @@
 const Discord = require('discord.js')
 const client = new Discord.Client()
 
-client.on('guildMemberAdd', member => {
+
+module.exports = (member, message) => {
+    
+  client.on('guildMemberAdd', member => {
      
   const welcomeEmbed = new Discord.MessageEmbed()
   .setColor('#8B0000')
@@ -10,7 +13,7 @@ client.on('guildMemberAdd', member => {
    (Btw -help)`)
    member.guild.channels.get('channelID').send("Welcome");
 
-
-  })
+  }
+  )}
   
         
