@@ -8,7 +8,7 @@ module.exports = {
     minArgs: 0,
     maxArgs: 0,
     description: 'I wanna be, the very best...',
-    callback: (message, arguments, text) => {
+    callback: async (message, arguments, text) => {
         const target = message.mentions.users.first() || message.author
         const targetId = target.id
     
