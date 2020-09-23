@@ -3,6 +3,7 @@ const client = new Discord.Client()
 const mongo = require('@util/mongo')
 const command = require('@util/command')
 const welcomeSchema = require('@schemas/welcome-schema')
+
   
   module.exports = (client) => {
     const channelId = '757771111374258176'
@@ -78,7 +79,7 @@ const welcomeSchema = require('@schemas/welcome-schema')
   
       const channelId = data[0]
       const text = data[1]
-  
+      const channelId = '757771111374258176'
       const channel = guild.channels.cache.get(channelId)
       channel.send(text.replace(/<@>/g, `<@${member.id}>`))
     }
