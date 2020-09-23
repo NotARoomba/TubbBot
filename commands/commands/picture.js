@@ -18,11 +18,8 @@ module.exports = {
       text: 'Hello world!',
       alignmentX: jimp.HORIZONTAL_ALIGN_CENTER,
       alignmentY: jimp.VERTICAL_ALIGN_MIDDLE
-    },
-    maxWidth,
-    maxHeight
-  
-    })
+    }
+   })
          
         welcome.write('Welcome2.png')
         
