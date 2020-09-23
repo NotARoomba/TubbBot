@@ -9,7 +9,7 @@
   "author": "L061571C5",
   "license": "ISC",
   "dependencies": {
-    "canvas": "^2.6.1",
+    "cairo": "0.1.0-alpha.3",
     "discord.js": "^12.3.1",
     "discord.js-commando": "git+https://github.com/discordjs/Commando.git",
     "i": "^0.3.6",
