@@ -18,7 +18,7 @@ module.exports = {
       const balusrEmbed = new Discord.MessageEmbed()
             .setColor('#FFFF00')
             .setTitle(`Error`)
-            .setDescription('Please tag a user to add Strands to.')
+            .setDescription('Please tag a user to add Tools to.')
 
       
       message.reply(balusrEmbed)
@@ -31,7 +31,7 @@ module.exports = {
       const balsadEmbed = new Discord.MessageEmbed()
             .setColor('#FFFF00')
             .setTitle(`Error`)
-            .setDescription('Please provide a valid number of Strands.')
+            .setDescription('Please provide a valid number of Tools.')
       
       message.reply(balsadEmbed)
       return
