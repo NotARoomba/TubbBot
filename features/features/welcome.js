@@ -1,7 +1,7 @@
 const Discord = require('discord.js')
 const client = new Discord.Client()
 
-module.exports = (client, message) => {
+module.exports = (member) => {
   member.roles.add(member.guild.roles.cache.find(i => i.name === 'welcome'))
     const rules = '757769773148012655'  // rules and info
     //const roles = '751559736096456885'
