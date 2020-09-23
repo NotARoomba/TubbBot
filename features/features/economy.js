@@ -2,11 +2,11 @@ const mongo = require('@util/mongo')
 const profileSchema = require('@schemas/profile-schema')
 
 
-const strandsCache = {} // { 'guildId-userId': strands }
+const toolsCache = {} // { 'guildId-userId': tools }
 
 module.exports = (client) => {}
 
-module.exports.addCoins = async (guildId, userId, strands) => {
+module.exports.addCoins = async (guildId, userId, tools) => {
   return await mongo().then(async (mongoose) => {
     try {
       console.log('Running findOneAndUpdate()')
@@ -20,7 +20,7 @@ module.exports.addCoins = async (guildId, userId, strands) => {
           guildId,
           userId,
           $inc: {
-            strands,
+            tools,
           },
         },
         {
@@ -31,9 +31,9 @@ module.exports.addCoins = async (guildId, userId, strands) => {
 
       console.log('RESULT:', result)
 
-      strandsCache[`${guildId}-${userId}`] = result.strands
+      toolsCache[`${guildId}-${userId}`] = result.tools
 
-      return result.strands
+      return result.tools
     } finally {
       mongoose.connection.close()
     }
@@ -41,7 +41,7 @@ module.exports.addCoins = async (guildId, userId, strands) => {
 }
 
 module.exports.getCoins = async (guildId, userId) => {
-  const cachedValue = strandsCache[`${guildId}-${userId}`]
+  const cachedValue = toolsCache[`${guildId}-${userId}`]
   if (cachedValue) {
     return cachedValue
   }
@@ -58,22 +58,22 @@ module.exports.getCoins = async (guildId, userId) => {
 
       console.log('RESULT:', result)
 
-      let strands = 0
+      let tools = 0
       if (result) {
-        strands = result.strands
+        tools = result.tools
       } else {
         console.log('Inserting a document')
         await new profileSchema({
           guildId,
           userId,
-          strands,
+          tools,
         }).save()
       }
 
-      strandsCache[`${guildId}-${userId}`] = strands
+      toolsCache[`${guildId}-${userId}`] = tools
       
 
-      return strands
+      return tools
     } finally {
       mongoose.connection.close()
     }
