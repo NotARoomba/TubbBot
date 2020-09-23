@@ -6,7 +6,7 @@ const welcomeSchema = require('@schemas/welcome-schema')
 
 module.exports = (member, message) => {
     
-  client.on('guildMemberAdd', async (message) => {
+  client.on('guildMemberAdd', async member => {
         const { member, channel, content, guild } = message
     
         if (!member.hasPermission('ADMINISTRATOR')) {
