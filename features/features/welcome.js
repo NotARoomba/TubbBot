@@ -80,8 +80,8 @@ const welcomeSchema = require('@schemas/welcome-schema')
   
       const channelId = data[0]
       const text = data[1]
-      const channelId = '757771111374258176'
       
+
       const channel = guild.channels.cache.get(channelId)
       channel.send(text.replace(/<@>/g, `<@${member.id}>`))
     }
