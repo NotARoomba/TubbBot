@@ -16,8 +16,8 @@ module.exports = {
     200,
     {
       text: 'Hello world!',
-      alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
-      alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE
+      alignmentX: jimp.HORIZONTAL_ALIGN_CENTER,
+      alignmentY: jimp.VERTICAL_ALIGN_MIDDLE
     },
     maxWidth,
     maxHeight
