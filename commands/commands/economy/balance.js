@@ -19,7 +19,7 @@ module.exports = {
     const balEmbed = new Discord.MessageEmbed()
         .setColor('#000080')
         .setTitle(`Balance`)
-        .setDescription(`Your balance is ${coins} Strands!`)
+        .setDescription(`Your balance is ${coins} Tools!`)
 
       message.reply(balEmbed)
   },
