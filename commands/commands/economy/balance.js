@@ -14,12 +14,16 @@ module.exports = {
     const guildId = message.guild.id
     const userId = target.id
 
-    const tools = await economy.getCoins(guildId, userId)
+    const strands = await economy.getCoins(guildId, userId)
 
     const balEmbed = new Discord.MessageEmbed()
         .setColor('#000080')
         .setTitle(`Balance`)
+<<<<<<< HEAD
         .setDescription(`Your balance is ${tools} Tools!`)
+=======
+        .setDescription(`Your balance is ${strands} Strands!`)
+>>>>>>> parent of 571098a... jbk.
       message.reply(balEmbed)
   },
 }
