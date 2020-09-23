@@ -20,9 +20,7 @@ module.exports = {
         const balEmbed = new Discord.MessageEmbed()
             .setColor('#000080')
             .setTitle(`Balance`)
-            .setDescription(`Your rank ${level} with ${xp} experience! You now need ${getNeededXP(
-                level
-              )} XP to level up again.`)
+            .setDescription(`Your rank ${level} with ${xp} experience! You now need ${getNeededXP(level)} XP to level up again.`)
           message.reply(balEmbed)
       },
 }

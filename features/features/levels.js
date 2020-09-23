@@ -1,10 +1,5 @@
-const Discord = require('discord.js');
-const client = new Discord.Client();
-
-
 const mongo = require('@util/mongo')
 const profileSchema = require('@schemas/profile-schema')
-
 
 module.exports = (client) => {
   client.on('message', (message) => {
@@ -43,8 +38,6 @@ const addXP = async (guildId, userId, xpToAdd, message) => {
       if (xp >= needed) {
         ++level
         xp -= needed
-
-        
 
         message.reply(
           `You are now level ${level} with ${xp} experience! You now need ${getNeededXP(
