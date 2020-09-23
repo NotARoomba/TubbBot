@@ -6,9 +6,9 @@ const welcomeSchema = require('@schemas/welcome-schema')
 
   
   module.exports = (client) => {
-    const channelId = '757771111374258176'
+   
     const cache = {} // guildId: [channelId, text]
-    const channelId = '757771111374258176'
+  
   
     command(client, 'setwelcome', async (message) => {
       const { member, channel, content, guild } = message
@@ -80,7 +80,8 @@ const welcomeSchema = require('@schemas/welcome-schema')
   
       const channelId = data[0]
       const text = data[1]
-
+      const channelId = '757771111374258176'
+      
       const channel = guild.channels.cache.get(channelId)
       channel.send(text.replace(/<@>/g, `<@${member.id}>`))
     }
