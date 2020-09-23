@@ -6,7 +6,7 @@ const welcomeSchema = require('@schemas/welcome-schema')
   
   module.exports = (client) => {
     //!setwelcome <message>
-    const cache = {guildId: [757771111374258176, welcome]} // guildId: [channelId, text]
+    const cache = {guildId: [757771111374258176]} // guildId: [channelId, text]
   
     command(client, 'setwelcome', async (message) => {
       const { member, channel, content, guild } = message
