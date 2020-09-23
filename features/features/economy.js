@@ -53,8 +53,6 @@ module.exports.getCoins = async (guildId, userId) => {
         guildId,
         userId,
       })
-
-
       console.log('RESULT:', result)
 
       let strands = 0
