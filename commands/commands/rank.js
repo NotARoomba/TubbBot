@@ -15,7 +15,7 @@ module.exports = {
         const guildId = message.guild.id
         const userId = target.id
     
-        const xp = await levels(guildId, userId)
+        const xp = await levels.addXp(guildId, userId)
     
         const balEmbed = new Discord.MessageEmbed()
             .setColor('#000080')
