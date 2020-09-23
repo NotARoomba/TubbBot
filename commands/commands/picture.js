@@ -5,8 +5,8 @@ const client = new Discord.Client();
 
 
 module.exports = {
-    commands: 'rank',
-    description: 'I wanna be the very best...',
+    commands: ['picture', 'pic'],
+    description: '*click click*',
     callback: async (message, args) => {
 
         let font = await jimp.loadFont(jimp.FONT_SANS_128_BLACK) 
