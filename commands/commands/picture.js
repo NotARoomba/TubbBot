@@ -12,8 +12,8 @@ module.exports = {
         let font = await jimp.loadFont(jimp.FONT_SANS_128_BLACK) 
         let welcome = await jimp.read('https://cdn.discordapp.com/attachments/757768055479861278/758090856325709885/bh.jpeg').then(font => {
     font,
-    x,
-    y,
+    508,
+    200,
     {
       text: 'Hello world!',
       alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
