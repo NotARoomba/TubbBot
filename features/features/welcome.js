@@ -12,6 +12,6 @@ module.exports = (member, message) => {
             .setDescription(`Welcome to this Server, ${member}! Please read #rules . Thank you for joining this server and we hope you have a good time!
             (Btw -help)`)
   
-            member.guild.channels.cache.get(`720631185688100867`).send(welcomeEmbed)
+            member.guild.channels.cache.get(`757771111374258176`).send(welcomeEmbed)
       })
 }
