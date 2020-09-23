@@ -15,12 +15,12 @@ module.exports = {
         const guildId = message.guild.id
         const userId = target.id
     
-        const xp = await levels.xp(guildId, userId)
+        const xp = await levels(guildId, userId)
     
         const balEmbed = new Discord.MessageEmbed()
             .setColor('#000080')
             .setTitle(`Balance`)
-            .setDescription(`Your rank ${level} with ${xp} experience! You now need ${getNeededXP(level)} XP to level up again.`)
+            .setDescription(`Your rank ${level} with ${xp} experience! `)
           message.reply(balEmbed)
       },
 }
