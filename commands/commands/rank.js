@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const xp = require('@features/xp')
+const xp = require('@features/levels')
 const client = new Discord.Client()
 
 
