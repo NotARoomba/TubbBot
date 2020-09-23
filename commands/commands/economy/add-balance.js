@@ -7,7 +7,7 @@ module.exports = {
   minArgs: 2,
   maxArgs: 2,
   description: 'Money for the Admins!',
-  expectedArgs: "<The target's @> <Strand amount>",
+  expectedArgs: "<The target's @> <Tool amount>",
   permissionError: 'You must be an administrator to use this command.',
   permissions: 'ADMINISTRATOR',
   callback: async (message, arguments) => {
