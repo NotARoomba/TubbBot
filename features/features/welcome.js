@@ -1,7 +1,7 @@
 const Discord = require('discord.js')
 const client = new Discord.Client()
 
-module.exports = (message) => {
+module.exports = (client, message) => {
   const channel = member.guild.channels.cache.find(channel => channel.name === 'welcome')  // welcome channel
     const rules = '757769773148012655'  // rules and info
     //const roles = '751559736096456885'
