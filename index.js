@@ -35,10 +35,9 @@ client.on('ready', async () => {
 
   
 
+ });
 
-  });
-
-//heroku stack:set heroku-16 -a tubb-bot jic
+//heroku stack:set heroku-18 -a tubb-bot jic v509
 client.login('NzUwMTIzNjc3NzM5MTIyODE5.X019HQ.m8ieoPXK1T5f5xJaH0e1K8N3wII')
 client.login(process.env.token)
 
