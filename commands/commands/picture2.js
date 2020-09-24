@@ -23,7 +23,7 @@ module.exports = {
 	// Draw a shape onto the main canvas
 	ctx.drawImage(avatar, 25, 25, 200, 200);
 
-        const welcome = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
-        message.channel.send(welcome);
+        const picture2 = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
+        message.channel.send(picture2);
     }
 }
