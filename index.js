@@ -38,7 +38,7 @@ client.on('ready', async () => {
 
   });
 
-
+//heroku stack:set heroku-16 -a tubb-bot jic
 client.login('NzUwMTIzNjc3NzM5MTIyODE5.X019HQ.m8ieoPXK1T5f5xJaH0e1K8N3wII')
 client.login(process.env.token)
 
