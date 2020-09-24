@@ -3,7 +3,6 @@ const client = new Discord.Client();
 //const Canvas = require('canvas');
 
 
-
 module.exports = {
     commands: ['picture2', 'pic2'],
     description: '*click click*',
