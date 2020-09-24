@@ -34,7 +34,6 @@ client.on('ready', async () => {
   loadFeatures(client)
 
   
-
 });
 
 //heroku stack:set heroku-18 -a tubb-bot jic v509
