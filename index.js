@@ -5,7 +5,6 @@ const mongo = require('@util/mongo');
 const Commando = require('discord.js-commando');
 const loadCommands = require('@root/commands/load-commands.js')
 const loadFeatures = require('@root/features/load-features.js')
-client.commands = new Discord.Collection();
 const path = require('path')
 
 const client  = new Commando.CommandoClient({
