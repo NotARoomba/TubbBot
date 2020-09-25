@@ -2,27 +2,17 @@ require('module-alias/register');
 require('events').EventEmitter.prototype._maxListeners = 100;
 const Discord = require('discord.js')
 const mongo = require('@util/mongo');
-const Commando = require('discord.js-commando');
+
 const loadCommands = require('@root/commands/load-commands.js')
 const loadFeatures = require('@root/features/load-features.js')
 const path = require('path')
 
-const client  = new Commando.CommandoClient({
-  owner: '465917394108547072'
-})
+
 client.on('ready', async () => {
   console.log('Tubb is online!')
   client.user.setActivity('|-help|');
 
-  client.registry
-    .registerGroups([
-      ['misc', 'misc commands'],
-      ['moderation', 'moderation commands'],
-      ['games', 'Commands to handle games'],
-    ])
-    .registerDefaults()
-    .registerCommandsIn(path.join(__dirname, 'cmds'))
-
+  
 
   await mongo().then(mongoose => {
     try {
