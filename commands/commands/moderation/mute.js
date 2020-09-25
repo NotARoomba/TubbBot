@@ -14,7 +14,7 @@ if(!role) message.guild.createRole({name: 'Muted'});
 if(!user){
     message.channel.send(`There's no person to mute tho`);
 }
-message.guild.channels.forEach(f => {
+message.guild.channels.cache.forEach(f => {
     f.overwritePermissions(role, {
         SEND_MESSAGES: false
     });
