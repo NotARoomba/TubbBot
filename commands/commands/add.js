@@ -7,7 +7,6 @@ module.exports = {
   expectedArgs: '<num1> <num2>',
   minArgs: 2,
   maxArgs: 2,
-  cooldown: 10,
   description: 'Add two numbers',
   callback: (message, arguments, text) => {
     const { guild } = message
