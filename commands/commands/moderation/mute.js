@@ -3,16 +3,13 @@ const client = new Discord.Client()
 
 module.exports = {
     commands: 'mute',
-    description: 'mummth muthm mheh',
+    description: 'munmth muthm mheh',
     permissionError: 'You must be an administrator to use this command.',
     permissions: 'ADMINISTRATOR',
     callback: (message) => {
         let user = message.mentions.users.first();
 let role = message.guild.roles.cache.find(r => r.name === 'Muted');
 if(!role) message.guild.createRole({name: 'Muted'});
-if(user.hasPermission('ADMINISTRATOR')) {
-return message.channel.send(`I can't mute ${user} because he is staff`);
-}
 
 if(!user){
     message.channel.send(`There's no person to mute tho`);
