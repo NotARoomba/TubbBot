@@ -11,7 +11,10 @@ module.exports = {
 
     const num1 = +arguments[0]
     const num2 = +arguments[1]
-
-    message.reply(`The sum is ${num1 + num2}`)
+    const addEmbed = new Discord.MessageEmbed()
+    .setColor('#228B22')
+    .setTitle(`Success`)
+    .setDescription(`The sum is ${num1 + num2}`)
+    message.reply(addEmbed)
   },
 }
