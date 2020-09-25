@@ -18,6 +18,7 @@ client.on('ready', async () => {
     .registerGroups([
       ['misc', 'misc commands'],
       ['moderation', 'moderation commands'],
+      ['games', 'Commands to handle games'],
     ])
     .registerDefaults()
     .registerCommandsIn(path.join(__dirname, 'cmds'))
