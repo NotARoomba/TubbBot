@@ -1,8 +1,8 @@
 require('module-alias/register');
 require('events').EventEmitter.prototype._maxListeners = 100;
+const client = new Discord.Client();
 const Discord = require('discord.js')
 const mongo = require('@util/mongo');
-
 const loadCommands = require('@root/commands/load-commands.js')
 const loadFeatures = require('@root/features/load-features.js')
 const path = require('path')

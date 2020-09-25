@@ -1,4 +1,3 @@
-const Commando = require('discord.js-commando')
 const { words } = require('@util/fast-type-words')
 
 const example = {
