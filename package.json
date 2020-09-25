@@ -11,7 +11,7 @@
   "dependencies": {
     "cairo": "0.1.0-alpha.3",
     "discord.js": "^12.3.1",
-    "discord.js-commando": "git+https://github.com/discordjs/Commando.git",
+    "discord.js-commando": "git+https://github.com/discordjs/commando.git",
     "i": "^0.3.6",
     "install": "^0.13.0",
     "jimp": "^0.16.1",
