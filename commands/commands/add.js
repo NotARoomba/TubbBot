@@ -9,14 +9,19 @@ module.exports = {
   maxArgs: 2,
   description: 'Add two numbers',
   callback: (message, arguments, text) => {
-    const { guild } = message
-
-    const num1 = +arguments[0]
-    const num2 = +arguments[1]
+    
+      let sum = 0
+  
+      for (const arg of args) {
+        sum += parseInt(arg)
+      }
+  
+      
+    
     const addEmbed = new Discord.MessageEmbed()
     .setColor('#228B22')
     .setTitle(`Success`)
-    .setDescription(`The sum is ${num1 + num2}`)
+    .setDescription(`The sum is ${sum}`)
     message.reply(addEmbed)
-  },
+  }
 }
