@@ -1,5 +1,6 @@
 require('module-alias/register');
 require('events').EventEmitter.prototype._maxListeners = 100;
+const Discord = require('discord.js')
 const mongo = require('@util/mongo');
 const Commando = require('discord.js-commando');
 const loadCommands = require('@root/commands/load-commands.js')
