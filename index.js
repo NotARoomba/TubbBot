@@ -8,6 +8,7 @@ const loadFeatures = require('@root/features/load-features.js')
 const path = require('path')
 
 
+
 client.on('ready', async () => {
   console.log('Tubb is online!')
   client.user.setActivity('|-help|');
