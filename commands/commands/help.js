@@ -8,7 +8,7 @@ module.exports = {
   description: "Describes all of this bot's commands",
   callback: (message, arguments, text) => {
     
-    let reply = 'I am TUBB (The Utility Bot (Let the Errors begin!)):\n\n'
+    let reply = 'I am TUBB (The Utility Bot):\n\n'
 
     const commands = loadCommands()
 
@@ -43,8 +43,9 @@ module.exports = {
       const { description } = command
       
       reply += `**${prefix}${mainCommand}${args}** = ${description}\n`
+      
     }
-
+    reply += `Made by L061571C5`
     message.channel.send(reply) 
   },
 }

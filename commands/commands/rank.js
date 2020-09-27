@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const economy = require('@features/levels')
+const levels = require('@features/levels')
 const client = new Discord.Client()
 
 module.exports = {
@@ -14,9 +14,9 @@ module.exports = {
     const guildId = message.guild.id
     const userId = target.id
 
-    const xp = await levels.xp(guildId, userId)
-    const level = await levels.level(guildId, userId)
-    const getNeededXP = await levels.getNeededXP(guildId, userId)
+    const xp = await xp(guildId, userId)
+    const level = await level(guildId, userId)
+    const getNeededXP = await getNeededXP(guildId, userId)
 
     const rankEmbed = new Discord.MessageEmbed()
         .setColor('#000080')

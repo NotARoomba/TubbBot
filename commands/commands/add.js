@@ -8,8 +8,7 @@ module.exports = {
   callback: (message, args, text) => {
     
       let sum = 0
-  
-      for (const arg of args) {
+       for (const arg of args) {
         sum += parseInt(arg)
       }
   
