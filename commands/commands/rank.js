@@ -6,7 +6,7 @@ module.exports = {
   commands: 'rank',
   maxArgs: 1,
   description: 'I wanna be, the very best...',
-  expectedArgs: "[Target user's @]",
+  expectedArgs: "<Target user's @>",
   callback: async (message) => {
     const target = message.mentions.users.first() || message.author
     const targetId = target.id
@@ -14,14 +14,14 @@ module.exports = {
     const guildId = message.guild.id
     const userId = target.id
 
-    const xp = await xp(guildId, userId)
-    const level = await level(guildId, userId)
-    const getNeededXP = await getNeededXP(guildId, userId)
+    
+    const level = await levels.level(guildId, userId)
+    
 
     const rankEmbed = new Discord.MessageEmbed()
         .setColor('#000080')
         .setTitle(`Rank`)
-        .setDescription(`Your level is ${level} with ${xp} XP out of ${getNeededXP()}`)
+        .setDescription(`Your level is ${level}`)
 
       message.reply(rankEmbed)
   },

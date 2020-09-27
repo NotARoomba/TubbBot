@@ -2,6 +2,8 @@ const Discord = require('discord.js')
 
  module.exports = {
     commands: 'unban',
+    maxArgs: 1,
+    expectedArgs: "<Target user's Id>",
     description: 'Reinstatement to this Server!',
     permissions: 'ADMINISTRATOR',
     callback: async (message, args) => {
