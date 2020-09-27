@@ -15,7 +15,7 @@ module.exports = {
     const userId = target.id
 
     
-    const level = await levels.level(guildId, userId)
+    const level = await levels.getNeededXP(guildId, userId)
     
 
     const rankEmbed = new Discord.MessageEmbed()

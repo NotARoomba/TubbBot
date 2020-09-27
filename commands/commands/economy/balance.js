@@ -6,7 +6,7 @@ module.exports = {
   commands: ['balance', 'bal'],
   maxArgs: 1,
   description: 'Check your d̶e̶b̶t̶  balance',
-  expectedArgs: "[Target user's @]",
+  expectedArgs: "<Target user's @>",
   callback: async (message) => {
     const target = message.mentions.users.first() || message.author
     const targetId = target.id
