@@ -21,7 +21,7 @@ client.on('ready', async () => {
     } finally {
       mongoose.connection.close()
     }
-    
+
   })
 
   loadCommands(client)
