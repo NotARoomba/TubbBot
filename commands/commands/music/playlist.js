@@ -10,7 +10,7 @@ module.exports = {
   cooldown: 3,
   aliases: ["pl"],
   description: "Play a playlist from youtube",
-  async execute(message, args) {
+  async callback(message, args) {
     const { PRUNING } = require("../config.json");
     const { channel } = message.member.voice;
 
