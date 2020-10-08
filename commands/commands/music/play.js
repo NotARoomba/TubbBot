@@ -1,9 +1,13 @@
+const Discord = require('discord.js')
+const client = new Discord.Client();
 const { play } = require("@util/play");
 const { YOUTUBE_API_KEY, SOUNDCLOUD_CLIENT_ID } = require("@root/config.json");
 const ytdl = require("ytdl-core");
 const YouTubeAPI = require("simple-youtube-api");
 const youtube = new YouTubeAPI(YOUTUBE_API_KEY);
 const scdl = require("soundcloud-downloader");
+client.queue = new Map();
+
 
 module.exports = {
   name: "play",
@@ -12,8 +16,8 @@ module.exports = {
   description: "Plays audio from YouTube or Soundcloud",
   async callback(message, args)  {
     const { channel } = message.member.voice;
-
-    const serverQueue = message.client.queue.get(message.guild.id);
+ 
+    const serverQueue = client.queue.get(message.guild.id);
     if (!channel) return message.reply("You need to join a voice channel first!").catch(console.error);
     if (serverQueue && channel !== message.guild.me.voice.channel)
       return message.reply(`You must be in the same channel as ${message.client.user}`).catch(console.error);
