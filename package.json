@@ -9,13 +9,15 @@
   "author": "L061571C5",
   "license": "ISC",
   "dependencies": {
-    "@discordjs/opus": "^0.3.2",
     "cairo": "0.1.0-alpha.3",
     "discord.js": "^12.3.1",
     "discord.js-commando": "git+https://github.com/discordjs/commando.git",
+<<<<<<< HEAD
     "ffmpeg": "0.0.4",
     "ffmpeg-static": "^4.2.7",
     "fluent-ffmpeg": "^2.1.2",
+=======
+>>>>>>> parent of f2dcea8... music bot upgrade
     "i": "^0.3.6",
     "install": "^0.13.0",
     "jimp": "^0.16.1",
@@ -24,8 +26,7 @@
     "mongoose": "^5.10.6",
     "node-gyp": "^7.1.0",
     "node-pre-gyp": "^0.15.0",
-    "npm": "^6.14.8",
-    "ytdl-core": "^3.3.0"
+    "npm": "^6.14.8"
   },
   "_moduleAliases": {
     "@root": ".",
