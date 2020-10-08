@@ -14,6 +14,7 @@ module.exports = {
     description: 'Sysinfo.exe',
     callback: async (message, arguments, text) => {
           
+
         
 
     const memberCount = guild.members.cache.filter(member => !member.user.bot).size;
