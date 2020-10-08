@@ -1,3 +1,6 @@
 {
-    "prefix": "-"
+    "prefix": "-",
+    "YOUTUBE_API_KEY": "AIzaSyDkoL4Q7L0XSlUWG0qKwAnfspqZAUCubJU",
+    "MAX_PLAYLIST_SIZE": 10,
+    "PRUNING": false
 }
