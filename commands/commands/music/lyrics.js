@@ -5,7 +5,7 @@ module.exports = {
   name: "lyrics",
   aliases: ["ly"],
   description: "Get lyrics for the currently playing song",
-  async callback(message) {
+  async callback: (message) => {
     const queue = message.client.queue.get(message.guild.id);
     if (!queue) return message.channel.send("There is nothing playing.").catch(console.error);
 

@@ -4,7 +4,7 @@ module.exports = {
   name: "volume",
   aliases: ["v"],
   description: "Change volume of currently playing music",
-  callback(message, args) {
+  callback:(message, args) => {
     const queue = message.client.queue.get(message.guild.id);
 
     if (!queue) return message.reply("There is nothing playing.").catch(console.error);

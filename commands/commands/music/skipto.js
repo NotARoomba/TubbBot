@@ -4,7 +4,7 @@ module.exports = {
   name: "skipto",
   aliases: ["st"],
   description: "Skip to the selected queue number",
-  callback(message, args) {
+  callback:(message, args) => {
     if (!args.length)
       return message
         .reply(`Usage: ${message.client.prefix}${module.exports.name} <Queue Number>`)
