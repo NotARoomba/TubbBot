@@ -4,7 +4,6 @@ const client = new Discord.Client()
 const { version } = require('@root/package.json')
 const { prefix } = require('@root/config.json')
 const tag = `750123677739122819`
-const gldnum = require('@root/index.js')
 
 
 
@@ -45,7 +44,7 @@ const embed = new Discord.MessageEmbed()
   },
   {
     name: 'Server count',
-    value: gldnum,
+    value: client.guilds.cache.size,
   },
   {
     name: 'Total members',
