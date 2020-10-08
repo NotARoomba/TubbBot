@@ -2,6 +2,7 @@ const { canModifyQueue } = require("@util/musicutil");
 
 module.exports = {
   name: "pause",
+  commands: ["pause"],
   description: "Pause the currently playing music",
   callback:(message) => {
     const queue = message.client.queue.get(message.guild.id);

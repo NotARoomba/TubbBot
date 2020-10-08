@@ -2,6 +2,7 @@ const { canModifyQueue } = require("@util/musicutil");
 
 module.exports = {
   name: "shuffle",
+  commands: ["shuffle"],
   description: "Shuffle queue",
   callback:(message) => {
     const queue = message.client.queue.get(message.guild.id);

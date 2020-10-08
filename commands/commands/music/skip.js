@@ -2,7 +2,7 @@ const { canModifyQueue } = require("@util/musicutil");
 
 module.exports = {
   name: "skip",
-  aliases: ["s"],
+  commands: ["s"],
   description: "Skip the currently playing song",
   callback:(message) => {
     const queue = message.client.queue.get(message.guild.id);

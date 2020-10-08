@@ -3,6 +3,7 @@ const config = require("@root/config.json");
 
 module.exports = {
   name: "pruning",
+  commands: ["pruning"],
   description: "Toggle pruning of bot messages",
   callback:(message) => {
     config.PRUNING = !config.PRUNING;

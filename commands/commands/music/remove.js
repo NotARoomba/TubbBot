@@ -2,6 +2,7 @@ const { canModifyQueue } = require("@util/musicutil");
 
 module.exports = {
   name: "remove",
+  commands: ["remove"],
   description: "Remove song from the queue",
   callback:(message, args) => {
     const queue = message.client.queue.get(message.guild.id);

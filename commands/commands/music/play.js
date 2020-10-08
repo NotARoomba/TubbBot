@@ -8,9 +8,9 @@ const scdl = require("soundcloud-downloader");
 module.exports = {
   name: "play",
   cooldown: 3,
-  aliases: ["p"],
+  commands: ["p"],
   description: "Plays audio from YouTube or Soundcloud",
-  async callback:(message, args) => {
+  async callback(message, args)  {
     const { channel } = message.member.voice;
 
     const serverQueue = message.client.queue.get(message.guild.id);

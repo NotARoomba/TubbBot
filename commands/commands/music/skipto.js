@@ -2,7 +2,7 @@ const { canModifyQueue } = require("@util/musicutil");
 
 module.exports = {
   name: "skipto",
-  aliases: ["st"],
+  commands: ["st"],
   description: "Skip to the selected queue number",
   callback:(message, args) => {
     if (!args.length)

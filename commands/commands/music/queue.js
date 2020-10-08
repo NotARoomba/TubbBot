@@ -2,7 +2,7 @@ const { MessageEmbed, splitMessage, escapeMarkdown } = require("discord.js");
 
 module.exports = {
   name: "queue",
-  aliases: ["q"],
+  commands: ["q"],
   description: "Show the music queue and now playing.",
   callback:(message) => {
     const queue = message.client.queue.get(message.guild.id);
