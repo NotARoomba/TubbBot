@@ -4,7 +4,6 @@ const client = new Discord.Client()
 module.exports = client => {
     const rules = '757769773148012655'  // rules and info
     //const roles = '751559736096456885'
-    
     client.on('guildMemberAdd', (member) => {
           const welcomeEmbed = new Discord.MessageEmbed()
             .setColor('#8B0000')
