@@ -15,7 +15,7 @@ const Discord = require('discord.js')
             const iderrEmbed = new Discord.MessageEmbed()
             .setColor('#FFFF00')
             .setTitle(`Error`)
-            .setDescription(`Please enter a id!`)
+            .setDescription(`Please enter a id`)
 
             return message.channel.send(iderrEmbed)
         }
@@ -28,7 +28,7 @@ const Discord = require('discord.js')
             const ubyesEmbed = new Discord.MessageEmbed()
              .setColor('#228B22')
              .setTitle(`Success`)
-             .setDescription(`${member} has been unbanned!`)
+             .setDescription(`${member} has been unbanned`)
 
             await message.channel.send(ubyesEmbed)
         } catch (e) {
@@ -36,7 +36,7 @@ const Discord = require('discord.js')
             const uberrEmbed = new Discord.MessageEmbed()
             .setColor('#FFFF00')
             .setTitle(`Error`)
-            .setDescription(`An error occured!`)
+            .setDescription(`An error occured`)
             
             return message.channel.send(uberrEmbed)
         }

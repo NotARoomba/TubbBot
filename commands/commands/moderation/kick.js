@@ -30,7 +30,7 @@ module.exports = {
         const kikerrEmbed = new Discord.MessageEmbed()
             .setColor('#FFFF00')
             .setTitle(`Error`)
-            .setDescription(`${tag} Please specify someone to kick.`)
+            .setDescription(`${tag} Please specify someone to kick`)
         
         message.channel.send(kikerrEmbed)
       }

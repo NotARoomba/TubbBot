@@ -30,7 +30,7 @@ module.exports = {
         const banerrEmbed = new Discord.MessageEmbed()
             .setColor('#FFFF00')
             .setTitle(`Error`)
-            .setDescription(`${tag} Please specify someone to ban.`)
+            .setDescription(`${tag} Please specify someone to ban`)
         
         message.channel.send(banerrEmbed)
       }
