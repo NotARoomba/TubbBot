@@ -17,7 +17,7 @@ module.exports = {
 
         
 
-    const memberCount = guild.members.cache.filter(member => !member.user.bot).size;
+
 
 
 const embed = new Discord.MessageEmbed()
@@ -48,7 +48,7 @@ const embed = new Discord.MessageEmbed()
   },
   {
     name: 'Total members',
-    value: memberCount,
+    value: `${message.guild.memberCount}`,
   }
 )
 
