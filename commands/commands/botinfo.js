@@ -5,28 +5,29 @@ const { version } = require('@root/package.json')
 const { prefix } = require('@root/config.json')
 
 
+
 module.exports = {
     commands: 'sys',
     minArgs: 0,
     maxArgs: 0,
     description: 'Sysinfo.exe',
     callback: async (message, arguments, text) => {
-        
+      setInterval(function () {    
     let totalMembers = 0
         
-    const guild = client.guilds.cache
-    totalMembers += (await guild[1].members.cache.fetch()).size
+
+    const memberCount = client.guilds.cache.reduce((a, g) => a + g.memberCount, 0)
 
 
 const embed = new Discord.MessageEmbed()
 .setAuthor(
   `Information about Tubb`,
-  this.client.user.displayAvatarURL()
+  `https://sciencerack.com/wp-content/uploads/2018/06/utility-programs.png`
 )
 .addFields(
   {
     name: 'Bot tag',
-    value: client.user.tag,
+    value: client.user,
   },
   {
     name: 'Version',
@@ -46,10 +47,12 @@ const embed = new Discord.MessageEmbed()
   },
   {
     name: 'Total members',
-    value: totalMembers,
+    value: memberCount,
   }
 )
 
 message.channel.send(embed)
     }
+    )
+}
 }
