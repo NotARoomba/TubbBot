@@ -9,7 +9,6 @@
   "author": "L061571C5",
   "license": "ISC",
   "dependencies": {
-    "@discordjs/opus": "^0.3.2",
     "cairo": "0.1.0-alpha.3",
     "discord.js": "^12.3.1",
     "discord.js-commando": "git+https://github.com/discordjs/commando.git",
@@ -25,6 +24,7 @@
     "node-gyp": "^7.1.0",
     "node-pre-gyp": "^0.15.0",
     "npm": "^6.14.8",
+    "opusscript": "0.0.7",
     "simple-youtube-api": "^5.2.1",
     "soundcloud-downloader": "^0.1.6",
     "string-progressbar": "^1.0.1",
