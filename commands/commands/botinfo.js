@@ -3,6 +3,7 @@ const client = new Discord.Client()
 
 const { version } = require('@root/package.json')
 const { prefix } = require('@root/config.json')
+const tag = `750123677739122819`
 
 
 
@@ -12,11 +13,10 @@ module.exports = {
     maxArgs: 0,
     description: 'Sysinfo.exe',
     callback: async (message, arguments, text) => {
-      setInterval(function () {    
-    let totalMembers = 0
+          
         
 
-    const memberCount = client.guilds.cache.reduce((a, g) => a + g.memberCount, 0)
+    const memberCount = guild.members.cache.filter(member => !member.user.bot).size;
 
 
 const embed = new Discord.MessageEmbed()
@@ -27,7 +27,7 @@ const embed = new Discord.MessageEmbed()
 .addFields(
   {
     name: 'Bot tag',
-    value: client.user,
+    value: tag,
   },
   {
     name: 'Version',
@@ -53,6 +53,6 @@ const embed = new Discord.MessageEmbed()
 
 message.channel.send(embed)
     }
-    )
+    
 }
-}
+
