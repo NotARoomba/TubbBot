@@ -1,3 +1,5 @@
+const Discord = require('discord.js')
+const client = new Discord.Client();
 const { MessageEmbed } = require("discord.js");
 const { YOUTUBE_API_KEY } = require("@root/config.json");
 const YouTubeAPI = require("simple-youtube-api");
