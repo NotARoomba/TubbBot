@@ -38,7 +38,7 @@ module.exports = {
       const choice = resultsEmbed.fields[parseInt(response.first()) - 1].name;
 
       message.channel.activeCollector = false;
-      message.client.commands.cache.get("play").execute(message, [choice]);
+      client.commands.get("play").execute(message, [choice]);
       resultsMessage.delete().catch(console.error);
     } catch (error) {
       console.error(error);
