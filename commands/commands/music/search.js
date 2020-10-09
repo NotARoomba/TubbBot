@@ -1,15 +1,13 @@
-const Discord = require('discord.js')
-const client = new Discord.Client();
 const { MessageEmbed } = require("discord.js");
-const { YOUTUBE_API_KEY } = require("@root/config.json");
+const { YOUTUBE_API_KEY } = require("../config.json");
 const YouTubeAPI = require("simple-youtube-api");
 const youtube = new YouTubeAPI(YOUTUBE_API_KEY);
 
 module.exports = {
   name: "search",
-  commands: ["search"],
+  commands: "search",
   description: "Search and select videos to play",
-  async callback(message, args)  {
+  async execute(message, args) {
     if (!args.length)
       return message.reply(`Usage: ${message.client.prefix}${module.exports.name} <Video Name>`).catch(console.error);
     if (message.channel.activeCollector)
@@ -40,7 +38,7 @@ module.exports = {
       const choice = resultsEmbed.fields[parseInt(response.first()) - 1].name;
 
       message.channel.activeCollector = false;
-      client.commands.get("play").execute(message, [choice]);
+      message.client.commands.get("play").execute(message, [choice]);
       resultsMessage.delete().catch(console.error);
     } catch (error) {
       console.error(error);
