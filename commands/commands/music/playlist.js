@@ -11,7 +11,7 @@ module.exports = {
   commands: ["playlist", "pl"],
   description: "Play a playlist from youtube",
   async callback(message, args)  {
-    const { PRUNING } = require("../config.json");
+    const { PRUNING } = require("@root/config.json");
     const { channel } = message.member.voice;
 
     const serverQueue = message.client.queue.get(message.guild.id);
