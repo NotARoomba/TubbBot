@@ -3,7 +3,7 @@ const lyricsFinder = require("lyrics-finder");
 
 module.exports = {
   name: "lyrics",
-  commands: ["ly"],
+  commands: ["lyrics", "ly"],
   description: "Get lyrics for the currently playing song",
   async callback (message) {
     const queue = message.client.queue.get(message.guild.id);

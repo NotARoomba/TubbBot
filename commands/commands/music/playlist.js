@@ -8,7 +8,7 @@ const scdl = require("soundcloud-downloader")
 module.exports = {
   name: "playlist",
   cooldown: 3,
-  commands: ["pl"],
+  commands: ["playlist", "pl"],
   description: "Play a playlist from youtube",
   async callback(message, args)  {
     const { PRUNING } = require("../config.json");

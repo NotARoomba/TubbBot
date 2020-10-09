@@ -12,7 +12,7 @@ const scdl = require("soundcloud-downloader");
 module.exports = {
   name: "play",
   cooldown: 3,
-  commands: ["p"],
+  commands: ["play", "p"],
   description: "Plays audio from YouTube or Soundcloud",
   async callback(message, args)  {
     const { channel } = message.member.voice;

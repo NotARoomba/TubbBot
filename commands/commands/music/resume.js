@@ -2,7 +2,7 @@ const { canModifyQueue } = require("@util/musicutil");
 
 module.exports = {
   name: "resume",
-  commands: ["r"],
+  commands: ["resume", "r"],
   description: "Resume currently playing music",
   callback:(message) => {
     const queue = message.client.queue.get(message.guild.id);
