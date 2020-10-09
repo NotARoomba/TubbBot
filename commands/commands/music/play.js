@@ -1,13 +1,11 @@
-const Discord = require('discord.js')
-const client = new Discord.Client();
-client.queue = new Map();
+
 const { play } = require("@util/play");
 const { YOUTUBE_API_KEY, SOUNDCLOUD_CLIENT_ID } = require("@root/config.json");
 const ytdl = require("ytdl-core");
 const YouTubeAPI = require("simple-youtube-api");
 const youtube = new YouTubeAPI(YOUTUBE_API_KEY);
 const scdl = require("soundcloud-downloader");
-
+const prefix = require("@root/config.json")
 
 
 module.exports = {
@@ -25,7 +23,7 @@ module.exports = {
 
     if (!args.length)
       return message
-        .reply(`Usage: ${message.client.prefix}play <YouTube URL | Video Name | Soundcloud URL>`)
+        .reply(`Usage: ${prefix}play <YouTube URL | Video Name | Soundcloud URL>`)
         .catch(console.error);
 
     const permissions = channel.permissionsFor(message.client.user);

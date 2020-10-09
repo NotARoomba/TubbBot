@@ -4,6 +4,7 @@ const { YOUTUBE_API_KEY, MAX_PLAYLIST_SIZE, SOUNDCLOUD_CLIENT_ID } = require("@r
 const YouTubeAPI = require("simple-youtube-api");
 const youtube = new YouTubeAPI(YOUTUBE_API_KEY);
 const scdl = require("soundcloud-downloader")
+const prefix = require("@root/config.json")
 
 module.exports = {
   name: "playlist",
@@ -20,7 +21,7 @@ module.exports = {
 
     if (!args.length)
       return message
-        .reply(`Usage: ${message.client.prefix}playlist <YouTube Playlist URL | Playlist Name>`)
+        .reply(`Usage: ${prefix}playlist <YouTube Playlist URL | Playlist Name>`)
         .catch(console.error);
     if (!channel) return message.reply("You need to join a voice channel first!").catch(console.error);
 
