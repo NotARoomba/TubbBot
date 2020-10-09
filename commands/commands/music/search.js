@@ -39,7 +39,7 @@ module.exports = {
       const choice = resultsEmbed.fields[parseInt(response.first()) - 1].name;
 
       message.channel.activeCollector = false;
-      message.client.commands.get("play").execute(message, [choice]);
+      message.client.commands.get("play").callback(message, [choice]);
       resultsMessage.delete().catch(console.error);
     } catch (error) {
       console.error(error);
