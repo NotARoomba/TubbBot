@@ -16,7 +16,7 @@ client.on('ready', async () => {
   console.log('Tubb is online!')
   client.user.setActivity('|-help|');
 
-  
+  if(msg.channel.type === "dm") return;
 
   await mongo().then(mongoose => {
     try {
