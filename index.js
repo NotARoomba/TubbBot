@@ -12,11 +12,11 @@ const prefix = "-"
 
 
 
-client.on('ready', async () => {
+client.on('ready',  async () => {
   console.log('Tubb is online!')
   client.user.setActivity('|-help|');
 
-  if(msg.channel.type === "dm") return;
+  
 
   await mongo().then(mongoose => {
     try {
@@ -31,7 +31,6 @@ client.on('ready', async () => {
  loadFeatures(client)
 
 });
-
 
 
 //heroku stack:set heroku-18 -a tubb-bot jic v509
