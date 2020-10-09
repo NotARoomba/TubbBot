@@ -39,11 +39,7 @@ module.exports = {
       const choice = resultsEmbed.fields[parseInt(response.first()) - 1].name;
 
       message.channel.activeCollector = false;
-<<<<<<< HEAD
       message.client.commands.get("play").execute(message, [choice]);
-=======
-      message.client.commands.cache.get("play").execute(message, [choice]);
->>>>>>> parent of 6fcd8382... Update search.js
       resultsMessage.delete().catch(console.error);
     } catch (error) {
       console.error(error);
