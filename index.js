@@ -6,7 +6,7 @@ const mongo = require('@util/mongo');
 const loadCommands = require('@root/commands/load-commands.js')
 const loadFeatures = require('@root/features/load-features.js')
 const ytdl = require("ytdl-core");
-const queue = new Map();
+client.queue = new Map();
 const prefix = "-"
 
 
