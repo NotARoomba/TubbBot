@@ -8,9 +8,7 @@ const loadFeatures = require('@root/features/load-features.js')
 const ytdl = require("ytdl-core");
 client.queue = new Map();
 const prefix = "-"
-const {Client} = require("discord.js");
-const bot = new Client();
-bot.options.http.api = "https://discord.com/api"
+
 
 
 
