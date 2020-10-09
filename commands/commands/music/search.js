@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+
 const { MessageEmbed } = require("discord.js");
 const { YOUTUBE_API_KEY } = require("@root/config.json");
 const YouTubeAPI = require("simple-youtube-api");
