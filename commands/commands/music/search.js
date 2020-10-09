@@ -1,3 +1,4 @@
+
 const { MessageEmbed } = require("discord.js");
 const { YOUTUBE_API_KEY } = require("@root/config.json");
 const YouTubeAPI = require("simple-youtube-api");
@@ -5,9 +6,9 @@ const youtube = new YouTubeAPI(YOUTUBE_API_KEY);
 
 module.exports = {
   name: "search",
-  commands: ["search"],
+  commands: "search",
   description: "Search and select videos to play",
-  async callback(message, args)  {
+  async callback(message, args) {
     if (!args.length)
       return message.reply(`Usage: ${message.client.prefix}${module.exports.name} <Video Name>`).catch(console.error);
     if (message.channel.activeCollector)
@@ -38,7 +39,11 @@ module.exports = {
       const choice = resultsEmbed.fields[parseInt(response.first()) - 1].name;
 
       message.channel.activeCollector = false;
+<<<<<<< HEAD
       message.client.commands.get("play").execute(message, [choice]);
+=======
+      message.client.commands.cache.get("play").execute(message, [choice]);
+>>>>>>> parent of 6fcd8382... Update search.js
       resultsMessage.delete().catch(console.error);
     } catch (error) {
       console.error(error);

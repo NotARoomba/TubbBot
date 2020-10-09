@@ -2,7 +2,7 @@ const Discord = require('discord.js')
 const client = new Discord.Client()
 
 module.exports = {
-    commands: ['removerole', 'delrole', 'deleterole'],
+    commands: ['removerole', 'derole', 'deleterole'],
     minArgs: 2,
     description: 'Loss of Privileges',
     expectedArgs: "<Target user's @> <The role name>",
