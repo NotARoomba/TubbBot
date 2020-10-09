@@ -1,5 +1,6 @@
 const Discord = require('discord.js')
 const client = new Discord.Client();
+client.queue = new Map();
 const { play } = require("@util/play");
 const { YOUTUBE_API_KEY, SOUNDCLOUD_CLIENT_ID } = require("@root/config.json");
 const ytdl = require("ytdl-core");
