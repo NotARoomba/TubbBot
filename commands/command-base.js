@@ -85,7 +85,7 @@ module.exports = (client, commandOptions) => {
   client.on('message', async (message) => {
     const { member, content, guild, channel } = message
 
-    const prefix = guildPrefixes[guild.id] || globalPrefix.catch()
+    const prefix = guildPrefixes[guild.id] || globalPrefix
 
     for (const alias of commands) {
       const command = `${prefix}${alias.toLowerCase()}`
