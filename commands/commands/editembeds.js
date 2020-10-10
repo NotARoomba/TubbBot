@@ -17,6 +17,9 @@ module.exports = {
     var Msg = await message.channel.send(Embed);
              // sends message
     Msg.edit(newEmbed)
-    message.delete(1000) // edits message with newembed
+    .then(msg => {
+        msg.delete({ timeout: 1 })
+      })
+      .catch(console.error); // edits message with newembed
     }
 }
