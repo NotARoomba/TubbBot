@@ -7,16 +7,14 @@ module.exports = {
     description: "Describes all of this bot's commands",
     callback: (message, arguments, text) => {
 
-        const tstEmbed = new Discord.MessageEmbed()
-	.setTitle('Some title')
-	.setDescription('Description after the edit');
-        
-    message.reply(tstEmbed);
-        
-        const tstEmbed = new Discord.MessageEmbed()
-	.setTitle('e')
-	.setDescription('Description after the edit');
+        const Embed = new Discord.MessageEmbed()
+        .setDescription(":one:")
 
-message.edit(tstEmbed);
+    const newEmbed = new Discord.MessageEmbed()
+        .setDescription(":two:")
+
+    // Edit Part Below
+    var Msg = await message.channel.send(Embed); // sends message
+    Msg.edit(newEmbed) // edits message with newembed
     }
 }
