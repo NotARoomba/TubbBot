@@ -5,7 +5,7 @@ const client = new Discord.Client()
 module.exports = {
     commands: ['test'],
     description: "Describes all of this bot's commands",
-    callback: (message, arguments, text) => {
+    async callback (message, arguments, text) {
 
         const Embed = new Discord.MessageEmbed()
         .setDescription(":one:")
