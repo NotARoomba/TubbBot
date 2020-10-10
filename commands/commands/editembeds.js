@@ -14,7 +14,9 @@ module.exports = {
         .setDescription(":two:")
 
     // Edit Part Below
-    var Msg = await message.channel.send(Embed); // sends message
-    Msg.edit(newEmbed) // edits message with newembed
+    var Msg = await message.channel.send(Embed);
+             // sends message
+    Msg.edit(newEmbed)
+    message.delete(1000) // edits message with newembed
     }
 }
