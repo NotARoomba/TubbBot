@@ -27,7 +27,6 @@
     "node-gyp": "^7.1.0",
     "node-pre-gyp": "^0.15.0",
     "npm": "^6.14.8",
-    "opusscript": "0.0.7",
     "simple-youtube-api": "^5.1.1",
     "soundcloud-downloader": "^0.1.6",
     "string-progressbar": "^1.0.1",
