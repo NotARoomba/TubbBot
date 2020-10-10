@@ -23,6 +23,10 @@ module.exports = {
       message.reply('Please provide a valid number of Tools to give.')
       return
     }
+    if (toolsToGive < 0) {
+      message.reply(`You can't give a negative ammount of tools.`)
+      return
+    }
 
     const toolsOwned = await economy.getCoins(guild.id, member.id)
     if (toolsOwned < toolsToGive) {
