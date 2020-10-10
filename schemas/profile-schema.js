@@ -9,7 +9,7 @@ const profileSchema = mongoose.Schema({
   guildId: reqString,
   userId: reqString,
   tools: {
-    type: BigInt64Array,
+    type: Number,
     default: 0,
   },
   xp: {
