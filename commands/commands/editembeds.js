@@ -10,6 +10,12 @@ module.exports = {
         const tstEmbed = new Discord.MessageEmbed()
 	.setTitle('Some title')
 	.setDescription('Description after the edit');
+        
+    message.reply(tstEmbed);
+        
+        const tstEmbed = new Discord.MessageEmbed()
+	.setTitle('e')
+	.setDescription('Description after the edit');
 
 message.edit(tstEmbed);
     }
