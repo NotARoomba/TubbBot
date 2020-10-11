@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const Canvas = require('canvas');
-const { FONT_SANS_10_BLACK } = require('jimp');
+
 
 
 module.exports = {
