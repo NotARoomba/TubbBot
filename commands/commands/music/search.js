@@ -24,14 +24,14 @@ module.exports = {
       .setColor("#F8AA2A");
 
     try {
-      const results = await youtube.searchVideos(search, 10);
+      const results = await youtube.searchVideos(search, 15);
       results.map((video, index) => resultsEmbed.addField(video.shortURL, `${index + 1}. ${video.title}`));
 
       var resultsMessage = await message.channel.send(resultsEmbed);
 
       function filter(msg) {
         const pattern = /(^[1-9][0-9]{0,1}$)/g;
-        return pattern.test(msg.content) && parseInt(msg.content.match(pattern)[0]) <= 10;
+        return pattern.test(msg.content) && parseInt(msg.content.match(pattern)[0]) <= 15;
       }
 
       message.channel.activeCollector = true;
