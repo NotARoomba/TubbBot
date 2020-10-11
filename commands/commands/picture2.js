@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const Canvas = require('canvas');
+const { FONT_SANS_10_BLACK } = require('jimp');
 
 
 module.exports = {
@@ -13,11 +14,11 @@ module.exports = {
         ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
         
         ctx.strokeStyle = '#74037b';
-	ctx.strokeRect(0, 0, canvas.width, canvas.height);
+	    ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
-	ctx.font = applyText(canvas, `${member.displayName}!`);
-	ctx.fillStyle = '#ffffff';
-	ctx.fillText(`${message.member.displayName}!`, canvas.width / 2.5, canvas.height / 1.8);
+        ctx.font = '60px sans-serif';
+	    ctx.fillStyle = '#ffffff';
+	    ctx.fillText(`${message.member.displayName}!`, canvas.width / 2.5, canvas.height / 1.8);
         ctx.beginPath();
         // Start the arc to form a circle
         ctx.arc(125, 125, 100, 0, Math.PI * 2, true);
