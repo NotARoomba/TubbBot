@@ -15,7 +15,6 @@
     "@discordjs/opus": "^0.3.2",
     "cairo": "0.1.0-alpha.3",
     "discord.js": "^12.3.1",
-    "discord.js-commando": "git+https://github.com/discordjs/commando.git",
     "ffmpeg-static": "^4.2.3",
     "heroku": "^7.45.0",
     "i": "^0.3.6",
