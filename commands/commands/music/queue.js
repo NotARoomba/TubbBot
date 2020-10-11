@@ -16,7 +16,7 @@ module.exports = {
       .setColor("#F8AA2A");
 
     const splitDescription = splitMessage(description, {
-      maxLength: 2048,
+      maxLength: 4096,
       char: "\n",
       prepend: "",
       append: ""
