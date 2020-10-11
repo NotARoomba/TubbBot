@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
-//const Canvas = require('canvas');
+const Canvas = require('canvas');
 
 
 module.exports = {
