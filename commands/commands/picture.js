@@ -5,7 +5,7 @@ const { FONT_SANS_10_BLACK } = require('jimp');
 
 
 module.exports = {
-    commands: ['picture2', 'pic2'],
+    commands: ['picture', 'pic'],
     description: '*click click*',
     callback: async (message) => {
         const canvas = Canvas.createCanvas(700, 300);
