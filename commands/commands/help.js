@@ -29,7 +29,7 @@ module.exports = {
                   // A MessageEmbed to actually send in chat, and...
                   content: new Discord.MessageEmbed({
                       title: 'General Commands',
-                      description: 'add, Adds two numbers \n  sys, Sysinfo.exe \n help, Shows this menu \n msgdel, Message Genocide \n ping, Find your ping to me!'
+                      description: '**add**, Adds two numbers \n  **sys**, Sysinfo.exe \n **help (h)**, Shows this menu \n **msgdel**, Message Genocide \n **ping**, Find your ping to me!'
                    
                       
                   }),
@@ -45,7 +45,7 @@ module.exports = {
                   name: 'economy',
                   content: new Discord.MessageEmbed({
                       title: 'Economy',
-                      description: 'addbal, Money for the Admins \n  balance (bal), Check your d̶e̶b̶t̶  balance \n pay, Got Cash? \n'
+                      description: '**addbal**, Money for the Admins \n  **balance (bal)**, Check your d̶e̶b̶t̶  balance \n **pay**, Got Cash? \n'
                   }),
                   reactions: {
                       '◀': 'general',
@@ -56,7 +56,7 @@ module.exports = {
                 name: 'moderation',
                 content: new Discord.MessageEmbed({
                     title: 'Moderation',
-                    description: 'ban, BAN HAMMER TIME!! \n  kick, Kicks someone somewhere? \n mute, Muhn mhuuthm mhee \n unban, Reinstatement to this Server! \n unmute, Oh I can talk now?'
+                    description: '**ban**, BAN HAMMER TIME!! \n  **kick**, Kicks someone somewhere? \n **mute**, Muhn mhuuthm mhee \n **unban**, Reinstatement to this Server! \n **unmute**, Oh I can talk now?'
                 }),
                 reactions: {
                     '◀': 'economy',
@@ -67,7 +67,7 @@ module.exports = {
               name: 'music',
               content: new Discord.MessageEmbed({
                   title: 'Music',
-                  description: 'loop, Toggle music loop \n  lyrics (ly), Get lyrics for the currently playing song \n nowplaying (np), Show now playing song \n pause, Pause the currently playing music \n play (p), Plays audio from YouTube or Soundcloud \n playlist (pl), Play a playlist from youtube \n pruning, Toggle pruning of bot messages \n queue (q), Show the music queue and now playing \n remove (r), Remove song from the queue \n resume, Resume currently playing music \n search, Search and select videos to play \n shuffle, Shuffle queue \n skip (s), Skip the currently playing song \n skipto (st), Skip to the selected queue number \n stop, Stops the music \n volume (v), Change volume of currently playing music'
+                  description: '**loop**, Toggle music loop \n  **lyrics (ly)**, Get lyrics for the currently playing song \n **nowplaying (np)**, Show now playing song \n **pause**, Pause the currently playing music \n **play (p)**, Plays audio from YouTube or Soundcloud \n **playlist (pl)**, Play a playlist from youtube \n **pruning**, Toggle pruning of bot messages \n **queue (q)**, Show the music queue and now playing \n **remove (r)**, Remove song from the queue \n **resume**, Resume currently playing music \n **search**, Search and select videos to play \n **shuffle**, Shuffle queue \n **skip (s)**, Skip the currently playing song \n **skipto (st)**, Skip to the selected queue number \n **stop**, Stops the music \n **volume (v)**, Change volume of currently playing music'
               }),
               reactions: {
                   '◀': 'moderation',
@@ -78,7 +78,7 @@ module.exports = {
                 name: 'roles',
                 content: new Discord.MessageEmbed({
                     title: 'Roles',
-                    description: 'giverole (addrole), Gives someone a role \n removerole (derole), Loss of Privileges'
+                    description: '**giverole (addrole)**, Gives someone a role \n **removerole (derole)**, Loss of Privileges'
                 }),
                 reactions: {
                     '◀': 'music',
