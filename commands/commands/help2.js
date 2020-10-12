@@ -16,7 +16,7 @@ module.exports = {
                 name: 'system',
                 content: new Discord.MessageEmbed({
                     title: 'System',
-                    description: ''
+                    description: `This command shows Tubb's commands`
                 }),
                 reactions: {
                     '▶': 'general',
