@@ -13,8 +13,19 @@ module.exports = {
           let helpMenu = new Menu(message.channel, message.author.id, [
               // Each object in this array is a unique page.
               {
+                name: 'system',
+                content: new Discord.MessageEmbed({
+                    title: 'System',
+                    description: ''
+                }),
+                reactions: {
+                    '▶': 'general',
+                    '⏹': 'delete'
+                }
+            },
+              {
                   // A page object consists of a name, used as a destination by reactions...
-                  name: 'main',
+                  name: 'general',
                   // A MessageEmbed to actually send in chat, and...
                   content: new Discord.MessageEmbed({
                       title: 'General Commands',
@@ -26,7 +37,8 @@ module.exports = {
                   // Note there's also special destination names (read below)
                   reactions: {
                       '▶': 'economy',
-                      '⏹': 'delete'
+                      '◀': 'system'
+                      
                   }
               },
               {
@@ -36,7 +48,7 @@ module.exports = {
                       description: 'addbal, Money for the Admins \n  balance (bal), Check your d̶e̶b̶t̶  balance \n pay, Got Cash? \n'
                   }),
                   reactions: {
-                      '◀': 'main',
+                      '◀': 'general',
                       '▶': 'moderation'
                   }
               },
@@ -69,7 +81,7 @@ module.exports = {
                     description: 'giverole (addrole), Gives someone a role \n removerole (derole), Loss of Privileges'
                 }),
                 reactions: {
-                    '◀': 'moderation',
+                    '◀': 'music',
                 }
             }  
               
