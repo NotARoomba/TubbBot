@@ -36,8 +36,9 @@ module.exports = {
                   // A set of reactions with destination names attached.
                   // Note there's also special destination names (read below)
                   reactions: {
-                      '▶': 'economy',
-                      '◀': 'system'
+                    '◀': 'system',
+                    '▶': 'economy'
+                      
                       
                   }
               },
