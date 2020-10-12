@@ -79,7 +79,7 @@ module.exports = {
               // The last parameter is the number of milliseconds you want the menu to collect reactions for each page before it stops to save resources
               // The timer is reset when a user interacts with the menu.
               // This is optional, and defaults to 180000 (3 minutes).
-          ], 300000)
+          ], 712000)
           // Run Menu.start() when you're ready to send the menu in chat.
           // Once sent, the menu will automatically handle everything else.
           helpMenu.start()
