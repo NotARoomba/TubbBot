@@ -16,7 +16,7 @@ module.exports = {
                 name: 'system',
                 content: new Discord.MessageEmbed({
                     title: 'System',
-                    description: `This command shows Tubb's commands`
+                    description: `This command shows Tubb's commands \n\n Use the reactions to navagate \n\n **setprefix**, Set custom server prefix \n **setwelcome**, Set your server's welcome message`
                 }),
                 reactions: {
                     '▶': 'general',
