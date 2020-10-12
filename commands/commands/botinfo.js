@@ -40,7 +40,7 @@ const embed = new Discord.MessageEmbed()
   },
   {
     name: 'Time since last restart',
-    value: `${process.uptime().toFixed(2)}s`,
+    value: `${process.uptime().toFixed(2) / 60 / 60}h`,
   },
   {
     name: 'Server count',
