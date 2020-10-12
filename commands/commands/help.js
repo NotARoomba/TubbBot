@@ -57,7 +57,7 @@ module.exports = {
                 name: 'moderation',
                 content: new Discord.MessageEmbed({
                     title: 'Moderation',
-                    description: '**ban**, BAN HAMMER TIME!! \n  **kick**, Kicks someone somewhere? \n **mute**, Muhn mhuuthm mhee \n **unban**, Reinstatement to this Server! \n **unmute**, Oh I can talk now?'
+                    description: '**ban**, BAN HAMMER TIME!! \n  **kick**, Kicks someone somewhere? \n **mute**, Muhn mhuuthm mhee \n **unban**, Reinstatement to this Server! \n **unmute**, Oh I can talk now? \n **giverole (addrole)**, Gives someone a role \n **removerole (derole)**, Loss of Privileges'
                 }),
                 reactions: {
                     '◀': 'economy',
@@ -72,19 +72,8 @@ module.exports = {
               }),
               reactions: {
                   '◀': 'moderation',
-                  '▶': 'roles'
               }
             },
-            {
-                name: 'roles',
-                content: new Discord.MessageEmbed({
-                    title: 'Roles',
-                    description: '**giverole (addrole)**, Gives someone a role \n **removerole (derole)**, Loss of Privileges'
-                }),
-                reactions: {
-                    '◀': 'music',
-                }
-            }  
               
               
               // The last parameter is the number of milliseconds you want the menu to collect reactions for each page before it stops to save resources
