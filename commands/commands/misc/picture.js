@@ -14,7 +14,7 @@ module.exports = {
             const ctx = canvas.getContext('2d');
         
             // Declare a base size of the font
-            let fontSize = 85;
+            let fontSize = 60;
         
             do {
                 // Assign the font to the context and decrement it so it can be measured again
