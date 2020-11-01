@@ -53,7 +53,7 @@ module.exports = {
         ctx.clip();
 	const avatar = await Canvas.loadImage(message.author.displayAvatarURL({ format: 'jpg', size: 512}));
 	// Draw a shape onto the main canvas
-	ctx.drawImage(avatar, 25, 25, 200, 200);
+	ctx.drawImage(avatar, 350, 25, 200, 200);
 
         const picture = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
         message.channel.send(picture);

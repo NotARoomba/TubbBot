@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const Canvas = require('canvas-constructor');
 const { get } = require('node-superfetch');
-const background = 'https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/v268batch2-kul-02_2.jpg?bg=transparent&con=3&cs=srgb&dpr=1&fm=jpg&ixlib=php-3.1.0&q=80&usm=15&vib=3&w=1300&s=a5cfc956068e95f97f6df92d9d96439c'
+//const background = 'https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/v268batch2-kul-02_2.jpg?bg=transparent&con=3&cs=srgb&dpr=1&fm=jpg&ixlib=php-3.1.0&q=80&usm=15&vib=3&w=1300&s=a5cfc956068e95f97f6df92d9d96439c'
 
 
 
@@ -12,17 +12,18 @@ module.exports = {
     callback: async (message) => {
         let WELCOME_MESSAGE_TITLE = `${message.member.displayName} Just joined!`; // you can change that for whatever you want 
         let WELCOME_MESSAGE_TEXT = `You are our ${message.guild.members.cache.size}th member!`;
-        
+        const image = await Canvas.resolveImage('https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/v268batch2-kul-02_2.jpg?bg=transparent&con=3&cs=srgb&dpr=1&fm=jpg&ixlib=php-3.1.0&q=80&usm=15&vib=3&w=1300&s=a5cfc956068e95f97f6df92d9d96439c')
+
         try {
 
             async function createCanvas() { // here we create the canvas function and make sure it's a async function.
             
                 var imageUrlRegex = /\?size=2048$/g;
                 var { body: avatar } = await get(message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 }).replace(imageUrlRegex, "?size128")); // this is gonna be the user avatar
-                var { body: defaultbackground } = await get(background); // this is gonna be the background we have at line 15
+                var { body: defaultbackground } = await get(image); // this is gonna be the background we have at line 15
 
                 return new Canvas.Canvas(820, 360) // lets customize our canvas, Canvas(Width, Height) in my case I want the canvas width to be 820 and the Height 360
-                    .printImage(defaultbackground, 0, 0, 820, 360) // lets start by adding the background, .addImage(variable, SX, SY, X, Y), in our case we want the background to be at the same exact size as the canvase to replace the X,Y with the canvas width and height at line 54
+                    .printImage(image, 0, 0, 820, 360) // lets start by adding the background, .addImage(variable, SX, SY, X, Y), in our case we want the background to be at the same exact size as the canvase to replace the X,Y with the canvas width and height at line 54
                     .addRoundImage(avatar, 335, 35, 150, 150, 150 / 2) // now lets add the avatar, we want the avatar to be round image, so we use RoundImage, (x: number, y: number, width: number, height: number, radius), in our case I want the avatar position to be at (335, 35) and the size(150, 150, 150 / 2)
                     // now lets add some text !!
                     .setColor("#ffffff") // this is gonna be the color of the text
