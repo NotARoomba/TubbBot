@@ -16,7 +16,7 @@ client.on('ready',  async () => {
   console.log('Tubb is online!')
   let activities = [ `${client.guilds.cache.size} servers` ], i = 0;
 
-  setInterval(() => client.user.setActivity(`${prefix}help | In ${activities[i ++ % activities.length]}`, { type: "LISTENING"},`${process.env.INTERVAL}`, 10000))
+  setInterval(() => client.user.setActivity(`${prefix}help | In ${activities[i ++ % activities.length]}`, { type: "LISTENING"},`${process.env.INTERVAL}`, 600000))
 
   
 
