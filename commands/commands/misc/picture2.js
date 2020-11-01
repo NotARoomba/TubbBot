@@ -1,6 +1,8 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const Canvas = require('canvas');
+const Canvas = require('canvas-constructor');
+const { get } = require('node-superfetch');
+const background = 'https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/v268batch2-kul-02_2.jpg?bg=transparent&con=3&cs=srgb&dpr=1&fm=jpg&ixlib=php-3.1.0&q=80&usm=15&vib=3&w=1300&s=a5cfc956068e95f97f6df92d9d96439c'
 
 
 
@@ -28,21 +30,18 @@ module.exports = {
                     // now lets add some text !!
                     .setColor("#ffffff") // this is gonna be the color of the text
                     .setTextAlign('center') // we want the text to be centered 
-                    .setTextFont('30px BebasNeueRegular') // this is gonna be the text font, remember at line 12 we required our custom font and we gave it a name "BebasNeueRegular"
+                    .setTextFont('30px sans-serif') // this is gonna be the text font, remember at line 12 we required our custom font and we gave it a name "BebasNeueRegular"
                     .addText(WELCOME_MESSAGE_TITLE, 410.6, 228.1) // lets add the title that we required at line 36, .addText(the variable, X, Y) in my case I want the text to be at this postion the variable, X: 410.6 and Y: 228.1
                     // now we are done with the title, let add the welcome message text that we required at line 37, but now we are gonna change the text size
-                    .setTextFont('25px BebasNeueRegular') // as you can see we are still using the same name but the size is different, we changed the size from 30px to 25px
+                    .setTextFont('25px sans-serif') // as you can see we are still using the same name but the size is different, we changed the size from 30px to 25px
                     .addText(WELCOME_MESSAGE_TEXT, 410.6, 276.1) // lets add the text that we required at line 37
                     // now we are good to go!, you can use the variables we required at line 46 - 52 for more additions 
                     .toBuffer() // you don't have to use this if you don't know what Buffer means
             }
 
             // now lets send the attachment to the channel !
-            let FIRST_MESSAGE = await message.channel.send('*Please Wait this might take a while due to background size...*'); // you don't have to include this in the welcome message, but I did that for other uses such as [ profile, rank ]
-
-            const SECOND_MESSAGE = `**This is the welcome message test**`; // this is gonna be the message above the canvas, same thing you don't have to include this.
-            const attachment = new MessageAttachment(await createCanvas(), 'welcome.png') // now lets const the canvas that we created !
-            message.channel.send(SECOND_MESSAGE).then(async msg => await msg.channel.send(attachment)).then(FIRST_MESSAGE.delete({ timeout: 1 }))
+            await message.channel.send(attachment)
+            const attachment = new MessageAttachment(await createCanvas(), 'welcome.png')
         } catch (e) {
             message.channel.send(`Oh no an error occurred :( \`${e.message}\` try again later.`); // you can replace message.channel.send with console.log if you don't to get the error message in the channel
         }
