@@ -35,7 +35,7 @@ const embed = new Discord.MessageEmbed()
     value: version,
   },
   {
-    name: "Server's command prefix",
+    name: "Tubb's command prefix",
     value: prefix,
   },
   {
@@ -44,7 +44,7 @@ const embed = new Discord.MessageEmbed()
   },
   {
     name: 'Server count',
-    value: `${client.guilds.cache.size}`,
+    value: `${client.guilds.size}`,
   },
   {
     name: 'Total members',
