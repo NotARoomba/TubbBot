@@ -9,7 +9,7 @@ const background = 'https://img.rawpixel.com/s3fs-private/rawpixel_images/websit
 module.exports = {
     commands: ['picture2', 'pic2'],
     description: '*click click*',
-    callback: async (message) => {
+    callback: async (client, message, args) => {
         
         
         try {
