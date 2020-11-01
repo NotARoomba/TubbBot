@@ -45,7 +45,7 @@ const embed = new Discord.MessageEmbed()
   },
   {
     name: 'Server count',
-    value: activities,
+    value: `Look at status =>`,
   },
   {
     name: 'Total members',
