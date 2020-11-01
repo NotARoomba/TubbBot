@@ -9,8 +9,8 @@ const background = 'https://img.rawpixel.com/s3fs-private/rawpixel_images/websit
 module.exports = {
     commands: ['picture2', 'pic2'],
     description: '*click click*',
-    callback: async (client, message, args) => {
-        let WELCOME_MESSAGE_TITLE = `${message.author.username} Just joined!`; // you can change that for whatever you want 
+    callback: async (message) => {
+        let WELCOME_MESSAGE_TITLE = `${message.member.displayName} Just joined!`; // you can change that for whatever you want 
         let WELCOME_MESSAGE_TEXT = `You are our ${message.guild.members.cache.size}th member!`;
         
         try {
@@ -18,15 +18,11 @@ module.exports = {
             async function createCanvas() { // here we create the canvas function and make sure it's a async function.
             
                 var imageUrlRegex = /\?size=2048$/g;
-                var AUTHOR_NAME = message.author.username; // as I said before I like to use variables for everything, this one is for the user name. example: @Sphinix
-                var AUTHOR_TAG = message.author.tag; // this one is for the user tag. example: @Sphinix#0001
-                var AUTHOR_TAG_LENGTH = AUTHOR_TAG.length > 10 ? AUTHOR_TAG.substring(0, 12) + ".." : AUTHOR_TAG; // with this you can set a limit for the length so if the user tag is longer than 10 characters it's gonna cut the name and add .. to it ,you don't have to include that
-                var AUTHOR_NAME_LENGTH = AUTHOR_NAME.length > 10 ? AUTHOR_NAME.substring(0, 12) + ".." : AUTHOR_NAME; // same thing for the user name
                 var { body: avatar } = await get(message.author.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 }).replace(imageUrlRegex, "?size128")); // this is gonna be the user avatar
                 var { body: defaultbackground } = await get(background); // this is gonna be the background we have at line 15
 
-                return new Canvas(820, 360) // lets customize our canvas, Canvas(Width, Height) in my case I want the canvas width to be 820 and the Height 360
-                    .addImage(defaultbackground, 0, 0, 820, 360) // lets start by adding the background, .addImage(variable, SX, SY, X, Y), in our case we want the background to be at the same exact size as the canvase to replace the X,Y with the canvas width and height at line 54
+                return new Canvas.Canvas(820, 360) // lets customize our canvas, Canvas(Width, Height) in my case I want the canvas width to be 820 and the Height 360
+                    .printImage(defaultbackground, 0, 0, 820, 360) // lets start by adding the background, .addImage(variable, SX, SY, X, Y), in our case we want the background to be at the same exact size as the canvase to replace the X,Y with the canvas width and height at line 54
                     .addRoundImage(avatar, 335, 35, 150, 150, 150 / 2) // now lets add the avatar, we want the avatar to be round image, so we use RoundImage, (x: number, y: number, width: number, height: number, radius), in our case I want the avatar position to be at (335, 35) and the size(150, 150, 150 / 2)
                     // now lets add some text !!
                     .setColor("#ffffff") // this is gonna be the color of the text
