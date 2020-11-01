@@ -14,7 +14,9 @@ const prefix = "-"
 
 client.on('ready',  async () => {
   console.log('Tubb is online!')
-  ///client.user.setActivity('|-help|');
+  let activities = [ `${client.guilds.cache.size} servers` ], i = 0;
+
+  setInterval(() => client.user.setActivity(`${prefix}help | ${activities[i ++ % activities.length]}`, { type: "WATCHING"}),`${process.env.INTERVAL}`)
 
   
 

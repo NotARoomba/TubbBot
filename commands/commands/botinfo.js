@@ -44,7 +44,7 @@ const embed = new Discord.MessageEmbed()
   },
   {
     name: 'Server count',
-    value: `${client.guilds.size}`,
+    value: `${client.guilds.cache.size}`,
   },
   {
     name: 'Total members',
