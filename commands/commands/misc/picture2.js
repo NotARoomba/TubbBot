@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const Canvas = require('canvas-constructor');
+const { get } = require('node-superfetch');
 const background = 'https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/v268batch2-kul-02_2.jpg?bg=transparent&con=3&cs=srgb&dpr=1&fm=jpg&ixlib=php-3.1.0&q=80&usm=15&vib=3&w=1300&s=a5cfc956068e95f97f6df92d9d96439c'
 
 
@@ -9,7 +10,8 @@ module.exports = {
     commands: ['picture2', 'pic2'],
     description: '*click click*',
     callback: async (client, message, args) => {
-        
+        let WELCOME_MESSAGE_TITLE = `${message.author.username} Just joined!`; // you can change that for whatever you want 
+        let WELCOME_MESSAGE_TEXT = `You are our ${message.guild.members.cache.size}th member!`;
         
         try {
 
@@ -39,10 +41,11 @@ module.exports = {
             }
 
             // now lets send the attachment to the channel !
-            await message.send(attachment)
-            const attachment = new MessageAttachment(await createCanvas(), 'welcome.png')
+            
+            const attachment = new Discord.MessageAttachment(await createCanvas(), 'welcome.png')
+            await message.channel.send(attachment);
         } catch (e) {
-            message.send(`Oh no an error occurred :( \`${e.message}\` try again later.`); // you can replace message.channel.send with console.log if you don't to get the error message in the channel
+            console.log(`Oh no an error occurred :( \`${e.message}\` try again later.`); // you can replace message.channel.send with console.log if you don't to get the error message in the channel
         }
 
     }
