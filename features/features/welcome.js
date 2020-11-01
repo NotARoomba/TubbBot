@@ -72,7 +72,7 @@ module.exports = (client) => {
     const text = data[1]
 
     const channel = guild.channels.cache.get(channelId)
-    channel.send(text.replace[/<@>/g, `<@${member.id}>`, /<Server>/g, `<${message.guild.name}>`])
+    channel.send(text.replace(/<@>/g, `<@${member.id}>`))
   }
 
   command(client, 'simjoin', (message) => {
