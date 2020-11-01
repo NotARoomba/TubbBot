@@ -39,10 +39,10 @@ module.exports = {
             }
 
             // now lets send the attachment to the channel !
-            await channel.send(attachment)
+            await message.send(attachment)
             const attachment = new MessageAttachment(await createCanvas(), 'welcome.png')
         } catch (e) {
-            channel.send(`Oh no an error occurred :( \`${e.message}\` try again later.`); // you can replace message.channel.send with console.log if you don't to get the error message in the channel
+            message.send(`Oh no an error occurred :( \`${e.message}\` try again later.`); // you can replace message.channel.send with console.log if you don't to get the error message in the channel
         }
 
     }
