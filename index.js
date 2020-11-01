@@ -14,7 +14,7 @@ const prefix = "-"
 
 client.on('ready',  async () => {
   console.log('Tubb is online!')
-  client.user.setActivity('|-help|');
+  ///client.user.setActivity('|-help|');
 
   
 
