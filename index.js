@@ -14,7 +14,13 @@ const prefix = "-"
 
 client.on('ready',  async () => {
   console.log('Tubb is online!')
-  client.user.setStatus('online', 'Use -help | Made by L061571C5') 
+  client.user.setPresence({
+    status: 'online',
+    activity: {
+        name: ' -help | Made by L061571C5',
+        type: 'WATCHING',
+    }
+})
 
   
 
