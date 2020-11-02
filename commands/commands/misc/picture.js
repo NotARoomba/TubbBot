@@ -23,7 +23,7 @@ module.exports = {
 	    ctx.fillText('Welcome to the server,', 200, 225);
         ctx.font = '25px sans-serif';
 	    ctx.fillStyle = '#00000';
-	    ctx.fillText(`${message.member.username}!`, 300, 250);
+	    ctx.fillText(`${message.member.displayName}!`, 300, 250);
         ctx.beginPath();
         // Start the arc to form a circle
         ctx.arc(350, 110, 75, 0, Math.PI * 2, true);
