@@ -1,7 +1,7 @@
 require('module-alias/register');
 require('events').EventEmitter.prototype._maxListeners = 100;
 const Discord = require('discord.js')
-const client = new Discord.Client();
+const client = new Discord.Client({ ws: { intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MEMBERS', 'GUILD_PRESENCES'] } });
 const mongo = require('@util/mongo');
 const loadCommands = require('@root/commands/load-commands.js')
 const loadFeatures = require('@root/features/load-features.js')
@@ -14,13 +14,16 @@ const prefix = "-"
 
 client.on('ready',  async () => {
   console.log('Tubb is online!')
-  client.user.setPresence({
-    status: 'online',
-    activity: {
-        name: ' -help | Made by L061571C5',
-        type: 'WATCHING',
-    }
-})
+  let activities = [ `${client.guilds.cache.size} servers`, `${client.channels.cache.size} channels`, `${client.users.cache.size} users` ], i = 0;
+  setInterval(() => client.user.setActivity(`${prefix}help | ${activities[i ++ % activities.length]}`, { type: "WATCHING"}),`${process.env.INTERVAL}`)
+
+ // client.user.setPresence({
+   // status: 'online',
+   // activity: {
+       // name: ' -help | Made by L061571C5',
+       // type: 'WATCHING',
+   // }
+//})
 
   
 

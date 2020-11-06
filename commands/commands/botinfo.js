@@ -4,11 +4,8 @@ const client = new Discord.Client()
 const { version } = require('@root/package.json')
 const { prefix } = require('@root/config.json')
 const tag = `750123677739122819`
-const activities = require('@root/index.js')
-const mongo = require('@util/mongo')
-const commandPrefixSchema = require('@schemas/command-prefix-schema')
-const { prefix: globalPrefix } = require('@root/config.json')
-const guildPrefixes = {} 
+
+
 
 
 module.exports = {
@@ -18,28 +15,7 @@ module.exports = {
     description: 'Sysinfo.exe',
     callback: async (message, arguments, text) => {
           
-      const prefix = guildPrefixes[guild.id] || globalPrefix
-        
-      module.exports.updateCache = (guildId, newPrefix) => {
-        guildPrefixes[guildId] = newPrefix
-      }
-      
-      module.exports.loadPrefixes = async (client) => {
-        await mongo().then(async (mongoose) => {
-          try {
-            for (const guild of client.guilds.cache) {
-              const guildId = guild[1].id
-      
-              const result = await commandPrefixSchema.findOne({ _id: guildId })
-              guildPrefixes[guildId] = result ? result.prefix : globalPrefix
-            }
-      
-            console.log(guildPrefixes)
-          } finally {
-            mongoose.connection.close()
-  }
-})
-      }
+
 
 
 
@@ -58,8 +34,8 @@ const embed = new Discord.MessageEmbed()
     value: version,
   },
   {
-    name: "Servers's command prefix",
-    value: guildPrefixes,
+    name: "Tubb's command prefix",
+    value: prefix,
   },
   {
     name: 'Time since last restart',
@@ -67,7 +43,7 @@ const embed = new Discord.MessageEmbed()
   },
   {
     name: 'Server count',
-    value: `Look at status =>`,
+    value: `${client.guilds.cache.size}`,
   },
   {
     name: 'Total members',
