@@ -14,16 +14,13 @@ const prefix = "-"
 
 client.on('ready',  async () => {
   console.log('Tubb is online!')
-  let activities = [ `In ${client.guilds.cache.size} servers`], i = 0;
-  setInterval(() => client.user.setActivity(`${prefix}help | ${activities}`, { type: "WATCHING"}),`${process.env.INTERVAL}`)
-
- // client.user.setPresence({
-   // status: 'online',
-   // activity: {
-       // name: ' -help | Made by L061571C5',
-       // type: 'WATCHING',
-   // }
-//})
+  client.user.setPresence({
+    status: 'online',
+   activity: {
+        name: ` -help in ${client.guilds.cache.size} servers| Made by L061571C5`,
+        type: 'WATCHING',
+   }
+})
 
   
 
