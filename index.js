@@ -17,7 +17,7 @@ client.on('ready',  async () => {
   client.user.setPresence({
     status: 'online',
    activity: {
-        name: ` -help in ${client.guilds.cache.size} servers| Made by L061571C5`,
+        name: ` -help in ${client.guilds.cache.size} servers | Made by L061571C5`,
         type: 'WATCHING',
    }
 })
