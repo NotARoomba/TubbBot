@@ -15,7 +15,7 @@ const prefix = "-"
 client.on('ready',  async () => {
   console.log('Tubb is online!')
   let activities = [ `In ${client.guilds.cache.size} servers`], i = 0;
-  setInterval(() => {client.user.setActivity(`${prefix}help | ${activities}`, { type: "WATCHING"}),`${process.env.INTERVAL}`}, 600000)
+  setInterval(() => {client.user.setActivity(`${prefix}help | ${activities}`, { type: "WATCHING"}),`${process.env.INTERVAL}`})
 
  // client.user.setPresence({
    // status: 'online',
