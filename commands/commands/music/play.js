@@ -5,7 +5,7 @@ const ytdl = require("ytdl-core");
 const YouTubeAPI = require("simple-youtube-api");
 const youtube = new YouTubeAPI(YOUTUBE_API_KEY);
 const scdl = require("soundcloud-downloader");
-const prefix = require("@root/config.json")
+
 
 
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
   description: "Plays audio from YouTube or Soundcloud",
   async callback(message, args)  {
     const { channel } = message.member.voice;
- 
+
     const serverQueue = message.client.queue.get(message.guild.id);
     if (!channel) return message.reply("You need to join a voice channel first!").catch(console.error);
     if (serverQueue && channel !== message.guild.me.voice.channel)
@@ -23,7 +23,7 @@ module.exports = {
 
     if (!args.length)
       return message
-        .reply(`Usage: ${prefix}play <YouTube URL | Video Name | Soundcloud URL>`)
+        .reply(`Usage: ${message.client.prefix}play <YouTube URL | Video Name | Soundcloud URL>`)
         .catch(console.error);
 
     const permissions = channel.permissionsFor(message.client.user);
@@ -80,9 +80,8 @@ module.exports = {
           duration: Math.ceil(trackInfo.duration / 1000)
         };
       } catch (error) {
-        if (error.statusCode === 404)
-          return message.reply("Could not find that Soundcloud track.").catch(console.error);
-        return message.reply("There was an error playing that Soundcloud track.").catch(console.error);
+        console.error(error);
+        return message.reply(error.message).catch(console.error);
       }
     } else {
       try {
@@ -95,7 +94,7 @@ module.exports = {
         };
       } catch (error) {
         console.error(error);
-        return message.reply("No video was found with a matching title").catch(console.error);
+        return message.reply(error.message).catch(console.error);
       }
     }
 

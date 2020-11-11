@@ -27,6 +27,7 @@
     "module-alias": "^2.2.2",
     "mongodb": "^3.6.2",
     "mongoose": "^5.10.6",
+    "node-fetch": "^2.6.1",
     "node-gyp": "^7.1.0",
     "node-pre-gyp": "^0.15.0",
     "node-superfetch": "^0.1.10",
@@ -34,8 +35,8 @@
     "simple-youtube-api": "^5.1.1",
     "soundcloud-downloader": "^0.1.6",
     "string-progressbar": "^1.0.1",
-    "ytdl-core": "^4.0.0",
-    "ytdl-core-discord": "^1.2.1"
+    "ytdl-core": "^4.0.3",
+    "ytdl-core-discord": "^1.2.4"
   },
   "_moduleAliases": {
     "@root": ".",

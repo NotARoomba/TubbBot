@@ -1,14 +1,27 @@
 const ytdlDiscord = require("ytdl-core-discord");
 const scdl = require("soundcloud-downloader");
-const { canModifyQueue } = require("@util/musicutil");
+const { canModifyQueue } = require("../util/EvobotUtil");
 
 module.exports = {
   async play(song, message) {
-    const { PRUNING, SOUNDCLOUD_CLIENT_ID } = require("@root/config.json");
+    let PRUNING, SOUNDCLOUD_CLIENT_ID;
+
+    try {
+      const config = require("../config.json");
+      PRUNING = config.PRUNING;
+      SOUNDCLOUD_CLIENT_ID = config.SOUNDCLOUD_CLIENT_ID;
+    } catch (error) {
+      PRUNING = process.env.PRUNING;
+      SOUNDCLOUD_CLIENT_ID = process.env.SOUNDCLOUD_CLIENT_ID;
+    }
+
     const queue = message.client.queue.get(message.guild.id);
 
     if (!song) {
-      queue.channel.leave();
+      setTimeout(function() { 
+        if (!queue.connection.dispatcher && message.guild.me.voice.channel ) {queue.channel.leave(); 
+          queue.textChannel.send("I have left the channel. See you again.").catch(console.error);
+        } else return },120000);
       message.client.queue.delete(message.guild.id);
       return queue.textChannel.send("🚫 Music queue ended.").catch(console.error);
     }
@@ -21,17 +34,9 @@ module.exports = {
         stream = await ytdlDiscord(song.url, { highWaterMark: 1 << 25 });
       } else if (song.url.includes("soundcloud.com")) {
         try {
-          stream = await scdl.downloadFormat(
-            song.url,
-            scdl.FORMATS.OPUS,
-            SOUNDCLOUD_CLIENT_ID ? SOUNDCLOUD_CLIENT_ID : undefined
-          );
+          stream = await scdl.downloadFormat(song.url, scdl.FORMATS.OPUS, SOUNDCLOUD_CLIENT_ID);
         } catch (error) {
-          stream = await scdl.downloadFormat(
-            song.url,
-            scdl.FORMATS.MP3,
-            SOUNDCLOUD_CLIENT_ID ? SOUNDCLOUD_CLIENT_ID : undefined
-          );
+          stream = await scdl.downloadFormat(song.url, scdl.FORMATS.MP3, SOUNDCLOUD_CLIENT_ID);
           streamType = "unknown";
         }
       }
@@ -133,7 +138,7 @@ module.exports = {
 
         case "🔉":
           reaction.users.remove(user).catch(console.error);
-          if (!canModifyQueue(member)) return;
+          if (!canModifyQueue(member) || queue.volume == 0) return;
           if (queue.volume - 10 <= 0) queue.volume = 0;
           else queue.volume = queue.volume - 10;
           queue.connection.dispatcher.setVolumeLogarithmic(queue.volume / 100);
@@ -144,7 +149,7 @@ module.exports = {
 
         case "🔊":
           reaction.users.remove(user).catch(console.error);
-          if (!canModifyQueue(member)) return;
+          if (!canModifyQueue(member) || queue.volume == 100) return;
           if (queue.volume + 10 >= 100) queue.volume = 100;
           else queue.volume = queue.volume + 10;
           queue.connection.dispatcher.setVolumeLogarithmic(queue.volume / 100);
