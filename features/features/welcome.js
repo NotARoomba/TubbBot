@@ -3,9 +3,9 @@ const { MessageAttachment } = require('discord.js')
 const path = require('path')
 const { getChannelId } = require('@commands/config/setwelcome')
 const mongo = require('@util/mongo')
-const cache = require('@commands/config/setwelcome')
+//const cache = require('@commands/config/setwelcome')
 const welcomeSchema = require('@schemas/welcome-schema')
-
+const cache = {}
 module.exports = (client) => {
   client.on('guildMemberAdd', async (member) => {
     const { guild } = member
@@ -37,7 +37,7 @@ module.exports = (client) => {
     }
 
   
-    const text = data[1]
+    const text = data
 
   
     
@@ -72,8 +72,8 @@ module.exports = (client) => {
     ctx.fillText(bannertext2, x, 100 + pfp.height)
 
     const attachment = new MessageAttachment(canvas.toBuffer())
-    
-    channel.send(text, attachment)
+    channel.send(text)
+    channel.send(attachment)
   })
 }
     
