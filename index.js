@@ -14,7 +14,7 @@ client.queue = new Map();
 client.on('ready',  async () => {
   console.log('Tubb is online!')
   setInterval(() => {
-    client.user.setActivity(`-help in ${client.guilds.cache.size} Servers | Made by L061571C5`, { type: 'WATCHING' })
+    client.user.setActivity(`-help in ${client.guilds.cache.size} Servers | Made by L061571C5#5281`, { type: 'WATCHING' })
 }, 60000);
 
   await mongo().then(mongoose => {
