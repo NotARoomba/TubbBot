@@ -27,13 +27,6 @@ module.exports = (client) => {
         }
       })
     }
-
-    const channelId = data[0]
-    const text = data[1]
-    const channel = guild.channels.cache.get(channelId)
-    channel.send(text.replace(/<@>/g, `<@${member.id}>`))
-    
-
     const canvas = Canvas.createCanvas(700, 300)
     const ctx = canvas.getContext('2d')
 
@@ -64,7 +57,10 @@ module.exports = (client) => {
     ctx.fillText(bannertext2, x, 100 + pfp.height)
 
     const attachment = new MessageAttachment(canvas.toBuffer())
-    
+    const channelId = data[0]
+    const text = data[1]
+    const channel = guild.channels.cache.get(channelId)
+    channel.send(text.replace(/<@>/g, `<@${member.id}>`))
     channel.send(attachment)
   })
 }

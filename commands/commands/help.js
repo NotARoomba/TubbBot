@@ -3,7 +3,7 @@ const Discord = require(`discord.js`)
 const client = new Discord.Client()
 
 module.exports = {
-  commands: [`help`, `h`],
+  commands: [`help`, `h`, `commands`, `cmds`],
   description: "Describes all of this bot`s commands",
   async callback (message, arguments, text)  {
     

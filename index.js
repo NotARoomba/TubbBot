@@ -15,16 +15,7 @@ client.on('ready',  async () => {
   console.log('Tubb is online!')
   setInterval(() => {
     client.user.setActivity(`-help in ${client.guilds.cache.size} Servers | Made by L061571C5`, { type: 'WATCHING' })
-}, 60000); // Runs this every 60 seconds.
-  //client.user.setPresence({
-   // status: 'online',
-   //activity: {
-        //name: ` -help in ${client.guilds.cache.size} servers | Made by L061571C5`,
-        //type: 'WATCHING',
-   //}
-//})
-
-  
+}, 60000);
 
   await mongo().then(mongoose => {
     try {
@@ -43,6 +34,35 @@ client.on('message',  message => {
  if (message.mentions.has(client.user.id)) {
   message.reply("Use -help for a list of commands!");
 };
+})
+client.on('guildCreate', guild => {
+  const channel = guild.channels.cache.find(channel => channel.type === 'text' && channel.permissionsFor(guild.me).has('SEND_MESSAGES'))
+  const Invite = new Discord.MessageEmbed()
+  .setTitle(`Thank you for inviting me to \`\`${guild.name}\`\`!`)
+  .addFields(
+      {
+          name: `My default prefix is`,
+          value: `\`\`-\`\` but you can always change it by running -setprefix (New Prefix)`,
+          inline: true,
+      },
+      {
+          name: `My commands`,
+          value: `I would recomend trying -help or -commands!`,
+          inline: true,
+      },
+      {
+          name: `If you want to invite me to your server please click Invite me!`,
+          value: `[Invite me!] https://discord.com/api/oauth2/authorize?client_id=750123677739122819&permissions=8&redirect_uri=https%3A%2F%2Fdiscordapp.com%2Foauth2%2Fauthorize%3F%26client_id%3D%5B750123677739122819%5D%26scope%3Dbot&scope=bot`, // This is optional if you want over people to invite your bot to different servers!
+          inline: true,
+      },
+      {
+        name: `PSA`,
+        value: `This bot may be buggy at times`,
+        inline: true,
+    },
+  )
+  .setFooter(`And a special thanks from the creator of ${client.user.username}`)
+  channel.send(Invite)
 })
 
 //heroku stack:set heroku-18 -a tubb-bot jic v509
