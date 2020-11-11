@@ -1,56 +1,24 @@
+const Canvas = require('canvas')
+const { MessageAttachment } = require('discord.js')
+const path = require('path')
+const { getChannelId } = require('@commands/config/setwelcome')
 const mongo = require('@util/mongo')
-const command = require('@util/command')
+const cache = require('@commands/config/setwelcome')
 const welcomeSchema = require('@schemas/welcome-schema')
 
 module.exports = (client) => {
-  //!setwelcome <message>
-  const cache = {} // guildId: [channelId, text]
-
-  command(client, 'setwelcome', async (message) => {
-    const { member, channel, content, guild } = message
-
-    if (!member.hasPermission('ADMINISTRATOR')) {
-      channel.send('You do not have permission to run this command.')
-      return
-    }
-
-    let text = content
-
-    const split = text.split(' ')
-
-    if (split.length < 2) {
-      channel.send('Please provide a welcome message')
-      return
-    }
-
-    split.shift()
-    text = split.join(' ')
-
-    cache[guild.id] = [channel.id, text]
-
-    await mongo().then(async (mongoose) => {
-      try {
-        await welcomeSchema.findOneAndUpdate(
-          {
-            _id: guild.id,
-          },
-          {
-            _id: guild.id,
-            channelId: channel.id,
-            text,
-          },
-          {
-            upsert: true,
-          }
-        )
-      } finally {
-        mongoose.connection.close()
-      }
-    })
-  })
-
-  const onJoin = async (member) => {
+  client.on('guildMemberAdd', async (member) => {
     const { guild } = member
+
+    const channelId = getChannelId(guild.id)
+    if (!channelId) {
+      return
+    }
+
+    const channel = guild.channels.cache.get(channelId)
+    if (!channel) {
+      return
+    }
 
     let data = cache[guild.id]
 
@@ -61,25 +29,51 @@ module.exports = (client) => {
         try {
           const result = await welcomeSchema.findOne({ _id: guild.id })
 
-          cache[guild.id] = data = [result.channelId, result.text]
+          cache[guild.id] = data = [result.text]
         } finally {
           mongoose.connection.close()
         }
       })
     }
 
-    const channelId = data[0]
+  
     const text = data[1]
 
-    const channel = guild.channels.cache.get(channelId)
-    channel.send(text.replace(/<@>/g, `<@${member.id}>`))
-  }
+  
+    
 
-  command(client, 'simjoin', (message) => {
-    onJoin(message.member)
-  })
+    const canvas = Canvas.createCanvas(700, 300)
+    const ctx = canvas.getContext('2d')
 
-  client.on('guildMemberAdd', (member) => {
-    onJoin(member)
+    const background = await Canvas.loadImage(
+      'https://www.fg-a.com/wallpapers/2020-black-crystalline-peaks-image.jpg')
+    let x = 0
+    let y = 0
+    ctx.drawImage(background, x, y)
+
+    const pfp = await Canvas.loadImage(
+      member.user.displayAvatarURL({
+        format: 'png',
+      })
+    )
+    x = canvas.width / 2 - pfp.width / 2
+    y = 25
+    ctx.drawImage(pfp, x, y)
+
+    ctx.fillStyle = '#ffffff'
+    ctx.font = '35px sans-serif'
+    let bannertext = `Welcome ${member.user.tag}`
+    x = canvas.width / 2 - ctx.measureText(bannertext).width / 2
+    ctx.fillText(bannertext, x, 60 + pfp.height)
+
+    ctx.font = '30px sans-serif'
+    bannertext2 = `Member #${guild.memberCount}`
+    x = canvas.width / 2 - ctx.measureText(bannertext2).width / 2
+    ctx.fillText(bannertext2, x, 100 + pfp.height)
+
+    const attachment = new MessageAttachment(canvas.toBuffer())
+    
+    channel.send(text, attachment)
   })
 }
+    
