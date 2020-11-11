@@ -1,8 +1,6 @@
 const mongo = require('@util/mongo')
 const commandPrefixSchema = require('@schemas/command-prefix-schema')
 
-// Importing command-base so we have access to the
-// "updateCache" function which I forgot to cover in the video
 const commandBase = require('@root/commands/command-base')
 
 module.exports = {
@@ -33,7 +31,7 @@ module.exports = {
 
         message.reply(`The prefix for this bot is now ${prefix}`)
 
-        // Update the cache
+        
         commandBase.updateCache(guildId, prefix)
       } finally {
         mongoose.connection.close()
