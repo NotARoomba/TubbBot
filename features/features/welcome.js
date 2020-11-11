@@ -5,20 +5,12 @@ const { getChannelId } = require('@commands/config/setwelcome')
 const mongo = require('@util/mongo')
 //const cache = require('@commands/config/setwelcome')
 const welcomeSchema = require('@schemas/welcome-schema')
-const cache = {}
+
 module.exports = (client) => {
   client.on('guildMemberAdd', async (member) => {
     const { guild } = member
+    const cache = {}
 
-    const channelId = getChannelId(guild.id)
-    if (!channelId) {
-      return
-    }
-
-    const channel = guild.channels.cache.get(channelId)
-    if (!channel) {
-      return
-    }
 
     let data = cache[guild.id]
 
@@ -29,17 +21,17 @@ module.exports = (client) => {
         try {
           const result = await welcomeSchema.findOne({ _id: guild.id })
 
-          cache[guild.id] = data = [result.text]
+          cache[guild.id] = data = [result.channelId, result.text]
         } finally {
           mongoose.connection.close()
         }
       })
     }
 
-  
-    const text = data
-
-  
+    const channelId = data[0]
+    const text = data[1]
+    const channel = guild.channels.cache.get(channelId)
+    channel.send(text.replace(/<@>/g, `<@${member.id}>`))
     
 
     const canvas = Canvas.createCanvas(700, 300)
@@ -72,7 +64,7 @@ module.exports = (client) => {
     ctx.fillText(bannertext2, x, 100 + pfp.height)
 
     const attachment = new MessageAttachment(canvas.toBuffer())
-    channel.send(text)
+    
     channel.send(attachment)
   })
 }

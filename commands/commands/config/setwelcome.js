@@ -1,25 +1,12 @@
 const welcomeSchema = require('@schemas/welcome-schema')
 const mongo = require('@util/mongo')
 
-const cache = new Map()
-
-const loadData = async () => {
-  const results = await welcomeSchema.find()
-
-  for (const result of results) {
-    cache.set(result._id, result.channelId)
-  }
-}
-loadData()
-
 module.exports = {
     commands: 'setwelcome',
-    minArgs: 1,
-  maxArgs: 1,
   requiredPermissions: ['ADMINISTRATOR'],
   callback: async (message) => {
     const { guild, channel, content } = message
-
+    const cache = {}
     let text = content
 
     const split = text.split(' ')
@@ -47,7 +34,7 @@ module.exports = {
         upsert: true,
       }
     )
-    
+    console.log('UPDATED DATABASE')
         }finally {
             mongoose.connection.close()
           }
@@ -55,12 +42,7 @@ module.exports = {
 
     
 
-    cache.set(guild.id, channel.id, text)
-
     message.reply('Welcome channel set!')
   },
 }
 
-module.exports.getChannelId = (guildId) => {
-  return cache.get(guildId)
-}
