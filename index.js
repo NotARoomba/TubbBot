@@ -5,9 +5,8 @@ const client = new Discord.Client
 const mongo = require('@util/mongo');
 const loadCommands = require('@root/commands/load-commands.js')
 const loadFeatures = require('@root/features/load-features.js')
-const ytdl = require("ytdl-core");
 client.queue = new Map();
-const prefix = "-"
+
 
 
 
@@ -40,7 +39,11 @@ client.on('ready',  async () => {
  loadFeatures(client)
 
 });
-
+client.on('message',  message => {
+ if (message.mentions.has(client.user.id)) {
+  message.reply("Use -help for a list of commands!");
+};
+})
 
 //heroku stack:set heroku-18 -a tubb-bot jic v509
 client.login('NzUwMTIzNjc3NzM5MTIyODE5.X019HQ.m8ieoPXK1T5f5xJaH0e1K8N3wII')
