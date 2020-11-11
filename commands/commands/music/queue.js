@@ -4,7 +4,7 @@ module.exports = {
   name: "queue",
   commands: ["queue", "q"],
   description: "Show the music queue and now playing.",
-  callback:(message) => {
+  callback: async (message) => {
     const permissions = message.channel.permissionsFor(message.client.user);
     if (!permissions.has(["MANAGE_MESSAGES", "ADD_REACTIONS"]))
       return message.reply("Missing permission to manage messages or add reactions");

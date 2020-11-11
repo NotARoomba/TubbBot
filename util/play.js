@@ -1,13 +1,13 @@
 const ytdlDiscord = require("ytdl-core-discord");
 const scdl = require("soundcloud-downloader");
-const { canModifyQueue } = require("../util/EvobotUtil");
+const { canModifyQueue } = require("@util/musicutil");
 
 module.exports = {
   async play(song, message) {
     let PRUNING, SOUNDCLOUD_CLIENT_ID;
 
     try {
-      const config = require("../config.json");
+      const config = require("@root/config.json");
       PRUNING = config.PRUNING;
       SOUNDCLOUD_CLIENT_ID = config.SOUNDCLOUD_CLIENT_ID;
     } catch (error) {

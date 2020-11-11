@@ -5,6 +5,7 @@ module.exports = {
   commands: ['leave', 'disconnect'],
   description: "Disconnects from Voice Channel",
   callback: (message) => {
+    
     const { channel } = message.member.voice; 
     const serverQueue = message.client.queue.get(message.guild.id); 
     if (!channel) return message.reply("You need to join a voice channel first!").catch(console.error); 
