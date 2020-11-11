@@ -29,7 +29,7 @@ module.exports = {
                   // A MessageEmbed to actually send in chat, and...
                   content: new Discord.MessageEmbed({
                       title: 'General Commands',
-                      description: '**add**, Adds two numbers \n  **sys**, Sysinfo.exe \n **help (h)**, Shows this menu \n **msgdel**, Message Genocide \n **ping**, Find your ping to me! \n **summon**, *Holy Music stops*'
+                      description: '**add**, Adds two numbers \n  **sys**, Sysinfo.exe \n **help (h)**, Shows this menu \n **msgdel**, Message Genocide \n **ping**, Find your ping to me! \n **worldnews (wn)**, Displays world news \n **summon**, *Holy Music stops*'
                    
                       
                   }),
@@ -68,7 +68,7 @@ module.exports = {
               name: 'music',
               content: new Discord.MessageEmbed({
                   title: 'Music',
-                  description: '**loop**, Toggle music loop \n  **lyrics (ly)**, Get lyrics for the currently playing song \n **nowplaying (np)**, Show now playing song \n **pause**, Pause the currently playing music \n **play (p)**, Plays audio from YouTube or Soundcloud \n **playlist (pl)**, Play a playlist from youtube \n **pruning**, Toggle pruning of bot messages \n **queue (q)**, Show the music queue and now playing \n **remove (r)**, Remove song from the queue \n **resume**, Resume currently playing music \n **search**, Search and select videos to play \n **shuffle**, Shuffle queue \n **skip (s)**, Skip the currently playing song \n **skipto (st)**, Skip to the selected queue number \n **stop**, Stops the music \n **volume (v)**, Change volume of currently playing music'
+                  description: '**leave**, Toggle music loop \n **loop**, Toggle music loop \n **lyrics (ly)**, Get lyrics for the currently playing song \n **nowplaying (np)**, Show now playing song \n **pause**, Pause the currently playing music \n **play (p)**, Plays audio from YouTube or Soundcloud \n **playlist (pl)**, Play a playlist from youtube \n **pruning**, Toggle pruning of bot messages \n **queue (q)**, Show the music queue and now playing \n **remove (r)**, Remove song from the queue \n **resume**, Resume currently playing music \n **search**, Search and select videos to play \n **shuffle**, Shuffle queue \n **skip (s)**, Skip the currently playing song \n **skipto (st)**, Skip to the selected queue number \n **stop**, Stops the music \n **volume (v)**, Change volume of currently playing music'
               }),
               reactions: {
                   '◀': 'moderation',
