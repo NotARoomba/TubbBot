@@ -4,7 +4,7 @@ const path = require('path')
 const { getChannelId } = require('@commands/config/setwelcome')
 const mongo = require('@util/mongo')
 //const cache = require('@commands/config/setwelcome')
-const welcomeSchema = require('@schemas/welcome-schema')
+const serverSchema = require('@schemas/server-schema')
 
 module.exports = (client) => {
   client.on('guildMemberAdd', async (member) => {
@@ -19,7 +19,7 @@ module.exports = (client) => {
 
       await mongo().then(async (mongoose) => {
         try {
-          const result = await welcomeSchema.findOne({ _id: guild.id })
+          const result = await serverSchema.findOne({ _id: guild.id })
 
           cache[guild.id] = data = [result.channelId, result.text, result.image, result.color]
         } finally {
