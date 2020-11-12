@@ -34,7 +34,7 @@ module.exports = (client) => {
     const background = await Canvas.loadImage(image)
     let x = 0
     let y = 0
-    ctx.drawImage(background, x, y)
+    ctx.drawImage(background, 0, 0, canvas.width, canvas.height)
 
     const pfp = await Canvas.loadImage(
       member.user.displayAvatarURL({
