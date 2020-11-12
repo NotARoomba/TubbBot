@@ -53,8 +53,9 @@ module.exports = {
     
 
     message.reply('Welcome image set!')
-  },
+  } catch (error) {
+    console.error(error);
+    return message.reply(error.message).catch(console.error);
+  }
 }
-} catch (error) {
-  console.error(error);
-  return message.reply(error.message).catch(console.error);
+} 
