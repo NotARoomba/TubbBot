@@ -65,7 +65,7 @@ module.exports = (client) => {
     channel.send(attachment)
     } catch (error) {
       console.error(error);
-      return message.reply(error).catch(console.error);
+      return message.channel.send(error).catch(console.error);
     }
   })
 }
