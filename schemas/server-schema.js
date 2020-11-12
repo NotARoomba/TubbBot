@@ -5,11 +5,13 @@ const reqString = {
   required: true,
 }
 
-const welcomeSchema = mongoose.Schema({
+const serverSchema = mongoose.Schema({
   _id: reqString,
   channelId: reqString,
   text: reqString,
   image: reqString,
+  color: reqString,
+  prefix: reqString,
 })
 
-module.exports = mongoose.model('welcome-channels', welcomeSchema)
+module.exports = mongoose.model('server-settings', serverSchema)

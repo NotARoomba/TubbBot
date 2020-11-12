@@ -21,7 +21,7 @@ module.exports = (client) => {
         try {
           const result = await welcomeSchema.findOne({ _id: guild.id })
 
-          cache[guild.id] = data = [result.channelId, result.text, result.image]
+          cache[guild.id] = data = [result.channelId, result.text, result.image, result.color]
         } finally {
           mongoose.connection.close()
         }
@@ -29,6 +29,7 @@ module.exports = (client) => {
     }
     try {
     const image = data[2]
+    const color = data[3]
     const canvas = Canvas.createCanvas(700, 300)
     const ctx = canvas.getContext('2d')
 
@@ -46,7 +47,7 @@ module.exports = (client) => {
     y = 25
     ctx.drawImage(pfp, x, y)
 
-    ctx.fillStyle = '#ffffff'
+    ctx.fillStyle = color
     ctx.font = '35px sans-serif'
     let bannertext = `Welcome ${member.user.tag}`
     x = canvas.width / 2 - ctx.measureText(bannertext).width / 2

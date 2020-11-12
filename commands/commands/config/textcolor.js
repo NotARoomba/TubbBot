@@ -1,28 +1,34 @@
 const serverSchema = require('@schemas/server-schema')
 const mongo = require('@util/mongo')
 
+
 module.exports = {
-    commands: ['setwelcome', 'sw'],
+    commands: ['setcolor', 'sc'],
     minArgs: 1,
     maxArgs: 1,
-    expectedArgs: "<This server's new welcome message>",
+    expectedArgs: "<This server's new welcome text color>",
     permissionError: 'You must be an admin to run this command.',
   requiredPermissions: ['ADMINISTRATOR'],
   callback: async (message) => {
     const { guild, channel, content } = message
     const cache = {}
-    let text = content
+    let color = content
 
-    const split = text.split(' ')
-
+    const split = color.split(' ')
+ try {
     if (split.length < 2) {
-      channel.send('Please provide a welcome message')
+      channel.send('Please provide a hex color')
       return
     }
-
+     
+  
     split.shift()
-    text = split.join(' ')
-    cache[guild.id] = [channel.id, text]
+    color = split.join(' ')
+    cache[guild.id] = [color]
+    
+        
+    
+    
     await mongo().then(async (mongoose) => {
         try {
     await serverSchema.findOneAndUpdate(
@@ -31,14 +37,13 @@ module.exports = {
       },
       {
         _id: guild.id,
-        channelId: channel.id,
-        text,
+        color,
       },
       {
         upsert: true,
       }
     )
-    console.log('UPDATED DATABASE')
+    console.log('UPDATED IMAGE DATABASE')
         }finally {
             mongoose.connection.close()
           }
@@ -46,7 +51,10 @@ module.exports = {
 
     
 
-    message.reply('Welcome channel set!')
-  },
+    message.reply('Server color set! Please make sure that it is a hex code.')
+  } catch (error) {
+    console.error(error);
+    return message.reply(error.message).catch(console.error);
+  }
 }
-
+} 

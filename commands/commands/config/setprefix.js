@@ -1,6 +1,5 @@
 const mongo = require('@util/mongo')
-const commandPrefixSchema = require('@schemas/command-prefix-schema')
-
+const serverSchema = require('@schemas/server-schema')
 const commandBase = require('@root/commands/command-base')
 
 module.exports = {
@@ -16,7 +15,7 @@ module.exports = {
         const guildId = message.guild.id
         const prefix = arguments[0]
 
-        await commandPrefixSchema.findOneAndUpdate(
+        await serverSchema.findOneAndUpdate(
           {
             _id: guildId,
           },

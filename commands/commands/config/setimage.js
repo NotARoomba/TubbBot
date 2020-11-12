@@ -1,9 +1,13 @@
-const welcomeSchema = require('@schemas/welcome-schema')
+const serverSchema = require('@schemas/server-schema')
 const mongo = require('@util/mongo')
-const { endsWith } = require('ffmpeg-static')
+
 
 module.exports = {
     commands: ['setimage', 'si'],
+    minArgs: 1,
+    maxArgs: 1,
+    expectedArgs: "<This server's new welcome image link>",
+    permissionError: 'You must be an admin to run this command.',
   requiredPermissions: ['ADMINISTRATOR'],
   callback: async (message) => {
     const { guild, channel, content } = message
@@ -27,7 +31,7 @@ module.exports = {
     
     await mongo().then(async (mongoose) => {
         try {
-    await welcomeSchema.findOneAndUpdate(
+    await serverSchema.findOneAndUpdate(
       {
         _id: guild.id,
       },
@@ -47,7 +51,7 @@ module.exports = {
 
     
 
-    message.reply('Welcome image set! Please make sure that it is a proper image link.')
+    message.reply('Welcome image set! Please make sure that it is the proper link for your image.')
   } catch (error) {
     console.error(error);
     return message.reply(error.message).catch(console.error);
