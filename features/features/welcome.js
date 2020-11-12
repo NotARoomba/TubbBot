@@ -27,6 +27,7 @@ module.exports = (client) => {
         }
       })
     }
+    try {
     const image = data[2]
     const canvas = Canvas.createCanvas(700, 300)
     const ctx = canvas.getContext('2d')
@@ -62,6 +63,10 @@ module.exports = (client) => {
     const channel = guild.channels.cache.get(channelId)
     channel.send(text.replace(/<@>/g, `<@${member.id}>`))
     channel.send(attachment)
+    } catch (error) {
+      console.error(error);
+      return message.reply(error.message).catch(console.error);
+    }
   })
 }
     

@@ -21,12 +21,7 @@ module.exports = {
     split.shift()
     image = split.join(' ')
     cache[guild.id] = [image]
-    if (image.endsWith(['.png', '.jpg', '.jpeg'])) {
-        return
-    } else {
-        channel.send('Please provide a png, jpg, or jpeg image')
-        
-    } 
+    
         
     
     
@@ -52,7 +47,7 @@ module.exports = {
 
     
 
-    message.reply('Welcome image set!')
+    message.reply('Welcome image set! Please make sure that it is a proper image link.')
   } catch (error) {
     console.error(error);
     return message.reply(error.message).catch(console.error);
