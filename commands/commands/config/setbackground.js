@@ -26,7 +26,7 @@ module.exports = {
     } else {
         channel.send('Please provide a png, jpg, or jpeg image')
         
-    } return
+    } 
         
     
     
