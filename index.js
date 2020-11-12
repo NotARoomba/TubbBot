@@ -5,9 +5,14 @@ const client = new Discord.Client
 const mongo = require('@util/mongo');
 const loadCommands = require('@root/commands/load-commands.js')
 const loadFeatures = require('@root/features/load-features.js')
+const config = require('@root/config.json')
+const commandBase = require('@root/commands/command-base')
 client.queue = new Map();
 
-
+//const client = new Commando.CommandoClient({
+//  owner: '251120969320497152',
+//  commandPrefix: config.prefix,
+//})
 
 
 
@@ -31,7 +36,11 @@ client.on('ready',  async () => {
 
 });
 client.on('message',  message => {
- if (message.mentions.has(client.user.id)) {
+    if (message.author.bot) return false;
+
+    if (message.content.includes("@here") || message.content.includes("@everyone")) return false;
+
+    if (message.mentions.has(client.user.id)) {
   message.reply("Use -help for a list of commands!");
 };
 })
