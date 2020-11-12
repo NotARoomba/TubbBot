@@ -3,7 +3,7 @@ const mongo = require('@util/mongo')
 const { endsWith } = require('ffmpeg-static')
 
 module.exports = {
-    commands: 'setbackground',
+    commands: ['setimage', 'si'],
   requiredPermissions: ['ADMINISTRATOR'],
   callback: async (message) => {
     const { guild, channel, content } = message

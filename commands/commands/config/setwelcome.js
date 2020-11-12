@@ -2,7 +2,7 @@ const welcomeSchema = require('@schemas/welcome-schema')
 const mongo = require('@util/mongo')
 
 module.exports = {
-    commands: 'setwelcome',
+    commands: ['setwelcome', 'sw'],
   requiredPermissions: ['ADMINISTRATOR'],
   callback: async (message) => {
     const { guild, channel, content } = message

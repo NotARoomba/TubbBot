@@ -4,7 +4,7 @@ const commandPrefixSchema = require('@schemas/command-prefix-schema')
 const commandBase = require('@root/commands/command-base')
 
 module.exports = {
-  commands: 'setprefix',
+  commands: ['setprefix', 'sp'],
   minArgs: 1,
   maxArgs: 1,
   expectedArgs: "<This bot's new command prefix>",
