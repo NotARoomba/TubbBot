@@ -1,6 +1,6 @@
 module.exports = {
     commands: ['simjoin', 'sj'],
-    requiredPermissions: ['ADMINISTRATOR'],
+    requiredPermissions: 'ADMINISTRATOR',
     callback: (message, args, text, client) => {
       client.emit('guildMemberAdd', message.member)
     },
