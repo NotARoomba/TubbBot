@@ -5,8 +5,7 @@ const client = new Discord.Client
 const mongo = require('@util/mongo');
 const loadCommands = require('@root/commands/load-commands.js')
 const loadFeatures = require('@root/features/load-features.js')
-const config = require('@root/config.json')
-const commandBase = require('@root/commands/command-base')
+const dtoken = require('@root/config.json')
 client.queue = new Map();
 
 //const client = new Commando.CommandoClient({
@@ -75,6 +74,6 @@ client.on('guildCreate', guild => {
 })
 
 //heroku stack:set heroku-18 -a tubb-bot jic v509
-client.login('NzUwMTIzNjc3NzM5MTIyODE5.X019HQ.m8ieoPXK1T5f5xJaH0e1K8N3wII')
+client.login('NzUwMTIzNjc3NzM5MTIyODE5.X019HQ.USGz-7328iyyiA9UoGPTqZeU4xI')
 client.login(process.env.token)
 
