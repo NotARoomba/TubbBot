@@ -21,17 +21,17 @@ module.exports = (client) => {
         try {
           const result = await welcomeSchema.findOne({ _id: guild.id })
 
-          cache[guild.id] = data = [result.channelId, result.text]
+          cache[guild.id] = data = [result.channelId, result.text, result.image]
         } finally {
           mongoose.connection.close()
         }
       })
     }
+    const image = data[2]
     const canvas = Canvas.createCanvas(700, 300)
     const ctx = canvas.getContext('2d')
 
-    const background = await Canvas.loadImage(
-      'https://www.fg-a.com/wallpapers/2020-black-crystalline-peaks-image.jpg')
+    const background = await Canvas.loadImage(image)
     let x = 0
     let y = 0
     ctx.drawImage(background, x, y)
