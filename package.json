@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "^0.3.2",
+    "array.prototype.move": "0.0.4",
     "axios": "^0.18.1",
     "cairo": "0.1.0-alpha.3",
     "canvas": "^2.6.1",
