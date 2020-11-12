@@ -33,7 +33,7 @@ module.exports = (client) => {
     const canvas = Canvas.createCanvas(700, 300)
     const ctx = canvas.getContext('2d')
 
-    const background = await Canvas.loadImage(image)
+    const background = await Canvas.loadImage(image || 'https://spacenews.com/wp-content/uploads/2018/05/24359364107_152b0152ff_k.jpg')
     let x = 0
     let y = 0
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height)
@@ -47,7 +47,7 @@ module.exports = (client) => {
     y = 25
     ctx.drawImage(pfp, x, y)
 
-    ctx.fillStyle = color
+    ctx.fillStyle = color || '#ffffff'
     ctx.font = '35px sans-serif'
     let bannertext = `Welcome ${member.user.tag}`
     x = canvas.width / 2 - ctx.measureText(bannertext).width / 2

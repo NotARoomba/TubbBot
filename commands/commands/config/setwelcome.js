@@ -3,9 +3,6 @@ const mongo = require('@util/mongo')
 
 module.exports = {
     commands: ['setwelcome', 'sw'],
-    minArgs: 0,
-    maxArgs: 0,
-    expectedArgs: "<This server's new welcome message>",
     permissionError: 'You must be an admin to run this command.',
   requiredPermissions: ['ADMINISTRATOR'],
   callback: async (message) => {
@@ -16,7 +13,7 @@ module.exports = {
     const split = text.split(' ')
  
     if (split.length < 2) {
-      channel.send('Please provide a welcome message')
+      channel.send('Please provide a welcome image')
       return
     }
 
