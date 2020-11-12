@@ -3,7 +3,7 @@ const client = new Discord.Client()
 
 
 const mongo = require('@util/mongo')
-const commandPrefixSchema = require('@schemas/command-prefix-schema')
+const serverSchema = require('@schemas/server-schema')
 const { prefix: globalPrefix } = require('@root/config.json')
 const guildPrefixes = {} 
 
@@ -213,7 +213,7 @@ module.exports.loadPrefixes = async (client) => {
       for (const guild of client.guilds.cache) {
         const guildId = guild[1].id
 
-        const result = await commandPrefixSchema.findOne({ _id: guildId })
+        const result = await serverSchema.findOne({ _id: guildId })
         guildPrefixes[guildId] = result ? result.prefix : globalPrefix
       }
 
