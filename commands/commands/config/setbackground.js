@@ -11,17 +11,17 @@ module.exports = {
     let image = content
 
     const split = image.split(' ')
-
+ try {
     if (split.length < 2) {
       channel.send('Please provide a welcome image')
       return
     }
-    const imagexts = ['.png', '.jpg', '.jpeg']
+     
   
     split.shift()
     image = split.join(' ')
     cache[guild.id] = [image]
-    if (image.endsWith(imagexts)) {
+    if (image.endsWith(['.png', '.jpg', '.jpeg'])) {
         return
     } else {
         channel.send('Please provide a png, jpg, or jpeg image')
@@ -55,4 +55,6 @@ module.exports = {
     message.reply('Welcome image set!')
   },
 }
-
+} catch (error) {
+  console.error(error);
+  return message.reply(error.message).catch(console.error);
