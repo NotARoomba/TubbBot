@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const axios = require('axios')
-const { apitoken } = require('@root/config.json');
 const exampleEmbed = (
 	temp,
 	maxTemp,
@@ -16,10 +15,10 @@ const exampleEmbed = (
 	cityName,
 	country
 ) =>
-	new Discord.RichEmbed()
+	new Discord.MessageEmbed()
 		.setColor('#0099ff')
 		.setAuthor(`Hello, ${author}`, profile)
-		.setTitle(`There is ${temp}\u00B0 C in ${cityName}, ${country}`)
+		.setTitle(`It is ${temp}\u00B0 C in ${cityName}, ${country}`)
 		.addField(`Maximum Temperature:`, `${maxTemp}\u00B0 C`, true)
 		.addField(`Minimum Temperature:`, `${minTemp}\u00B0 C`, true)
 		.addField(`Humidity:`, `${humidity} %`, true)
@@ -27,21 +26,15 @@ const exampleEmbed = (
 		.addField(`Pressure:`, `${pressure} hpa`, true)
 		.addField(`Cloudiness:`, `${cloudness}`, true)
 		.setThumbnail(`http://openweathermap.org/img/w/${icon}.png`)
-		.setFooter('Made With Diffrences in Temperature');
+		.setFooter('Made with  a Diffrences in Temperature');
 
 module.exports = {
     commands: 'weather',
     description: 'Returns the weather for a location',
     callback(message, args) {
-        const { content } = message
-        let cityName = content
-
-        const split = cityName.split(' ')
-        split.shift()
-        cityName = split.join(' ')
         axios
         .get(
-            `https://api.openweathermap.org/data/2.5/weather?q=${args}&units=metric&appid=${apitoken}`
+            `https://api.openweathermap.org/data/2.5/weather?q=${args}&units=metric&appid=04222de0b070f0e94c8874434d22d029`
         )
         .then(response => {
             let apiData = response;
@@ -59,7 +52,7 @@ module.exports = {
             let cloudness = apiData.data.weather[0].description;
             message.channel.send(exampleEmbed(currentTemp, maxTemp, minTemp, pressure, humidity, wind, cloudness, icon, author, profile, cityName, country));
         }).catch(err => {
-            message.reply(`Enter a vailid city name`)
+            message.reply(`Enter a valid city name`)
         })
     }
 }
