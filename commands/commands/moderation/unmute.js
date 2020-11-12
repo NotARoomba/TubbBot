@@ -7,7 +7,7 @@ module.exports = {
     maxArgs: 1,
     expectedArgs: "<Target user's @>",
     permissionError: 'You must be an administrator to use this command.',
-    permissions: 'MUTE_MEMBERS',
+    requiredPermissions: 'ADMINISTRATOR',
     callback: (message) => {
         const role = message.guild.roles.cache.find(r => r.name === "Muted");
         const { member, mentions, arguments} = message

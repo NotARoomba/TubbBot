@@ -5,7 +5,7 @@ const mongo = require('@util/mongo')
 module.exports = {
     commands: ['setcolor', 'sc'],
     permissionError: 'You must be an admin to run this command.',
-  requiredPermissions: ['ADMINISTRATOR'],
+    requiredPermissions: 'ADMINISTRATOR',
   callback: async (message) => {
     const { guild, channel, content } = message
     const cache = {}
