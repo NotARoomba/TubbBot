@@ -5,6 +5,6 @@
     "SOUNDCLOUD_CLIENT_ID": "",
     "newsAPI": "6098e69fe47c4d5f9f394b2546dcbaac",
     "MAX_PLAYLIST_SIZE": 100,
-    "PRUNING": false
-    
+    "PRUNING": false,
+    "apitoken": "04222de0b070f0e94c8874434d22d029"
 }
