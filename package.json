@@ -24,6 +24,7 @@
     "ffmpeg-static": "^4.2.3",
     "heroku": "^7.45.0",
     "i": "^0.3.6",
+    "imageapi.js": "^1.0.19",
     "install": "^0.13.0",
     "jimp": "^0.16.1",
     "lyrics-finder": "^21.0.5",
