@@ -4,8 +4,8 @@ const commandBase = require('@root/commands/command-base')
 
 module.exports = {
   commands: ['setprefix', 'sp'],
-  minArgs: 1,
-  maxArgs: 1,
+  minArgs: 0,
+  maxArgs: 0,
   expectedArgs: "<This bot's new command prefix>",
   permissionError: 'You must be an admin to run this command.',
   permissions: 'ADMINISTRATOR',

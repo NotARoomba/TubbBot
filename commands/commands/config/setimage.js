@@ -4,8 +4,8 @@ const mongo = require('@util/mongo')
 
 module.exports = {
     commands: ['setimage', 'si'],
-    minArgs: 1,
-    maxArgs: 1,
+    minArgs: 0,
+    maxArgs: 0,
     expectedArgs: "<This server's new welcome image link>",
     permissionError: 'You must be an admin to run this command.',
   requiredPermissions: ['ADMINISTRATOR'],

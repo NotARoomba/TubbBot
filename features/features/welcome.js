@@ -64,9 +64,10 @@ module.exports = (client) => {
     const channel = guild.channels.cache.get(channelId)
     channel.send(text.replace(/<@>/g, `<@${member.id}>`))
     channel.send(attachment)
+    
     } catch (error) {
-      console.error(error);
-      return message.channel.send(error).catch(console.error);
+      console.log(error);
+
     }
   })
 }

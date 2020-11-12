@@ -4,8 +4,8 @@ const mongo = require('@util/mongo')
 
 module.exports = {
     commands: ['setcolor', 'sc'],
-    minArgs: 1,
-    maxArgs: 1,
+    minArgs: 0,
+    maxArgs: 0,
     expectedArgs: "<This server's new welcome text color>",
     permissionError: 'You must be an admin to run this command.',
   requiredPermissions: ['ADMINISTRATOR'],
