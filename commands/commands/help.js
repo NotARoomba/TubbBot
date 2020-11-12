@@ -15,7 +15,7 @@ module.exports = {
                 name: 'system',
                 content: new Discord.MessageEmbed({
                     title: 'System',
-                    description: `This command shows Tubb's commands \n\n Use the reactions to navagate \n\n **setprefix (sp)**, Set custom server prefix. \n **setwelcome (sw)**, Set your server's welcome message, use <@> to tag new members and use command in channel to send messages in. \n **setimage (si)**, Set custom welcome image. \n`
+                    description: `This command shows Tubb's commands \n\n Use the reactions to navagate \n\n **setprefix (sp)**, Set custom server prefix. \n **setwelcome (sw)**, Set your server's welcome message, use <@> to tag new members and use command in channel to send messages in. \n **setimage (si)**, Set custom welcome image. \n **textcolor (sc)**, Set custom welcome text color. \n **simjoin (sj)**, Stimulates someone joining your server to test out all of the above. \n`
                 }),
                 reactions: {
                     '▶': 'general',
@@ -28,7 +28,7 @@ module.exports = {
                   // A MessageEmbed to actually send in chat, and...
                   content: new Discord.MessageEmbed({
                       title: 'General Commands',
-                      description: '**add**, Adds two numbers \n  **sys**, Sysinfo.exe \n **help (h)**, Shows this menu \n **msgdel**, Message Genocide \n **ping**, Find your ping to me! \n **worldnews (wn)**, Displays world news \n **summon**, *Holy Music stops*'
+                      description: '**add**, Adds two numbers \n  **sys**, Sysinfo.exe \n **help (h)**, Shows this menu \n **msgdel**, Message Genocide \n **ping**, Find your ping to me! \n **worldnews (wn)**, Displays world news \n **summon**, *Holy Music stops* \n **reddit**, *Taste the memes* \n **worldnews (wn)**, Shows some news articles \n'
                    
                       
                   }),

@@ -1,10 +1,9 @@
 const Discord = require('discord.js')
 const client = new Discord.Client()
 
-const { version } = require('@root/package.json')
-const { prefix } = require('@root/config.json')
+const welcome = require('@features/welcome')
+const version = require('@root/package.json')
 const tag = `750123677739122819`
-
 
 
 
@@ -13,12 +12,28 @@ module.exports = {
     minArgs: 0,
     maxArgs: 0,
     description: 'Sysinfo.exe',
-    callback: async (message, arguments, text) => {
-          
+    callback: async (message, member) => {
 
-
-
-
+      const { guild } = member
+      const cache = {}
+  
+  
+    var data = cache[guild.id]
+  
+      if (!data) {
+        console.log('FETCHING FROM DATABASE')
+  
+        await mongo().then(async (mongoose) => {
+          try {
+            const result = await serverSchema.findOne({ _id: guild.id })
+  
+            cache[guild.id] = data = [result.prefix]
+          } finally {
+            mongoose.connection.close()
+          }
+        })
+      }
+      const prefix = data[0]
 const embed = new Discord.MessageEmbed()
 .setAuthor(
   `Information about Tubb`,
@@ -35,6 +50,10 @@ const embed = new Discord.MessageEmbed()
   },
   {
     name: "Tubb's command prefix",
+    value: '-',
+  },
+  {
+    name: "Server command prefix",
     value: prefix,
   },
   {
