@@ -1,9 +1,10 @@
 {
     "prefix": "-",
     "dtoken": "NzUwMTIzNjc3NzM5MTIyODE5.X019HQ.USGz-7328iyyiA9UoGPTqZeU4xI",
-    "YOUTUBE_API_KEY": "AIzaSyDkoL4Q7L0XSlUWG0qKwAnfspqZAUCubJU",
+    "youtubeAPI": "AIzaSyDkoL4Q7L0XSlUWG0qKwAnfspqZAUCubJU",
     "SOUNDCLOUD_CLIENT_ID": "",
     "newsAPI": "6098e69fe47c4d5f9f394b2546dcbaac",
     "MAX_PLAYLIST_SIZE": 100,
-    "PRUNING": false
+    "PRUNING": false,
+    "geniusLyricsAPI": "_agbvLMIA55-hMme4-Sia-Hubl_kZjkfgN0imUHZXwHsh3G2EdZYWJuA0fcQntw5"
 }

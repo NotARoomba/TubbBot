@@ -1,17 +1,36 @@
 require('module-alias/register');
 require('events').EventEmitter.prototype._maxListeners = 100;
-const Discord = require('discord.js')
-const client = new Discord.Client
+const { Structures, Discord } = require('discord.js');
+//const client = new Discord.Client
 const mongo = require('@util/mongo');
 const loadCommands = require('@root/commands/load-commands.js')
 const loadFeatures = require('@root/features/load-features.js')
-const dtoken = require('@root/config.json')
-client.queue = new Map();
+const path = require('path');
+//client.queue = new Map();
+const { CommandoClient } = require('discord.js-commando');
+Structures.extend('Guild', function(Guild) {
+  class MusicGuild extends Guild {
+    constructor(client, data) {
+      super(client, data);
+      this.musicData = {
+        queue: [],
+        isPlaying: false,
+        nowPlaying: null,
+        songDispatcher: null,
+        skipTimer: false, // only skip if user used leave command
+        loopSong: false,
+        loopQueue: false,
+        volume: 1
+      };
+    }
+  }
+  return MusicGuild;
+});
 
-//const client = new Commando.CommandoClient({
-//  owner: '251120969320497152',
-//  commandPrefix: config.prefix,
-//})
+const client = new CommandoClient({
+  owner: '465917394108547072',
+  commandPrefix: '-',
+})
 
 
 
@@ -30,10 +49,47 @@ client.on('ready',  async () => {
 
   })
 
+
+  client.registry
+	.registerDefaultTypes()
+	.registerGroups([
+		['music', 'Music commands that use Commando'],
+	])
+	.registerDefaultGroups()
+	.registerDefaultCommands({
+    help: false,
+    ping: false,
+    prefix: false,
+    commandState: false,
+    unknownCommand: false,
+  })
+	.registerCommandsIn(path.join(__dirname, 'cmds'));
   loadCommands(client)
  loadFeatures(client)
 
 });
+
+client.on('voiceStateUpdate', async (___, newState) => {
+  if (
+    newState.member.user.bot &&
+    !newState.channelID &&
+    newState.guild.musicData.songDispatcher &&
+    newState.member.user.id == client.user.id
+  ) {
+    newState.guild.musicData.queue.length = 0;
+    newState.guild.musicData.songDispatcher.end();
+    return;
+  }
+  if (
+    newState.member.user.bot &&
+    newState.channelID &&
+    newState.member.user.id == client.user.id &&
+    !newState.selfDeaf
+  ) {
+    newState.setSelfDeaf(true);
+  }
+});
+
 client.on('message',  message => {
     if (message.author.bot) return false;
 
