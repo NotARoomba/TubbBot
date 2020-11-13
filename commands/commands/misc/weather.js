@@ -29,7 +29,7 @@ const exampleEmbed = (
 		.setFooter('Made with  a Diffrences in Temperature');
 
 module.exports = {
-    commands: 'weather',
+    commands: ['weather', 'w'],
     description: 'Returns the weather for a location',
     callback(message, args) {
         axios

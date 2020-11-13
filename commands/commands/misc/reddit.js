@@ -1,7 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 const api = require("imageapi.js");
 module.exports = {
-  commands: "reddit",
+  commands: ["reddit", 'r'],
   description: "Get a meme from a subreddit of your choice!",
   callback: async (message) => {
     let Subreddit = message.content.slice(8);
