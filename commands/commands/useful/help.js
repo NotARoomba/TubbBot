@@ -28,7 +28,7 @@ module.exports = {
                   // A MessageEmbed to actually send in chat, and...
                   content: new Discord.MessageEmbed({
                       title: 'General Commands',
-                      description: '**add**, Adds two numbers \n  **sys**, Sysinfo.exe \n **help (h)**, Shows this menu \n **msgdel**, Message Genocide \n **ping**, Find your ping to me! \n **worldnews (wn)**, Displays world news \n **summon**, *Holy Music stops* \n **reddit**, *Taste the memes* \n **worldnews (wn)**, Shows some news articles \n **weather (w)**, Shows the weather for your city \n **todayinhistory (tih)**, Finds an event that happened on specifiec date. \n **reddit (r)**, Finds a random image on specified subreddit. \n **urbandictionary (ud)**, Looks up a word/phrase. \n'
+                      description: '**add**, Adds two numbers \n  **sys**, Sysinfo.exe \n **help (h)**, Shows this menu \n **msgdel**, Message Genocide \n **ping**, Find your ping to me! \n **worldnews (wn)**, Displays world news \n **summon**, *Holy Music stops* \n **reddit (r)**, *Taste the memes* \n **worldnews (wn)**, Shows some news articles \n **weather (w)**, Shows the weather for your city \n **todayinhistory (tih)**, Finds an event that happened on specifiec date. \n **reddit (r)**, Finds a random image on specified subreddit. \n **urbandictionary (ud)**, Looks up a word/phrase. \n'
                    
                       
                   }),
