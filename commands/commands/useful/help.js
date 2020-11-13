@@ -28,7 +28,7 @@ module.exports = {
                   // A MessageEmbed to actually send in chat, and...
                   content: new Discord.MessageEmbed({
                       title: 'General Commands',
-                      description: '**add**, Adds two numbers \n  **sys**, Sysinfo.exe \n **help (h)**, Shows this menu \n **msgdel**, Message Genocide \n **ping**, Find your ping to me! \n **worldnews (wn)**, Displays world news \n **summon**, *Holy Music stops* \n **reddit**, *Taste the memes* \n **worldnews (wn)**, Shows some news articles \n **weather (w)**, Shows the weather for your city \n **todayinhistory (tih)**, Finds an event that happened on specifiec date. \n **reddit (r)**, Finds a random image on specified subreddit. \n'
+                      description: '**add**, Adds two numbers \n  **sys**, Sysinfo.exe \n **help (h)**, Shows this menu \n **msgdel**, Message Genocide \n **ping**, Find your ping to me! \n **worldnews (wn)**, Displays world news \n **summon**, *Holy Music stops* \n **reddit**, *Taste the memes* \n **worldnews (wn)**, Shows some news articles \n **weather (w)**, Shows the weather for your city \n **todayinhistory (tih)**, Finds an event that happened on specifiec date. \n **reddit (r)**, Finds a random image on specified subreddit. \n **urbandictionary (ud)**, Looks up a word/phrase. \n'
                    
                       
                   }),
@@ -48,7 +48,7 @@ module.exports = {
                     description: '**ban**, BAN HAMMER TIME!! \n  **kick**, Kicks someone somewhere? \n **mute**, Muhn mhuuthm mhee \n **unban**, Reinstatement to this Server! \n **unmute**, Oh I can talk now? \n **giverole (addrole)**, Gives someone a role \n **removerole (derole)**, Loss of Privileges'
                 }),
                 reactions: {
-                    '◀': 'economy',
+                    '◀': 'general',
                     '▶': 'music'
                 }
             },
@@ -56,7 +56,7 @@ module.exports = {
               name: 'music',
               content: new Discord.MessageEmbed({
                   title: 'Music',
-                  description: '**leave**, Leaves the Voice Channel \n **loop**, Toggle music loop \n **move**, Move songs to the top of the queue \n **lyrics (ly)**, Get lyrics for the currently playing song \n **nowplaying (np)**, Show now playing song \n **pause**, Pause the currently playing music \n **play (p)**, Plays audio from YouTube or Soundcloud \n **playlist (pl)**, Play a playlist from youtube \n **pruning**, Toggle pruning of bot messages \n **queue (q)**, Show the music queue and now playing \n **remove (r)**, Remove song from the queue \n **resume**, Resume currently playing music \n **search**, Search and select videos to play \n **shuffle**, Shuffle queue \n **skip (s)**, Skip the currently playing song \n **skipto (st)**, Skip to the selected queue number \n **stop**, Stops the music \n **volume (v)**, Change volume of currently playing music'
+                  description: '**createplaylist (cp)**, Creates a custom playlist \n **deleteplaylist (delp)**, Deletes a custom playlist \n **displayplaylist (dp)**, Displays a custom playlist`s songs \n **leave**, Leaves the Voice Channel \n **loop**, Toggle song loop \n **loopqueue (lq)**, Loops the entire queue \n **lyrics (ly)**, Get lyrics for the currently playing song \n **move**, Move songs anywhere in the queue \n **myplaylists (mp)**, Displays your custom playlist \n **nowplaying (np)**, Show now playing song \n **pause**, Pause the currently playing music \n **play (p)**, Plays audio from YouTube \n **queue (q)**, Show the music queue and now playing \n **remove**, Remove song from the queue \n **removefromplaylist (rfp)**, Removes a song from your custom playlist \n **resume**, Resumes currently playing music \n **savetoplaylist (stp)**, Saves songs to your custom playlist \n **shuffle**, Shuffle queue \n **skip (s)**, Skip the currently playing song \n **skipall (sa)**, Skips all the songs \n **skipto (st)**, Skip to the selected queue number \n **volume (v)**, Change volume of currently playing music'
               }),
               reactions: {
                   '◀': 'moderation',

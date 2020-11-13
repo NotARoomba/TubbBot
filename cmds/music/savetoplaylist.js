@@ -8,7 +8,7 @@ module.exports = class SaveToPlaylistCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'save-to-playlist',
-      aliases: ['stp', 'save-song', 'add-to-playlist', 'add-song', 'stp'],
+      aliases: ['stp', 'save-song', 'add-to-playlist', 'add-song'],
       group: 'music',
       memberName: 'save-to-playlist',
       guildOnly: true,
