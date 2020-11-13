@@ -26,7 +26,7 @@ const exampleEmbed = (
 		.addField(`Pressure:`, `${pressure} hpa`, true)
 		.addField(`Cloudiness:`, `${cloudness}`, true)
 		.setThumbnail(`http://openweathermap.org/img/w/${icon}.png`)
-		.setFooter('Made with  a Diffrences in Temperature');
+		.setFooter('Powered by OpenWeatherMap.org');
 
 module.exports = {
     commands: ['weather', 'w'],
