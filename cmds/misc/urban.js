@@ -10,10 +10,6 @@ module.exports = class UrbanCommand extends Command {
       aliases: ['ud', 'urbandictionary'],
       memberName: 'urban',
       description: 'Get definitions from urban dictonary.',
-      throttling: {
-        usages: 1,
-        duration: 4
-      },
       args: [
         {
           key: 'text',
