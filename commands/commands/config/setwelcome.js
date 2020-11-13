@@ -13,7 +13,7 @@ module.exports = {
     const split = text.split(' ')
  
     if (split.length < 2) {
-      channel.send('Please provide a welcome image')
+      channel.send('Please provide a welcome message')
       return
     }
 
@@ -43,7 +43,7 @@ module.exports = {
 
     
 
-    message.reply('Welcome channel set!')
+    message.reply('Welcome message and channel set!')
   },
 }
 
