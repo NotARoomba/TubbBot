@@ -36,7 +36,6 @@
     "node-superfetch": "^0.1.10",
     "nodemon": "^2.0.6",
     "npm": "^7.0.7",
-    "request": "^2.88.2",
     "simple-youtube-api": "^5.1.1",
     "soundcloud-downloader": "^0.1.6",
     "string-progressbar": "^1.0.1",
