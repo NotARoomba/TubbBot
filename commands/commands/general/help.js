@@ -43,7 +43,7 @@ module.exports = {
                 name: 'fun',
                 content: new Discord.MessageEmbed({
                     title: 'Fun Commands',
-                    description: `**add**, Adds two numbers \n  **reddit (r)**, *Taste the memes* \n **news (n)**, Shows some news articles \n **weather (w)**, Shows the weather for your city \n **todayinhistory (tih)**, Finds an event that happened on specifiec date. \n **urbandictionary (ud)**, Looks up a word/phrase. \n'`
+                    description: `**add**, Adds two numbers \n  **reddit (r)**, *Taste the memes* \n **news (n)**, Shows some news articles \n **weather (w)**, Shows the weather for your city \n **todayinhistory (tih)**, Finds an event that happened on specifiec date. \n **urbandictionary (ud)**, Looks up a word/phrase. \n`
                 }),
                 reactions: {
                     '◀': 'general',
