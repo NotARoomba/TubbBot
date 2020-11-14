@@ -64,13 +64,24 @@ module.exports = {
             {
               name: 'music',
               content: new Discord.MessageEmbed({
-                  title: 'Music',
-                  description: '**createplaylist (cp)**, Creates a custom playlist \n **deleteplaylist (delp)**, Deletes a custom playlist \n **displayplaylist (dp)**, Displays a custom playlist`s songs \n **leave**, Leaves the Voice Channel \n **loop**, Toggle song loop \n **loopqueue (lq)**, Loops the entire queue \n **lyrics (ly)**, Get lyrics for the currently playing song \n **move**, Move songs anywhere in the queue \n **myplaylists (mp)**, Displays your custom playlist \n **nowplaying (np)**, Show now playing song \n **pause**, Pause the currently playing music \n **play (p)**, Plays audio from YouTube \n **queue (q)**, Show the music queue and now playing \n **remove**, Remove song from the queue \n **removefromplaylist (rfp)**, Removes a song from your custom playlist \n **resume**, Resumes currently playing music \n **savetoplaylist (stp)**, Saves songs to your custom playlist \n **shuffle**, Shuffle queue \n **skip (s)**, Skip the currently playing song \n **skipall (sa)**, Skips all the songs \n **skipto (st)**, Skip to the selected queue number \n **volume (v)**, Change volume of currently playing music'
+                  title: 'Music 1/2',
+                  description: '**createplaylist (cp)**, Creates a custom playlist \n **deleteplaylist (delp)**, Deletes a custom playlist \n **displayplaylist (dp)**, Displays a custom playlist`s songs \n **leave**, Leaves the Voice Channel \n **loop**, Toggle song loop \n **loopqueue (lq)**, Loops the entire queue \n **lyrics (ly)**, Get lyrics for the currently playing song \n **move**, Move songs anywhere in the queue \n **myplaylists (mp)**, Displays your custom playlist \n **nowplaying (np)**, Show now playing song \n **pause**, Pause the currently playing music \n'
               }),
               reactions: {
                   '◀': 'moderation',
+                  '▶': 'music2'
               }
             },
+            {
+                name: 'music2',
+                content: new Discord.MessageEmbed({
+                    title: 'Music 2/2',
+                    description: '**play (p)**, Plays audio from YouTube \n **queue (q)**, Show the music queue and now playing \n **remove**, Remove song from the queue \n **removefromplaylist (rfp)**, Removes a song from your custom playlist \n **resume**, Resumes currently playing music \n **savetoplaylist (stp)**, Saves songs to your custom playlist \n **shuffle**, Shuffle queue \n **skip (s)**, Skip the currently playing song \n **skipall (sa)**, Skips all the songs \n **skipto (st)**, Skip to the selected queue number \n **volume (v)**, Change volume of currently playing music'
+                }),
+                reactions: {
+                    '◀': 'music',
+                }
+              },
               
               
               // The last parameter is the number of milliseconds you want the menu to collect reactions for each page before it stops to save resources
