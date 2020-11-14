@@ -40,7 +40,10 @@ const client = new CommandoClient({
 
 })
 client.setProvider(
-  MongoClient.connect('mongodb+srv://L061571C5:89euzXX8IylP1DYn@tubbbot.kfqqn.mongodb.net/data?retryWrites=true&w=majority')
+  MongoClient.connect('mongodb+srv://L061571C5:89euzXX8IylP1DYn@tubbbot.kfqqn.mongodb.net/data?retryWrites=true&w=majority', {
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  })
     .then((client) => {
       return new MongoDBProvider(client, 'data')
     })
@@ -50,8 +53,8 @@ client.setProvider(
 )
 
 
-client.on('ready',  async () => {
-  console.log('Tubb is online!')
+client.on('ready',  async (member) => {
+  console.log('Tubb is online!') 
   setInterval(() => {
     client.user.setActivity(`-help in ${client.guilds.cache.size} Servers | Made by L061571C5#5281`, { type: 'WATCHING' })
 }, 60000);
