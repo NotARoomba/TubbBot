@@ -1,8 +1,5 @@
 const Canvas = require('canvas')
 const { MessageAttachment } = require('discord.js')
-const path = require('path')
-const { getChannelId } = require('@commands/config/setwelcome')
-const mongo = require('@util/mongo')
 //const cache = require('@commands/config/setwelcome')
 const serverSchema = require('@schemas/server-schema')
 
