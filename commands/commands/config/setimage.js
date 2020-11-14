@@ -26,8 +26,7 @@ module.exports = {
         
     
     
-    await mongo().then(async (mongoose) => {
-        try {
+    
     await serverSchema.findOneAndUpdate(
       {
         _id: guild.id,
@@ -41,10 +40,7 @@ module.exports = {
       }
     )
     console.log('UPDATED IMAGE DATABASE')
-        }finally {
-            mongoose.connection.close()
-          }
-        });
+        
 
     
 

@@ -2,13 +2,11 @@ require('module-alias/register');
 require('events').EventEmitter.prototype._maxListeners = 100;
 const { Structures, Discord } = require('discord.js');
 //const client = new Discord.Client
-
+const serverSchema = require('@schemas/server-schema')
 const mongo = require('@util/mongo');
 const loadCommands = require('@root/commands/load-commands.js')
 const loadFeatures = require('@root/features/load-features.js')
-const path = require('path');
-const { prefix: globalPrefix } = require('@root/config.json')
-const guildPrefixes = {} 
+const path = require('path'); 
 const { CommandoClient } = require('discord.js-commando');
 Structures.extend('Guild', function(Guild) {
   class MusicGuild extends Guild {
@@ -31,7 +29,7 @@ Structures.extend('Guild', function(Guild) {
 
 const client = new CommandoClient({
   owner: '465917394108547072',
-  commandPrefix: guildPrefixes,
+  commandPrefix: `-`,
 })
 
 
@@ -42,7 +40,8 @@ client.on('ready',  async () => {
 }, 60000);
 
   await mongo()
-
+  
+  
   client.registry
 	.registerDefaultTypes()
 	.registerGroups([

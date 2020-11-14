@@ -6,6 +6,7 @@ const mongo = require('@util/mongo')
 const serverSchema = require('@schemas/server-schema')
 const { prefix: globalPrefix } = require('@root/config.json')
 const guildPrefixes = {} 
+console.log(guildPrefixes)
 
 const validatePermissions = (permissions) => {
   const validPermissions = [

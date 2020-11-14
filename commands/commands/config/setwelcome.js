@@ -20,8 +20,7 @@ module.exports = {
     split.shift()
     text = split.join(' ')
     cache[guild.id] = [channel.id, text]
-    await mongo().then(async (mongoose) => {
-        try {
+   
     await serverSchema.findOneAndUpdate(
       {
         _id: guild.id,
@@ -36,11 +35,7 @@ module.exports = {
       }
     )
     console.log('UPDATED DATABASE')
-        }finally {
-            mongoose.connection.close()
-          }
-        });
-
+       
     
 
     message.reply('Welcome message and channel set!')
