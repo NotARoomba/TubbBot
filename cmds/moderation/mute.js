@@ -11,9 +11,9 @@ const reasons = {
 module.exports = class MuteCommand extends Commando.Command {
   constructor(client) {
     super(client, {
-      name: '_mute',
+      name: 'mute',
       group: 'moderation',
-      memberName: '_mute',
+      memberName: 'mute',
       userPermissions: ['ADMINISTRATOR'],
       description: 'Mutes a user',
       argsType: 'multiple',
