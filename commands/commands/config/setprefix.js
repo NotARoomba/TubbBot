@@ -7,27 +7,26 @@ module.exports = {
   permissionError: 'You must be an admin to run this command.',
   permissions: 'ADMINISTRATOR',
   callback: async (message, arguments, text) => {
-    const { guild, channel, content } = message
+    const { guild, content } = message
     const cache = {}
     let prefix = content
 
     const split = prefix.split(' ')
-       
+ 
     if (split.length < 2) {
-      channel.reply('Please provide a prefix')
+      message.reply('Please provide a prefix')
       return
     }
-     
-  
+
     split.shift()
     prefix = split.join(' ')
     cache[guild.id] = [prefix]
         await serverSchema.findOneAndUpdate(
           {
-            _id: guildId,
+            _id: guild.id,
           },
           {
-            _id: guildId,
+            _id: guild.id,
             prefix,
           },
           {
@@ -38,7 +37,7 @@ module.exports = {
         message.reply(`The prefix for this bot is now ${prefix}`)
 
         
-        commandBase.updateCache(guildId, prefix)
+        commandBase.updateCache(guild.id, prefix)
       
     
   },
