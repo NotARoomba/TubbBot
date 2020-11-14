@@ -28,7 +28,7 @@ module.exports = {
                   // A MessageEmbed to actually send in chat, and...
                   content: new Discord.MessageEmbed({
                       title: 'General Commands',
-                      description: '**add**, Adds two numbers \n  **sys**, Sysinfo.exe \n **help (h)**, Shows this menu \n **msgdel**, Message Genocide \n **ping**, Find your ping to me! \n **worldnews (wn)**, Displays world news \n **summon**, *Holy Music stops* \n **reddit (r)**, *Taste the memes* \n **worldnews (wn)**, Shows some news articles \n **weather (w)**, Shows the weather for your city \n **todayinhistory (tih)**, Finds an event that happened on specifiec date. \n **reddit (r)**, Finds a random image on specified subreddit. \n **urbandictionary (ud)**, Looks up a word/phrase. \n'
+                      description: '**sys**, Sysinfo.exe \n **help (h)**, Shows this menu \n **msgdel**, Message Genocide \n **ping**, Find your ping to me! \n **summon**, *Holy Music stops* \n '
                    
                       
                   }),
@@ -36,11 +36,20 @@ module.exports = {
                   // Note there's also special destination names (read below)
                   reactions: {
                     '◀': 'system',
-                    '▶': 'moderation'
-                      
-                      
+                    '▶': 'fun'   
                   }
               },
+              {
+                name: 'fun',
+                content: new Discord.MessageEmbed({
+                    title: 'Fun Commands',
+                    description: `**add**, Adds two numbers \n  **reddit (r)**, *Taste the memes* \n **news (n)**, Shows some news articles \n **weather (w)**, Shows the weather for your city \n **todayinhistory (tih)**, Finds an event that happened on specifiec date. \n **urbandictionary (ud)**, Looks up a word/phrase. \n'`
+                }),
+                reactions: {
+                    '◀': 'general',
+                    '▶': 'moderation'
+                }
+            },
               {
                 name: 'moderation',
                 content: new Discord.MessageEmbed({
@@ -48,7 +57,7 @@ module.exports = {
                     description: '**ban**, BAN HAMMER TIME!! \n  **kick**, Kicks someone somewhere? \n **mute**, Muhn mhuuthm mhee \n **unban**, Reinstatement to this Server! \n **unmute**, Oh I can talk now? \n **giverole (addrole)**, Gives someone a role \n **removerole (derole)**, Loss of Privileges'
                 }),
                 reactions: {
-                    '◀': 'general',
+                    '◀': 'fun',
                     '▶': 'music'
                 }
             },

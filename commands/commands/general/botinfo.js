@@ -13,7 +13,7 @@ module.exports = {
     minArgs: 0,
     maxArgs: 0,
     description: 'Sysinfo.exe',
-    callback: async (message, arguments, text) => {
+    callback: async (message, client) => {
           
 
 
