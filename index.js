@@ -69,6 +69,7 @@ client.on('ready',  async (member) => {
 	.registerGroups([
     ['music', 'Music commands that use Commando'],
     ['misc', 'Misc commands that use Commando'],
+    ['moderation', 'Moderation commands that use Commando'],
 	])
 	.registerDefaultGroups()
 	.registerDefaultCommands({
