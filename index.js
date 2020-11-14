@@ -2,6 +2,7 @@ require('module-alias/register');
 require('events').EventEmitter.prototype._maxListeners = 100;
 const { Structures, Discord } = require('discord.js');
 //const client = new Discord.Client
+
 const mongo = require('@util/mongo');
 const loadCommands = require('@root/commands/load-commands.js')
 const loadFeatures = require('@root/features/load-features.js')
@@ -30,9 +31,8 @@ Structures.extend('Guild', function(Guild) {
 
 const client = new CommandoClient({
   owner: '465917394108547072',
-  commandPrefix: `${guildPrefixes || globalPrefix}`,
+  commandPrefix: guildPrefixes,
 })
-
 
 
 client.on('ready',  async () => {
