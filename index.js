@@ -6,7 +6,8 @@ const mongo = require('@util/mongo');
 const loadCommands = require('@root/commands/load-commands.js')
 const loadFeatures = require('@root/features/load-features.js')
 const path = require('path');
-//client.queue = new Map();
+const { prefix: globalPrefix } = require('@root/config.json')
+const guildPrefixes = {} 
 const { CommandoClient } = require('discord.js-commando');
 Structures.extend('Guild', function(Guild) {
   class MusicGuild extends Guild {
@@ -29,7 +30,7 @@ Structures.extend('Guild', function(Guild) {
 
 const client = new CommandoClient({
   owner: '465917394108547072',
-  commandPrefix: '-',
+  commandPrefix: `${guildPrefixes || globalPrefix}`,
 })
 
 
@@ -40,15 +41,7 @@ client.on('ready',  async () => {
     client.user.setActivity(`-help in ${client.guilds.cache.size} Servers | Made by L061571C5#5281`, { type: 'WATCHING' })
 }, 60000);
 
-  await mongo().then(mongoose => {
-    try {
-      console.log('Connected to Mongo!')
-    } finally {
-      mongoose.connection.close()
-    }
-
-  })
-
+  await mongo()
 
   client.registry
 	.registerDefaultTypes()
