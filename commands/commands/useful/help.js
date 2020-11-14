@@ -15,7 +15,7 @@ module.exports = {
                 name: 'system',
                 content: new Discord.MessageEmbed({
                     title: 'System Config',
-                    description: `This command shows Tubb's commands \n\n Use the reactions to navagate \n\n **setprefix (sp)**, Set custom server prefix. \n **setwelcome (sw)**, Set your server's welcome message, use <@> to tag new members and use command in channel to send messages in. \n **setimage (si)**, Set custom welcome image. \n **textcolor (sc)**, Set custom welcome text color. \n **simjoin (sj)**, Stimulates someone joining your server to test out all of the above. \n`
+                    description: `This command shows Tubb's commands \n\n Use the reactions to navagate \n\n **prefix**, Set custom server prefix. \n **setwelcome (sw)**, Set your server's welcome message, use <@> to tag new members and use command in channel to send messages in. \n **setimage (si)**, Set custom welcome image. \n **textcolor (sc)**, Set custom welcome text color. \n **simjoin (sj)**, Stimulates someone joining your server to test out all of the above. \n`
                 }),
                 reactions: {
                     '▶': 'general',

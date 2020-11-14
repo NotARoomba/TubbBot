@@ -1,9 +1,11 @@
 require('module-alias/register');
 require('events').EventEmitter.prototype._maxListeners = 100;
 const { Structures, Discord } = require('discord.js');
+const { MongoClient } = require('mongodb')
+const MongoDBProvider = require('commando-provider-mongo')
 //const client = new Discord.Client
-const serverSchema = require('@schemas/server-schema')
 const mongo = require('@util/mongo');
+const db = require('quick.db');
 const loadCommands = require('@root/commands/load-commands.js')
 const loadFeatures = require('@root/features/load-features.js')
 
@@ -31,11 +33,21 @@ Structures.extend('Guild', function(Guild) {
   return MusicGuild;
 });
 
+
 const client = new CommandoClient({
   owner: '465917394108547072',
   commandPrefix: '-',
 
 })
+client.setProvider(
+  MongoClient.connect('mongodb+srv://L061571C5:89euzXX8IylP1DYn@tubbbot.kfqqn.mongodb.net/data?retryWrites=true&w=majority')
+    .then((client) => {
+      return new MongoDBProvider(client, 'data')
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+)
 
 
 client.on('ready',  async () => {
@@ -59,7 +71,7 @@ client.on('ready',  async () => {
 	.registerDefaultCommands({
     help: false,
     ping: false,
-    prefix: false,
+    prefix: true,
     commandState: false,
     unknownCommand: false,
   })

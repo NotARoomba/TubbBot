@@ -1,9 +1,10 @@
-const mongo = require('@util/mongo')
+
 const serverSchema = require('@schemas/server-schema')
 const commandBase = require('@root/commands/command-base')
 
+
 module.exports = {
-  commands: ['setprefix', 'sp'],
+  commands: 'prefix',
   permissionError: 'You must be an admin to run this command.',
   permissions: 'ADMINISTRATOR',
   callback: async (message, arguments, text) => {
@@ -14,13 +15,16 @@ module.exports = {
     const split = prefix.split(' ')
  
     if (split.length < 2) {
-      message.reply('Please provide a prefix')
       return
     }
 
     split.shift()
     prefix = split.join(' ')
     cache[guild.id] = [prefix]
+   
+  
+     
+    
         await serverSchema.findOneAndUpdate(
           {
             _id: guild.id,
@@ -34,7 +38,7 @@ module.exports = {
           }
         )
 
-        message.reply(`The prefix for this bot is now ${prefix}`)
+        //message.reply(`The prefix for this bot is now ${prefix}`)
 
         
         commandBase.updateCache(guild.id, prefix)
