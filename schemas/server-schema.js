@@ -11,7 +11,10 @@ const serverSchema = mongoose.Schema({
   text: reqString,
   image: reqString,
   color: reqString,
-  prefix: reqString,
+  prefix: {
+    default: '-',
+    type: reqString,
+  },
 })
 
 module.exports = mongoose.model('server-settings', serverSchema)
