@@ -42,7 +42,6 @@ const client = new CommandoClient({
 client.setProvider(
   MongoClient.connect('mongodb+srv://L061571C5:89euzXX8IylP1DYn@tubbbot.kfqqn.mongodb.net/data?retryWrites=true&w=majority', {
     useUnifiedTopology: true,
-    useFindAndModify: false,
   })
     .then((client) => {
       return new MongoDBProvider(client, 'data')
