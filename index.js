@@ -6,7 +6,11 @@ const serverSchema = require('@schemas/server-schema')
 const mongo = require('@util/mongo');
 const loadCommands = require('@root/commands/load-commands.js')
 const loadFeatures = require('@root/features/load-features.js')
-const path = require('path'); 
+
+
+const path = require('path');
+//client.queue = new Map();
+
 const { CommandoClient } = require('discord.js-commando');
 Structures.extend('Guild', function(Guild) {
   class MusicGuild extends Guild {
@@ -29,7 +33,8 @@ Structures.extend('Guild', function(Guild) {
 
 const client = new CommandoClient({
   owner: '465917394108547072',
-  commandPrefix: `-`,
+  commandPrefix: '-',
+
 })
 
 
@@ -39,9 +44,11 @@ client.on('ready',  async () => {
     client.user.setActivity(`-help in ${client.guilds.cache.size} Servers | Made by L061571C5#5281`, { type: 'WATCHING' })
 }, 60000);
 
+
   await mongo()
   
   
+
   client.registry
 	.registerDefaultTypes()
 	.registerGroups([
