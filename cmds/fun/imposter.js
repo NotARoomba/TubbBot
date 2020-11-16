@@ -29,13 +29,13 @@ module.exports = class ImposterCommand extends Command {
 	}
 
 	async run(message, { playersCount }) {
-		const current = this.client.games.get(message.channel.id);
+		const current = this.client.games.get(message.guild.channel.cache.get(channelid));
 		if (current) return message.reply(`Please wait until the current game of \`${current.name}\` is finished.`);
 		this.client.games.set(message.channel.id, { name: this.name });
 		try {
 			const awaitedPlayers = await awaitPlayers(message, playersCount, 3);
 			if (!awaitedPlayers) {
-				this.client.games.delete(message.channel.id);
+				this.client.games.delete(message.guild.channel.cache.get(channelid));
 				return message.say('Game could not be started...');
 			}
 			const word = words[Math.floor(Math.random() * words.length)];

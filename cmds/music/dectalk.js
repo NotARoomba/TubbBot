@@ -13,10 +13,6 @@ module.exports = class DECTalkCommand extends Command {
 			memberName: 'dec-talk',
 			description: 'The world\'s best Text-to-Speech.',
 			guildOnly: true,
-			throttling: {
-				usages: 1,
-				duration: 10
-			},
 			userPermissions: ['CONNECT', 'SPEAK'],
 			credit: [
 				{
