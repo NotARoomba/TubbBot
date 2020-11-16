@@ -2,7 +2,7 @@ const { Command } = require('discord.js-commando');
 const { MessageEmbed } = require('discord.js');
 const Youtube = require('simple-youtube-api');
 const ytdl = require('ytdl-core');
-const { youtubeAPI } = require('@root/config.json');
+const { youtubeAPI } = require('@rootconfig.json');
 const youtube = new Youtube(youtubeAPI);
 const db = require('quick.db');
 
@@ -10,7 +10,7 @@ module.exports = class PlayCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'play',
-      aliases: ['play-song', 'add', 'p'],
+      aliases: ['p', 'add'],
       memberName: 'play',
       group: 'music',
       description: 'Play any song or playlist from youtube!',
@@ -39,8 +39,6 @@ module.exports = class PlayCommand extends Command {
       message.say(':no_entry: Please join a voice channel and try again!');
       return;
     }
-
-  
     /*
      [
       { name: '1', urls: [ [Object], [Object] ] },
@@ -322,6 +320,11 @@ module.exports = class PlayCommand extends Command {
           .on('error', function(e) {
             message.say(':x: Cannot play song!');
             console.error(e);
+            if (queue.length > 1) {
+              queue.shift();
+              classThis.playSong(queue, message);
+              return;
+            }
             message.guild.musicData.queue.length = 0;
             message.guild.musicData.isPlaying = false;
             message.guild.musicData.nowPlaying = null;
