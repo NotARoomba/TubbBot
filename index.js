@@ -130,7 +130,7 @@ client.on('guildCreate', guild => {
       },
       {
           name: `If you want to invite me to your server please click Invite me!`,
-          value: `[Invite me!](https://discord.com/api/oauth2/authorize?client_id=750123677739122819&permissions=2147483639&redirect_uri=https%3A%2F%2Fdiscordapp.com%2Foauth2%2Fauthorize%3F%26client_id%3D%5B750123677739122819%5D%26scope%3Dbot&scope=bot)`, // This is optional if you want over people to invite your bot to different servers!
+          value: `[Invite me!](https://discord.com/api/oauth2/authorize?client_id=750123677739122819&permissions=8&redirect_uri=https%3A%2F%2Fdiscordapp.com%2Foauth2%2Fauthorize%3F%26client_id%3D%5B750123677739122819%5D%26scope%3Dbot&scope=bot)`, // This is optional if you want over people to invite your bot to different servers!
           inline: true,
       },
   )
