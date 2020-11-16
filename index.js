@@ -36,7 +36,7 @@ Structures.extend('Guild', function(Guild) {
 
 const client = new CommandoClient({
   owner: '465917394108547072',
-  commandPrefix: '-',
+  commandPrefix: `-`,
 
 })
 client.setProvider(
@@ -111,7 +111,7 @@ client.on('message',  message => {
     if (message.content.includes("@here") || message.content.includes("@everyone")) return false;
 
     if (message.mentions.has(client.user.id)) {
-  message.reply("Use -help for a list of commands!");
+  message.reply(`Use ${message.guild.commandPrefix}help for a list of commands!`);
 };
 })
 client.on('guildCreate', guild => {
