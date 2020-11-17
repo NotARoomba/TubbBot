@@ -12,6 +12,7 @@
   "author": "L061571C5",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/collection": "^0.1.6",
     "@discordjs/opus": "^0.3.2",
     "array.prototype.move": "0.0.4",
     "axios": "^0.18.1",
