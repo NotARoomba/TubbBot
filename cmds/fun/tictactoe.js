@@ -1,6 +1,6 @@
 const { Command } = require('discord.js-commando');
 const { stripIndents } = require('common-tags');
-const { verify } = require('@util/Util');
+const { verify } = require('@util/util');
 
 module.exports = class TicTacToeCommand extends Command {
 	constructor(client) {
