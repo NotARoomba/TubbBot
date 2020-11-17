@@ -54,8 +54,9 @@ module.exports = (client) => {
     const attachment = new MessageAttachment(canvas.toBuffer())
     const channelId = data[0]
     const text = data[1]
-    const channel = guild.channels.cache.get(channelId)
-    channel.send(text.replace(/<@>/g, `<@${member.id}>`) || 'Welcome to this server!')
+    const channel2 = guild.channels.cache.find(channel => channel.type === 'text' && channel.permissionsFor(guild.me).has('SEND_MESSAGES'))
+    const channel = guild.channels.cache.get(channelId || channel2)
+    channel.send(text.replace(/<@>/g, `<@${member.id}>`) || 'Welcome to this server! Look at my config commands and set up your server!')
     channel.send(attachment)
     
     } catch (error) {
