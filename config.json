@@ -6,6 +6,9 @@
     "newsAPI": "6098e69fe47c4d5f9f394b2546dcbaac",
     "MAX_PLAYLIST_SIZE": 100,
     "PRUNING": false,
+    "GoogleKey": "AIzaSyCFqRJ2pkhqwBprv8TUyR4sv8salw7_mkM",
+    "SearchId": "50f1f32d3e1133188",
+    "GiphyKey": "JeZngsq9nD9oouKZRqC0jDsHKLqUOXuE",
     "Webster": "818831c9-c831-4b9e-a866-604cda9ce38a",
     "geniusLyricsAPI": "_agbvLMIA55-hMme4-Sia-Hubl_kZjkfgN0imUHZXwHsh3G2EdZYWJuA0fcQntw5"
 }
