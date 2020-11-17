@@ -51,8 +51,9 @@ module.exports = class DECTalkCommand extends Command {
       );
 		if (!typeof message.guild.musicData.songDispatcher == 'undefined' ||
 			!message.guild.musicData.songDispatcher == null) {   message.say(':pause_button: Song was paused!');
-	  
+		
 		  message.guild.musicData.songDispatcher.pause();
+		  message.say(':pause_button: Song was paused!');
 		}
 		
 		const connection = this.client.voice.connections.get(message.guild.id);
