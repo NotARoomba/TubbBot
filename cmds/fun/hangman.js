@@ -8,7 +8,7 @@ module.exports = class HangmanCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'hangman',
-			group: 'games-sp',
+			group: 'fun',
 			memberName: 'hangman',
 			description: 'Prevent a man from being hanged by guessing a word as fast as you can.',
 			credit: [
@@ -29,9 +29,6 @@ module.exports = class HangmanCommand extends Command {
 	}
 
 	async run(msg) {
-		const current = this.client.games.get(msg.channel.id);
-		if (current) return msg.reply(`Please wait until the current game of \`${current.name}\` is finished.`);
-		this.client.games.set(msg.channel.id, { name: this.name });
 		try {
 			const word = words[Math.floor(Math.random() * words.length)].toLowerCase();
 			let points = 0;
@@ -84,7 +81,6 @@ module.exports = class HangmanCommand extends Command {
 					points++;
 				}
 			}
-			this.client.games.delete(msg.channel.id);
 			const defined = await this.defineWord(word);
 			if (word.length === confirmation.length || guessed) {
 				return msg.say(stripIndents`
@@ -99,7 +95,6 @@ module.exports = class HangmanCommand extends Command {
 				${defined ? defined.definiton : ''}
 			`);
 		} catch (err) {
-			this.client.games.delete(msg.channel.id);
 			return msg.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
 		}
 	}

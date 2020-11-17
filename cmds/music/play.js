@@ -318,7 +318,7 @@ module.exports = class PlayCommand extends Command {
             }
           })
           .on('error', function(e) {
-            message.say(':x: Cannot play song!');
+            message.say(':x: Cannot play song! Text to speech automaticaly terminates the connection.');
             console.error(e);
             if (queue.length > 1) {
               queue.shift();

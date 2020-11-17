@@ -2,7 +2,6 @@ const { Command } = require('discord.js-commando');
 const request = require('node-superfetch');
 const { Readable } = require('stream');
 const { reactIfAble } = require('@util/util');
-const { LOADING_EMOJI_ID } = process.env;
 
 module.exports = class DECTalkCommand extends Command {
 	constructor(client) {
@@ -43,39 +42,24 @@ module.exports = class DECTalkCommand extends Command {
 			]
 		});
 	}
-
-	async run(msg, { text }) {
-		const connection = this.client.voice.connections.get(msg.guild.id);
+	 
+	async run(message, { text }) {
+		const connection = this.client.voice.connections.get(message.guild.id);
 		if (!connection) {
 			const usage = this.client.registry.commands.get('join').usage();
 			return msg.reply(`I am not in a voice channel. Use ${usage} to fix that!`);
 		}
-		if (
-			typeof message.guild.musicData.songDispatcher == 'undefined' ||
-			message.guild.musicData.songDispatcher == null
-		  ) {
-			return message.say(':x: There is no song playing right now!');
-		  } else if (voiceChannel.id !== message.guild.me.voice.channel.id) {
-			message.reply(
-			  `:no_entry: You must be in the same voice channel as the bot's in order to use that!`
-			);
-			return;
-		  }
-	  
-		  message.say(':pause_button: Song was paused!');
-	  
-		  message.guild.musicData.songDispatcher.pause();
 		try {
-			await reactIfAble(msg, this.client.user, '💬');
+			reactIfAble(message, this.client.user, '💬');
 			const { body } = await request
 				.get('http://tts.cyzon.us/tts')
 				.query({ text });
 			connection.play(Readable.from([body]));
-			await reactIfAble(msg, this.client.user, '🔉');
+			reactIfAble(message, this.client.user, '🔉');
 			return null;
 		} catch (err) {
-			await reactIfAble(msg, this.client.user, '⚠️');
-			return msg.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
+			reactIfAble(message, this.client.user, '⚠️');
+			return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
 		}
 	}
 };
