@@ -9,11 +9,11 @@ module.exports = {
         const day = parseInt(args[1]);
 
         if(isNaN(month)) {
-            return message.reply('please enter a valid month (ex. 12 31)');
+            return message.reply('please enter a valid month (ex. 4 13');
         }
 
         if(isNaN(day)) {
-            return message.reply('please enter a valid date (ex. 12 31)');
+            return message.reply('please enter a valid day (ex. 3 28)');
         }
 
         const date = month && day ? `/${month}/${day}` : '';
