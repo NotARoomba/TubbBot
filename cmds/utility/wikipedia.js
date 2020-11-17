@@ -9,7 +9,7 @@ module.exports = class WikipediaCommand extends Command {
 		super(client, {
             name: 'wikipedia',
             aliases: ['wiki'],
-			group: 'misc',
+			group: 'utility',
 			memberName: 'wikipedia',
 			description: 'Searches Wikipedia for your query.',
 			clientPermissions: ['EMBED_LINKS'],

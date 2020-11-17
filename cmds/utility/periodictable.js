@@ -9,7 +9,7 @@ module.exports = class PeriodicTableCommand extends Command {
 		super(client, {
 			name: 'periodic-table',
 			aliases: ['element', 'p-table'],
-			group: 'misc',
+			group: 'utility',
 			memberName: 'periodic-table',
 			description: 'Finds an element on the periodic table.',
 			throttling: {

@@ -6,7 +6,7 @@ module.exports = class UrbanCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'urban',
-      group: 'misc',
+      group: 'fun',
       aliases: ['ud', 'urbandictionary'],
       memberName: 'urban',
       description: 'Get definitions from urban dictonary.',

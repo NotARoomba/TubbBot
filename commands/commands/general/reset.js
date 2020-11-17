@@ -3,7 +3,7 @@ const client = new Discord.Client()
 const dtoken = require('@root/config.json')
 
 module.exports = {
-    commands: ['reload', 'kill'],
+    commands: ['reset', 'kill'],
     minArgs: 0,
     maxArgs: 0,
     description: 'Kill me to restart me!',

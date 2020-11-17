@@ -7,7 +7,7 @@ module.exports = class GiphyCommand extends Command {
 		super(client, {
 			name: 'giphy',
 			aliases: ['gif'],
-            group: 'misc',
+            group: 'fun',
 			memberName: 'giphy',
 			description: 'Searches Giphy for your query.',
 			credit: [

@@ -6,7 +6,7 @@ module.exports = class BotInfoCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: 'sys',
-      group: 'misc',
+      group: 'utility',
       memberName: 'sys',
       description: 'Displays bot information',
     })
