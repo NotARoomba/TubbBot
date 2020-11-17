@@ -1,7 +1,7 @@
 const { Command } = require('discord.js-commando');
 const { stripIndents, oneLine } = require('common-tags');
 const Collection = require('@discordjs/collection');
-const { delay, awaitPlayers, list } = require('@util/Util');
+const { delay, awaitPlayers, list } = require('@util/util');
 const words = require('@util/imposter');
 
 
