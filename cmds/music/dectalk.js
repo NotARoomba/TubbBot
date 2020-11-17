@@ -49,9 +49,8 @@ module.exports = class DECTalkCommand extends Command {
       return message.reply(
         ':no_entry: Please join a voice channel and try again!'
       );
-		if (typeof message.guild.musicData.songDispatcher !== 'undefined' ||
-			message.guild.musicData.songDispatcher !== null
-		  ) {   message.say(':pause_button: Song was paused!');
+		if (!typeof message.guild.musicData.songDispatcher == 'undefined' ||
+			!message.guild.musicData.songDispatcher == null) {   message.say(':pause_button: Song was paused!');
 	  
 		  message.guild.musicData.songDispatcher.pause();
 		}
