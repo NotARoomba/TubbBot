@@ -2,7 +2,7 @@ const { Command } = require('discord.js-commando');
 const { stripIndents, oneLine } = require('common-tags');
 const Collection = require('@discordjs/collection');
 const { delay, awaitPlayers, list } = require('@util/util');
-const words = require('@util/imposter');
+const words = require('@assets/imposter');
 
 
 module.exports = class ImposterCommand extends Command {

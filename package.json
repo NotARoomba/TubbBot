@@ -60,6 +60,7 @@
     "@util": "./util",
     "@features": "./features/features",
     "@commands": "./commands/commands",
-    "@cmds": "./cmds"
+    "@cmds": "./cmds",
+    "@assets": "./assets"
   }
 }

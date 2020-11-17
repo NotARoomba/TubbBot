@@ -50,6 +50,21 @@ module.exports = class DECTalkCommand extends Command {
 			const usage = this.client.registry.commands.get('join').usage();
 			return msg.reply(`I am not in a voice channel. Use ${usage} to fix that!`);
 		}
+		if (
+			typeof message.guild.musicData.songDispatcher == 'undefined' ||
+			message.guild.musicData.songDispatcher == null
+		  ) {
+			return message.say(':x: There is no song playing right now!');
+		  } else if (voiceChannel.id !== message.guild.me.voice.channel.id) {
+			message.reply(
+			  `:no_entry: You must be in the same voice channel as the bot's in order to use that!`
+			);
+			return;
+		  }
+	  
+		  message.say(':pause_button: Song was paused!');
+	  
+		  message.guild.musicData.songDispatcher.pause();
 		try {
 			await reactIfAble(msg, this.client.user, '💬');
 			const { body } = await request
