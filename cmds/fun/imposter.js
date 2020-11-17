@@ -89,7 +89,7 @@ module.exports = class ImposterCommand extends Command {
 						Talk amongst yourselves, who is the imposter? Voting begins in 1 minute.
 					`);
 				}
-				await delay(60000);
+				await delay(30000);
 				const choices = players.filter(player => !player.killed);
 				const ids = choices.map(player => player.id);
 				let i = 0;
@@ -116,7 +116,7 @@ module.exports = class ImposterCommand extends Command {
 				};
 				const vote = await msg.channel.awaitMessages(voteFilter, {
 					max: players.filter(player => !player.killed).size,
-					time: 60000
+					time: 30000
 				});
 				if (!vote.size) {
 					if (lastTurnTimeout) {
