@@ -81,7 +81,7 @@ module.exports = class ImposterCommand extends Command {
 					players.get(killedMsg.author.id).killed = true;
 					await msg.say(stripIndents`
 						${killedMsg.author} has been murdered for saying the kill word!
-						Talk amongst yourselves, who is the imposter? Voting begins in 1 minute.
+						Talk amongst yourselves, who is the imposter? Voting begins in 30 seconds.
 					`);
 				} else {
 					await msg.say(stripIndents`
@@ -94,7 +94,7 @@ module.exports = class ImposterCommand extends Command {
 				const ids = choices.map(player => player.id);
 				let i = 0;
 				await msg.say(stripIndents`
-					Alright, who do you think the imposter is? You have 1 minute to vote.
+					Alright, who do you think the imposter is? You have 30 seconds to vote.
 					_Type the number of the player you think is the imposter._
 					${choices.map(player => { i++; return `**${i}.** ${player.user.tag}`; }).join('\n')}
 				`);
