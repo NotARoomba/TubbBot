@@ -8,7 +8,7 @@ module.exports = {
     maxArgs: 1,
     description: '*Holy Music stops*',
     expectedArgs: "[Target user's @]",
-    callback: (message, arguments, text) => {
+    callback: (message) => {
         const target = message.mentions.users.first()
 
       
@@ -18,7 +18,7 @@ module.exports = {
             .setDescription('Please tag a user to Summon.')
             if (!target) {
       
-      message.reply(balusrEmbed)
+      message.say(balusrEmbed)
                 return
             }
 
@@ -28,16 +28,16 @@ module.exports = {
         .setDescription(`${target}`)
         
 
-    message.reply(summonEmbed)  
+    message.say(summonEmbed)  
 
     const summoningEmbed = new Discord.MessageEmbed()
         .setColor('#9400D3')
         .setDescription(`${target}`)
         
 
-    message.reply(summoningEmbed)
-    message.reply(summoningEmbed)
-    message.reply(summoningEmbed)
-    message.reply(summoningEmbed) 
+    message.say(summoningEmbed)
+    message.say(summoningEmbed)
+    message.say(summoningEmbed)
+    message.say(summoningEmbed) 
     }
 }
