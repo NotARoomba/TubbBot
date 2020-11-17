@@ -1,7 +1,7 @@
 const { Command } = require('discord.js-commando');
 const request = require('node-superfetch');
 const { Readable } = require('stream');
-const { reactIfAble } = require('@util/Util');
+const { reactIfAble } = require('@util/util');
 const { LOADING_EMOJI_ID } = process.env;
 
 module.exports = class DECTalkCommand extends Command {
