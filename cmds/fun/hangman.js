@@ -2,7 +2,7 @@ const { Command } = require('discord.js-commando');
 const request = require('node-superfetch');
 const { stripIndents } = require('common-tags');
 const words = require('@assets/wordlist');
-const { WEBSTER_KEY } = process.env;
+const { Webster } = require('@root/config.json');
 
 module.exports = class HangmanCommand extends Command {
 	constructor(client) {
@@ -60,7 +60,7 @@ module.exports = class HangmanCommand extends Command {
 				};
 				const guess = await msg.channel.awaitMessages(filter, {
 					max: 1,
-					time: 30000
+					time: 60000
 				});
 				if (!guess.size) {
 					await msg.say('Sorry, time is up!');
