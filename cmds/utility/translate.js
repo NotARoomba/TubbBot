@@ -55,7 +55,7 @@ module.exports = class TranslateCommand extends Command {
 		});
 	}
 
-	async run(msg, { text, target, base }) {
+	async run(msg, { base, target, text }) {
 		try {
 			const { text: result, from } = await translate(text, { to: target, from: base });
 			const embed = new MessageEmbed()
