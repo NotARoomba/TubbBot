@@ -17,7 +17,7 @@ module.exports = class BanCommand extends Command {
           key: 'userToBan',
           prompt:
             'Please mention the user you want to ban with @ or provide his ID.',
-          type: 'user' || 'member'
+          type: 'user' || 'integer'
         },
         {
           key: 'reason',
