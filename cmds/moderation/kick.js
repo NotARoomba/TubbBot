@@ -17,7 +17,7 @@ module.exports = class KickCommand extends Command {
           key: 'userToKick',
           prompt:
             'Please mention the user you want to kick with @ or provide his ID.',
-          type: 'string'
+          type: 'user' || 'member'
         },
         {
           key: 'reason',
