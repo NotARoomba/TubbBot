@@ -47,7 +47,7 @@ module.exports = class IslandCommand extends Command {
 					**Day ${turn}.** Who should be kicked off the island?
 					You have **2 minutes** to make a decision before voting starts.
 				`);
-				await delay(120000);
+				await delay(30000);
 				const choices = players.filter(player => playersLeft.has(player.id));
 				const ids = choices.map(player => player.id);
 				await msg.say(stripIndents`
@@ -72,7 +72,7 @@ module.exports = class IslandCommand extends Command {
 				};
 				const vote = await msg.channel.awaitMessages(voteFilter, {
 					max: playersLeft.size,
-					time: 60000
+					time: 30000
 				});
 				if (!vote.size) {
 					if (lastTurnTimeout) {
