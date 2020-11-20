@@ -16,8 +16,8 @@ module.exports = class KickCommand extends Command {
         {
           key: 'userToKick',
           prompt:
-            'Please mention the user you want to kick with @ or provide his ID.',
-          type: 'user' || 'integer'
+            'Please mention the user you want to kick with @.',
+          type: 'user'
         },
         {
           key: 'reason',
@@ -29,11 +29,8 @@ module.exports = class KickCommand extends Command {
   }
 
   async run(message, { userToKick, reason }) {
-    const extractNumber = /\d+/g;
-    const userToKickID = userToKick.match(extractNumber)[0];
     const user =
-      message.mentions.members.first() ||
-      (await message.guild.members.fetch(userToKickID));
+      message.mentions.members.first()
     if (user == undefined)
       return message.channel.send(':x: Please try again with a valid user.');
     user
