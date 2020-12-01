@@ -4,6 +4,7 @@ const { Structures, Discord } = require('discord.js');
 const { MongoClient } = require('mongodb')
 const MongoDBProvider = require('commando-provider-mongo')
 //const client = new Discord.Client
+const Discord = require(`discord.js`)
 const mongo = require('@util/mongo');
 const loadCommands = require('@root/commands/load-commands.js')
 const loadFeatures = require('@root/features/load-features.js')
