@@ -137,7 +137,7 @@ client.on('guildCreate', guild => {
     ],
     timestamp: new Date(),
   footer: {
-    text: `Thanks from the creator of ${client.user.username}`}
+    text: `Thank you from the creator of ${client.user.username}`}
   }
   channel.send({ embed: invite })
 })
