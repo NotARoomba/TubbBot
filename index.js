@@ -116,17 +116,17 @@ client.on('message',  message => {
 })
 client.on('guildCreate', guild => {
   const channel = guild.channels.cache.find(channel => channel.type === 'text' && channel.permissionsFor(guild.me).has('SEND_MESSAGES'))
-  const invite = new Discord.MessageEmbed()
-  .setTitle(`Thank you for inviting me to \`\`${guild.name}\`\`!`)
-  .addFields(
+  const invite = {
+  title: `Thank you for inviting me to \`\`${guild.name}\`\`!`,
+  fields: [
       {
           name: `My default prefix is`,
-          value: `\`\`-\`\` but you can always change it by running -setprefix (New Prefix)`,
+          value: `\`\`-\`\` but you can always change it by running \n-setprefix`,
           inline: true,
       },
       {
           name: `My commands`,
-          value: `I would recomend trying -help or -commands!`,
+          value: `Run -help or -commands to show all of my commands!`,
           inline: true,
       },
       {
@@ -134,10 +134,14 @@ client.on('guildCreate', guild => {
           value: `[Invite me!](https://discord.com/api/oauth2/authorize?client_id=750123677739122819&permissions=8&redirect_uri=https%3A%2F%2Fdiscordapp.com%2Foauth2%2Fauthorize%3F%26client_id%3D%5B750123677739122819%5D%26scope%3Dbot&scope=bot)`, // This is optional if you want over people to invite your bot to different servers!
           inline: true,
       },
-  )
-  .setFooter(`And a special thanks from the creator of ${client.user.username}`)
-  channel.send(invite)
+    ],
+    timestamp: new Date(),
+  footer: {
+    text: `Thanks from the creator of ${client.user.username}`}
+  }
+  channel.send({ embed: invite })
 })
+
 
 //heroku stack:set heroku-18 -a tubb-bot jic v509
 client.login('NzUwMTIzNjc3NzM5MTIyODE5.X019HQ.USGz-7328iyyiA9UoGPTqZeU4xI')
