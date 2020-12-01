@@ -44,6 +44,7 @@ module.exports = class LeaveCommand extends Command {
       message.guild.musicData.loopSong = false;
       setTimeout(() => {
         message.guild.musicData.songDispatcher.end();
+        message.guild.musicData.songDispatcher.end();
       }, 100);
       return;
     } else {
@@ -51,6 +52,7 @@ module.exports = class LeaveCommand extends Command {
       message.guild.musicData.skipTimer = true;
       message.guild.musicData.loopSong = false;
       message.guild.musicData.loopQueue = false;
+      message.guild.musicData.songDispatcher.end();
       message.guild.musicData.songDispatcher.end();
       return;
     }
