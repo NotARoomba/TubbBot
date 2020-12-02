@@ -37,22 +37,22 @@ module.exports = class WordChainCommand extends Command {
 		});
 	}
 
-	async run(msg, { opponent, time }) {
+	async run(message, { opponent, time }) {
 		const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)
-		if (opponent.bot) return msg.reply('Bots may not be played against.');
-		if (opponent.id === msg.author.id) return msg.reply('You may not play against yourself.');
+		if (opponent.bot) return message.reply('Bots may not be played against.');
+		if (opponent.id === message.author.id) return message.reply('You may not play against yourself.');
 		try {
-			await msg.say(`${opponent}, do you accept this challenge?`);
-			const verification = await verify(msg.channel, opponent);
+			await message.say(`${opponent}, do you accept this challenge?`);
+			const verification = await verify(message.channel, opponent);
 			if (!verification) {
-				return msg.say('Looks like they declined...');
+				return message.say('Looks like they declined...');
 			}
 			const startWord = startWords[Math.floor(Math.random() * startWords.length)];
-			await msg.say(stripIndents`
+			await message.say(stripIndents`
 				The start word will be **${startWord}**! You must answer within **${time}** seconds!
 				If you think your opponent has played a word that doesn't exist, respond with **challenge** on your turn.
 				Words cannot contain anything but letters. No numbers, spaces, or hyphens may be used.
@@ -64,34 +64,34 @@ Date: ${new Date()}`)
 			let winner = null;
 			let lastWord = startWord;
 			while (!winner) {
-				const player = userTurn ? msg.author : opponent;
+				const player = userTurn ? message.author : opponent;
 				const letter = lastWord.charAt(lastWord.length - 1);
-				await msg.say(`It's ${player}'s turn! The letter is **${letter}**.`);
+				await message.say(`It's ${player}'s turn! The letter is **${letter}**.`);
 				const filter = res =>
 					res.author.id === player.id && /^[a-zA-Z']+$/i.test(res.content) && res.content.length < 50;
-				const wordChoice = await msg.channel.awaitMessages(filter, {
+				const wordChoice = await message.channel.awaitMessages(filter, {
 					max: 1,
 					time: time * 1000
 				});
 				if (!wordChoice.size) {
-					await msg.say('Time!');
-					winner = userTurn ? opponent : msg.author;
+					await message.say('Time!');
+					winner = userTurn ? opponent : message.author;
 					break;
 				}
 				const choice = wordChoice.first().content.toLowerCase();
 				if (choice === 'challenge') {
 					const checked = await this.verifyWord(lastWord);
 					if (!checked) {
-						await msg.say(`Caught red-handed! **${lastWord}** is not valid!`);
+						await message.say(`Caught red-handed! **${lastWord}** is not valid!`);
 						winner = player;
 						break;
 					}
-					await msg.say(`Sorry, **${lastWord}** is indeed valid!`);
+					await message.say(`Sorry, **${lastWord}** is indeed valid!`);
 					continue;
 				}
 				if (!choice.startsWith(letter) || words.includes(choice)) {
-					await msg.say('Sorry! You lose!');
-					winner = userTurn ? opponent : msg.author;
+					await message.say('Sorry! You lose!');
+					winner = userTurn ? opponent : message.author;
 					break;
 				}
 				words.push(choice);
@@ -99,8 +99,8 @@ Date: ${new Date()}`)
 				userTurn = !userTurn;
 			}
 
-			if (!winner) return msg.say('Oh... No one won.');
-			return msg.say(`The game is over! The winner is ${winner}!`);
+			if (!winner) return message.say('Oh... No one won.');
+			return message.say(`The game is over! The winner is ${winner}!`);
 		} catch (err) {
 			throw err;
 		}

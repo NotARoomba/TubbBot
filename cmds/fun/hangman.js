@@ -1,10 +1,7 @@
 const { Command } = require('discord.js-commando');
-const request = require('node-superfetch');
 const { stripIndents } = require('common-tags');
 const words = require('@assets/wordlist');
-const { Webster } = require('@root/config.json');
-const config = require('@root/config.json');
-const Discord = require('discord.js');
+
 module.exports = class HangmanCommand extends Command {
 	constructor(client) {
 		super(client, {
@@ -29,7 +26,7 @@ module.exports = class HangmanCommand extends Command {
 		});
 	}
 
-	async run(msg) {
+	async run(message) {
 		const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
@@ -44,7 +41,7 @@ Date: ${new Date()}`)
 			const incorrect = [];
 			const display = new Array(word.length).fill('_');
 			while (word.length !== confirmation.length && points < 6) {
-				await msg.say(stripIndents`
+				await message.say(stripIndents`
 					${displayText === null ? 'Here we go!' : displayText ? 'Good job!' : 'Nope!'}
 					\`${display.join(' ')}\`. Which letter do you choose?
 					Incorrect Tries: ${incorrect.join(', ') || 'None'}
@@ -59,14 +56,14 @@ Date: ${new Date()}`)
 				`);
 				const filter = res => {
 					const choice = res.content.toLowerCase();
-					return res.author.id === msg.author.id && !confirmation.includes(choice) && !incorrect.includes(choice);
+					return res.author.id === message.author.id && !confirmation.includes(choice) && !incorrect.includes(choice);
 				};
-				const guess = await msg.channel.awaitMessages(filter, {
+				const guess = await message.channel.awaitMessages(filter, {
 					max: 1,
 					time: 60000
 				});
 				if (!guess.size) {
-					await msg.say('Sorry, time is up!');
+					await message.say('Sorry, time is up!');
 					break;
 				}
 				const choice = guess.first().content.toLowerCase();
@@ -89,19 +86,19 @@ Date: ${new Date()}`)
 			}
 			const defined = await this.defineWord(word);
 			if (word.length === confirmation.length || guessed) {
-				return msg.say(stripIndents`
+				return message.say(stripIndents`
 					You won, it was ${word}!
 					${defined ? `**${defined.name}** (${defined.partOfSpeech})` : ''}
 					${defined ? defined.definiton : ''}
 				`);
 			}
-			return msg.say(stripIndents`
+			return message.say(stripIndents`
 				Too bad... It was ${word}...
 				${defined ? `**${defined.name}** (${defined.partOfSpeech})` : ''}
 				${defined ? defined.definiton : ''}
 			`);
 		} catch (err) {
-			return msg.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
+			return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
 		}
 	}
 
@@ -109,7 +106,7 @@ Date: ${new Date()}`)
 		try {
 			const { body } = await request
 				.get(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}`)
-				.query({ key: WEBSTER_KEY });
+				.query({ key: client.Webster });
 			if (!body.length) return null;
 			const data = body[0];
 			if (typeof data === 'string') return null;

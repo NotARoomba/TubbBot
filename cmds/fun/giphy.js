@@ -1,8 +1,4 @@
 const { Command } = require('discord.js-commando');
-const request = require('node-superfetch');
-const { GiphyKey } = require('@root/config.json');
-const config = require('@root/config.json');
-const Discord = require('discord.js');
 module.exports = class GiphyCommand extends Command {
 	constructor(client) {
 		super(client, {
@@ -29,7 +25,7 @@ module.exports = class GiphyCommand extends Command {
 		});
 	}
 
-	async run(msg, { query }) {
+	async run(message, { query }) {
 		const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
@@ -40,13 +36,13 @@ Date: ${new Date()}`)
 				.get('http://api.giphy.com/v1/gifs/search')
 				.query({
 					q: query,
-					api_key: GiphyKey,
-					rating: msg.channel.nsfw ? 'r' : 'pg'
+					api_key: config.GiphyKey,
+					rating: message.channel.nsfw ? 'r' : 'pg'
 				});
-			if (!body.data.length) return msg.say('Could not find any results.');
-			return msg.say(body.data[Math.floor(Math.random() * body.data.length)].images.original.url);
+			if (!body.data.length) return message.say('Could not find any results.');
+			return message.say(body.data[Math.floor(Math.random() * body.data.length)].images.original.url);
 		} catch (err) {
-			return msg.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
+			return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
 		}
 	}
 };

@@ -1,8 +1,6 @@
 const fetch = require('node-fetch');
 const { Command } = require('discord.js-commando');
 
-const config = require('@root/config.json');
-const Discord = require('discord.js');
 module.exports = class UrbanCommand extends Command {
   constructor(client) {
     super(client, {
@@ -33,7 +31,7 @@ Date: ${new Date()}`)
     fetch(`https://api.urbandictionary.com/v0/define?term=${text}`)
       .then(res => res.json())
       .then(json => {
-        const embed = new MessageEmbed()
+        const embed = new Discord.MessageEmbed()
           .setColor('#BB7D61')
           .setTitle(`${text}`)
           .setAuthor(

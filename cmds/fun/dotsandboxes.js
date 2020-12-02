@@ -23,19 +23,19 @@ module.exports = class DotsAndBoxesCommand extends Command {
 		});
 	}
 	
-	async run(msg, { opponent }) {
+	async run(message, { opponent }) {
 		const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)
-		if (opponent.bot) return msg.reply('Bots may not be played against.');
-		if (opponent.id === msg.author.id) return msg.reply('You may not play against yourself.');
+		if (opponent.bot) return message.reply('Bots may not be played against.');
+		if (opponent.id === message.author.id) return message.reply('You may not play against yourself.');
 		try {
-			await msg.say(`${opponent}, do you accept this challenge?`);
-			const verification = await verify(msg.channel, opponent);
+			await message.say(`${opponent}, do you accept this challenge?`);
+			const verification = await verify(message.channel, opponent);
 			if (!verification) {
-				return msg.say('Looks like they declined...');
+				return message.say('Looks like they declined...');
 			}
 			const board = this.generateBoard();
 			const taken = [];
@@ -45,11 +45,11 @@ Date: ${new Date()}`)
 			let winner = null;
 			let lastTurnTimeout = false;
 			while (taken.length < 40) {
-				const user = userTurn ? msg.author : opponent;
-				await msg.say(stripIndents`
+				const user = userTurn ? message.author : opponent;
+				await message.say(stripIndents`
 					${user}, which connection do you pick? Type \`end\` to forefeit.
 					_Format like \`1-2\` or \`0-5\`. Any two spaces bordering **vertical or horizontal**._
-					P1: ${msg.author.tag} | P2: ${opponent.tag}
+					P1: ${message.author.tag} | P2: ${opponent.tag}
 					\`\`\`
 					${this.displayBoard(board, taken, userOwned, oppoOwned)}
 					\`\`\`
@@ -79,12 +79,12 @@ Date: ${new Date()}`)
 					}
 					return !taken.includes(`${first}-${second}`);
 				};
-				const turn = await msg.channel.awaitMessages(filter, {
+				const turn = await message.channel.awaitMessages(filter, {
 					max: 1,
 					time: 60000
 				});
 				if (!turn.size) {
-					await msg.say('Sorry, time is up!');
+					await message.say('Sorry, time is up!');
 					if (lastTurnTimeout) {
 						winner = 'time';
 						break;
@@ -96,7 +96,7 @@ Date: ${new Date()}`)
 				}
 				const choice = turn.first().content;
 				if (choice.toLowerCase() === 'end') {
-					winner = userTurn ? opponent : msg.author;
+					winner = userTurn ? opponent : message.author;
 					break;
 				}
 				const matched = choice.match(/([0-9]+)-([0-9]+)/);
@@ -115,18 +115,18 @@ Date: ${new Date()}`)
 						else oppoOwned.push(newSquare);
 					}
 					if (taken.length < 40) {
-						await msg.say(`${user}, great job! Keep going until you can't make any more!`);
+						await message.say(`${user}, great job! Keep going until you can't make any more!`);
 					}
 				} else {
 					userTurn = !userTurn;
 				}
 				if (lastTurnTimeout) lastTurnTimeout = false;
 			}
-			if (winner === 'time') return msg.say('Game ended due to inactivity.');
+			if (winner === 'time') return message.say('Game ended due to inactivity.');
 			winner = userOwned.length === oppoOwned.length
 				? null
-				: userOwned.length > oppoOwned.length ? msg.author : opponent;
-			return msg.say(winner ? `Congrats, ${winner}!` : 'Looks like it\'s a draw...');
+				: userOwned.length > oppoOwned.length ? message.author : opponent;
+			return message.say(winner ? `Congrats, ${winner}!` : 'Looks like it\'s a draw...');
 		} catch (err) {
 			throw err;
 		}
