@@ -47,11 +47,9 @@ module.exports = class TranslateCommand extends Command {
 					type: 'string',
 					max: 500
 				},
-				
 			]
 		});
 	}
-
 	async run(message, { base, target, text }) {
 		const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
         webhookClient.send(`Command: ${this.name} 

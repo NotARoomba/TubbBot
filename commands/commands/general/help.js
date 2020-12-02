@@ -45,7 +45,7 @@ Date: ${new Date()}`)
                 name: 'fun',
                 content: new Discord.MessageEmbed({
                     title: 'Fun Commands',
-                    description: `**add**, Adds two numbers \n  **reddit (r)**, *Taste the memes* \n **news (n)**, Shows some news articles \n **weather (w)**, Shows the weather for your city \n **todayinhistory (tih)**, Finds an event that happened on specific date (ex. 4 13) \n **urbandictionary (ud)**, Looks up a word/phrase. \n **giphy (gif)**, Gets a gif from Giphy \n **hangman**, Play hangman with over 50,000 words \n **wordchain**, Try to come up with words that start with the last letter of your opponent\'s word. \n **tictctoe (ttt)**, Play a game of tic tac toe with someone \n `
+                    description: `**math**, Calculator \n  **reddit (r)**, *Taste the memes* \n **news (n)**, Shows some news articles \n **weather (w)**, Shows the weather for your city \n **todayinhistory (tih)**, Finds an event that happened on specific date (ex. 4 13, month day) \n **urbandictionary (ud)**, Looks up a word/phrase. \n **giphy (gif)**, Gets a gif from Giphy \n **hangman**, Play hangman with over 50,000 words \n **wordchain**, Try to come up with words that start with the last letter of your opponent\'s word. \n **tictctoe (ttt)**, Play a game of tic tac toe with someone \n `
                 }),
                 reactions: {
                     '◀': 'general',
