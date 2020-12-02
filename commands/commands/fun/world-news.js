@@ -2,7 +2,7 @@ const Discord = require('discord.js')
 const client = new Discord.Client()
 const fetch = require('node-fetch');
 const { newsAPI } = require('@root/config.json');
-
+const config = require('@root/config.json');
 
 module.exports = {
     commands: ['worldnews', 'wn'],
@@ -10,7 +10,8 @@ module.exports = {
     maxArgs: 0,
     description: 'Get the World News',
      callback: async (message) => {
-      console.log(`Command: worldnews 
+      const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: worldnews 
       Ran by: ${message.author.tag}
       Server: ${message.guild.name}
       Date: ${new Date()}`)

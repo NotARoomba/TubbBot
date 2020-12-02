@@ -1,5 +1,5 @@
 const { Command } = require('discord.js-commando');
-
+const config = require('@root/config.json');
 module.exports = class ResumeCommand extends Command {
   constructor(client) {
     super(client, {
@@ -13,7 +13,8 @@ module.exports = class ResumeCommand extends Command {
   }
 
   run(message) {
-    console.log(`Command: ${this.name} 
+    const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)

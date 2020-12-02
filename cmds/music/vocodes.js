@@ -3,7 +3,7 @@ const request = require('node-superfetch');
 const { Readable } = require('stream');
 const { list, reactIfAble } = require('@util/util');
 const voices = require('@assets/vocodes');
-
+const config = require('@root/config.json');
 
 module.exports = class VocodesCommand extends Command {
 	constructor(client) {
@@ -46,7 +46,8 @@ module.exports = class VocodesCommand extends Command {
 	}
 
 	async run(msg, { voice, text }) {
-		console.log(`Command: ${this.name} 
+		const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)

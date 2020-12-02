@@ -1,6 +1,6 @@
 const { Command } = require('discord.js-commando');
 const math = require('mathjs');
-
+const config = require('@root/config.json');
 module.exports = class MathCommand extends Command {
 	constructor(client) {
 		super(client, {
@@ -27,7 +27,8 @@ module.exports = class MathCommand extends Command {
 	}
 
 	run(msg, { expression }) {
-		console.log(`Command: ${this.name} 
+		const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)

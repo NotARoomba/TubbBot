@@ -1,14 +1,15 @@
 const Discord = require('discord.js')
 const client = new Discord.Client()
 const dtoken = require('@root/config.json')
-
+const config = require('@root/config.json');
 module.exports = {
     commands: ['reset', 'kill'],
     minArgs: 0,
     maxArgs: 0,
     description: 'Kill me to restart me!',
     callback: (message, arguments, text) => {
-        console.log(`Command: reset 
+        const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: reset 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)

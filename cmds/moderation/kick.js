@@ -1,6 +1,6 @@
 const { Command } = require('discord.js-commando');
 const { MessageEmbed } = require('discord.js');
-
+const config = require('@root/config.json');
 module.exports = class KickCommand extends Command {
   constructor(client) {
     super(client, {
@@ -29,7 +29,8 @@ module.exports = class KickCommand extends Command {
   }
 
   async run(message, { userToKick, reason }) {
-    console.log(`Command: ${this.name} 
+    const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)

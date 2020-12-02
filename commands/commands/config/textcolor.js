@@ -1,13 +1,14 @@
 const serverSchema = require('@schemas/server-schema')
 const mongo = require('@util/mongo')
-
+const config = require('@root/config.json');
 
 module.exports = {
     commands: ['setcolor', 'sc'],
     permissionError: 'You must be an admin to run this command.',
     requiredPermissions: 'ADMINISTRATOR',
   callback: async (message) => {
-    console.log(`Command: setcolor 
+    const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: setcolor 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)
@@ -43,7 +44,8 @@ Date: ${new Date()}`)
         upsert: true,
       }
     )
-    console.log('UPDATED IMAGE DATABASE')
+    const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send('UPDATED IMAGE DATABASE')
        
     
 

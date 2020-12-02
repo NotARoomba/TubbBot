@@ -1,12 +1,13 @@
 const serverSchema = require('@schemas/server-schema')
 const mongo = require('@util/mongo')
-
+const config = require('@root/config.json');
 module.exports = {
     commands: ['setwelcome', 'sw'],
     permissionError: 'You must be an admin to run this command.',
     requiredPermissions: 'ADMINISTRATOR',
   callback: async (message) => {
-    console.log(`Command: setwelcome 
+    const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: setwelcome 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)
@@ -38,7 +39,7 @@ Date: ${new Date()}`)
         upsert: true,
       }
     )
-    console.log('UPDATED DATABASE')
+        webhookClient.send('UPDATED DATABASE')
        
     
 

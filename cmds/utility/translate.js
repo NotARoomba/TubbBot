@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 const translate = require('@vitalets/google-translate-api');
 const { list } = require('@util/util');
 const codes = Object.keys(translate.languages).filter(code => typeof translate.languages[code] !== 'function');
-
+const config = require('@root/config.json');
 module.exports = class TranslateCommand extends Command {
 	constructor(client) {
 		super(client, {
@@ -56,7 +56,8 @@ module.exports = class TranslateCommand extends Command {
 	}
 
 	async run(msg, { base, target, text }) {
-		console.log(`Command: ${this.name} 
+		const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)

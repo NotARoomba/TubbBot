@@ -2,14 +2,15 @@ const Discord = require('discord.js')
 const commandBase = require('@root/commands/command-base')
 const client = new Discord.Client()
 //const summoned = '427630841045319701'
-
+const config = require('@root/config.json');
 module.exports = {
     commands: 'summon',
     maxArgs: 1,
     description: '*Holy Music stops*',
     expectedArgs: "[Target user's @]",
     callback: (message) => {
-        console.log(`Command: summon 
+        const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: summon 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)

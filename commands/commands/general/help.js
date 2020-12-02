@@ -1,12 +1,13 @@
 const { Menu } = require('discord.js-menu');
 const Discord = require(`discord.js`)
 const client = new Discord.Client()
-
+const config = require('@root/config.json');
 module.exports = {
   commands: [`help`, `h`, `commands`, `cmds`],
   description: "Describes all of this bot`s commands",
   async callback (message, arguments, text)  {
-   console.log(`Command: help 
+   const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: help 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)

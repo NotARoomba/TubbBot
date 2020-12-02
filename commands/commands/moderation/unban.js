@@ -1,5 +1,5 @@
 const Discord = require('discord.js')
-
+const config = require('@root/config.json');
  module.exports = {
     commands: 'unban',
     maxArgs: 1,
@@ -7,7 +7,8 @@ const Discord = require('discord.js')
     description: 'Reinstatement to this Server!',
     permissions: 'ADMINISTRATOR',
     callback: async (message, args) => {
-        console.log(`Command: unban 
+        const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: unban 
         Ran by: ${message.author.tag}
         Server: ${message.guild.name}
         Date: ${new Date()}`)

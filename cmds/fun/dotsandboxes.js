@@ -2,7 +2,7 @@ const { Command } = require('discord.js-commando');
 const { stripIndents } = require('common-tags');
 const { verify } = require('@util/util');
 const squareIDs = [5, 6, 7, 8, 10, 11, 12, 13, 15, 16, 17, 18, 20, 21, 22, 23];
-
+const config = require('@root/config.json');
 module.exports = class DotsAndBoxesCommand extends Command {
 	constructor(client) {
 		super(client, {
@@ -23,7 +23,8 @@ module.exports = class DotsAndBoxesCommand extends Command {
 	}
 	
 	async run(msg, { opponent }) {
-		console.log(`Command: ${this.name} 
+		const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)

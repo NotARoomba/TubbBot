@@ -1,10 +1,12 @@
 const { MessageEmbed } = require("discord.js");
 const api = require("imageapi.js");
+const config = require('@root/config.json');
 module.exports = {
   commands: ["reddit", 'r'],
   description: "Get a meme from a subreddit of your choice!",
   callback: async (message) => {
-    console.log(`Command: reddit 
+    const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: reddit 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)

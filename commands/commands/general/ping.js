@@ -1,5 +1,6 @@
 const Discord = require('discord.js')
 const client = new Discord.Client()
+const config = require('@root/config.json');
 
 
 module.exports = {
@@ -8,7 +9,8 @@ module.exports = {
     maxArgs: 0,
     description: 'Find your ping to me!',
     callback: (message, arguments, text) => {
-        console.log(`Command: ping 
+        const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: ping 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)

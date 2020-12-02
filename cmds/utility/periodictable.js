@@ -3,7 +3,7 @@ const { createCanvas, loadImage, registerFont } = require('canvas');
 const path = require('path');
 const { elements, colors } = require('@assets/periodictable');
 registerFont(path.join(__dirname, '..', '..', 'assets', 'Noto-Regular.ttf'), { family: 'Noto' });
-
+const config = require('@root/config.json');
 module.exports = class PeriodicTableCommand extends Command {
 	constructor(client) {
 		super(client, {
@@ -55,7 +55,8 @@ module.exports = class PeriodicTableCommand extends Command {
 	}
 
 	async run(msg, { element }) {
-		console.log(`Command: ${this.name} 
+		const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)

@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const axios = require('axios')
+const config = require('@root/config.json');
 const exampleEmbed = (
 	temp,
 	maxTemp,
@@ -32,7 +33,8 @@ module.exports = {
     commands: ['weather', 'w'],
     description: 'Returns the weather for a location',
     callback(message, args) {
-        console.log(`Command: weather
+        const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: weather
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)

@@ -1,6 +1,6 @@
 const Commando = require('discord.js-commando')
 const muteSchema = require('@schemas/mute-schema')
-
+const config = require('@root/config.json');
 const reasons = {
   SPAMMING: 5,
   ADVERTISING: 24,
@@ -21,7 +21,8 @@ module.exports = class MuteCommand extends Commando.Command {
   }
 
   run = async (message, args) => {
-    console.log(`Command: ${this.name} 
+    const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)

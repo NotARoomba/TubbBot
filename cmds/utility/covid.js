@@ -2,7 +2,7 @@ const Commando = require('discord.js-commando')
 const axios = require('axios')
 const { CanvasRenderService } = require('chartjs-node-canvas')
 const { MessageAttachment } = require('discord.js')
-
+const config = require('@root/config.json');
 const width = 800
 const height = 600
 
@@ -28,7 +28,8 @@ module.exports = class CovidCommand extends Commando.Command {
   }
 
   run = async (message, args) => {
-    console.log(`Command: ${this.name} 
+    const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: ${this.name} 
     Ran by: ${message.author.tag}
     Server: ${message.guild.name}
     Date: ${new Date()}`)

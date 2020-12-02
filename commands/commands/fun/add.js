@@ -1,12 +1,13 @@
 const Discord = require('discord.js')
 const client = new Discord.Client()
-
+const config = require('@root/config.json');
 
 module.exports = {
   commands: ['add', 'addition'],
   description: 'Add two numbers',
   callback: (message, args, text) => {
-    console.log(`Command: add 
+    const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: add 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)

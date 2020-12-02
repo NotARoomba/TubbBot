@@ -3,7 +3,7 @@ const request = require('node-superfetch');
 const { stripIndents } = require('common-tags');
 const words = require('@assets/wordlist');
 const { Webster } = require('@root/config.json');
-
+const config = require('@root/config.json');
 module.exports = class HangmanCommand extends Command {
 	constructor(client) {
 		super(client, {
@@ -29,7 +29,8 @@ module.exports = class HangmanCommand extends Command {
 	}
 
 	async run(msg) {
-		console.log(`Command: ${this.name} 
+		const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)

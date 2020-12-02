@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 const { geniusLyricsAPI } = require('@root/config.json');
-
+const config = require('@root/config.json');
 module.exports = class LyricsCommand extends Command {
   constructor(client) {
     super(client, {
@@ -28,7 +28,8 @@ module.exports = class LyricsCommand extends Command {
     });
   }
   async run(message, { songName }) {
-    console.log(`Command: ${this.name} 
+    const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}`)
@@ -135,7 +136,8 @@ Date: ${new Date()}`)
           resolve(result.response.song.url);
         }
       } catch (e) {
-        console.log(e);
+        const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(e);
         reject('There was a problem finding a URL for this song');
       }
     });
@@ -166,7 +168,8 @@ Date: ${new Date()}`)
           resolve(lyrics.replace(/(\[.+\])/g, ''));
         }
       } catch (e) {
-        console.log(e);
+        const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        webhookClient.send(e);
         reject(
           'There was a problem fetching lyrics for this song, please try again'
         );
