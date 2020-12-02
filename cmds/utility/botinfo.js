@@ -56,5 +56,9 @@ module.exports = class BotInfoCommand extends Commando.Command {
       )
 
     message.channel.send(embed)
+    console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
   }
 }
