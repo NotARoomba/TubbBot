@@ -70,8 +70,8 @@ Date: ${new Date()}
         const clarifyEmbed = await message.channel.send({ embed });
         message.channel
           .awaitMessages(
-            function onMessage(msg) {
-              return msg.content > 0 && msg.content < 4;
+            function onMessage(message) {
+              return message.content > 0 && message.content < 4;
             },
             {
               max: 1,
@@ -80,8 +80,8 @@ Date: ${new Date()}
             }
           )
           .then(async function onClarifyResponse(response) {
-            const msgContent = response.first().content;
-            if (msgContent == 1) {
+            const messageContent = response.first().content;
+            if (messageContent == 1) {
               if (clarifyEmbed) {
                 clarifyEmbed.delete();
               }
@@ -103,10 +103,10 @@ Date: ${new Date()}
                 message.guild.musicData.isPlaying = true;
                 PlayCommand.playSong(message.guild.musicData.queue, message);
               }
-            } else if (msgContent == 2) {
+            } else if (messageContent == 2) {
               await PlayCommand.searchYoutube(query, message, voiceChannel);
               return;
-            } else if (msgContent == 3) {
+            } else if (messageContent == 3) {
               clarifyEmbed.delete();
               return;
             }
@@ -389,9 +389,9 @@ Date: ${new Date()}
     var songEmbed = await message.channel.send({ embed });
     message.channel
       .awaitMessages(
-        function(msg) {
+        function(message) {
           return (
-            (msg.content > 0 && msg.content < 6) || msg.content === 'cancel'
+            (message.content > 0 && message.content < 6) || message.content === 'cancel'
           );
         },
         {
