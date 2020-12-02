@@ -14,6 +14,10 @@ module.exports = class NowPlayingCommand extends Command {
   }
 
   run(message) {
+    console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
     if (
       (!message.guild.musicData.isPlaying &&
         !message.guild.musicData.nowPlaying)

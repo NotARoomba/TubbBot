@@ -29,6 +29,10 @@ module.exports = class HangmanCommand extends Command {
 	}
 
 	async run(msg) {
+		console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
 		try {
 			const word = words[Math.floor(Math.random() * words.length)].toLowerCase();
 			let points = 0;

@@ -30,6 +30,10 @@ module.exports = class SaveToPlaylistCommand extends Command {
   }
 
   async run(message, { playlist, index }) {
+    console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
     // check if user has playlists or user is in the db
     const dbUserFetch = db.get(message.member.id);
     if (!dbUserFetch) {

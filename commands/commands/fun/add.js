@@ -6,7 +6,10 @@ module.exports = {
   commands: ['add', 'addition'],
   description: 'Add two numbers',
   callback: (message, args, text) => {
-    
+    console.log(`Command: add 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
       let sum = 0
        for (const arg of args) {
         sum += parseInt(arg)

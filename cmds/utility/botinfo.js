@@ -13,6 +13,10 @@ module.exports = class BotInfoCommand extends Commando.Command {
   }
 
   run = async (message) => {
+    console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
     let totalMembers = 0
 
     for (const guild of this.client.guilds.cache) {
@@ -56,9 +60,6 @@ module.exports = class BotInfoCommand extends Commando.Command {
       )
 
     message.channel.send(embed)
-    console.log(`Command: ${this.name} 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}`)
+  
   }
 }

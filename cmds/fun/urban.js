@@ -24,6 +24,10 @@ module.exports = class UrbanCommand extends Command {
   }
 
   run(message, { text }) {
+    console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
     fetch(`https://api.urbandictionary.com/v0/define?term=${text}`)
       .then(res => res.json())
       .then(json => {

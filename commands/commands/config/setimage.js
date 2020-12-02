@@ -7,6 +7,10 @@ module.exports = {
     permissionError: 'You must be an admin to run this command.',
   requiredPermissions: 'ADMINISTRATOR',
   callback: async (message) => {
+    console.log(`Command: setimage 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
     const { guild, channel, content } = message
     const cache = {}
     let image = content

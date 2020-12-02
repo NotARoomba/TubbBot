@@ -10,6 +10,10 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     description: 'Mass (message) Genocide',
     async callback (message, arguments, text) {
+        console.log(`Command: msgdel 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
         message.delete();
             const fetched = await message.channel.messages.fetch({limit: 99});
             message.channel.bulkDelete(fetched);

@@ -32,6 +32,10 @@ module.exports = class WikipediaCommand extends Command {
 	}
 
 	async run(msg, { query }) {
+		console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
 		try {
 			const { body } = await request
 				.get('https://en.wikipedia.org/w/api.php')

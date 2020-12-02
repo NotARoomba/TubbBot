@@ -21,8 +21,12 @@ module.exports = class DotsAndBoxesCommand extends Command {
 			]
 		});
 	}
-
+	
 	async run(msg, { opponent }) {
+		console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
 		if (opponent.bot) return msg.reply('Bots may not be played against.');
 		if (opponent.id === msg.author.id) return msg.reply('You may not play against yourself.');
 		try {
@@ -177,5 +181,6 @@ module.exports = class DotsAndBoxesCommand extends Command {
 		displayed.push('█                      █');
 		displayed.push(new Array(24).fill('█').join(''));
 		return displayed.join('\n');
+		
 	}
 };

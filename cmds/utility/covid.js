@@ -28,6 +28,10 @@ module.exports = class CovidCommand extends Commando.Command {
   }
 
   run = async (message, args) => {
+    console.log(`Command: ${this.name} 
+    Ran by: ${message.author.tag}
+    Server: ${message.guild.name}
+    Date: ${new Date()}`)
     const days = parseInt(args) || 30
 
     const url = 'https://api.covidtracking.com/v1/us/daily.json'

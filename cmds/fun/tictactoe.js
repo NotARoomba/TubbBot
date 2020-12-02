@@ -22,6 +22,10 @@ module.exports = class TicTacToeCommand extends Command {
 	}
 
 	async run(msg, { opponent }) {
+		console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
 		if (opponent.bot) return msg.reply('Bots may not be played against.');
 		if (opponent.id === msg.author.id) return msg.reply('You may not play against yourself.');
 

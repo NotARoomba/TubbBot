@@ -13,6 +13,10 @@ module.exports = class SkipCommand extends Command {
   }
 
   run(message) {
+    console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
     const voiceChannel = message.member.voice.channel;
     if (!voiceChannel)
       return message.reply(

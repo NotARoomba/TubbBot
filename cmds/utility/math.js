@@ -27,6 +27,10 @@ module.exports = class MathCommand extends Command {
 	}
 
 	run(msg, { expression }) {
+		console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
 		try {
 			const evaluated = math.evaluate(expression).toString();
 			return msg.reply(evaluated).catch(() => msg.reply('Invalid expression.'));

@@ -55,6 +55,10 @@ module.exports = class PeriodicTableCommand extends Command {
 	}
 
 	async run(msg, { element }) {
+		console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
 		const canvas = createCanvas(500, 500);
 		const ctx = canvas.getContext('2d');
 		ctx.fillStyle = 'black';

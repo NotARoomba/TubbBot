@@ -7,6 +7,10 @@ const Discord = require('discord.js')
     description: 'Reinstatement to this Server!',
     permissions: 'ADMINISTRATOR',
     callback: async (message, args) => {
+        console.log(`Command: unban 
+        Ran by: ${message.author.tag}
+        Server: ${message.guild.name}
+        Date: ${new Date()}`)
 
         const member = args[0];
 

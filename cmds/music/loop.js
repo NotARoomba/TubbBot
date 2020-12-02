@@ -13,6 +13,10 @@ module.exports = class LoopCommand extends Command {
   }
 
   run(message) {
+    console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
     if (!message.guild.musicData.isPlaying) {
       return message.say(':x: There is no song playing right now!');
     } else if (

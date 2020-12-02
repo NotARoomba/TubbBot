@@ -46,6 +46,10 @@ module.exports = class VocodesCommand extends Command {
 	}
 
 	async run(msg, { voice, text }) {
+		console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
 		const connection = this.client.voice.connections.get(msg.guild.id);
 		if (!connection) {
 			const usage = this.client.registry.commands.get('join').usage();

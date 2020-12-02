@@ -6,6 +6,10 @@ module.exports = {
   commands: [`help`, `h`, `commands`, `cmds`],
   description: "Describes all of this bot`s commands",
   async callback (message, arguments, text)  {
+   console.log(`Command: help 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
     
     
       // Provide a menu with a channel, an author ID to let control the menu, and an array of menu pages.

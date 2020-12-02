@@ -8,6 +8,10 @@ module.exports = {
   permissionError: 'You must be an admin to run this command.',
   permissions: 'ADMINISTRATOR',
   callback: async (message, arguments, text) => {
+    console.log(`Command: prefix
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
     const { guild, content } = message
     const cache = {}
     let prefix = content

@@ -28,6 +28,10 @@ module.exports = class LyricsCommand extends Command {
     });
   }
   async run(message, { songName }) {
+    console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
     if (
       songName == '' &&
       message.guild.musicData.isPlaying 

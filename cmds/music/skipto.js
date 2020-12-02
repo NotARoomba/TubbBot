@@ -22,6 +22,10 @@ module.exports = class SkipToCommand extends Command {
   }
 
   run(message, { songNumber }) {
+    console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
     if (songNumber < 1 && songNumber >= message.guild.musicData.queue.length) {
       return message.reply(':x: Please enter a valid song number!');
     }

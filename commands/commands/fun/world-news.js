@@ -10,6 +10,10 @@ module.exports = {
     maxArgs: 0,
     description: 'Get the World News',
      callback: async (message) => {
+      console.log(`Command: worldnews 
+      Ran by: ${message.author.tag}
+      Server: ${message.guild.name}
+      Date: ${new Date()}`)
         try {
             const response = await fetch(
               `https://newsapi.org/v2/top-headlines?sources=reuters&pageSize=5&apiKey=${newsAPI}`

@@ -56,6 +56,10 @@ module.exports = class TranslateCommand extends Command {
 	}
 
 	async run(msg, { base, target, text }) {
+		console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
 		try {
 			const { text: result, from } = await translate(text, { to: target, from: base });
 			const embed = new MessageEmbed()

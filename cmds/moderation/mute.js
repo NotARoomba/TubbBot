@@ -21,6 +21,10 @@ module.exports = class MuteCommand extends Commando.Command {
   }
 
   run = async (message, args) => {
+    console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
     // !mute @ reason
 
     const { guild, author: staff } = message

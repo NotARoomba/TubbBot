@@ -14,7 +14,10 @@ module.exports = class QueueCommand extends Command {
   }
 
   run(message) {
-    
+    console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
     if (message.guild.musicData.queue.length == 0)
       return message.say(':x: There are no songs in queue!');
     const queueClone = message.guild.musicData.queue;

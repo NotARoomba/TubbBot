@@ -21,6 +21,10 @@ module.exports = class LoopQueueCommand extends Command {
   }
 
   run(message) {
+    console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
     if (!message.guild.musicData.isPlaying) {
       message.say(':x: There is no song playing right now!');
       return;

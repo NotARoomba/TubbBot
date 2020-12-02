@@ -27,6 +27,10 @@ module.exports = class MoveSongCommand extends Command {
     });
   }
   async run(message, { oldPosition, newPosition }) {
+    console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
     if (
       oldPosition < 1 ||
       oldPosition > message.guild.musicData.queue.length ||

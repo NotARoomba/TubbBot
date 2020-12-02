@@ -5,6 +5,10 @@ module.exports = {
     commands: ['todayinhistory', 'tih'],
     description: 'gives info about what important event happend today in hisotry',
     async callback(message, args) {
+        console.log(`Command: todayinhistory 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
         const month = parseInt(args[0]);
         const day = parseInt(args[1]);
 

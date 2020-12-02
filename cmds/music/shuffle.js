@@ -12,6 +12,10 @@ module.exports = class ShuffleQueueCommand extends Command {
     });
   }
   run(message) {
+    console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
     var voiceChannel = message.member.voice.channel;
     if (!voiceChannel)
       return message.reply(

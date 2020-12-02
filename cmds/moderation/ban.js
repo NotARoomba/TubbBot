@@ -29,7 +29,10 @@ module.exports = class BanCommand extends Command {
   }
 
   async run(message, { userToBan, reason }) {
-   
+    console.log(`Command: ${this.name} 
+    Ran by: ${message.author.tag}
+    Server: ${message.guild.name}
+    Date: ${new Date()}`)
     const user =
       message.mentions.members.first()
     if (user == undefined || 'all')

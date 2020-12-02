@@ -14,6 +14,10 @@ module.exports = class UnmuteCommand extends Commando.Command {
   }
 
   run = async (message, args) => {
+    console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
     //!unmute @
     //!unmute ID
 

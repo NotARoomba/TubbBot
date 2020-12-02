@@ -29,6 +29,10 @@ module.exports = class VolumeCommand extends Command {
   }
 
   run(message, { wantedVolume }) {
+    console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
     const voiceChannel = message.member.voice.channel;
     if (!voiceChannel)
       return message.reply(

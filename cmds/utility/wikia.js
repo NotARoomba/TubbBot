@@ -55,6 +55,10 @@ module.exports = class WikiaCommand extends Command {
 	}
 
 	async search(wiki, query) {
+		console.log(`Command: ${this.name} 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
 		const { body } = await request
 			.get(`https://${wiki}.fandom.com/api.php`)
 			.query({

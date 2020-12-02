@@ -9,6 +9,10 @@ module.exports = {
     description: '*Holy Music stops*',
     expectedArgs: "[Target user's @]",
     callback: (message) => {
+        console.log(`Command: summon 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
         const target = message.mentions.users.first()
 
       

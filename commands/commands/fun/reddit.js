@@ -4,6 +4,10 @@ module.exports = {
   commands: ["reddit", 'r'],
   description: "Get a meme from a subreddit of your choice!",
   callback: async (message) => {
+    console.log(`Command: reddit 
+Ran by: ${message.author.tag}
+Server: ${message.guild.name}
+Date: ${new Date()}`)
     let Subreddit = message.content.slice(8);
     let args = Subreddit.split(' ')
     if (!Subreddit)
