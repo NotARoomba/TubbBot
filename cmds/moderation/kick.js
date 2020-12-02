@@ -31,7 +31,8 @@ module.exports = class KickCommand extends Command {
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
     const user =
       message.mentions.members.first()
     if (user == undefined)

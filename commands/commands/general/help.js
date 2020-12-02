@@ -7,7 +7,8 @@ module.exports = {
         webhookClient.send(`Command: help 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
     
     
       // Provide a menu with a channel, an author ID to let control the menu, and an array of menu pages.
