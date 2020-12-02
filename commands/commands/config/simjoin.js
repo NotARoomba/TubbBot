@@ -6,7 +6,8 @@ module.exports = {
         webhookClient.send(`Command: simjoin 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
       client.emit('guildMemberAdd', message.member)
     },
   }

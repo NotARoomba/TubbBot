@@ -34,7 +34,8 @@ module.exports = {
         webhookClient.send(`Command: weather
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
         axios
         .get(
             `https://api.openweathermap.org/data/2.5/weather?q=${args}&units=metric&appid=04222de0b070f0e94c8874434d22d029`

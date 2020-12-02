@@ -30,7 +30,8 @@ module.exports = class GiphyCommand extends Command {
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
 		try {
 			const { body } = await request
 				.get('http://api.giphy.com/v1/gifs/search')

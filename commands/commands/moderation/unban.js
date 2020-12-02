@@ -9,7 +9,8 @@ module.exports = {
         webhookClient.send(`Command: unban 
         Ran by: ${message.author.tag}
         Server: ${message.guild.name}
-        Date: ${new Date()}`)
+        Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
 
         const member = args[0];
 

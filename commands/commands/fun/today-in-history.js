@@ -8,7 +8,8 @@ module.exports = {
         webhookClient.send(`Command: todayinhistory 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
         const month = parseInt(args[0]);
         const day = parseInt(args[1]);
 

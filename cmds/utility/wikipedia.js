@@ -33,7 +33,8 @@ module.exports = class WikipediaCommand extends Command {
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
 		try {
 			const { body } = await request
 				.get('https://en.wikipedia.org/w/api.php')

@@ -23,7 +23,8 @@ module.exports = class CreatePlaylistCommand extends Command {
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
     // check if the user exists in the db
     if (!db.get(message.member.id)) {
       db.set(message.member.id, {

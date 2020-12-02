@@ -31,7 +31,8 @@ module.exports = class HangmanCommand extends Command {
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
 		try {
 			const word = words[Math.floor(Math.random() * words.length)].toLowerCase();
 			let points = 0;

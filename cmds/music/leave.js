@@ -16,7 +16,8 @@ module.exports = class LeaveCommand extends Command {
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
     var voiceChannel = message.member.voice.channel;
     if (!voiceChannel) {
       message.reply(':no_entry: Please join a voice channel and try again!');

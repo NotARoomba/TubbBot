@@ -16,7 +16,8 @@ module.exports = class MyPlaylistsCommand extends Command {
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
     // check if user has playlists or user is in the db
     const dbUserFetch = db.get(message.member.id);
     if (!dbUserFetch) {

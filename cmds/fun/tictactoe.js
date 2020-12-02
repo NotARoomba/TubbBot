@@ -25,7 +25,8 @@ module.exports = class TicTacToeCommand extends Command {
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
 		if (opponent.bot) return message.reply('Bots may not be played against.');
 		if (opponent.id === message.author.id) return message.reply('You may not play against yourself.');
 

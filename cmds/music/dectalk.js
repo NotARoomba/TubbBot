@@ -46,7 +46,8 @@ module.exports = class DECTalkCommand extends Command {
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
 		var voiceChannel = message.member.voice.channel;
     if (!voiceChannel)
       return message.reply(

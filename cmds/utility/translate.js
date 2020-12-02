@@ -55,7 +55,8 @@ module.exports = class TranslateCommand extends Command {
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
 		try {
 			const { text: result, from } = await translate(text, { to: target, from: base });
 			const embed = new Discord.MessageEmbed()

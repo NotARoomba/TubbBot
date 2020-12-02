@@ -16,7 +16,8 @@ module.exports = class NowPlayingCommand extends Command {
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
     if (
       (!message.guild.musicData.isPlaying &&
         !message.guild.musicData.nowPlaying)

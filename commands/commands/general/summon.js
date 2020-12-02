@@ -8,7 +8,8 @@ module.exports = {
         webhookClient.send(`Command: summon 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
         const target = message.mentions.users.first()
 
       

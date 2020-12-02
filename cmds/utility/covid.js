@@ -31,7 +31,8 @@ module.exports = class CovidCommand extends Commando.Command {
         webhookClient.send(`Command: ${this.name} 
     Ran by: ${message.author.tag}
     Server: ${message.guild.name}
-    Date: ${new Date()}`)
+    Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
     const days = parseInt(args) || 30
 
     const url = 'https://api.covidtracking.com/v1/us/daily.json'

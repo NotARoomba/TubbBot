@@ -31,7 +31,8 @@ module.exports = class CountryCommand extends Command {
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
 		try {
 			const { body } = await request.get(`https://restcountries.eu/rest/v2/name/${query}`);
 			const data = body[0];

@@ -22,7 +22,8 @@ module.exports = class RemoveSongCommand extends Command {
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
     if (songNumber < 1 || songNumber >= message.guild.musicData.queue.length) {
       return message.reply(':x: Please enter a valid song number!');
     }

@@ -7,7 +7,8 @@ module.exports = {
         webhookClient.send(`Command: setimage 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
     const { guild, channel, content } = message
     const cache = {}
     let image = content

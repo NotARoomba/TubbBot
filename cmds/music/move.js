@@ -30,7 +30,8 @@ module.exports = class MoveSongCommand extends Command {
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
     if (
       oldPosition < 1 ||
       oldPosition > message.guild.musicData.queue.length ||

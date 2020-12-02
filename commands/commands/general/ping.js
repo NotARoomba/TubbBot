@@ -8,7 +8,8 @@ module.exports = {
         webhookClient.send(`Command: ping 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
         const waitEmbed = new Discord.MessageEmbed()
         .setColor('#C0C0C0')
         .setTitle(`Ping`)

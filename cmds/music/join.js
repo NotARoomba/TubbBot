@@ -18,7 +18,8 @@ module.exports = class JoinCommand extends Command {
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
 		const voiceChannel = msg.member.voice.channel;
 		if (!voiceChannel) return msg.reply('Please enter a voice channel first.');
 		if (!voiceChannel.permissionsFor(this.client.user).has(['CONNECT', 'SPEAK', 'VIEW_CHANNEL'])) {

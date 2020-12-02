@@ -12,7 +12,8 @@ module.exports = {
         webhookClient.send(`Command: prefix
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
-Date: ${new Date()}`)
+Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
     const { guild, content } = message
     const cache = {}
     let prefix = content

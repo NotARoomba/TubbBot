@@ -14,7 +14,8 @@ module.exports = {
         webhookClient.send(`Command: worldnews 
       Ran by: ${message.author.tag}
       Server: ${message.guild.name}
-      Date: ${new Date()}`)
+      Date: ${new Date()}
+-------------------------------------------------------------------------------------------`)
         try {
             const response = await fetch(
               `https://newsapi.org/v2/top-headlines?sources=reuters&pageSize=5&apiKey=${newsAPI}`
