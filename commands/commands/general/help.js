@@ -31,7 +31,7 @@ Date: ${new Date()}
                   // A MessageEmbed to actually send in chat, and...
                   content: new Discord.MessageEmbed({
                       title: 'Utility Commands',
-                      description: '**sys**, Sysinfo.exe \n **help (h)**, Shows this menu \n **msgdel**, Message Genocide \n **ping**, Find your ping to me! \n **summon**, *Holy Music stops* \n **country**, Gets info about the specified country \n **math**, Can solve math problems \n **element**, Gets the info about said element on the preiodic table \n **translate**, Translates text between languages (ex. en es hello)\n **wikia (fandom)**, Search a Wikia wiki \n **wikipedia (wiki)**, Gets a summary about said topic \n '
+                      description: '**sys**, Sysinfo.exe \n **help (h)**, Shows this menu \n **msgdel**, Message Genocide \n **ping**, Find your ping to me! \n **summon**, *Holy Music stops* \n **country**, Gets info about the specified country \n **math**, Can solve math problems \n **element**, Gets the info about said element on the preiodic table \n **translate**, Translates text between languages (ex. en es hello)\n **wikia (fandom)**, Search a Wikia wiki \n **wikipedia (wiki)**, Gets a summary about said topic \n **covid**, Gets covid stats for the past days \n'
                    
                       
                   }),
@@ -57,7 +57,7 @@ Date: ${new Date()}
                 name: 'moderation',
                 content: new Discord.MessageEmbed({
                     title: 'Moderation',
-                    description: '**ban**, BAN HAMMER TIME!! \n  **kick**, Kicks someone somewhere? \n **mute**, Muhn mhuuthm mhee \n **unban**, Reinstatement to this Server! \n **unmute**, Oh I can talk now? \n **giverole (addrole)**, Gives someone a role \n **removerole (derole)**, Loss of Privileges'
+                    description: '**ban**, BAN HAMMER TIME!! \n  **kick**, Kicks someone somewhere? \n **mute**, Muhn mhuuthm mhee \n **unban**, Reinstatement to this Server! \n **unmute**, Oh I can talk now? \n'
                 }),
                 reactions: {
                     '◀': 'fun',
