@@ -1,7 +1,8 @@
 const { Command } = require('discord.js-commando');
-const { MessageEmbed } = require('discord.js');
+const Discord = require('discord.js');
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
+const { MessageEmbed } = require('discord.js');
 const { geniusLyricsAPI } = require('@root/config.json');
 const config = require('@root/config.json');
 module.exports = class LyricsCommand extends Command {

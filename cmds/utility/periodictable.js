@@ -4,6 +4,7 @@ const path = require('path');
 const { elements, colors } = require('@assets/periodictable');
 registerFont(path.join(__dirname, '..', '..', 'assets', 'Noto-Regular.ttf'), { family: 'Noto' });
 const config = require('@root/config.json');
+const Discord = require('discord.js');
 module.exports = class PeriodicTableCommand extends Command {
 	constructor(client) {
 		super(client, {

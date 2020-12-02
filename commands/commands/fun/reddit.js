@@ -1,6 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 const api = require("imageapi.js");
 const config = require('@root/config.json');
+const Discord = require('discord.js');
 module.exports = {
   commands: ["reddit", 'r'],
   description: "Get a meme from a subreddit of your choice!",

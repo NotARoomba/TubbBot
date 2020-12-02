@@ -3,6 +3,7 @@ const { stripIndents } = require('common-tags');
 const { verify } = require('@util/util');
 const squareIDs = [5, 6, 7, 8, 10, 11, 12, 13, 15, 16, 17, 18, 20, 21, 22, 23];
 const config = require('@root/config.json');
+const Discord = require('discord.js');
 module.exports = class DotsAndBoxesCommand extends Command {
 	constructor(client) {
 		super(client, {

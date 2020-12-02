@@ -4,6 +4,7 @@ const Youtube = require('simple-youtube-api');
 const { youtubeAPI } = require('@root/config.json');
 const youtube = new Youtube(youtubeAPI);
 const config = require('@root/config.json');
+const Discord = require('discord.js');
 module.exports = class SaveToPlaylistCommand extends Command {
   constructor(client) {
     super(client, {

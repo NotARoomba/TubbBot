@@ -3,6 +3,7 @@ const request = require('node-superfetch');
 const { Readable } = require('stream');
 const { reactIfAble } = require('@util/util');
 const config = require('@root/config.json');
+const Discord = require('discord.js');
 module.exports = class DECTalkCommand extends Command {
 	constructor(client) {
 		super(client, {

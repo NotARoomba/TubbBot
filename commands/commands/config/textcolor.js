@@ -1,7 +1,7 @@
 const serverSchema = require('@schemas/server-schema')
 const mongo = require('@util/mongo')
 const config = require('@root/config.json');
-
+const Discord = require('discord.js');
 module.exports = {
     commands: ['setcolor', 'sc'],
     permissionError: 'You must be an admin to run this command.',

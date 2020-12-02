@@ -2,6 +2,7 @@ const { Command } = require('discord.js-commando');
 const request = require('node-superfetch');
 const { GiphyKey } = require('@root/config.json');
 const config = require('@root/config.json');
+const Discord = require('discord.js');
 module.exports = class GiphyCommand extends Command {
 	constructor(client) {
 		super(client, {

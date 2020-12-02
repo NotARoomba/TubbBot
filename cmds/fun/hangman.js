@@ -4,6 +4,7 @@ const { stripIndents } = require('common-tags');
 const words = require('@assets/wordlist');
 const { Webster } = require('@root/config.json');
 const config = require('@root/config.json');
+const Discord = require('discord.js');
 module.exports = class HangmanCommand extends Command {
 	constructor(client) {
 		super(client, {

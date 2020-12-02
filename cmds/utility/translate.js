@@ -1,5 +1,5 @@
 const { Command } = require('discord.js-commando');
-const { MessageEmbed } = require('discord.js');
+const Discord = require('discord.js');
 const translate = require('@vitalets/google-translate-api');
 const { list } = require('@util/util');
 const codes = Object.keys(translate.languages).filter(code => typeof translate.languages[code] !== 'function');

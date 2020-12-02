@@ -1,9 +1,10 @@
 const { Command } = require('discord.js-commando');
-const { MessageEmbed } = require('discord.js');
+const Discord = require('discord.js');
 const Youtube = require('simple-youtube-api');
 const ytdl = require('ytdl-core');
 const { youtubeAPI } = require('@root/config.json');
 const youtube = new Youtube(youtubeAPI);
+const { MessageEmbed } = require('discord.js');
 const db = require('quick.db');
 const config = require('@root/config.json');
 module.exports = class PlayCommand extends Command {

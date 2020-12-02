@@ -5,6 +5,7 @@ const { delay, verify } = require('@util/util');
 const startWords = require('@assets/wordlist');
 const { Webster } = require('@root/config.json');
 const config = require('@root/config.json');
+const Discord = require('discord.js');
 module.exports = class WordChainCommand extends Command {
 	constructor(client) {
 		super(client, {

@@ -1,13 +1,14 @@
 const Commando = require('discord.js-commando')
 const muteSchema = require('@schemas/mute-schema')
 const config = require('@root/config.json');
+
 const reasons = {
   SPAMMING: 5,
   ADVERTISING: 24,
   ANNOYING: 3,
   OTHER: 2,
 }
-
+const Discord = require('discord.js');
 module.exports = class MuteCommand extends Commando.Command {
   constructor(client) {
     super(client, {

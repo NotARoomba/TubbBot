@@ -1,4 +1,5 @@
 const config = require('@root/config.json');
+const Discord = require('discord.js');
 module.exports = {
     commands: ['simjoin', 'sj'],
     requiredPermissions: 'ADMINISTRATOR',

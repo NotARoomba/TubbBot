@@ -1,5 +1,6 @@
 const { Command } = require('discord.js-commando');
 const config = require('@root/config.json');
+const Discord = require('discord.js');
 module.exports = class SkipToCommand extends Command {
   constructor(client) {
     super(client, {
