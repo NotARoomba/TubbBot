@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 const { Command } = require('discord.js-commando');
-const { MessageEmbed } = require('discord.js');
+
 const config = require('@root/config.json');
 const Discord = require('discord.js');
 module.exports = class UrbanCommand extends Command {

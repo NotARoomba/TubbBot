@@ -1,10 +1,6 @@
 const { Command } = require('discord.js-commando');
-const Discord = require('discord.js');
-const fetch = require('node-fetch');
-const cheerio = require('cheerio');
+
 const { MessageEmbed } = require('discord.js');
-const { geniusLyricsAPI } = require('@root/config.json');
-const config = require('@root/config.json');
 module.exports = class LyricsCommand extends Command {
   constructor(client) {
     super(client, {
@@ -110,7 +106,7 @@ Date: ${new Date()}`)
     return new Promise(async function(resolve, reject) {
       const searchURL = `https://api.genius.com/search?q=${encodeURI(query)}`;
       const headers = {
-        Authorization: `Bearer ${geniusLyricsAPI}`
+        Authorization: `Bearer ${config.geniusLyricsAPI}`
       };
       try {
         const body = await fetch(searchURL, { headers });
@@ -126,7 +122,7 @@ Date: ${new Date()}`)
   static getSongPageURL(url) {
     return new Promise(async function(resolve, reject) {
       const headers = {
-        Authorization: `Bearer ${geniusLyricsAPI}`
+        Authorization: `Bearer ${config.geniusLyricsAPI}`
       };
       try {
         const body = await fetch(url, { headers });

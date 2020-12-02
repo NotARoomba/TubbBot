@@ -1,4 +1,4 @@
-const muteSchema = require('@schemas/mute-schema')
+
 
 module.exports = (client) => {
   const checkMutes = async () => {

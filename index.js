@@ -1,17 +1,31 @@
 require('module-alias/register');
 require('events').EventEmitter.prototype._maxListeners = 100;
-const { Structures, Discord } = require('discord.js');
+const  { Structures } = require('discord.js');
 const { MongoClient } = require('mongodb')
-const MongoDBProvider = require('commando-provider-mongo')
+global.MongoDBProvider = require('commando-provider-mongo')
+global.Commando = require('discord.js-commando')
 //const client = new Discord.Client
-const mongo = require('@util/mongo');
-const loadCommands = require('@root/commands/load-commands.js')
-const loadFeatures = require('@root/features/load-features.js')
-
-
-const path = require('path');
-//client.queue = new Map();
-
+global.mongo = require('@util/mongo');
+global.loadCommands = require('@root/commands/load-commands.js')
+global.loadFeatures = require('@root/features/load-features.js')
+global.Discord = require('discord.js')
+global.config = require('@root/config.json');
+global.path = require('path');
+global.MessageEmbed
+global.Structures
+global.ytdl = require('ytdl-core');
+global.Youtube = require('simple-youtube-api');
+global.cheerio = require('cheerio');
+global.fetch = require('node-fetch');
+global.Pagination = require('discord-paginationembed');
+global.db = require('quick.db');
+global.translate = require('@vitalets/google-translate-api');
+global.request = require('node-superfetch')
+global.commandBase = require('@root/commands/command-base')
+global.serverSchema = require('@schemas/server-schema')
+global.muteSchema = require('@schemas/mute-schema')
+global.Canvas = require('canvas')
+global.math = require('mathjs');
 const { CommandoClient } = require('discord.js-commando');
 Structures.extend('Guild', function(Guild) {
   class MusicGuild extends Guild {

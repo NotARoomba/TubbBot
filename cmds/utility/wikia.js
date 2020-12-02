@@ -1,7 +1,4 @@
 const { Command } = require('discord.js-commando');
-const Discord = require('discord.js');
-const request = require('node-superfetch');
-const config = require('@root/config.json');
 module.exports = class WikiaCommand extends Command {
 	constructor(client) {
 		super(client, {
@@ -35,22 +32,22 @@ module.exports = class WikiaCommand extends Command {
 		});
 	}
 
-	async run(msg, { wiki, query }) {
+	async run(message, { wiki, query }) {
 		try {
 			const id = await this.search(wiki, query);
-			if (!id) return msg.say('Could not find any results.');
+			if (!id) return message.say('Could not find any results.');
 			const { data, basePath } = await this.fetchArticle(wiki, id);
-			const embed = new MessageEmbed()
+			const embed = new Discord.MessageEmbed()
 				.setColor(0x002D54)
 				.setTitle(data.title)
 				.setURL(`${basePath}${data.url}`)
 				.setAuthor('FANDOM', 'https://i.imgur.com/kBDqFIN.png', 'https://www.fandom.com/')
 				.setDescription(data.abstract)
 				.setThumbnail(data.thumbnail);
-			return msg.embed(embed);
+			return message.embed(embed);
 		} catch (err) {
-			if (err.status === 404) return msg.say('Could not find any results.');
-			return msg.say(`Oh no, an error occurred: \`${err.message}\`. Perhaps you entered an invalid wiki?`);
+			if (err.status === 404) return message.say('Could not find any results.');
+			return message.say(`Oh no, an error occurred: \`${err.message}\`. Perhaps you entered an invalid wiki?`);
 		}
 	}
 

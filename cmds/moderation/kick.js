@@ -1,7 +1,4 @@
 const { Command } = require('discord.js-commando');
-const Discord = require('discord.js');
-const config = require('@root/config.json');
-const { MessageEmbed } = require('discord.js');
 module.exports = class KickCommand extends Command {
   constructor(client) {
     super(client, {
@@ -42,7 +39,7 @@ Date: ${new Date()}`)
     user
       .kick(reason)
       .then(() => {
-        const kickEmbed = new MessageEmbed()
+        const kickEmbed = new Discord.MessageEmbed()
           .addField('Kicked:', userToKick)
           .addField('Reason:', reason)
           .setColor('#420626');

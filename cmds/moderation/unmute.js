@@ -1,8 +1,3 @@
-const Commando = require('discord.js-commando')
-const muteSchema = require('@schemas/mute-schema')
-const config = require('@root/config.json');
-const Discord = require('discord.js');
-
 module.exports = class UnmuteCommand extends Commando.Command {
   constructor(client) {
     super(client, {

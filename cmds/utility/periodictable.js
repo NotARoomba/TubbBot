@@ -1,10 +1,7 @@
 const { Command } = require('discord.js-commando');
 const { createCanvas, loadImage, registerFont } = require('canvas');
-const path = require('path');
 const { elements, colors } = require('@assets/periodictable');
 registerFont(path.join(__dirname, '..', '..', 'assets', 'Noto-Regular.ttf'), { family: 'Noto' });
-const config = require('@root/config.json');
-const Discord = require('discord.js');
 module.exports = class PeriodicTableCommand extends Command {
 	constructor(client) {
 		super(client, {
@@ -55,7 +52,7 @@ module.exports = class PeriodicTableCommand extends Command {
 		});
 	}
 
-	async run(msg, { element }) {
+	async run(message, { element }) {
 		const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
@@ -84,7 +81,7 @@ Date: ${new Date()}`)
 		ctx.fillText(element.mass || '?', 250, 400);
 		const period = element.number === 0 ? element.period : `period ${element.period}`;
 		const phase = element.undiscovered ? `hypothetical ${element.phase || 'element'}` : element.phase;
-		return msg.say(
+		return message.say(
 			`**${element.name} (${element.symbol})** is a ${phase} in ${period}.`,
 			{ files: [{ attachment: canvas.toBuffer(), name: `${element.name}.png` }] }
 		);

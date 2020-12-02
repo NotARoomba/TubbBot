@@ -1,10 +1,7 @@
 const { Command } = require('discord.js-commando');
-const request = require('node-superfetch');
 const { Readable } = require('stream');
 const { list, reactIfAble } = require('@util/util');
 const voices = require('@assets/vocodes');
-const config = require('@root/config.json');
-const Discord = require('discord.js');
 module.exports = class VocodesCommand extends Command {
 	constructor(client) {
 		super(client, {

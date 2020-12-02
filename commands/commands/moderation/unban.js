@@ -1,6 +1,4 @@
-const Discord = require('discord.js')
-const config = require('@root/config.json');
- module.exports = {
+module.exports = {
     commands: 'unban',
     maxArgs: 1,
     expectedArgs: "<Target user's Id>",

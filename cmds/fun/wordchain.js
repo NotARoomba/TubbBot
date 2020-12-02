@@ -1,11 +1,7 @@
 const { Command } = require('discord.js-commando');
-const request = require('node-superfetch');
 const { stripIndents } = require('common-tags');
 const { delay, verify } = require('@util/util');
 const startWords = require('@assets/wordlist');
-const { Webster } = require('@root/config.json');
-const config = require('@root/config.json');
-const Discord = require('discord.js');
 module.exports = class WordChainCommand extends Command {
 	constructor(client) {
 		super(client, {
@@ -115,7 +111,7 @@ Date: ${new Date()}`)
 		try {
 			const { body } = await request
 				.get(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}`)
-				.query({ key: Webster });
+				.query({ key: config.Webster });
 			if (!body.length) return false;
 			return true;
 		} catch (err) {

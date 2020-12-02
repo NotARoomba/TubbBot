@@ -1,6 +1,3 @@
-const Discord = require('discord.js')
-const client = new Discord.Client()
-const config = require('@root/config.json');
 
 module.exports = {
     commands: 'msgdel',

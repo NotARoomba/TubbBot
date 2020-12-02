@@ -1,7 +1,5 @@
 const TurndownService = require('turndown')
 const turndownService = new TurndownService()
-const Discord = require('discord.js')
-const client = new Discord.Client()
 module.exports = redditPostToEmbed 
 
     function redditPostToEmbed(post) {

@@ -1,9 +1,6 @@
 const { Command } = require('discord.js-commando');
-const Discord = require('discord.js');
-const translate = require('@vitalets/google-translate-api');
 const { list } = require('@util/util');
 const codes = Object.keys(translate.languages).filter(code => typeof translate.languages[code] !== 'function');
-const config = require('@root/config.json');
 module.exports = class TranslateCommand extends Command {
 	constructor(client) {
 		super(client, {
@@ -55,7 +52,7 @@ module.exports = class TranslateCommand extends Command {
 		});
 	}
 
-	async run(msg, { base, target, text }) {
+	async run(message, { base, target, text }) {
 		const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
@@ -63,14 +60,14 @@ Server: ${message.guild.name}
 Date: ${new Date()}`)
 		try {
 			const { text: result, from } = await translate(text, { to: target, from: base });
-			const embed = new MessageEmbed()
+			const embed = new Discord.MessageEmbed()
 				.setColor(0x4285F4)
 				.setFooter('Powered by Google Translate', 'https://i.imgur.com/h3RoHyp.png')
 				.addField(`❯ From: ${translate.languages[from.language.iso]}`, from.text.value || text)
 				.addField(`❯ To: ${translate.languages[target]}`, result);
-			return msg.embed(embed);
+			return message.embed(embed);
 		} catch (err) {
-			return msg.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
+			return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
 		}
 	}
 };

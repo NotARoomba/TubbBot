@@ -1,9 +1,6 @@
   
 const { Command } = require('discord.js-commando');
-const Discord = require('discord.js');
-const request = require('node-superfetch');
 const { shorten } = require('@util/util');
-const config = require('@root/config.json');
 module.exports = class WikipediaCommand extends Command {
 	constructor(client) {
 		super(client, {
@@ -31,7 +28,7 @@ module.exports = class WikipediaCommand extends Command {
 		});
 	}
 
-	async run(msg, { query }) {
+	async run(message, { query }) {
 		const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
@@ -52,17 +49,17 @@ Date: ${new Date()}`)
 					formatversion: 2
 				});
 			const data = body.query.pages[0];
-			if (data.missing) return msg.say('Could not find any results.');
-			const embed = new MessageEmbed()
+			if (data.missing) return message.say('Could not find any results.');
+			const embed = new Discord.MessageEmbed()
 				.setColor(0xE7E7E7)
 				.setTitle(data.title)
 				.setAuthor('Wikipedia', 'https://i.imgur.com/Z7NJBK2.png', 'https://www.wikipedia.org/')
 				.setThumbnail(data.thumbnail ? data.thumbnail.source : null)
 				.setURL(`https://en.wikipedia.org/wiki/${encodeURIComponent(query).replace(')', '%29')}`)
 				.setDescription(shorten(data.extract.replace('\n', '\n\n')));
-			return msg.embed(embed);
+			return message.embed(embed);
 		} catch (err) {
-			return msg.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
+			return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
 		}
 	}
 };

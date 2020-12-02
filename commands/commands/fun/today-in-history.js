@@ -1,6 +1,5 @@
-const request = require('node-superfetch');
-const Discord = require('discord.js');
-const config = require('@root/config.json');
+
+
 module.exports = {
     commands: ['todayinhistory', 'tih'],
     description: 'gives info about what important event happend today in hisotry',

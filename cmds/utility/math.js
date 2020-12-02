@@ -1,7 +1,4 @@
 const { Command } = require('discord.js-commando');
-const math = require('mathjs');
-const config = require('@root/config.json');
-const Discord = require('discord.js');
 module.exports = class MathCommand extends Command {
 	constructor(client) {
 		super(client, {
@@ -27,7 +24,7 @@ module.exports = class MathCommand extends Command {
 		});
 	}
 
-	run(msg, { expression }) {
+	run(message, { expression }) {
 		const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
@@ -35,9 +32,9 @@ Server: ${message.guild.name}
 Date: ${new Date()}`)
 		try {
 			const evaluated = math.evaluate(expression).toString();
-			return msg.reply(evaluated).catch(() => msg.reply('Invalid expression.'));
+			return message.reply(evaluated).catch(() => message.reply('Invalid expression.'));
 		} catch {
-			return msg.reply('Invalid expression.');
+			return message.reply('Invalid expression.');
 		}
 	}
 };

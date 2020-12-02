@@ -1,12 +1,5 @@
 const { Command } = require('discord.js-commando');
-const Discord = require('discord.js');
-const Youtube = require('simple-youtube-api');
-const ytdl = require('ytdl-core');
-const { youtubeAPI } = require('@root/config.json');
-const youtube = new Youtube(youtubeAPI);
-const { MessageEmbed } = require('discord.js');
-const db = require('quick.db');
-const config = require('@root/config.json');
+const youtube = new Youtube(config.youtubeAPI);
 module.exports = class PlayCommand extends Command {
   constructor(client) {
     super(client, {
@@ -64,7 +57,7 @@ Date: ${new Date()}`)
         }
       }
       if (found) {
-        const embed = new MessageEmbed()
+        const embed = new Discord.MessageEmbed()
           .setColor('#ff0000')
           .setTitle('Clarification')
           .setDescription(
@@ -183,7 +176,7 @@ Date: ${new Date()}`)
         message.guild.musicData.isPlaying = true;
         return PlayCommand.playSong(message.guild.musicData.queue, message);
       } else if (message.guild.musicData.isPlaying == true) {
-        const PlayListEmbed = new MessageEmbed()
+        const PlayListEmbed = new Discord.MessageEmbed()
           .setColor('#ff0000')
           .setTitle(`:musical_note: ${playlist.title}`)
           .addField(
@@ -232,7 +225,7 @@ Date: ${new Date()}`)
         message.guild.musicData.isPlaying = true;
         return PlayCommand.playSong(message.guild.musicData.queue, message);
       } else if (message.guild.musicData.isPlaying == true) {
-        const addedEmbed = new MessageEmbed()
+        const addedEmbed = new Discord.MessageEmbed()
           .setColor('#ff0000')
           .setTitle(`:musical_note: ${video.title}`)
           .addField(
@@ -268,7 +261,7 @@ Date: ${new Date()}`)
           .on('start', function() {
             message.guild.musicData.songDispatcher = dispatcher;
             dispatcher.setVolume(message.guild.musicData.volume);
-            const videoEmbed = new MessageEmbed()
+            const videoEmbed = new Discord.MessageEmbed()
               .setThumbnail(queue[0].thumbnail)
               .setColor('#ff0000')
               .addField(':notes: Now Playing:', queue[0].title)
@@ -380,7 +373,7 @@ Date: ${new Date()}`)
       );
     }
     vidNameArr.push('cancel');
-    const embed = new MessageEmbed()
+    const embed = new Discord.MessageEmbed()
       .setColor('#ff0000')
       .setTitle(`:mag: Search Results!`)
       .addField(':notes: Result 1', vidNameArr[0])
@@ -451,7 +444,7 @@ Date: ${new Date()}`)
               if (songEmbed) {
                 songEmbed.delete();
               }
-              const addedEmbed = new MessageEmbed()
+              const addedEmbed = new Discord.MessageEmbed()
                 .setColor('#ff0000')
                 .setTitle(`:musical_note: ${video.title}`)
                 .addField(

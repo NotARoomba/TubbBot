@@ -1,8 +1,5 @@
-const Canvas = require('canvas')
-const { MessageAttachment } = require('discord.js')
-//const cache = require('@commands/config/setwelcome')
-const serverSchema = require('@schemas/server-schema')
 
+const { MessageAttachment } = require('discord.js')
 module.exports = (client) => {
   client.on('guildMemberAdd', async (member) => {
     const { guild } = member

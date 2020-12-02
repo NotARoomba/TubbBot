@@ -1,8 +1,3 @@
-const Discord = require('discord.js')
-const commandBase = require('@root/commands/command-base')
-const client = new Discord.Client()
-//const summoned = '427630841045319701'
-const config = require('@root/config.json');
 module.exports = {
     commands: 'summon',
     maxArgs: 1,

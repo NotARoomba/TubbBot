@@ -1,7 +1,4 @@
 const { Command } = require('discord.js-commando');
-const db = require('quick.db');
-const config = require('@root/config.json');
-const Discord = require('discord.js');
 module.exports = class SaveToPlaylistCommand extends Command {
   constructor(client) {
     super(client, {

@@ -1,8 +1,3 @@
-const Discord = require('discord.js')
-const client = new Discord.Client()
-const config = require('@root/config.json');
-
-
 module.exports = {
     commands: 'ping',
     minArgs: 0,
@@ -17,7 +12,7 @@ Date: ${new Date()}`)
         const waitEmbed = new Discord.MessageEmbed()
         .setColor('#C0C0C0')
         .setTitle(`Ping`)
-        .setDescription(`:green_apple: Finding ping to bot...
+        .setDescription(`:green_apple: Finding ping to bot... 
        
        :alarm_clock: Your ping is ${Date.now() - message.createdTimestamp} ms`)
         message.reply(waitEmbed).then((resultMessage) => {

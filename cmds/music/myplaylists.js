@@ -1,8 +1,4 @@
 const { Command } = require('discord.js-commando');
-const db = require('quick.db');
-const Pagination = require('discord-paginationembed');
-const config = require('@root/config.json');
-const Discord = require('discord.js');
 module.exports = class MyPlaylistsCommand extends Command {
   constructor(client) {
     super(client, {

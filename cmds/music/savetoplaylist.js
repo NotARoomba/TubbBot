@@ -1,10 +1,5 @@
 const { Command } = require('discord.js-commando');
-const db = require('quick.db');
-const Youtube = require('simple-youtube-api');
-const { youtubeAPI } = require('@root/config.json');
-const youtube = new Youtube(youtubeAPI);
-const config = require('@root/config.json');
-const Discord = require('discord.js');
+const youtube = new Youtube(config.youtubeAPI);
 module.exports = class SaveToPlaylistCommand extends Command {
   constructor(client) {
     super(client, {

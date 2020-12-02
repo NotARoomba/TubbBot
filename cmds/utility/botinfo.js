@@ -1,7 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const Commando = require('discord.js-commando')
 const { version } = require('@root/package.json')
-const config = require('@root/config.json');
 module.exports = class BotInfoCommand extends Commando.Command {
   constructor(client) {
     super(client, {

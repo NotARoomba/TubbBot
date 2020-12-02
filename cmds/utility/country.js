@@ -1,8 +1,5 @@
 const { Command } = require('discord.js-commando');
-const Discord = require('discord.js');
-const request = require('node-superfetch');
 const { formatNumber } = require('@util/util');
-const config = require('@root/config.json');
 module.exports = class CountryCommand extends Command {
 	constructor(client) {
 		super(client, {
@@ -29,7 +26,7 @@ module.exports = class CountryCommand extends Command {
 		});
 	}
 
-	async run(msg, { query }) {
+	async run(message, { query }) {
 		const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
@@ -38,7 +35,7 @@ Date: ${new Date()}`)
 		try {
 			const { body } = await request.get(`https://restcountries.eu/rest/v2/name/${query}`);
 			const data = body[0];
-			const embed = new MessageEmbed()
+			const embed = new Discord.MessageEmbed()
 				.setColor(0x00AE86)
 				.setTitle(data.name)
 				.setThumbnail(`https://www.countryflags.io/${data.alpha2Code}/flat/64.png`)
@@ -50,10 +47,10 @@ Date: ${new Date()}`)
 				.addField('❯ Native Name', data.nativeName, true)
 				.addField('❯ Area', `${formatNumber(data.area)}km`, true)
 				.addField('❯ Languages', data.languages.map(lang => lang.name).join('/'));
-			return msg.embed(embed);
+			return message.embed(embed);
 		} catch (err) {
-			if (err.status === 404) return msg.say('Could not find any results.');
-			return msg.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
+			if (err.status === 404) return message.say('Could not find any results.');
+			return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
 		}
 	}
 };
