@@ -1,4 +1,3 @@
-
 module.exports = class BanCommand extends Commando.Command {
   constructor(client) {
     super(client, {
