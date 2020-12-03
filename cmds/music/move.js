@@ -1,5 +1,5 @@
-const { Command } = require('discord.js-commando');
-module.exports = class MoveSongCommand extends Command {
+
+module.exports = class MoveSongCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: 'move',
@@ -59,7 +59,7 @@ Date: ${new Date()}
       return;
     } else if (message.guild.musicData.loopSong) {
       message.reply(
-        ':x: Turn off the **loop** command before using the **move** command.'
+        ':x: Turn off the **loop** Commando.Command before using the **move** Commando.Command.'
       );
       return;
     }

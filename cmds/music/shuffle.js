@@ -1,5 +1,5 @@
-const { Command } = require('discord.js-commando');
-module.exports = class ShuffleQueueCommand extends Command {
+
+module.exports = class ShuffleQueueCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: 'shuffle',
@@ -34,7 +34,7 @@ Date: ${new Date()}
       return;
     } else if (message.guild.musicData.loopSong) {
       message.reply(
-        ':x: Turn off the **loop** command before using the **shuffle** command!'
+        ':x: Turn off the **loop** Commando.Command before using the **shuffle** Commando.Command!'
       );
       return;
     }

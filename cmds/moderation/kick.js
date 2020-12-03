@@ -1,5 +1,5 @@
-const { Command } = require('discord.js-commando');
-module.exports = class KickCommand extends Command {
+
+module.exports = class KickCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: 'kick',

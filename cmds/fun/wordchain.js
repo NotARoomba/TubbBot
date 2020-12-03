@@ -1,8 +1,7 @@
-const { Command } = require('discord.js-commando');
 const { stripIndents } = require('common-tags');
 const { delay, verify } = require('@util/util');
 const startWords = require('@assets/wordlist');
-module.exports = class WordChainCommand extends Command {
+module.exports = class WordChainCommand extends Commando.Command {
 	constructor(client) {
 		super(client, {
 			name: 'word-chain',

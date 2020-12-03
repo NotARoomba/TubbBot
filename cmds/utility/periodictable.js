@@ -1,8 +1,8 @@
-const { Command } = require('discord.js-commando');
+
 const { createCanvas, loadImage, registerFont } = require('canvas');
 const { elements, colors } = require('@assets/periodictable');
 registerFont(path.join(__dirname, '..', '..', 'assets', 'Noto-Regular.ttf'), { family: 'Noto' });
-module.exports = class PeriodicTableCommand extends Command {
+module.exports = class PeriodicTableCommand extends Commando.Command {
 	constructor(client) {
 		super(client, {
 			name: 'periodic-table',

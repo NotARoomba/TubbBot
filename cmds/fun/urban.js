@@ -1,7 +1,5 @@
 const fetch = require('node-fetch');
-const { Command } = require('discord.js-commando');
-
-module.exports = class UrbanCommand extends Command {
+module.exports = class UrbanCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: 'urban',

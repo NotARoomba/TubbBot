@@ -1,7 +1,7 @@
-const { Command } = require('discord.js-commando');
+
 const { list } = require('@util/util');
 const codes = Object.keys(translate.languages).filter(code => typeof translate.languages[code] !== 'function');
-module.exports = class TranslateCommand extends Command {
+module.exports = class TranslateCommand extends Commando.Command {
 	constructor(client) {
 		super(client, {
 			name: 'translate',

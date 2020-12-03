@@ -1,7 +1,7 @@
   
-const { Command } = require('discord.js-commando');
+
 const { shorten } = require('@util/util');
-module.exports = class WikipediaCommand extends Command {
+module.exports = class WikipediaCommand extends Commando.Command {
 	constructor(client) {
 		super(client, {
             name: 'wikipedia',

@@ -1,5 +1,5 @@
-const { Command } = require('discord.js-commando');
-module.exports = class DeletePlaylistCommand extends Command {
+
+module.exports = class DeletePlaylistCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: 'delete-playlist',

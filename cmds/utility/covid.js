@@ -1,4 +1,3 @@
-const Commando = require('discord.js-commando')
 const axios = require('axios')
 const { CanvasRenderService } = require('chartjs-node-canvas')
 const { MessageAttachment } = require('discord.js')

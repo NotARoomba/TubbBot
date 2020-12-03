@@ -1,6 +1,6 @@
-const { Command } = require('discord.js-commando');
+
 const youtube = new Youtube(config.youtubeAPI);
-module.exports = class SaveToPlaylistCommand extends Command {
+module.exports = class SaveToPlaylistCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: 'save-to-playlist',

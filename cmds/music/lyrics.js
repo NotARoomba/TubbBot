@@ -1,7 +1,7 @@
-const { Command } = require('discord.js-commando');
+
 
 const { MessageEmbed } = require('discord.js');
-module.exports = class LyricsCommand extends Command {
+module.exports = class LyricsCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: 'lyrics',

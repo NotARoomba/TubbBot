@@ -38,7 +38,7 @@ Date: ${new Date()}
           value: version,
         },
         {
-          name: "Server's command prefix",
+          name: "Server's Commando.Command prefix",
           value: message.guild.commandPrefix,
         },
         {

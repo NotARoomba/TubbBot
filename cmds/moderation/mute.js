@@ -1,9 +1,4 @@
-const reasons = {
-  SPAMMING: 5,
-  ADVERTISING: 24,
-  ANNOYING: 3,
-  OTHER: 2,
-}
+
 module.exports = class MuteCommand extends Commando.Command {
   constructor(client) {
     super(client, {
@@ -12,11 +7,27 @@ module.exports = class MuteCommand extends Commando.Command {
       memberName: 'mute',
       userPermissions: ['ADMINISTRATOR'],
       description: 'Mutes a user',
-      argsType: 'multiple',
+      args: [
+        {
+          key: 'target',
+          prompt: 'Who to mute',
+          type: 'user'
+      },
+        {
+          key: 'reason',
+          prompt: 'Why do you want to mute them?',
+          type: 'string'
+      },
+        {
+            key: 'time',
+            prompt: 'When do you want them to be unmuted?',
+            type: 'string'
+        },
+    ],
     })
   }
 
-  run = async (message, args) => {
+  run = async (message, { target, reason, time }) => {
     const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
@@ -26,33 +37,6 @@ Date: ${new Date()}
     // !mute @ reason
 
     const { guild, author: staff } = message
-
-    if (args.length !== 2) {
-      message.reply(
-        `Correct syntax: ${guild.commandPrefix}mute <Target @> <Reason>`
-      )
-      return
-    }
-
-    const target = message.mentions.users.first()
-    if (!target) {
-      message.reply('Please specify someone to mute')
-      return
-    }
-
-    const reason = args[1].toUpperCase()
-    if (!reasons[reason]) {
-      let validReasons = ''
-      for (const key in reasons) {
-        validReasons += `${key}, `
-      }
-      validReasons = validReasons.substr(0, validReasons.length - 2)
-
-      message.reply(
-        `Unknown reason, please use one of the following: ${validReasons}`
-      )
-      return
-    }
 
     const previousMutes = await muteSchema.find({
       userId: target.id,
@@ -67,7 +51,7 @@ Date: ${new Date()}
       return
     }
 
-    let duration = reasons[reason] * (previousMutes.length + 1)
+    let duration = time
 
     const expires = new Date()
     expires.setHours(expires.getHours() + duration)

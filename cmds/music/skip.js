@@ -1,5 +1,5 @@
-const { Command } = require('discord.js-commando');
-module.exports = class SkipCommand extends Command {
+
+module.exports = class SkipCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: 'skip',

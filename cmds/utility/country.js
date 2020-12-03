@@ -1,6 +1,5 @@
-const { Command } = require('discord.js-commando');
 const { formatNumber } = require('@util/util');
-module.exports = class CountryCommand extends Command {
+module.exports = class CountryCommand extends Commando.Command {
 	constructor(client) {
 		super(client, {
 			name: 'country',

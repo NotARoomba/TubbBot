@@ -1,7 +1,7 @@
-const { Command } = require('discord.js-commando');
+
 const { Readable } = require('stream');
 const { reactIfAble } = require('@util/util');
-module.exports = class DECTalkCommand extends Command {
+module.exports = class DECTalkCommand extends Commando.Command {
 	constructor(client) {
 		super(client, {
 			name: 'dec-talk',

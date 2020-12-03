@@ -1,5 +1,5 @@
-const { Command } = require('discord.js-commando');
-module.exports = class LoopQueueCommand extends Command {
+
+module.exports = class LoopQueueCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: 'loopqueue',
@@ -41,7 +41,7 @@ Date: ${new Date()}
       return;
     } else if (message.guild.musicData.loopSong) {
       message.reply(
-        ':x: Turn off the **loop** command before using the **loopqueue** command'
+        ':x: Turn off the **loop** Commando.Command before using the **loopqueue** Commando.Command'
       );
       return;
     }

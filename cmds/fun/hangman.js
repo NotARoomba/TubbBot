@@ -1,8 +1,7 @@
-const { Command } = require('discord.js-commando');
 const { stripIndents } = require('common-tags');
 const words = require('@assets/wordlist');
 
-module.exports = class HangmanCommand extends Command {
+module.exports = class HangmanCommand extends Commando.Command {
 	constructor(client) {
 		super(client, {
 			name: 'hangman',

@@ -1,5 +1,5 @@
-const { Command } = require('discord.js-commando');
-module.exports = class LoopCommand extends Command {
+
+module.exports = class LoopCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: 'loop',

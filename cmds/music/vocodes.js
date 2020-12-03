@@ -1,8 +1,8 @@
-const { Command } = require('discord.js-commando');
+
 const { Readable } = require('stream');
 const { list, reactIfAble } = require('@util/util');
 const voices = require('@assets/vocodes');
-module.exports = class VocodesCommand extends Command {
+module.exports = class VocodesCommand extends Commando.Command {
 	constructor(client) {
 		super(client, {
 			name: 'vocodes',

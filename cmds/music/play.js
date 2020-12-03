@@ -1,6 +1,6 @@
-const { Command } = require('discord.js-commando');
+
 const youtube = new Youtube(config.youtubeAPI);
-module.exports = class PlayCommand extends Command {
+module.exports = class PlayCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: 'play',

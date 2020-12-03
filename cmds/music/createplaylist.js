@@ -1,5 +1,4 @@
-const { Command } = require('discord.js-commando');
-module.exports = class CreatePlaylistCommand extends Command {
+module.exports = class CreatePlaylistCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: 'create-playlist',
