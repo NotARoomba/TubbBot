@@ -50,6 +50,7 @@ Structures.extend('Guild', function(Guild) {
 const client = new CommandoClient({
   owner: '465917394108547072',
   commandPrefix: `-`,
+  invite: `https://discord.gg/C8HM2hkTqt`
 
 })
 client.setProvider(
@@ -148,6 +149,11 @@ client.on('guildCreate', guild => {
           value: `[Invite me!](https://discord.com/api/oauth2/authorize?client_id=750123677739122819&permissions=8&redirect_uri=https%3A%2F%2Fdiscordapp.com%2Foauth2%2Fauthorize%3F%26client_id%3D%5B750123677739122819%5D%26scope%3Dbot&scope=bot)`, // This is optional if you want over people to invite your bot to different servers!
           inline: true,
       },
+      {
+        name: `My server if you have any questions`,
+        value: `[Link](https://discord.gg/C8HM2hkTqt)`, // This is optional if you want over people to invite your bot to different servers!
+        inline: true,
+    },
     ],
     timestamp: new Date(),
   footer: {
