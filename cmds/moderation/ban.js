@@ -7,7 +7,7 @@ module.exports = class BanCommand extends Commando.Command {
       group: 'moderation',
       description: 'Bans a tagged member.',
       guildOnly: true,
-      userPermissions: ['ADMINISTRATOR'],
+      userPermissions: ['BAN_MEMBERS'],
       clientPermissions: ['MANAGE_MESSAGES', 'KICK_MEMBERS', 'BAN_MEMBERS'],
       args: [
         {

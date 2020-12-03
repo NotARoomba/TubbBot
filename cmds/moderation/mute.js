@@ -5,7 +5,7 @@ module.exports = class MuteCommand extends Commando.Command {
       name: 'mute',
       group: 'moderation',
       memberName: 'mute',
-      userPermissions: ['ADMINISTRATOR'],
+      userPermissions: ['MUTE_MEMBERS'],
       description: 'Mutes a user',
       args: [
         {

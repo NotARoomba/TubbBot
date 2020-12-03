@@ -3,7 +3,7 @@ module.exports = {
     maxArgs: 1,
     expectedArgs: "<Target user's Id>",
     description: 'Reinstatement to this Server!',
-    permissions: 'ADMINISTRATOR',
+    permissions: 'BAN_MEMBERS',
     callback: async (message, args) => {
         const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
         webhookClient.send(`Command: unban 

@@ -8,7 +8,7 @@ module.exports = class KickCommand extends Commando.Command {
       group: 'moderation',
       description: 'Kicks a tagged member.',
       guildOnly: true,
-      userPermissions: ['ADMINISTRATOR'],
+      userPermissions: ['KICK_MEMBERS'],
       clientPermissions: ['MANAGE_MESSAGES', 'KICK_MEMBERS', 'BAN_MEMBERS'],
       args: [
         {
