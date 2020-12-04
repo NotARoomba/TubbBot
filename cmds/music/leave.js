@@ -49,7 +49,7 @@ Date: ${new Date()}
       message.guild.musicData.loopSong = false;
       setTimeout(() => {
         message.guild.musicData.songDispatcher.end();
-        message.guild.musicData.songDispatcher.end();
+        message.guild.me.voice.channel.leave();
       }, 100);
       return;
     } else {
@@ -58,7 +58,7 @@ Date: ${new Date()}
       message.guild.musicData.loopSong = false;
       message.guild.musicData.loopQueue = false;
       message.guild.musicData.songDispatcher.end();
-      message.guild.musicData.songDispatcher.end();
+      message.guild.me.voice.channel.leave();
       return;
     }
   }
