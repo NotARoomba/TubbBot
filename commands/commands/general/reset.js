@@ -14,6 +14,6 @@ Date: ${new Date()}
         if (message.author.id !== "465917394108547072") return false;
         message.reply("Resetting...");
         client.destroy();
-        client.login(process.env.dtoken);
+        client.login(process.env.TOKEN);
     }
 }
