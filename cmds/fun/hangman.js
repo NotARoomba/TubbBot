@@ -26,7 +26,7 @@ module.exports = class HangmanCommand extends Commando.Command {
 	}
 
 	async run(message) {
-		const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+		const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
@@ -106,7 +106,7 @@ Date: ${new Date()}
 		try {
 			const { body } = await request
 				.get(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}`)
-				.query({ key: client.Webster });
+				.query({ key: process.env.WEBSTER });
 			if (!body.length) return null;
 			const data = body[0];
 			if (typeof data === 'string') return null;

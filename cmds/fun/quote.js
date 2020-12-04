@@ -9,7 +9,7 @@ module.exports = class GiphyCommand extends Commando.Command {
 		});
     }
     async run(message) {
-        const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}

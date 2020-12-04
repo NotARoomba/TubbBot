@@ -26,7 +26,7 @@ module.exports = class GiphyCommand extends Commando.Command {
 	}
 
 	async run(message, { query }) {
-		const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+		const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
@@ -37,7 +37,7 @@ Date: ${new Date()}
 				.get('http://api.giphy.com/v1/gifs/search')
 				.query({
 					q: query,
-					api_key: config.GiphyKey,
+					api_key: process.env.GIPHY_KEY,
 					rating: message.channel.nsfw ? 'r' : 'pg'
 				});
 			if (!body.data.length) return message.say('Could not find any results.');

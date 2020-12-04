@@ -1,5 +1,6 @@
 require('module-alias/register');
-require('events').EventEmitter.prototype._maxListeners = 100;
+require('events').EventEmitter.prototype._maxListeners = 200;
+require('dotenv').config();
 const  { Structures } = require('discord.js');
 const { MongoClient } = require('mongodb')
 global.MongoDBProvider = require('commando-provider-mongo')
@@ -9,7 +10,6 @@ global.mongo = require('@util/mongo');
 global.loadCommands = require('@root/commands/load-commands.js')
 global.loadFeatures = require('@root/features/load-features.js')
 global.Discord = require('discord.js')
-global.config = require('@root/config.json');
 global.path = require('path');
 global.MessageEmbed
 global.Structures
@@ -162,8 +162,4 @@ client.on('guildCreate', guild => {
   channel.send({ embed: invite })
 })
 
-
-//heroku stack:set heroku-18 -a tubb-bot jic v509
-client.login('NzUwMTIzNjc3NzM5MTIyODE5.X019HQ.USGz-7328iyyiA9UoGPTqZeU4xI')
-client.login(process.env.token)
-
+client.login(process.env.TOKEN)

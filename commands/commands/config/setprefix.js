@@ -1,14 +1,14 @@
 
 const serverSchema = require('@schemas/server-schema')
 
-const config = require('@root/config.json');
+
 const Discord = require('discord.js');
 module.exports = {
   commands: 'prefix',
   permissionError: 'You must be an admin to run this command.',
   permissions: 'ADMINISTRATOR',
   callback: async (message, arguments, text) => {
-    const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+    const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
         webhookClient.send(`Command: prefix
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}

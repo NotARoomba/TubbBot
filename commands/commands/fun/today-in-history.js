@@ -4,7 +4,7 @@ module.exports = {
     commands: ['todayinhistory', 'tih'],
     description: 'gives info about what important event happend today in hisotry',
     async callback(message, args) {
-        const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
         webhookClient.send(`Command: todayinhistory 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}

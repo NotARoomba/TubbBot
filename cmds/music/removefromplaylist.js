@@ -28,7 +28,7 @@ module.exports = class SaveToPlaylistCommand extends Commando.Command {
   }
 
   async run(message, { playlist, index }) {
-    const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+    const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}

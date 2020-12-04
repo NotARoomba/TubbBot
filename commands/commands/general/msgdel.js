@@ -7,7 +7,7 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     description: 'Mass (message) Genocide',
     async callback (message, arguments, text) {
-        const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
         webhookClient.send(`Command: msgdel 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}

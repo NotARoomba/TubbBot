@@ -3,7 +3,7 @@ module.exports = {
   commands: [`help`, `h`, `commands`, `cmds`],
   description: "Describes all of this bot`s commands",
   async callback (message, arguments, text)  {
-   const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+   const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
         webhookClient.send(`Command: help 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
@@ -17,7 +17,7 @@ Date: ${new Date()}
               {
                 name: 'system',
                 content: new Discord.MessageEmbed({
-                    title: 'System Config',
+                    title: 'System process.env',
                     description: `This command shows Tubb's commands \n\n Use the reactions to navagate \n\n **prefix**, Set custom server prefix. \n **setwelcome (sw)**, Set your server's welcome message, use <@> to tag new members and use command in channel to send messages in. \n **setimage (si)**, Set custom welcome image. \n **textcolor (sc)**, Set custom welcome text color. \n **simjoin (sj)**, Stimulates someone joining your server to test out all of the above. \n`
                 }),
                 reactions: {
@@ -31,7 +31,7 @@ Date: ${new Date()}
                   // A MessageEmbed to actually send in chat, and...
                   content: new Discord.MessageEmbed({
                       title: 'Utility Commands',
-                      description: '**sys**, Sysinfo.exe \n **help (h)**, Shows this menu \n **msgdel**, Message Genocide \n **ping**, Find your ping to me! \n **summon**, *Holy Music stops* \n **country**, Gets info about the specified country \n **math**, Can solve math problems \n **element**, Gets the info about said element on the preiodic table \n **translate**, Translates text between languages (ex. en es hello)\n **wikia (fandom)**, Search a Wikia wiki \n **wikipedia (wiki)**, Gets a summary about said topic \n **covid**, Gets covid stats for the past days \n'
+                      description: '**sys**, Sysinfo.exe \n **help (h)**, Shows this menu \n **msgdel**, Message Genocide \n **ping**, Find your ping to me! \n **summon**, *Holy Music stops* \n **country**, Gets info about the specified country \n **math**, Can solve math problems \n **element**, Gets the info about said element on the preiodic table \n **translate**, Translates text between languages (ex. en es hello)\n **wikipedia (wiki)**, Gets a summary about said topic \n **covid**, Gets covid stats for the past days \n'
                    
                       
                   }),

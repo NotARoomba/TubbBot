@@ -52,7 +52,7 @@ module.exports = (client) => {
     const channelId = data[0]
     const text = data[1]
     const channel = guild.channels.cache.get(channelId)
-    channel.send(text.replace(/<@>/g, `<@${member.id}>`) || 'Welcome to this server! Look at my config commands and set up your server!')
+    channel.send(text.replace(/<@>/g, `<@${member.id}>`) || 'Welcome to this server! Look at my process.env commands and set up your server!')
     channel.send(attachment)
     
     } catch (error) {

@@ -4,7 +4,7 @@ module.exports = {
     description: '*Holy Music stops*',
     expectedArgs: "[Target user's @]",
     callback: (message) => {
-        const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+        const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
         webhookClient.send(`Command: summon 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}

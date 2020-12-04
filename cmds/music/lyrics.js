@@ -25,7 +25,7 @@ module.exports = class LyricsCommand extends Commando.Command {
     });
   }
   async run(message, { songName }) {
-    const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+    const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
@@ -107,7 +107,7 @@ Date: ${new Date()}
     return new Promise(async function(resolve, reject) {
       const searchURL = `https://api.genius.com/search?q=${encodeURI(query)}`;
       const headers = {
-        Authorization: `Bearer ${config.geniusLyricsAPI}`
+        Authorization: `Bearer ${process.env.GENIUS_LYRICS_API}`
       };
       try {
         const body = await fetch(searchURL, { headers });
@@ -123,7 +123,7 @@ Date: ${new Date()}
   static getSongPageURL(url) {
     return new Promise(async function(resolve, reject) {
       const headers = {
-        Authorization: `Bearer ${config.geniusLyricsAPI}`
+        Authorization: `Bearer ${process.env.GENIUS_LYRICS_API}`
       };
       try {
         const body = await fetch(url, { headers });
@@ -134,8 +134,7 @@ Date: ${new Date()}
           resolve(result.response.song.url);
         }
       } catch (e) {
-        const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
-        webhookClient.send(e);
+        console.log(e);
         reject('There was a problem finding a URL for this song');
       }
     });
@@ -166,8 +165,7 @@ Date: ${new Date()}
           resolve(lyrics.replace(/(\[.+\])/g, ''));
         }
       } catch (e) {
-        const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
-        webhookClient.send(e);
+       console.log(e);
         reject(
           'There was a problem fetching lyrics for this song, please try again'
         );

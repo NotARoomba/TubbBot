@@ -37,7 +37,7 @@ module.exports = class WordChainCommand extends Commando.Command {
 	}
 
 	async run(message, { opponent, time }) {
-		const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+		const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
@@ -111,7 +111,7 @@ Date: ${new Date()}
 		try {
 			const { body } = await request
 				.get(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}`)
-				.query({ key: config.Webster });
+				.query({ key: process.env.WEBSTER });
 			if (!body.length) return false;
 			return true;
 		} catch (err) {

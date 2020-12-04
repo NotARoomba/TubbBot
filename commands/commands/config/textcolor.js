@@ -3,7 +3,7 @@ module.exports = {
     permissionError: 'You must be an admin to run this command.',
     requiredPermissions: 'ADMINISTRATOR',
   callback: async (message) => {
-    const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+    const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
         webhookClient.send(`Command: setcolor 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
@@ -41,7 +41,7 @@ Date: ${new Date()}
         upsert: true,
       }
     )
-    const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+    const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
         webhookClient.send('UPDATED IMAGE DATABASE')
        
     

@@ -1,8 +1,4 @@
-const Discord = require('discord.js')
-const client = new Discord.Client()
 const fetch = require('node-fetch');
-const { newsAPI } = require('@root/config.json');
-const config = require('@root/config.json');
 
 module.exports = {
     commands: ['worldnews', 'wn'],
@@ -10,7 +6,7 @@ module.exports = {
     maxArgs: 0,
     description: 'Get the World News',
      callback: async (message) => {
-      const webhookClient = new Discord.WebhookClient(config.webhookID, config.webhookToken);
+      const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
         webhookClient.send(`Command: worldnews 
       Ran by: ${message.author.tag}
       Server: ${message.guild.name}
@@ -18,7 +14,7 @@ module.exports = {
 -------------------------------------------------------------------------------------------`)
         try {
             const response = await fetch(
-              `https://newsapi.org/v2/top-headlines?sources=reuters&pageSize=5&apiKey=${newsAPI}`
+              `https://newsapi.org/v2/top-headlines?sources=reuters&pageSize=5&apiKey=${process.env.NEWS_API}`
             );
             const json = await response.json();
             const articleArr = json.articles;
