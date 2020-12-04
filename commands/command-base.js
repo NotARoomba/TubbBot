@@ -4,7 +4,7 @@ const client = new Discord.Client()
 
 const mongo = require('@util/mongo')
 const serverSchema = require('@schemas/server-schema')
-const { prefix: globalPrefix } = '-'
+const { PREFIX: globalPrefix } = require(process.env.PREFIX)
 const guildPrefixes = {} 
 
 
