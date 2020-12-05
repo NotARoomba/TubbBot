@@ -161,5 +161,4 @@ client.on('guildCreate', guild => {
   }
   channel.send({ embed: invite })
 })
-const client2 = new Discord.Client()
-client2.login()
+client.login(DISCORD_TOKEN)
