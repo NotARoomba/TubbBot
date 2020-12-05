@@ -1,8 +1,4 @@
-
 const serverSchema = require('@schemas/server-schema')
-
-
-const Discord = require('discord.js');
 module.exports = {
   commands: 'prefix',
   permissionError: 'You must be an admin to run this command.',

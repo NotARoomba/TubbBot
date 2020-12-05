@@ -1,3 +1,4 @@
+
 module.exports = {
     commands: ['simjoin', 'sj'],
     requiredPermissions: 'ADMINISTRATOR',

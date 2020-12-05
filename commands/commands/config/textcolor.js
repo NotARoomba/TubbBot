@@ -1,3 +1,4 @@
+const serverSchema = require('@schemas/server-schema')
 module.exports = {
     commands: ['setcolor', 'sc'],
     permissionError: 'You must be an admin to run this command.',
