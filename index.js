@@ -161,4 +161,4 @@ client.on('guildCreate', guild => {
   }
   channel.send({ embed: invite })
 })
-client.login(DISCORD_TOKEN)
+client.login(process.env.TOKEN)
