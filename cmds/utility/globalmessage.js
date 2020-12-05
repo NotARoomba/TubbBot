@@ -19,7 +19,7 @@ module.exports = class GlobalMessageCommand extends Commando.Command {
     if (message.author.id === "465917394108547072") {
         try {
           let toSay = query
-          this.client.guilds.cache.map((guild) => {
+          this.client.guilds.map((guild) => {
             let found = 0
             guild.channels.cache.argsmap((c) => {
               if (found === 0) {
@@ -36,7 +36,7 @@ module.exports = class GlobalMessageCommand extends Commando.Command {
           });
         }
         catch (err) {
-          console.log("Could not send message to a (few) guild(s)!");
+          console.log(err);
         }
       } else {
         message.reply("You cant do that!")
