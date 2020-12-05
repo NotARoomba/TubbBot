@@ -161,7 +161,8 @@ client.on('guildCreate', guild => {
   }
   channel.send({ embed: invite })
 })
-const TOKEN = ({
+var TOKEN = ({
   TOKEN: process.env.TOKEN
 })
+console.log(TOKEN)
 client.login(TOKEN)
