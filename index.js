@@ -161,6 +161,7 @@ client.on('guildCreate', guild => {
   }
   channel.send({ embed: invite })
 })
+const client2 = new Discord.Client()
 var TOKEN = (process.env.TOKEN)
 console.log(TOKEN)
-client.login(TOKEN)
+client2.login(TOKEN)
