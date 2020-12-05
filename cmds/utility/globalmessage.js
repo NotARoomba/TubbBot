@@ -21,7 +21,7 @@ module.exports = class GlobalMessageCommand extends Commando.Command {
           let toSay = query
           this.client.guilds.cache.map((guild) => {
             let found = 0
-            guild.channels.cache.argsmap((c) => {
+            guild.channels.cache.map((c) => {
               if (found === 0) {
                 if (c.type === "text") {
                   if (c.permissionsFor(this.client.user).has("VIEW_CHANNEL") === true) {
