@@ -35,7 +35,7 @@ module.exports = (client) => {
     )
     x = canvas.width / 2 - pfp.width / 2
     y = 25
-    ctx.drawImage(pfp, x, y)
+    ctx.drawImage(pfp, x, y, 50, 50)
 
     ctx.fillStyle = color || '#ffffff'
     ctx.font = '35px sans-serif'
