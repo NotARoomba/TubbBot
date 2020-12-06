@@ -19,7 +19,7 @@ const { guild } = member
     }
     const channelId = data[0]
     const streamer = data[1]
-    const announcements = guild.channels.cache.get(channelId)
+    const channel = guild.channels.cache.get(channelId)
 const api = `https://api.twitch.tv/kraken/streams/${streamer}?client_id=${process.env.TWITCH_ID}`;
 
 
@@ -42,6 +42,6 @@ const api = `https://api.twitch.tv/kraken/streams/${streamer}?client_id=${proces
         .addField('Views', `${r.body.stream.channel.views}`, true)
         .setImage(r.body.stream.preview.large)
 
-      return client.channels.get(announcements.id).send({ embed });
+      return channel.send({ embed });
     }
   });
