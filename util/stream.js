@@ -4,7 +4,7 @@ require('dotenv');
 
 const streamer = '';
 
-const api = `https://api.twitch.tv/kraken/streams/${streamer}?client_id=${process.env.TWITCH}`;
+const api = `https://api.twitch.tv/kraken/streams/${streamer}?client_id=${process.env.TWITCH_ID}`;
 const announcements = client.channels.find('name', 'announcements');
 
   console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`);
