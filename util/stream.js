@@ -20,15 +20,15 @@ const { guild } = member
     const channelId = data[0]
     const streamer = data[1]
     const channel = guild.channels.cache.get(channelId)
-const api = (`https://api.twitch.tv/helix/search/channels?query=${streamer}`,
-{
-    "headers": {
-        "Client-ID": process.env.TWITCH_ID,
-        "Authorization": "Bearer " + process.env.TWITCH
+    const api = await fetch(`https://api.twitch.tv/helix/search/channels?query=${streamer}`,
+    {
+        "headers": {
+            "Client-ID": process.env.TWITCH_ID,
+            "Authorization": "Bearer " + process.env.TWITCH
+        }
     }
-}
-)
-
+    );
+    try {
   fetch.get(api).then(r => {
     if (r.body.stream === null) {
       setInterval(() => {
@@ -50,4 +50,8 @@ const api = (`https://api.twitch.tv/helix/search/channels?query=${streamer}`,
 
       return channel.send({ embed });
     }
-  });
+})
+  } catch (e) {
+    message.reply(':x: Something failed along the way!');
+    return console.error(e);
+  }
