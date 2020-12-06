@@ -48,7 +48,7 @@ Date: ${new Date()}
        
     
 
-    message.reply(`Streamer andn channel set. Please make sure that it is a streamer's username`)
+    message.reply(`Streamer and channel set. Please make sure that it is a streamer's username`)
   } catch (error) {
     console.error(error);
     return message.reply(error.message).catch(console.error);
