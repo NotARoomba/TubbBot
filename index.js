@@ -13,7 +13,6 @@ global.Discord = require('discord.js')
 global.path = require('path');
 global.MessageEmbed
 global.Structures
-global.streamSchema = require('@schemas/stream-schema')
 global.ytdl = require('ytdl-core');
 global.Youtube = require('simple-youtube-api');
 global.cheerio = require('cheerio');
