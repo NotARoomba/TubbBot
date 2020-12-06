@@ -155,6 +155,11 @@ client.on('guildCreate', guild => {
         value: `[Link](https://discord.gg/C8HM2hkTqt)`, // This is optional if you want over people to invite your bot to different servers!
         inline: true,
     },
+    {
+      name: `My Patreon`,
+      value: `[Link](https://www.patreon.com/L061571C5)`, // This is optional if you want over people to invite your bot to different servers!
+      inline: true,
+  },
     ],
     timestamp: new Date(),
   footer: {
