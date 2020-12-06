@@ -2,14 +2,25 @@ const Discord = require('discord.js');
 
 require('dotenv');
 
-const streamer = '';
+const { guild } = member
+    const cache = {}
 
+
+    let data = cache[guild.id]
+
+    if (!data) {
+      console.log('FETCHING FROM DATABASE')
+
+      
+          const result = await streamSchema.findOne({ _id: guild.id })
+
+          cache[guild.id] = data = [result.channelId, result.streamer]
+      
+    }
+    const channelId = data[0]
+    const streamer = data[1]
+    const announcements = guild.channels.cache.get(channelId)
 const api = `https://api.twitch.tv/kraken/streams/${streamer}?client_id=${process.env.TWITCH_ID}`;
-const announcements = client.channels.find('name', 'announcements');
-
-  console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`);
-
-  client.user.setGame(`on ${client.guilds.size} servers`);
 
 
   fetch.get(api).then(r => {

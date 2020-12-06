@@ -1,6 +1,6 @@
 const streamSchema = require('@schemas/stream-schema')
 module.exports = {
-    commands: ['setstreamer', 'ss'],
+    commands: ['setstream', 'ss'],
     permissionError: 'You must be an admin to run this command.',
     requiredPermissions: 'ADMINISTRATOR',
   callback: async (message) => {
@@ -24,7 +24,7 @@ Date: ${new Date()}
   
     split.shift()
     streamer = split.join(' ')
-    cache[guild.id] = [streamer]
+    cache[guild.id] = [channel.id, streamer]
     
         
     
@@ -36,6 +36,7 @@ Date: ${new Date()}
       },
       {
         _id: guild.id,
+        channelId: channel.id,
         streamer,
       },
       {
@@ -47,7 +48,7 @@ Date: ${new Date()}
        
     
 
-    message.reply(`Streamer set. Please make sure that it is a streamer's username`)
+    message.reply(`Streamer andn channel set. Please make sure that it is a streamer's username`)
   } catch (error) {
     console.error(error);
     return message.reply(error.message).catch(console.error);
