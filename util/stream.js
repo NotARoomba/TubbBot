@@ -18,7 +18,7 @@ const announcements = client.channels.find('name', 'announcements');
         snekfetch.get(api).then(console.log(r.body))
       }, 30000); // Set to 30 seconds, less than this causes 'node socket hang up'
     } else {
-      const embed = new Discord.RichEmbed()
+      const embed = new Discord.MessageEmbed()
         .setAuthor(
         `${r.body.stream.channel.display_name} is live on Twitch`,
         `${r.body.stream.channel.logo}`,
