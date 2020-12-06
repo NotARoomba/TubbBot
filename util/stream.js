@@ -20,13 +20,19 @@ const { guild } = member
     const channelId = data[0]
     const streamer = data[1]
     const channel = guild.channels.cache.get(channelId)
-const api = `https://api.twitch.tv/kraken/streams/${streamer}?client_id=${process.env.TWITCH_ID}`;
-
+const api = (`https://api.twitch.tv/helix/search/channels?query=${streamer}`,
+{
+    "headers": {
+        "Client-ID": process.env.TWITCH_ID,
+        "Authorization": "Bearer " + process.env.TWITCH
+    }
+}
+)
 
   fetch.get(api).then(r => {
     if (r.body.stream === null) {
       setInterval(() => {
-        snekfetch.get(api).then(console.log(r.body))
+        fetch.get(api).then(console.log(r.body))
       }, 30000); // Set to 30 seconds, less than this causes 'node socket hang up'
     } else {
       const embed = new Discord.MessageEmbed()
