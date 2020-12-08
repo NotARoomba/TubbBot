@@ -84,6 +84,7 @@ client.on('ready',  async (member) => {
     ['utility', 'Utility commands that use Commando'],
     ['moderation', 'Moderation commands that use Commando'],
     ['fun', 'Fun commands that use Commando'],
+    ['fun', 'Config commands that use Commando'],
 	])
 	.registerDefaultGroups()
 	.registerDefaultCommands({
