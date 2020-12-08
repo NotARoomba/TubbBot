@@ -4,10 +4,10 @@ const startWords = require('@assets/wordlist');
 module.exports = class WordChainCommand extends Commando.Command {
 	constructor(client) {
 		super(client, {
-			name: 'word-chain',
+			name: 'wordchain',
 			aliases: ['wc'],
 			group: 'fun',
-			memberName: 'word-chain',
+			memberName: 'wordchain',
 			description: 'Try to come up with words that start with the last letter of your opponent\'s word.',
 			guildOnly: true,
 			credit: [

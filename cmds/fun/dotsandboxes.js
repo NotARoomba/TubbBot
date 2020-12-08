@@ -4,10 +4,10 @@ const squareIDs = [5, 6, 7, 8, 10, 11, 12, 13, 15, 16, 17, 18, 20, 21, 22, 23];
 module.exports = class DotsAndBoxesCommand extends Commando.Command {
 	constructor(client) {
 		super(client, {
-			name: 'dots-and-boxes',
+			name: 'dotsandboxes',
 			aliases: ['dots-boxes', 'dot-box', 'dot-and-box', 'territory-capture'],
 			group: 'fun',
-			memberName: 'dots-and-boxes',
+			memberName: 'dotsandboxes',
 			description: 'Play a game of Dots and Boxes with another user.',
 			guildOnly: true,
 			args: [
