@@ -9,7 +9,6 @@ const premiumSchema = mongoose.Schema(
   {
     userId: String,
     guildId: String,
-    tier: reqString,
     expires: {
       type: Date,
       required: true,

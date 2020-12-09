@@ -5,7 +5,7 @@ module.exports = class DotsAndBoxesCommand extends Commando.Command {
 	constructor(client) {
 		super(client, {
 			name: 'dotsandboxes',
-			aliases: ['dots-boxes', 'dot-box', 'dot-and-box', 'territory-capture'],
+			aliases: ['dots-boxes', 'dab', 'dot-and-box', 'territory-capture'],
 			group: 'fun',
 			memberName: 'dotsandboxes',
 			description: 'Play a game of Dots and Boxes with another user.',
@@ -21,6 +21,20 @@ module.exports = class DotsAndBoxesCommand extends Commando.Command {
 	}
 	
 	async run(message, { opponent }) {
+		const { guild, author } = message
+		try {  const result = await premiumSchema.findOne({
+			guildId: guild.id,
+			userId: author.id,
+		}) 
+		if (result.guildId === undefined || result.userId === undefined) {
+			message.reply('This is a Premium only command, you can get premium by supporting me!')
+			return 
+		}
+	} catch (error) {
+		console.log(error)
+		message.reply('This is a Premium only command. You can get premium by supporting me!')
+		return	
+	}
 		const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
@@ -181,6 +195,7 @@ Date: ${new Date()}
 		displayed.push('█                      █');
 		displayed.push(new Array(24).fill('█').join(''));
 		return displayed.join('\n');
-		
+	
 	}
+
 };
