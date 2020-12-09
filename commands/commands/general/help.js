@@ -31,7 +31,7 @@ Date: ${new Date()}
                   // A MessageEmbed to actually send in chat, and...
                   content: new Discord.MessageEmbed({
                       title: 'Utility Commands',
-                      description: '**sys**, Sysinfo.exe \n **help (h)**, Shows this menu \n **msgdel**, Message Genocide \n **ping**, Find your ping to me! \n **summon**, *Holy Music stops* \n **country**, Gets info about the specified country \n **math**, Can solve math problems \n **element**, Gets the info about said element on the preiodic table \n **translate**, Translates text between languages (ex. en es hello)\n **wikipedia (wiki)**, Gets a summary about said topic \n **news (n)**, Shows some news articles \n **weather (w)**, Shows the weather for your city \n '
+                      description: '**sys**, Sysinfo.exe \n **help (h)**, Shows this menu \n **msgdel**, Message Genocide \n **ping**, Find your ping to me! \n **summon**, *Holy Music stops* \n **country**, Gets info about the specified country \n **math**, Can solve math problems \n **element**, Gets the info about said element on the preiodic table \n **translate**, Translates text between languages (ex. en es hello)\n **wikipedia (wiki)**, Gets a summary about said topic \n'
                    
                       
                   }),
@@ -46,7 +46,7 @@ Date: ${new Date()}
                 name: 'fun',
                 content: new Discord.MessageEmbed({
                     title: 'Fun Commands',
-                    description: `**reddit (r)**, *Taste the memes* \n **todayinhistory (tih)**, Finds an event that happened on specific date (ex. 4 13, month day) \n **urbandictionary (ud)**, Looks up a word/phrase. \n **giphy (gif)**, Gets a gif from Giphy \n **hangman**, Play hangman with over 50,000 words \n **wordchain**, Try to come up with words that start with the last letter of your opponent\'s word. \n **tictctoe (ttt)**, Play a game of tic tac toe with someone \n **quote**, Gets a quote from someone \n **dotsandboxes (dab)**, Play a game of Dots and Boxes with another user \n `
+                    description: `**math**, Calculator \n  **reddit (r)**, *Taste the memes* \n **news (n)**, Shows some news articles \n **weather (w)**, Shows the weather for your city \n **todayinhistory (tih)**, Finds an event that happened on specific date (ex. 4 13, month day) \n **urbandictionary (ud)**, Looks up a word/phrase. \n **giphy (gif)**, Gets a gif from Giphy \n **hangman**, Play hangman with over 50,000 words \n **wordchain**, Try to come up with words that start with the last letter of your opponent\'s word. \n **tictctoe (ttt)**, Play a game of tic tac toe with someone \n `
                 }),
                 reactions: {
                     '◀': 'general',

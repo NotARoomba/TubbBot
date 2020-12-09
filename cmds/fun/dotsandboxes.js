@@ -7,7 +7,7 @@ module.exports = class DotsAndBoxesCommand extends Commando.Command {
 			name: 'dotsandboxes',
 			aliases: ['dots-boxes', 'dab', 'dot-and-box', 'territory-capture'],
 			group: 'fun',
-			memberName: 'dotsandboxes',
+			memberName: 'dots-and-boxes',
 			description: 'Play a game of Dots and Boxes with another user.',
 			guildOnly: true,
 			args: [

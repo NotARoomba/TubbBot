@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 
 module.exports = {
-    commands: ['news', 'n'],
+    commands: ['worldnews', 'wn'],
     minArgs: 0,
     maxArgs: 0,
     description: 'Get the World News',
