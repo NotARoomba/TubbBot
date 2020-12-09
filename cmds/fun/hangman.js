@@ -26,20 +26,7 @@ module.exports = class HangmanCommand extends Commando.Command {
 	}
 
 	async run(message) {
-			const { guild, author } = message
-		try {  const result = await premiumSchema.findOne({
-			guildId: guild.id,
-			userId: author.id,
-		}) 
-		if (result.guildId === undefined || result.userId === undefined) {
-			message.reply('This is a Premium only command, you can get premium by supporting me!')
-			return 
-		}
-	} catch (error) {
-		console.log(error)
-		message.reply('This is a Premium only command. You can get premium by supporting me!')
-		return	
-	}
+
 		const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}

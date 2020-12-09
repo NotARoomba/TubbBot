@@ -13,7 +13,6 @@ global.Discord = require('discord.js')
 global.path = require('path');
 global.MessageEmbed
 global.Structures
-global.premiumSchema = require('@schemas/premium-schema')
 global.ytdl = require('ytdl-core');
 global.Youtube = require('simple-youtube-api');
 global.cheerio = require('cheerio');
@@ -85,7 +84,6 @@ client.on('ready',  async (member) => {
     ['utility', 'Utility commands that use Commando'],
     ['moderation', 'Moderation commands that use Commando'],
     ['fun', 'Fun commands that use Commando'],
-    ['config', 'Config commands that use Commando'],
 	])
 	.registerDefaultGroups()
 	.registerDefaultCommands({

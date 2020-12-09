@@ -21,23 +21,6 @@ module.exports = class DotsAndBoxesCommand extends Commando.Command {
 	}
 	
 	async run(message, { opponent }) {
-		const { author, guild } = message
-		try {  const result = await premiumSchema.findOne({
-			_id: guild.id,
-			userId: author.id,
-			
-			
-		}) 
-		console.log(result._id)
-		if (result.guildId === undefined || result.userId === undefined) {
-			message.reply('This is a Premium only command, you can get premium by supporting me!')
-			return 
-		}
-	} catch (error) {
-		console.log(error)
-		message.reply('This is a Premium only command. You can get premium by supporting me!')
-		return	
-	}
 		const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
         webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
