@@ -37,7 +37,7 @@ Date: ${new Date()}
     // !mute @ reason
 
     const { guild, author: staff } = message
-
+    
     const previousMutes = await muteSchema.find({
       userId: target.id,
     })

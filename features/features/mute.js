@@ -12,7 +12,7 @@ module.exports = (client) => {
       },
       current: true,
     }
-
+    await muteSchema.deleteMany({current: false})
     const results = await muteSchema.find(conditional)
     console.log('results:', results)
 
@@ -34,7 +34,7 @@ module.exports = (client) => {
         current: false,
       })
     }
-
+    await muteSchema.deleteMany({current: false})
     setTimeout(checkMutes, 1000 * 60 * 10)
   }
   checkMutes()
