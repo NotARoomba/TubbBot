@@ -49,9 +49,13 @@ module.exports = class DotsAndBoxesCommand extends Commando.Command {
         message.reply('That guild doesnt have Tubb')
         return
     }
-    await new premiumSchema({
+    await new premiumSchema(
+      {
+        _id: Guild,
+      },
+      {
+        _id: Guild,
         userId: User.id,
-        guildId: Guild,
         expires,
         current: true,
       }).save()

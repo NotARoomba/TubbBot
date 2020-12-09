@@ -21,11 +21,14 @@ module.exports = class DotsAndBoxesCommand extends Commando.Command {
 	}
 	
 	async run(message, { opponent }) {
-		const { guild, author } = message
+		const { author, guild } = message
 		try {  const result = await premiumSchema.findOne({
-			guildId: guild.id,
+			_id: guild.id,
 			userId: author.id,
+			
+			
 		}) 
+		console.log(result._id)
 		if (result.guildId === undefined || result.userId === undefined) {
 			message.reply('This is a Premium only command, you can get premium by supporting me!')
 			return 

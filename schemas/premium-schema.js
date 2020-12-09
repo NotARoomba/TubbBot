@@ -7,8 +7,8 @@ const reqString = {
 
 const premiumSchema = mongoose.Schema(
   {
-    userId: String,
-    guildId: String,
+    _id: reqString,
+    userId: reqString,
     expires: {
       type: Date,
       required: true,
