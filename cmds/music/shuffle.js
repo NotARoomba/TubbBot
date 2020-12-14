@@ -11,7 +11,7 @@ module.exports = class ShuffleQueueCommand extends Commando.Command {
   }
   run(message) {
     const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
-        webhookClient.send(`Command: ${this.name} 
+    webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}
@@ -34,7 +34,7 @@ Date: ${new Date()}
       return;
     } else if (message.guild.musicData.loopSong) {
       message.reply(
-        ':x: Turn off the **loop** Commando.Command before using the **shuffle** Commando.Command!'
+        ':x: Turn off the **loop** command before using the **shuffle** command!'
       );
       return;
     }
@@ -49,7 +49,7 @@ Date: ${new Date()}
     });
     var numOfEmbedFields = 10;
     if (titleArray.length < 10) numOfEmbedFields = titleArray.length;
-    var queueEmbed = new Discord.MessageEmbed()
+    var queueEmbed = new MessageEmbed()
       .setColor('#ff7373')
       .setTitle(':twisted_rightwards_arrows: New Music Queue!');
     for (let i = 0; i < numOfEmbedFields; i++) {

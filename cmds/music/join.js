@@ -15,21 +15,26 @@ module.exports = class JoinCommand extends Commando.Command {
 
 	async run(message) {
 		const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
-        webhookClient.send(`Command: ${this.name} 
+		webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}
 -------------------------------------------------------------------------------------------`)
 		const voiceChannel = message.member.voice.channel;
-		if (!voiceChannel) return message.reply('Please enter a voice channel first.');
-		if (!voiceChannel.permissionsFor(this.client.user).has(['CONNECT', 'SPEAK', 'VIEW_CHANNEL'])) {
-			return message.reply('I\'m missing the "Connect", "Speak", or "View Channel" permission for this channel.');
+		if (!voiceChannel) {
+			message.reply(':no_entry: Please join a voice channel and try again!');
+			return;
 		}
-		if (!voiceChannel.joinable) return message.reply('Your voice channel is not joinable.');
-		if (this.client.voice.connections.has(voiceChannel.guild.id)) {
-			return message.reply('I am already in a voice channel.');
+		if (message.guild.musicData.isPlaying != true) {
+			message.reply(':x: Nothing is Playing');
+			return;
 		}
-		await voiceChannel.join();
-		return message.reply(`Joined **${voiceChannel.name}**!`);
+		try {
+			await voiceChannel.join();
+			return;
+		} catch {
+			message.reply(':x Something went wrong when moving channels');
+			return;
+		}
 	}
 };
