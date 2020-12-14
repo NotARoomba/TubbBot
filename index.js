@@ -13,6 +13,7 @@ global.Discord = require('discord.js')
 global.path = require('path');
 global.MessageEmbed
 global.Structures
+global.axios = require('axios').default;
 global.ytdl = require('ytdl-core');
 global.Youtube = require('simple-youtube-api');
 global.cheerio = require('cheerio');
@@ -157,6 +158,11 @@ client.on('guildCreate', guild => {
       {
         name: `My Patreon`,
         value: `[Link](https://www.patreon.com/L061571C5)`, // This is optional if you want over people to invite your bot to different servers!
+        inline: true,
+      },
+      {
+        name: `My Website`,
+        value: `[Link](https://tubb-bot.000webhostapp.com/)`, // This is optional if you want over people to invite your bot to different servers!
         inline: true,
       },
     ],

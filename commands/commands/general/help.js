@@ -1,20 +1,20 @@
 const { Menu } = require('discord.js-menu');
 module.exports = {
-  commands: [`help`, `h`, `commands`, `cmds`],
-  description: "Describes all of this bot`s commands",
-  async callback (message, arguments, text)  {
-   const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
+    commands: [`help`, `h`, `commands`, `cmds`],
+    description: "Describes all of this bot`s commands",
+    async callback(message, arguments, text) {
+        const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
         webhookClient.send(`Command: help 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}
 -------------------------------------------------------------------------------------------`)
-    
-    
-      // Provide a menu with a channel, an author ID to let control the menu, and an array of menu pages.
-          let helpMenu = new Menu(message.channel, message.author.id, [
-              // Each object in this array is a unique page.
-              {
+
+
+        // Provide a menu with a channel, an author ID to let control the menu, and an array of menu pages.
+        let helpMenu = new Menu(message.channel, message.author.id, [
+            // Each object in this array is a unique page.
+            {
                 name: 'system',
                 content: new Discord.MessageEmbed({
                     title: 'System Config',
@@ -25,24 +25,24 @@ Date: ${new Date()}
                     '⏹': 'delete'
                 }
             },
-              {
-                  // A page object consists of a name, used as a destination by reactions...
-                  name: 'general',
-                  // A MessageEmbed to actually send in chat, and...
-                  content: new Discord.MessageEmbed({
-                      title: 'Utility Commands',
-                      description: '**sys**, Sysinfo.exe \n **help (h)**, Shows this menu \n **msgdel**, Message Genocide \n **ping**, Find your ping to me! \n **summon**, *Holy Music stops* \n **country**, Gets info about the specified country \n **math**, Can solve math problems \n **element**, Gets the info about said element on the preiodic table \n **translate**, Translates text between languages (ex. en es hello)\n **wikipedia (wiki)**, Gets a summary about said topic \n'
-                   
-                      
-                  }),
-                  // A set of reactions with destination names attached.
-                  // Note there's also special destination names (read below)
-                  reactions: {
+            {
+                // A page object consists of a name, used as a destination by reactions...
+                name: 'general',
+                // A MessageEmbed to actually send in chat, and...
+                content: new Discord.MessageEmbed({
+                    title: 'Utility Commands',
+                    description: '**sys**, Sysinfo.exe \n **help (h)**, Shows this menu \n **msgdel**, Message Genocide \n **ping**, Find your ping to me! \n **summon**, *Holy Music stops* \n **country**, Gets info about the specified country \n **math**, Can solve math problems \n **element**, Gets the info about said element on the preiodic table \n **translate**, Translates text between languages (ex. en es hello)\n **wikipedia (wiki)**, Gets a summary about said topic \n **ip**, Gets a summary about said ip \n'
+
+
+                }),
+                // A set of reactions with destination names attached.
+                // Note there's also special destination names (read below)
+                reactions: {
                     '◀': 'system',
-                    '▶': 'fun'   
-                  }
-              },
-              {
+                    '▶': 'fun'
+                }
+            },
+            {
                 name: 'fun',
                 content: new Discord.MessageEmbed({
                     title: 'Fun Commands',
@@ -53,7 +53,7 @@ Date: ${new Date()}
                     '▶': 'moderation'
                 }
             },
-              {
+            {
                 name: 'moderation',
                 content: new Discord.MessageEmbed({
                     title: 'Moderation',
@@ -65,15 +65,15 @@ Date: ${new Date()}
                 }
             },
             {
-              name: 'music',
-              content: new Discord.MessageEmbed({
-                  title: 'Music 1/2',
-                  description: '**createplaylist (cp)**, Creates a custom playlist \n **deleteplaylist (delp)**, Deletes a custom playlist \n **displayplaylist (dp)**, Displays a custom playlist`s songs \n **leave**, Leaves the Voice Channel \n **loop**, Toggle song loop \n **loopqueue (lq)**, Loops the entire queue \n **lyrics (ly)**, Get lyrics for the currently playing song \n **move**, Move songs anywhere in the queue \n **myplaylists (mp)**, Displays your custom playlist \n **nowplaying (np)**, Show now playing song \n **pause**, Pause the currently playing music \n'
-              }),
-              reactions: {
-                  '◀': 'moderation',
-                  '▶': 'music2'
-              }
+                name: 'music',
+                content: new Discord.MessageEmbed({
+                    title: 'Music 1/2',
+                    description: '**createplaylist (cp)**, Creates a custom playlist \n **deleteplaylist (delp)**, Deletes a custom playlist \n **displayplaylist (dp)**, Displays a custom playlist`s songs \n **leave**, Leaves the Voice Channel \n **loop**, Toggle song loop \n **loopqueue (lq)**, Loops the entire queue \n **lyrics (ly)**, Get lyrics for the currently playing song \n **move**, Move songs anywhere in the queue \n **myplaylists (mp)**, Displays your custom playlist \n **nowplaying (np)**, Show now playing song \n **pause**, Pause the currently playing music \n'
+                }),
+                reactions: {
+                    '◀': 'moderation',
+                    '▶': 'music2'
+                }
             },
             {
                 name: 'music2',
@@ -84,18 +84,17 @@ Date: ${new Date()}
                 reactions: {
                     '◀': 'music',
                 }
-              },
-              
-              
-              // The last parameter is the number of milliseconds you want the menu to collect reactions for each page before it stops to save resources
-              // The timer is reset when a user interacts with the menu.
-              // This is optional, and defaults to 180000 (3 minutes).
-          ], 712000)
-          // Run Menu.start() when you're ready to send the menu in chat.
-          // Once sent, the menu will automatically handle everything else.
-          helpMenu.start()
-       
-    
-      } 
-   }
- 
+            },
+
+
+            // The last parameter is the number of milliseconds you want the menu to collect reactions for each page before it stops to save resources
+            // The timer is reset when a user interacts with the menu.
+            // This is optional, and defaults to 180000 (3 minutes).
+        ], 712000)
+        // Run Menu.start() when you're ready to send the menu in chat.
+        // Once sent, the menu will automatically handle everything else.
+        helpMenu.start()
+
+
+    }
+}
