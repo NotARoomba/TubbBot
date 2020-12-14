@@ -13,6 +13,7 @@ global.path = require('path');
 global.MessageEmbed
 global.Structures
 global.webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
+global.fs = require("fs");
 global.axios = require('axios').default;
 global.ytdl = require('ytdl-core');
 global.Youtube = require('simple-youtube-api');

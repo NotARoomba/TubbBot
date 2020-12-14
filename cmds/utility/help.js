@@ -1,5 +1,5 @@
 const { Menu } = require('discord.js-menu');
-module.exports = class PingCommand extends Commando.Command {
+module.exports = class HelpCommand extends Commando.Command {
     constructor(client) {
         super(client, {
             name: 'help',
