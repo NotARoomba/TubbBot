@@ -12,8 +12,8 @@ module.exports = class NowPlayingCommand extends Commando.Command {
   }
 
   run(message) {
-    const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
-        webhookClient.send(`Command: ${this.name} 
+
+    webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}
@@ -65,7 +65,7 @@ Date: ${new Date()}
     );
 
     let totalDurationInMS = 0;
-    Object.keys(totalDurationObj).forEach(function(key) {
+    Object.keys(totalDurationObj).forEach(function (key) {
       if (key == 'hours') {
         totalDurationInMS = totalDurationInMS + totalDurationObj[key] * 3600000;
       } else if (key == 'minutes') {
@@ -96,15 +96,13 @@ Date: ${new Date()}
   }
   // prettier-ignore
   static formatDuration(durationObj) {
-      const duration = `${durationObj.hours ? (durationObj.hours + ':') : ''}${
-        durationObj.minutes ? durationObj.minutes : '00'
-      }:${
-        (durationObj.seconds < 10)
-          ? ('0' + durationObj.seconds)
-          : (durationObj.seconds
+    const duration = `${durationObj.hours ? (durationObj.hours + ':') : ''}${durationObj.minutes ? durationObj.minutes : '00'
+      }:${(durationObj.seconds < 10)
+        ? ('0' + durationObj.seconds)
+        : (durationObj.seconds
           ? durationObj.seconds
           : '00')
       }`;
-      return duration;
-    }
+    return duration;
+  }
 };

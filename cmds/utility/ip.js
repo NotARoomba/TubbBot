@@ -1,4 +1,4 @@
-module.exports = class CountryCommand extends Commando.Command {
+module.exports = class IpCommand extends Commando.Command {
     constructor(client) {
         super(client, {
             name: 'ip',
@@ -21,7 +21,10 @@ module.exports = class CountryCommand extends Commando.Command {
                 .get(`http://api.ipstack.com/${ip}?access_key=${process.env.IP_STACK}&output=json`)
                 .then((response) => {
                     const data = response.data
-                    const location = data.location
+                    if (data.longitude == null || undefined) {
+                        message.reply(`That is not a valid ip`)
+                        return
+                    }
                     const embed = new Discord.MessageEmbed()
                         .setColor(0x00AE86)
                         .setTitle(`Results for: ${data.ip}`)

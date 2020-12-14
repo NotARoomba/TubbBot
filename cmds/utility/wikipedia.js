@@ -1,11 +1,11 @@
-  
+
 
 const { shorten } = require('@util/util');
 module.exports = class WikipediaCommand extends Commando.Command {
 	constructor(client) {
 		super(client, {
-            name: 'wikipedia',
-            aliases: ['wiki'],
+			name: 'wikipedia',
+			aliases: ['wiki'],
 			group: 'utility',
 			memberName: 'wikipedia',
 			description: 'Searches Wikipedia for your query.',
@@ -29,8 +29,8 @@ module.exports = class WikipediaCommand extends Commando.Command {
 	}
 
 	async run(message, { query }) {
-		const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
-        webhookClient.send(`Command: ${this.name} 
+
+		webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}

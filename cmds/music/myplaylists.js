@@ -12,8 +12,8 @@ module.exports = class MyPlaylistsCommand extends Commando.Command {
   }
 
   run(message) {
-    const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
-        webhookClient.send(`Command: ${this.name} 
+
+    webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}
@@ -34,7 +34,7 @@ Date: ${new Date()}
       .setAuthorizedUsers([message.author.id])
       .setChannel(message.channel)
       .setElementsPerPage(5)
-      .formatField('# - Playlist', function(e) {
+      .formatField('# - Playlist', function (e) {
         return `**${savedPlaylistsClone.indexOf(e) + 1}**: ${e.name}`;
       });
 

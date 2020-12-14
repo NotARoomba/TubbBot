@@ -25,15 +25,15 @@ module.exports = class LyricsCommand extends Commando.Command {
     });
   }
   async run(message, { songName }) {
-    const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
-        webhookClient.send(`Command: ${this.name} 
+
+    webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}
 -------------------------------------------------------------------------------------------`)
     if (
       songName == '' &&
-      message.guild.musicData.isPlaying 
+      message.guild.musicData.isPlaying
     ) {
       songName = message.guild.musicData.nowPlaying.title;
     } else if (songName == '' && !message.guild.musicData.isPlaying) {
@@ -55,11 +55,11 @@ Date: ${new Date()}
     );
 
     LyricsCommand.searchSong(songName)
-      .then(function(url) {
+      .then(function (url) {
         LyricsCommand.getSongPageURL(url)
-          .then(function(url) {
+          .then(function (url) {
             LyricsCommand.getLyrics(url)
-              .then(function(lyrics) {
+              .then(function (lyrics) {
                 if (lyrics.length > 4095) {
                   message.say(
                     ':x: Lyrics are too long to be returned in a message embed!'
@@ -87,24 +87,24 @@ Date: ${new Date()}
                   return;
                 }
               })
-              .catch(function(err) {
+              .catch(function (err) {
                 message.say(err);
                 return;
               });
           })
-          .catch(function(err) {
+          .catch(function (err) {
             message.say(err);
             return;
           });
       })
-      .catch(function(err) {
+      .catch(function (err) {
         message.say(err);
         return;
       });
   }
 
   static searchSong(query) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
       const searchURL = `https://api.genius.com/search?q=${encodeURI(query)}`;
       const headers = {
         Authorization: `Bearer ${process.env.GENIUS_LYRICS_API}`
@@ -121,7 +121,7 @@ Date: ${new Date()}
   }
 
   static getSongPageURL(url) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
       const headers = {
         Authorization: `Bearer ${process.env.GENIUS_LYRICS_API}`
       };
@@ -141,7 +141,7 @@ Date: ${new Date()}
   }
 
   static getLyrics(url) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
       try {
         const response = await fetch(url);
         const text = await response.text();
@@ -165,7 +165,7 @@ Date: ${new Date()}
           resolve(lyrics.replace(/(\[.+\])/g, ''));
         }
       } catch (e) {
-       console.log(e);
+        console.log(e);
         reject(
           'There was a problem fetching lyrics for this song, please try again'
         );

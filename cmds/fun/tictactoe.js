@@ -3,8 +3,8 @@ const { verify } = require('@util/util');
 module.exports = class TicTacToeCommand extends Commando.Command {
 	constructor(client) {
 		super(client, {
-            name: 'tic-tac-toe',
-            aliases: ['ttt', 'tictactoe'],
+			name: 'tic-tac-toe',
+			aliases: ['ttt', 'tictactoe'],
 			group: 'fun',
 			memberName: 'tic-tac-toe',
 			description: 'Play a game of tic-tac-toe with another user.',
@@ -21,8 +21,8 @@ module.exports = class TicTacToeCommand extends Commando.Command {
 
 	async run(message, { opponent }) {
 
-		const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
-        webhookClient.send(`Command: ${this.name} 
+
+		webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}

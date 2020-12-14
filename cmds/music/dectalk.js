@@ -40,27 +40,27 @@ module.exports = class DECTalkCommand extends Commando.Command {
 			]
 		});
 	}
-	 
+
 	async run(message, { text }) {
-		const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
-        webhookClient.send(`Command: ${this.name} 
+
+		webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}
 -------------------------------------------------------------------------------------------`)
 		var voiceChannel = message.member.voice.channel;
-    if (!voiceChannel)
-      return message.reply(
-        ':no_entry: Please join a voice channel and try again!'
-      );
+		if (!voiceChannel)
+			return message.reply(
+				':no_entry: Please join a voice channel and try again!'
+			);
 		if (!typeof message.guild.musicData.songDispatcher == 'undefined' ||
-			message.guild.musicData.songDispatcher == null) {   
-				message.say(':pause_button: Song was paused!');
-		
-		  message.guild.musicData.songDispatcher.pause();
-		 
+			message.guild.musicData.songDispatcher == null) {
+			message.say(':pause_button: Song was paused!');
+
+			message.guild.musicData.songDispatcher.pause();
+
 		}
-		
+
 		const connection = this.client.voice.connections.get(message.guild.id);
 		if (!connection) {
 			const usage = this.client.registry.commands.get('join').usage();

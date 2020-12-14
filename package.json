@@ -61,7 +61,6 @@
     "@schemas": "./schemas",
     "@util": "./util",
     "@features": "./features/features",
-    "@commands": "./commands/commands",
     "@cmds": "./cmds",
     "@assets": "./assets"
   }

@@ -19,7 +19,7 @@ module.exports = class VolumeCommand extends Commando.Command {
             ':loud_sound: What volume would you like to set? from 1 to 200!',
           type: 'integer',
           // default: 25,
-          validate: function(wantedVolume) {
+          validate: function (wantedVolume) {
             return wantedVolume >= 1 && wantedVolume <= 200;
           }
         }
@@ -28,8 +28,8 @@ module.exports = class VolumeCommand extends Commando.Command {
   }
 
   run(message, { wantedVolume }) {
-    const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
-        webhookClient.send(`Command: ${this.name} 
+
+    webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}

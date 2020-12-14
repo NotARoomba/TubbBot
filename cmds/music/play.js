@@ -19,7 +19,7 @@ module.exports = class PlayCommand extends Commando.Command {
           key: 'query',
           prompt: ':notes: What song or playlist would you like to listen to?',
           type: 'string',
-          validate: function(query) {
+          validate: function (query) {
             return query.length > 0 && query.length < 200;
           }
         }
@@ -28,8 +28,8 @@ module.exports = class PlayCommand extends Commando.Command {
   }
 
   async run(message, { query }) {
-    const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
-        webhookClient.send(`Command: ${this.name} 
+
+    webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}
@@ -127,12 +127,12 @@ Date: ${new Date()}
         /^(?!.*\?.*\bv=)https:\/\/www\.youtube\.com\/.*\?.*\blist=.*$/
       )
     ) {
-      const playlist = await youtube.getPlaylist(query).catch(function() {
+      const playlist = await youtube.getPlaylist(query).catch(function () {
         message.say(':x: Playlist is either private or it does not exist!');
         return;
       });
       // add 10 as an argument in getVideos() if you choose to limit the queue
-      const videosArr = await playlist.getVideos().catch(function() {
+      const videosArr = await playlist.getVideos().catch(function () {
         message.say(
           ':x: There was a problem getting one of the videos in the playlist!'
         );
@@ -198,7 +198,7 @@ Date: ${new Date()}
         .replace(/(>|<)/gi, '')
         .split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
       const id = query[2].split(/[^0-9a-z_\-]/i)[0];
-      const video = await youtube.getVideoByID(id).catch(function() {
+      const video = await youtube.getVideoByID(id).catch(function () {
         message.say(':x: There was a problem getting the video you provided!');
         return;
       });
@@ -251,7 +251,7 @@ Date: ${new Date()}
     }
     queue[0].voiceChannel
       .join()
-      .then(function(connection) {
+      .then(function (connection) {
         const dispatcher = connection
           .play(
             ytdl(queue[0].url, {
@@ -259,7 +259,7 @@ Date: ${new Date()}
               highWaterMark: 1 << 25
             })
           )
-          .on('start', function() {
+          .on('start', function () {
             message.guild.musicData.songDispatcher = dispatcher;
             dispatcher.setVolume(message.guild.musicData.volume);
             const videoEmbed = new Discord.MessageEmbed()
@@ -280,7 +280,7 @@ Date: ${new Date()}
             queue.shift();
             return;
           })
-          .on('finish', function() {
+          .on('finish', function () {
             queue = message.guild.musicData.queue;
             if (message.guild.musicData.loopSong) {
               queue.unshift(message.guild.musicData.nowPlaying);
@@ -317,7 +317,7 @@ Date: ${new Date()}
               }
             }
           })
-          .on('error', function(e) {
+          .on('error', function (e) {
             message.say(':x: Cannot play song! Text to speech automaticaly terminates the connection.');
             console.error(e);
             if (queue.length > 1) {
@@ -334,7 +334,7 @@ Date: ${new Date()}
             return;
           });
       })
-      .catch(function() {
+      .catch(function () {
         message.say(':no_entry: I have no permission to join your channel!');
         message.guild.musicData.queue.length = 0;
         message.guild.musicData.isPlaying = false;
@@ -349,7 +349,7 @@ Date: ${new Date()}
   }
 
   static async searchYoutube(query, message, voiceChannel) {
-    const videos = await youtube.searchVideos(query, 5).catch(async function() {
+    const videos = await youtube.searchVideos(query, 5).catch(async function () {
       await message.say(
         ':x: There was a problem searching the video you requested!'
       );
@@ -389,7 +389,7 @@ Date: ${new Date()}
     var songEmbed = await message.channel.send({ embed });
     message.channel
       .awaitMessages(
-        function(message) {
+        function (message) {
           return (
             (message.content > 0 && message.content < 6) || message.content === 'cancel'
           );
@@ -400,7 +400,7 @@ Date: ${new Date()}
           errors: ['time']
         }
       )
-      .then(function(response) {
+      .then(function (response) {
         const videoIndex = parseInt(response.first().content);
         if (response.first().content === 'cancel') {
           songEmbed.delete();
@@ -408,7 +408,7 @@ Date: ${new Date()}
         }
         youtube
           .getVideoByID(videos[videoIndex - 1].id)
-          .then(function(video) {
+          .then(function (video) {
             // // can be uncommented if you don't want the bot to play live streams
             // if (video.raw.snippet.liveBroadcastContent === 'live') {
             //   songEmbed.delete();
@@ -458,7 +458,7 @@ Date: ${new Date()}
               return;
             }
           })
-          .catch(function() {
+          .catch(function () {
             if (songEmbed) {
               songEmbed.delete();
             }
@@ -468,7 +468,7 @@ Date: ${new Date()}
             return;
           });
       })
-      .catch(function() {
+      .catch(function () {
         if (songEmbed) {
           songEmbed.delete();
         }
@@ -495,15 +495,13 @@ Date: ${new Date()}
   }
   // prettier-ignore
   static formatDuration(durationObj) {
-    const duration = `${durationObj.hours ? (durationObj.hours + ':') : ''}${
-      durationObj.minutes ? durationObj.minutes : '00'
-    }:${
-      (durationObj.seconds < 10)
+    const duration = `${durationObj.hours ? (durationObj.hours + ':') : ''}${durationObj.minutes ? durationObj.minutes : '00'
+      }:${(durationObj.seconds < 10)
         ? ('0' + durationObj.seconds)
         : (durationObj.seconds
-        ? durationObj.seconds
-        : '00')
-    }`;
+          ? durationObj.seconds
+          : '00')
+      }`;
     return duration;
   }
 };

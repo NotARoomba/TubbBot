@@ -1,9 +1,16 @@
 const { Menu } = require('discord.js-menu');
-module.exports = {
-    commands: [`help`, `h`, `commands`, `cmds`],
-    description: "Describes all of this bot`s commands",
-    async callback(message, arguments, text) {
-        const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
+module.exports = class PingCommand extends Commando.Command {
+    constructor(client) {
+        super(client, {
+            name: 'help',
+            aliases: [`h`, `commands`, `cmds`],
+            group: 'utility',
+            memberName: 'help',
+            description: 'Describes all of this bot`s commands',
+        });
+    }
+    async run(message) {
+
         webhookClient.send(`Command: help 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}

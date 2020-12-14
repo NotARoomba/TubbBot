@@ -12,24 +12,24 @@ module.exports = class MuteCommand extends Commando.Command {
           key: 'target',
           prompt: 'Who to mute',
           type: 'user'
-      },
+        },
         {
           key: 'reason',
           prompt: 'Why do you want to mute them?',
           type: 'string'
-      },
-        {
-            key: 'time',
-            prompt: 'When do you want them to be unmuted?',
-            type: 'string'
         },
-    ],
+        {
+          key: 'time',
+          prompt: 'When do you want them to be unmuted?',
+          type: 'string'
+        },
+      ],
     })
   }
 
   run = async (message, { target, reason, time }) => {
-    const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
-        webhookClient.send(`Command: ${this.name} 
+
+    webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}
@@ -37,7 +37,7 @@ Date: ${new Date()}
     // !mute @ reason
 
     const { guild, author: staff } = message
-    
+
     const previousMutes = await muteSchema.find({
       userId: target.id,
     })

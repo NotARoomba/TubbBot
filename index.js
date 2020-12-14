@@ -1,18 +1,18 @@
 require('module-alias/register');
 require('events').EventEmitter.prototype._maxListeners = 200;
 require('dotenv').config();
+global.loadFeatures = require('@root/features/load-features.js')
 const { Structures } = require('discord.js');
 const { MongoClient } = require('mongodb')
 global.MongoDBProvider = require('commando-provider-mongo')
 global.Commando = require('discord.js-commando')
 //const client = new Discord.Client
 global.mongo = require('@util/mongo');
-global.loadCommands = require('@root/commands/load-commands.js')
-global.loadFeatures = require('@root/features/load-features.js')
 global.Discord = require('discord.js')
 global.path = require('path');
 global.MessageEmbed
 global.Structures
+global.webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
 global.axios = require('axios').default;
 global.ytdl = require('ytdl-core');
 global.Youtube = require('simple-youtube-api');
@@ -22,7 +22,6 @@ global.Pagination = require('discord-paginationembed');
 global.db = require('quick.db');
 global.translate = require('@vitalets/google-translate-api');
 global.request = require('node-superfetch')
-global.commandBase = require('@root/commands/command-base')
 global.serverSchema = require('@schemas/server-schema')
 global.muteSchema = require('@schemas/mute-schema')
 global.Canvas = require('canvas')
@@ -47,7 +46,6 @@ Structures.extend('Guild', function (Guild) {
   return MusicGuild;
 });
 
-
 const client = new CommandoClient({
   owner: '465917394108547072',
   commandPrefix: `-`,
@@ -55,7 +53,7 @@ const client = new CommandoClient({
 
 })
 client.setProvider(
-  MongoClient.connect('mongodb+srv://L061571C5:89euzXX8IylP1DYn@tubbbot.kfqqn.mongodb.net/data?retryWrites=true&w=majority', {
+  MongoClient.connect(process.env.MONGO, {
     useUnifiedTopology: true,
   })
     .then((client) => {
@@ -68,7 +66,7 @@ client.setProvider(
 
 
 client.on('ready', async (member) => {
-  console.log('Tubb is online!')
+  console.log('Tubb is starting!')
   setInterval(() => {
     client.user.setActivity(`-help in ${client.guilds.cache.size} Servers | Made by L061571C5#5281`, { type: 'WATCHING' })
   }, 60000);
@@ -85,6 +83,7 @@ client.on('ready', async (member) => {
       ['utility', 'Utility commands that use Commando'],
       ['moderation', 'Moderation commands that use Commando'],
       ['fun', 'Fun commands that use Commando'],
+      ['config', 'Config commands that use Commando'],
     ])
     .registerDefaultGroups()
     .registerDefaultCommands({
@@ -95,8 +94,8 @@ client.on('ready', async (member) => {
       unknownCommand: false,
     })
     .registerCommandsIn(path.join(__dirname, 'cmds'));
-  loadCommands(client)
   loadFeatures(client)
+  console.log('Done!')
 
 });
 

@@ -19,8 +19,8 @@ module.exports = class CreatePlaylistCommand extends Commando.Command {
   }
 
   run(message, { playlistName }) {
-    const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
-        webhookClient.send(`Command: ${this.name} 
+
+    webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}
@@ -56,7 +56,7 @@ Date: ${new Date()}
         .setAuthorizedUsers([message.member.id])
         .setChannel(message.channel)
         .setElementsPerPage(10)
-        .formatField('# - Title', function(e) {
+        .formatField('# - Title', function (e) {
           return `**${urlsArrayClone.indexOf(e) + 1}**: ${e.title}`;
         });
       savedSongsEmbed.embed.setColor('#ff7373').setTitle('Saved Songs');

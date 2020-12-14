@@ -3,7 +3,7 @@ module.exports = class SkipCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: 'skip',
-      aliases: ['skip-song', 'advance-song', 'next', 's'], 
+      aliases: ['skip-song', 'advance-song', 'next', 's'],
       memberName: 'skip',
       group: 'music',
       description: 'Skip the current playing song!',
@@ -12,8 +12,8 @@ module.exports = class SkipCommand extends Commando.Command {
   }
 
   run(message) {
-    const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
-        webhookClient.send(`Command: ${this.name} 
+
+    webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}
@@ -34,7 +34,7 @@ Date: ${new Date()}
         `:no_entry: You must be in the same voice channel as the bot's in order to use that!`
       );
       return;
-    } 
+    }
     message.guild.musicData.loopSong = false;
     message.guild.musicData.songDispatcher.end();
   }

@@ -12,8 +12,8 @@ module.exports = class QueueCommand extends Commando.Command {
   }
 
   run(message) {
-    const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
-        webhookClient.send(`Command: ${this.name} 
+
+    webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}
@@ -26,7 +26,7 @@ Date: ${new Date()}
       .setAuthorizedUsers([message.author.id])
       .setChannel(message.channel)
       .setElementsPerPage(10)
-      .formatField('# - Song', function(e) {
+      .formatField('# - Song', function (e) {
         return `**${queueClone.indexOf(e) + 1}**: ${e.title}`;
       });
 

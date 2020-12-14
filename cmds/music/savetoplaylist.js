@@ -40,8 +40,8 @@ module.exports = class SaveToPlaylistCommand extends Commando.Command {
   }
 
   async run(message, { playlist, url }) {
-    const webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
-        webhookClient.send(`Command: ${this.name} 
+
+    webhookClient.send(`Command: ${this.name} 
 Ran by: ${message.author.tag}
 Server: ${message.guild.name}
 Date: ${new Date()}
@@ -77,10 +77,9 @@ Date: ${new Date()}
         urlsArrayClone.push(processedURL);
         savedPlaylistsClone[location].urls = urlsArrayClone;
         message.reply(
-          `I added **${
-            savedPlaylistsClone[location].urls[
-              savedPlaylistsClone[location].urls.length - 1
-            ].title
+          `I added **${savedPlaylistsClone[location].urls[
+            savedPlaylistsClone[location].urls.length - 1
+          ].title
           }** to **${playlist}**`
         );
       }
@@ -95,11 +94,11 @@ Date: ${new Date()}
     if (
       url.match(/^(?!.*\?.*\bv=)https:\/\/www\.youtube\.com\/.*\?.*\blist=.*$/)
     ) {
-      const playlist = await youtube.getPlaylist(url).catch(function() {
+      const playlist = await youtube.getPlaylist(url).catch(function () {
         message.say(':x: Playlist is either private or it does not exist!');
         return;
       });
-      const videosArr = await playlist.getVideos().catch(function() {
+      const videosArr = await playlist.getVideos().catch(function () {
         message.say(
           ':x: There was a problem getting one of the videos in the playlist!'
         );
@@ -126,7 +125,7 @@ Date: ${new Date()}
       .replace(/(>|<)/gi, '')
       .split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
     const id = url[2].split(/[^0-9a-z_\-]/i)[0];
-    const video = await youtube.getVideoByID(id).catch(function() {
+    const video = await youtube.getVideoByID(id).catch(function () {
       message.say(':x: There was a problem getting the video you provided!');
       return;
     });
@@ -150,15 +149,13 @@ Date: ${new Date()}
   }
   // prettier-ignore
   static formatDuration(durationObj) {
-    const duration = `${durationObj.hours ? (durationObj.hours + ':') : ''}${
-      durationObj.minutes ? durationObj.minutes : '00'
-    }:${
-      (durationObj.seconds < 10)
+    const duration = `${durationObj.hours ? (durationObj.hours + ':') : ''}${durationObj.minutes ? durationObj.minutes : '00'
+      }:${(durationObj.seconds < 10)
         ? ('0' + durationObj.seconds)
         : (durationObj.seconds
-        ? durationObj.seconds
-        : '00')
-    }`;
+          ? durationObj.seconds
+          : '00')
+      }`;
     return duration;
   }
 };
