@@ -27,7 +27,7 @@ module.exports = class TubbClient extends CommandoClient {
     constructor(options) {
         super(options);
         const papertrail = new winston.transports.Syslog({
-            host: 'logs3.papertrailapp.com',
+            host: 'logs.collector.solarwinds.com',
             port: process.env.PORT,
             protocol: 'tls4',
             localhost: os.hostname(),
