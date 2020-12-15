@@ -35,7 +35,7 @@ module.exports = class TubbClient extends CommandoClient {
             // Handle, report, or silently ignore connection errors and failures
           });
         
-          global.logger = new winston.Logger({
+          var logger = new winston.Logger({
             transports: [winstonPapertrail]
           });
         this.games = new Collection();
