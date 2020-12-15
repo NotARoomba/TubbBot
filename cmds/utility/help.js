@@ -19,7 +19,7 @@ module.exports = class Help2Command extends Commando.Command {
         });
     }
     async run(message, { command }) {
-        this.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+        client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
         if (!command) {
             const embeds = [];
             for (let i = 0; i < Math.ceil(this.client.registry.groups.size / 10); i++) {
