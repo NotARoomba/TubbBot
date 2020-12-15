@@ -1,7 +1,5 @@
-const os = require('os');
 const Collection = require('@discordjs/collection');
 var winston = require('winston');
-require('winston-syslog');
 const { CommandoClient } = require('discord.js-commando');
 const { Structures } = require('discord.js');
 Structures.extend('Guild', function (Guild) {
@@ -26,15 +24,10 @@ Structures.extend('Guild', function (Guild) {
 module.exports = class TubbClient extends CommandoClient {
     constructor(options) {
         super(options);
-        const papertrail = new winston.transports.Syslog({
-            host: 'logs3.papertrailapp.com',
-            port: process.env.PORT,
-            protocol: 'tls4',
-            localhost: os.hostname(),
-            eol: '\n',
-        });
+        
         this.logger = winston.createLogger({
-            transports: [papertrail],
+            transports: [new winston.transports.File({filename: 'commands.log', level: 'info'}),
+            new winston.transports.File({filename: 'error.log', level: 'error'})],
             format: winston.format.combine(
                 winston.format.timestamp({ format: 'MM/DD/YYYY HH:mm:ss' }),
                 winston.format.printf(log => `[${log.timestamp}] [${log.level.toUpperCase()}]: ${log.message}`)
