@@ -55,14 +55,15 @@ module.exports = class DECTalkCommand extends Commando.Command {
 		if (!connection) {
 			const usage = this.client.registry.commands.get('join').usage();
 			return message.reply(`I am not in a voice channel. Use ${usage} to fix that!`);
+			
+		}
+		if (
+			typeof message.guild.musicData.songDispatcher === 'undefined') { } else {
+			message.guild.musicData.loopSong = false;
+			message.guild.musicData.songDispatcher.end();
+			message.say('Song was skipped because of dectalk.')
 		}
 		try {
-			if (
-				typeof message.guild.musicData.songDispatcher === 'undefined') { } else {
-				message.guild.musicData.loopSong = false;
-				message.guild.musicData.songDispatcher.end();
-				message.say('Song was skipped because of dectalk.')
-			}
 			reactIfAble(message, this.client.user, '💬');
 			const { body } = await request
 				.get('http://tts.cyzon.us/tts')
