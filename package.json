@@ -49,6 +49,7 @@
     "simple-youtube-api": "^5.2.1",
     "stream": "0.0.2",
     "winston": "^3.3.3",
+    "winston-papertrail": "^1.0.5",
     "winston-syslog": "^2.4.4",
     "ytdl-core": "^4.1.6",
     "ytdl-core-discord": "^1.2.4"
