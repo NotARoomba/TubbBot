@@ -49,7 +49,7 @@ Date: ${new Date()}
     });
     var numOfEmbedFields = 10;
     if (titleArray.length < 10) numOfEmbedFields = titleArray.length;
-    var queueEmbed = new MessageEmbed()
+    var queueEmbed = new Discord.MessageEmbed()
       .setColor('#ff7373')
       .setTitle(':twisted_rightwards_arrows: New Music Queue!');
     for (let i = 0; i < numOfEmbedFields; i++) {

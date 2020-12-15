@@ -1,5 +1,5 @@
 const { CommandoRegistry } = require("discord.js-commando");
-
+const { stripIndents } = require('common-tags');
 
 module.exports = class Help2Command extends Commando.Command {
     constructor(client) {
@@ -12,37 +12,30 @@ module.exports = class Help2Command extends Commando.Command {
         });
     }
     async run(message) {
-        fs.readdir("./cmds", (error, folders) => {
+        const commands = this.client.registry.findCommands('', false);
 
-            folders.forEach(folder => {
-                fs.readdir(`./cmds/${folder}/`, (error, possibleCommands) => {
-     
-                   let jsCommands = possibleCommands.filter(pcmd => pcmd.split(".").pop() === "js");
-                   if (jsCommands.length <= 0) {
-                         console.log(`No commands to load in ${folder}!`);
-                         return;
-                   }
-     
-                   jsCommands.forEach(command => {
-                        let props = require(`../${folder}/${command}`);
-                        let name = props.name.replace("Command", "").toLowerCase();
-                        const description = props.description;
-                        console.log(`Name: ${name}, description: ${description}.`); //Name: undefined, description: undefined.
-                   });
-                })
+        var arr = commands
+        let name = commands[0].group
+
+        console.log(arr, name)
+
+
+        const commandEmbed = new Pagination.FieldsEmbed()
+            .setArray(arr)
+            .setAuthorizedUsers([message.author.id])
+            .setChannel(message.channel)
+            .setElementsPerPage(10)
+            .formatField('# - Command', function (e) {
+                return `** ${commands.description} **: ${commands.name}`;
             });
-        });
-        // const commandEmbed = new Pagination.FieldsEmbed()
-        //     .setArray(command)
-        //     .setAuthorizedUsers([message.author.id])
-        //     .setChannel(message.channel)
-        //     .setElementsPerPage(10)
-        //     .formatField('# - Command', function (e) {
-        //         return `**${command.indexOf(e) + 1}**: ${e.name}`;
-        //     });
 
-        // commandEmbed.embed.setColor('#ff7373').setTitle('Help');
-        // commandEmbed.build();
+        commandEmbed.embed.setColor('#ff7373').setTitle('Help');
+        commandEmbed.build()
+
+
+
 
     }
 }
+
+
