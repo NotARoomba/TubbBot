@@ -7,7 +7,7 @@ module.exports = class Help2Command extends Commando.Command {
             aliases: [`h`, `commands`, `cmds`],
             group: 'utility',
             memberName: 'help',
-            description: 'Describes all of this bot`s commands',
+            description: 'Describes all of this bot`s commands2',
             args: [
                 {
                     key: 'command',
@@ -24,7 +24,7 @@ module.exports = class Help2Command extends Commando.Command {
             for (let i = 0; i < Math.ceil(this.client.registry.groups.size / 10); i++) {
                 const nsfw = message.channel.nsfw || this.client.isOwner(message.author);
                 const embed = new Discord.MessageEmbed()
-                    .setTitle(`Help Menu`)
+                    .setTitle(`Command List (Page ${i + 1})`)
                     .setDescription(stripIndents`
 						To run a command, use ${message.anyUsage('<command>')}.
 						${nsfw ? '' : 'Use in an NSFW channel to see NSFW commands.'}
@@ -54,9 +54,11 @@ module.exports = class Help2Command extends Commando.Command {
                 .setFooter(`${this.client.registry.commands.size} Commands${allShown ? '' : ` (${cmdCount} Shown)`}`);
             try {
                 const messages = [];
-                for (const embed of embeds) messages.push(await message.say({ embed }));
+                for (const embed of embeds) messages.push(await message.direct({ embed }));
+                if (message.channel.type !== 'dm') messages.push(await message.say('📬 Sent you a DM with information.'));
+                return messages;
             } catch {
-                return message.reply('(Insert Error Here)');
+                return message.reply('Failed to send DM. You probably have DMs disabled.');
             }
         }
         const userPerms = command.userPermissions
@@ -68,6 +70,7 @@ module.exports = class Help2Command extends Commando.Command {
         return message.say(stripIndents`
 			Command: **${command.name}** ${command.guildOnly ? ' (Usable only in servers)' : ''}
 			${command.description}${command.details ? `\n${command.details}` : ''}
+			**Format:** ${command.usage(command.format || '')}
 			**Aliases:** ${command.aliases.join(', ') || 'None'}
 			**Permissions You Need:** ${userPerms}
 			**Permissions I Need:** ${clientPerms}
