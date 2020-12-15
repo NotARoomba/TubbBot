@@ -34,11 +34,9 @@ module.exports = class TubbClient extends CommandoClient {
             eol: '\n',
         });
         this.logger = winston.createLogger({
+            format: winston.format.simple(),
+  levels: winston.config.syslog.levels,
             transports: [papertrail],
-            format: winston.format.combine(
-                winston.format.timestamp({ format: 'MM/DD/YYYY HH:mm:ss' }),
-                winston.format.printf(log => `[${log.timestamp}] [${log.level.toUpperCase()}]: ${log.message}`)
-            )
 
         });
         this.games = new Collection();
