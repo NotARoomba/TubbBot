@@ -1,7 +1,7 @@
 const os = require('os');
 const Collection = require('@discordjs/collection');
 var winston = require('winston');
-require('winston-papertrail').Papertrail;
+require('winston-syslog');
 const { CommandoClient } = require('discord.js-commando');
 const { Structures } = require('discord.js');
 Structures.extend('Guild', function (Guild) {
@@ -26,18 +26,21 @@ Structures.extend('Guild', function (Guild) {
 module.exports = class TubbClient extends CommandoClient {
     constructor(options) {
         super(options);
-        var winstonPapertrail = new winston.transports.Papertrail({
+        const papertrail = new winston.transports.Syslog({
             host: 'logs3.papertrailapp.com',
-            port: process.env.PORT
-          })
-          
-          winstonPapertrail.on('error', function(err) {
-            // Handle, report, or silently ignore connection errors and failures
-          });
-        
-          var logger = new winston.Logger({
-            transports: [winstonPapertrail]
-          });
+            port: process.env.PORT,
+            protocol: 'tls4',
+            localhost: os.hostname(),
+            eol: '\n',
+        });
+        this.logger = winston.createLogger({
+            transports: [papertrail],
+            format: winston.format.combine(
+                winston.format.timestamp({ format: 'MM/DD/YYYY HH:mm:ss' }),
+                winston.format.printf(log => `[${log.timestamp}] [${log.level.toUpperCase()}]: ${log.message}`)
+            )
+
+        });
         this.games = new Collection();
     }
 }
