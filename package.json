@@ -28,6 +28,7 @@
     "discord.js": "^12.5.1",
     "discord.js-commando": "git+https://github.com/discordjs/Commando.git",
     "discord.js-menu": "^2.2.2",
+    "discord.js-pagination": "^1.0.3",
     "dotenv": "^8.2.0",
     "ffmpeg-static": "^4.2.7",
     "heroku": "^7.47.5",
