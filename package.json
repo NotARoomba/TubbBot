@@ -32,6 +32,7 @@
     "lyrics-finder": "^21.4.0",
     "mathjs": "^8.1.0",
     "module-alias": "^2.2.2",
+    "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
     "mongodb": "^3.6.3",
     "mongoose": "^5.11.8",
