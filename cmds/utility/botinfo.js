@@ -1,65 +1,46 @@
-const { MessageEmbed } = require('discord.js');
-const { version } = require('@root/package.json')
-module.exports = class BotInfoCommand extends Commando.Command {
+const { version: djsVersion } = require('discord.js');
+const { version: commandoVersion } = require('discord.js-commando');
+const moment = require('moment');
+require('moment-duration-format');
+const { formatNumber, embedURL } = require('@util/util');
+const { version, dependencies } = require('@root/package');
+const permissions = ['ADMINISTRATOR']
+const deps = { ...dependencies };
+const source = 'TubbBot' && 'L061571C5';
+
+
+module.exports = class InfoCommand extends Commando.Command {
   constructor(client) {
     super(client, {
-      name: 'sys',
+      name: 'info',
+      aliases: ['stats', 'uptime', 'bot-info', 'sys'],
       group: 'util',
-      memberName: 'sys',
-      description: 'Displays bot information',
-    })
+      memberName: 'info',
+      description: 'Responds with detailed bot information.',
+      guarded: true,
+      clientPermissions: ['EMBED_LINKS']
+    });
   }
 
-  run = async (message) => {
-
-    webhookClient.send(`Command: ${this.name} 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
-    let totalMembers = 0
-
-    for (const guild of this.client.guilds.cache) {
-      totalMembers += (await guild[1].members.fetch()).size
-    }
-
-    const embed = new MessageEmbed()
-      .setAuthor(
-        `Information about Tubb`,
-        this.client.user.displayAvatarURL()
-      )
-      .addFields(
-        {
-          name: 'Bot tag',
-          value: this.client.user.tag,
-        },
-        {
-          name: 'Version',
-          value: version,
-        },
-        {
-          name: "Server's Command prefix",
-          value: message.guild.commandPrefix,
-        },
-        {
-          name: 'Time since last restart',
-          value: `${process.uptime().toFixed(2) / 60 / 60}h`,
-        },
-        {
-          name: 'Server count',
-          value: this.client.guilds.cache.size,
-        },
-        {
-          name: 'Total members',
-          value: totalMembers,
-        },
-        {
-          name: 'Invite me!',
-          value: `[Invite me!](https://discord.com/api/oauth2/authorize?client_id=750123677739122819&permissions=8&redirect_uri=https%3A%2F%2Fdiscordapp.com%2Foauth2%2Fauthorize%3F%26client_id%3D%5B750123677739122819%5D%26scope%3Dbot&scope=bot)`
-        }
-      )
-
-    message.channel.send(embed)
-
+  async run(msg) {
+    const invite = await this.client.generateInvite({ permissions });
+    const repoURL = `https://github.com/L061571C5/TubbBot`;
+    const embed = new Discord.MessageEmbed()
+      .setColor(0x00AE86)
+      .addField('❯ Servers', formatNumber(this.client.guilds.cache.size), true)
+      .addField('❯ Commands', formatNumber(this.client.registry.commands.size), true)
+      .addField('❯ Shards', formatNumber(this.client.options.shardCount), true)
+      .addField('❯ Home Server',
+        this.client.options.invite ? embedURL('Invite', this.client.options.invite) : 'None', true)
+      .addField('❯ Invite', embedURL('Add Me', invite), true)
+      .addField('❯ Source Code', source ? embedURL('GitHub', repoURL) : 'N/A', true)
+      .addField('❯ Memory Usage', `${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)}MB`, true)
+      .addField('❯ Uptime', moment.duration(this.client.uptime).format('d:hh:mm:ss'), true)
+      .addField('❯ Version', `v${version}`, true)
+      .addField('❯ Node.js', process.version, true)
+      .addField('❯ Discord.js', `v${djsVersion}`, true)
+      .addField('❯ Commando', `v${commandoVersion}`, true)
+      .addField('❯ Dependencies', Object.keys(deps).sort().join(', '));
+    return msg.embed(embed);
   }
-}
+};
