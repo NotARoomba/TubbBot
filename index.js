@@ -28,7 +28,7 @@ global.serverSchema = require('@schemas/server-schema')
 global.muteSchema = require('@schemas/mute-schema')
 global.Canvas = require('canvas')
 global.math = require('mathjs');
-const Client = require('@util/client.js');
+const Client = require('@util/Client.js');
 global.client = new Client({
   commandPrefix: process.env.PREFIX,
   owner: process.env.OWNERS,
