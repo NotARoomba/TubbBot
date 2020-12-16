@@ -11,7 +11,6 @@ global.Discord = require('discord.js')
 global.path = require('path');
 global.MessageEmbed
 global.Structures
-global.webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
 global.logger = require('winston')
 global.winston = require('winston');
 global.fs = require("fs");
