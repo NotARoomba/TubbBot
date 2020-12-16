@@ -2,7 +2,7 @@ module.exports = class MsgdelCommand extends Commando.Command {
     constructor(client) {
         super(client, {
             name: 'msgdel',
-            group: 'utility',
+            group: 'util',
             memberName: 'msgdel',
             description: 'Mass (message) Genocide',
             userPermissions: ['ADMINISTRATOR'],

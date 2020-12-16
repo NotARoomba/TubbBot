@@ -4,7 +4,7 @@ module.exports = class MathCommand extends Commando.Command {
 		super(client, {
 			name: 'math',
 			aliases: ['mathematics', 'solve'],
-			group: 'utility',
+			group: 'util',
 			memberName: 'math',
 			description: 'Evaluates a math expression.',
 			credit: [

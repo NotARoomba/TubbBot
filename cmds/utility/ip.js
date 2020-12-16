@@ -2,7 +2,7 @@ module.exports = class IpCommand extends Commando.Command {
     constructor(client) {
         super(client, {
             name: 'ip',
-            group: 'utility',
+            group: 'util',
             memberName: 'ip',
             description: 'Responds with information on an ip.',
             args: [

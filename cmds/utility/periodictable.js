@@ -7,7 +7,7 @@ module.exports = class PeriodicTableCommand extends Commando.Command {
 		super(client, {
 			name: 'periodic-table',
 			aliases: ['element', 'p-table'],
-			group: 'utility',
+			group: 'util',
 			memberName: 'periodic-table',
 			description: 'Finds an element on the periodic table.',
 			throttling: {

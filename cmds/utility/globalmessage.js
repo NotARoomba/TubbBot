@@ -3,7 +3,7 @@ module.exports = class GlobalMessageCommand extends Commando.Command {
     super(client, {
       name: 'globalmessage',
       aliases: ['gm'],
-      group: 'utility',
+      group: 'util',
       memberName: 'globalmessage',
       description: 'Sends a message to all servers',
       ownerOnly: true,
