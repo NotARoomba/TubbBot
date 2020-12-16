@@ -57,6 +57,7 @@
     "string-progressbar": "^1.0.1",
     "turndown": "^7.0.0",
     "winston": "^3.3.3",
+    "winston-mongodb": "^5.0.5",
     "ytdl-core": "^4.1.6",
     "ytdl-core-discord": "^1.2.4"
   },

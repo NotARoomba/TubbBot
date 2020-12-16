@@ -1,5 +1,6 @@
 const Collection = require('@discordjs/collection');
-const winston = require('winston');
+var winston = require('winston');
+require('winston-mongodb');
 const { CommandoClient } = require('discord.js-commando');
 module.exports = class TubbClient extends CommandoClient {
     constructor(options) {
@@ -7,8 +8,8 @@ module.exports = class TubbClient extends CommandoClient {
 
         this.logger = winston.createLogger({
             transports: [
-                new winston.transports.File({ filename: `commands.log`, level: `info` }),
-                new winston.transports.File({ filename: `error.log`, level: `error` })],
+                new winston.transports.MongoDB({ db: process.env.MONGO, name: `commands.log`, level: `info` }),
+                new winston.transports.MongoDB({ db: process.env.MONGO, name: `error.log`, level: `error` })],
             format: winston.format.combine(
                 winston.format.timestamp({ format: 'MM/DD/YYYY HH:mm:ss' }),
                 winston.format.printf(log => `[${log.timestamp}] [${log.level.toUpperCase()}]: ${log.message}`)
