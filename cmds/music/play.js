@@ -42,6 +42,7 @@ module.exports = class PlayCommand extends Commando.Command {
       { name: '3', urls: [ [Object], [Object] ] }
      ]
     */
+
     if (db.get(message.member.id) !== null) {
       const userPlaylists = db.get(message.member.id).savedPlaylists;
       let found = false;
@@ -56,18 +57,19 @@ module.exports = class PlayCommand extends Commando.Command {
       if (found) {
         const embed = new Discord.MessageEmbed()
           .setColor('#ff0000')
-          .setTitle('Clarification')
+          .setTitle(':eyes: Clarification Please.')
           .setDescription(
             `You have a playlist named **${query}**, did you mean to play the playlist or search for **${query}** on YouTube?`
           )
-          .addField('1.', 'Play saved playlist')
-          .addField('2.', 'Search on YouTube')
-          .addField('3.', 'Cancel');
+          .addField(':arrow_forward: Playlist', '1. Play saved playlist')
+          .addField(':mag: YouTube', '2. Search on YouTube')
+          .addField(':x: Cancel', '3. Cancel')
+          .setFooter('Choose by commenting a number between 1 and 3.');
         const clarifyEmbed = await message.channel.send({ embed });
         message.channel
           .awaitMessages(
-            function onMessage(message) {
-              return message.content > 0 && message.content < 4;
+            function onMessage(msg) {
+              return msg.content > 0 && msg.content < 4;
             },
             {
               max: 1,
@@ -76,8 +78,8 @@ module.exports = class PlayCommand extends Commando.Command {
             }
           )
           .then(async function onClarifyResponse(response) {
-            const messageContent = response.first().content;
-            if (messageContent == 1) {
+            const msgContent = response.first().content;
+            if (msgContent == 1) {
               if (clarifyEmbed) {
                 clarifyEmbed.delete();
               }
@@ -99,10 +101,10 @@ module.exports = class PlayCommand extends Commando.Command {
                 message.guild.musicData.isPlaying = true;
                 PlayCommand.playSong(message.guild.musicData.queue, message);
               }
-            } else if (messageContent == 2) {
+            } else if (msgContent == 2) {
               await PlayCommand.searchYoutube(query, message, voiceChannel);
               return;
-            } else if (messageContent == 3) {
+            } else if (msgContent == 3) {
               clarifyEmbed.delete();
               return;
             }
@@ -245,19 +247,31 @@ module.exports = class PlayCommand extends Commando.Command {
       // happens when loading a saved playlist
       queue[0].voiceChannel = message.member.voice.channel;
     }
+    if (message.guild.me.voice.channel !== null) {
+      if (message.guild.me.voice.channel.id !== queue[0].voiceChannel.id) {
+        queue[0].voiceChannel = message.guild.me.voice.channel;
+      }
+    }
     queue[0].voiceChannel
       .join()
       .then(function (connection) {
         const dispatcher = connection
           .play(
             ytdl(queue[0].url, {
+              filter: 'audio',
               quality: 'highestaudio',
               highWaterMark: 1 << 25
             })
           )
           .on('start', function () {
             message.guild.musicData.songDispatcher = dispatcher;
-            dispatcher.setVolume(message.guild.musicData.volume);
+            if (!db.get(`${message.guild.id}.serverSettings.volume`))
+              dispatcher.setVolume(message.guild.musicData.volume);
+            else
+              dispatcher.setVolume(
+                db.get(`${message.guild.id}.serverSettings.volume`)
+              );
+
             const videoEmbed = new Discord.MessageEmbed()
               .setThumbnail(queue[0].thumbnail)
               .setColor('#ff0000')
@@ -314,7 +328,7 @@ module.exports = class PlayCommand extends Commando.Command {
             }
           })
           .on('error', function (e) {
-            message.say(':x: Cannot play song! Text to speech automaticaly terminates the connection.');
+            message.say(':x: Cannot play song!');
             console.error(e);
             if (queue.length > 1) {
               queue.shift();
@@ -385,9 +399,9 @@ module.exports = class PlayCommand extends Commando.Command {
     var songEmbed = await message.channel.send({ embed });
     message.channel
       .awaitMessages(
-        function (message) {
+        function (msg) {
           return (
-            (message.content > 0 && message.content < 6) || message.content === 'cancel'
+            (msg.content > 0 && msg.content < 6) || msg.content === 'cancel'
           );
         },
         {
