@@ -54,11 +54,7 @@ module.exports = class PeriodicTableCommand extends Commando.Command {
 
 	async run(message, { element }) {
 
-		webhookClient.send(`Command: ${this.name} 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
+		client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
 		const canvas = createCanvas(500, 500);
 		const ctx = canvas.getContext('2d');
 		ctx.fillStyle = 'black';

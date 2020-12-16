@@ -13,11 +13,7 @@ module.exports = class LeaveCommand extends Commando.Command {
 
   run(message) {
 
-    webhookClient.send(`Command: ${this.name} 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     var voiceChannel = message.member.voice.channel;
     if (!voiceChannel) {
       message.reply(':no_entry: Please join a voice channel and try again!');

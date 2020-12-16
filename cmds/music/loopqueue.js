@@ -21,11 +21,7 @@ module.exports = class LoopQueueCommand extends Commando.Command {
 
   run(message) {
 
-    webhookClient.send(`Command: ${this.name} 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     if (!message.guild.musicData.isPlaying) {
       message.say(':x: There is no song playing right now!');
       return;

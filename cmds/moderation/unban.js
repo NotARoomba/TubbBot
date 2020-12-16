@@ -20,11 +20,7 @@ module.exports = class UnbanCommand extends Commando.Command {
     }
     async run(message, { member }) {
 
-        webhookClient.send(`Command: unban 
-        Ran by: ${message.author.tag}
-        Server: ${message.guild.name}
-        Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
+        client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
         message.guild.fetchBans().then(bans => {
             message.guild.members.unban(member)
         })

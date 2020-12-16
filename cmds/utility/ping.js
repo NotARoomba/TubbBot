@@ -10,11 +10,7 @@ module.exports = class PingCommand extends Commando.Command {
 
     run(message) {
 
-        webhookClient.send(`Command: ping 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
-------------------------------------------------------------------------------------------- `)
+        client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
         const waitEmbed = new Discord.MessageEmbed()
             .setColor('#C0C0C0')
             .setTitle(`Ping`)

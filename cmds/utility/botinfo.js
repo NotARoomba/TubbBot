@@ -4,6 +4,7 @@ const moment = require('moment');
 require('moment-duration-format');
 const { formatNumber, embedURL } = require('@util/util');
 const { version, dependencies } = require('@root/package');
+const { logger } = require('../..');
 const permissions = ['ADMINISTRATOR']
 const deps = { ...dependencies };
 const source = 'TubbBot' && 'L061571C5';
@@ -22,7 +23,8 @@ module.exports = class InfoCommand extends Commando.Command {
     });
   }
 
-  async run(msg) {
+  async run(message) {
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     const invite = await this.client.generateInvite({ permissions });
     const repoURL = `https://github.com/L061571C5/TubbBot`;
     const embed = new Discord.MessageEmbed()
@@ -41,6 +43,7 @@ module.exports = class InfoCommand extends Commando.Command {
       .addField('❯ Discord.js', `v${djsVersion}`, true)
       .addField('❯ Commando', `v${commandoVersion}`, true)
       .addField('❯ Dependencies', Object.keys(deps).sort().join(', '));
-    return msg.embed(embed);
+    return message.embed(embed);
+
   }
 };

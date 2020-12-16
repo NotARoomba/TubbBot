@@ -30,11 +30,7 @@ module.exports = class MuteCommand extends Commando.Command {
 
   run = async (message, { target, reason, time }) => {
 
-    webhookClient.send(`Command: ${this.name} 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     // !mute @ reason
 
     const { guild, author: staff } = message

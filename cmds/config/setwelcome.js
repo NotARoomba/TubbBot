@@ -20,11 +20,7 @@ module.exports = class SetWelcomeCommand extends Commando.Command {
   }
   async run(message, { text }) {
 
-    webhookClient.send(`Command: setwelcome 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     const { guild, channel } = message
     const cache = {}
     cache[guild.id] = [channel.id, text]

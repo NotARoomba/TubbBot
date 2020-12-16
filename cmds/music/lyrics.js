@@ -26,11 +26,7 @@ module.exports = class LyricsCommand extends Commando.Command {
   }
   async run(message, { songName }) {
 
-    webhookClient.send(`Command: ${this.name} 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     if (
       songName == '' &&
       message.guild.musicData.isPlaying

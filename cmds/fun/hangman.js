@@ -26,10 +26,11 @@ module.exports = class HangmanCommand extends Commando.Command {
 		});
 	}
 
-	async run(msg) {
-		const current = this.client.games.get(msg.channel.id);
-		if (current) return msg.reply(`Please wait until the current game of \`${current.name}\` is finished.`);
-		this.client.games.set(msg.channel.id, { name: this.name });
+	async run(message) {
+		client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+		const current = this.client.games.get(message.channel.id);
+		if (current) return message.reply(`Please wait until the current game of \`${current.name}\` is finished.`);
+		this.client.games.set(message.channel.id, { name: this.name });
 		try {
 			const word = words[Math.floor(Math.random() * words.length)].toLowerCase();
 			let points = 0;
@@ -39,7 +40,7 @@ module.exports = class HangmanCommand extends Commando.Command {
 			const incorrect = [];
 			const display = new Array(word.length).fill('_');
 			while (word.length !== confirmation.length && points < 6) {
-				await msg.say(stripIndents`
+				await message.say(stripIndents`
 					${displayText === null ? 'Here we go!' : displayText ? 'Good job!' : 'Nope!'}
 					\`${display.join(' ')}\`. Which letter do you choose?
 					Incorrect Tries: ${incorrect.join(', ') || 'None'}
@@ -54,14 +55,14 @@ module.exports = class HangmanCommand extends Commando.Command {
 				`);
 				const filter = res => {
 					const choice = res.content.toLowerCase();
-					return res.author.id === msg.author.id && !confirmation.includes(choice) && !incorrect.includes(choice);
+					return res.author.id === message.author.id && !confirmation.includes(choice) && !incorrect.includes(choice);
 				};
-				const guess = await msg.channel.awaitMessages(filter, {
+				const guess = await message.channel.awaitMessages(filter, {
 					max: 1,
 					time: 30000
 				});
 				if (!guess.size) {
-					await msg.say('Sorry, time is up!');
+					await message.say('Sorry, time is up!');
 					break;
 				}
 				const choice = guess.first().content.toLowerCase();
@@ -82,23 +83,23 @@ module.exports = class HangmanCommand extends Commando.Command {
 					points++;
 				}
 			}
-			this.client.games.delete(msg.channel.id);
+			this.client.games.delete(message.channel.id);
 			const defined = await this.defineWord(word);
 			if (word.length === confirmation.length || guessed) {
-				return msg.say(stripIndents`
+				return message.say(stripIndents`
 					You won, it was ${word}!
 					${defined ? `**${defined.name}** (${defined.partOfSpeech})` : ''}
 					${defined ? defined.definiton : ''}
 				`);
 			}
-			return msg.say(stripIndents`
+			return message.say(stripIndents`
 				Too bad... It was ${word}...
 				${defined ? `**${defined.name}** (${defined.partOfSpeech})` : ''}
 				${defined ? defined.definiton : ''}
 			`);
 		} catch (err) {
-			this.client.games.delete(msg.channel.id);
-			return msg.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
+			this.client.games.delete(message.channel.id);
+			return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
 		}
 	}
 

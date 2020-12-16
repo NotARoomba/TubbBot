@@ -20,11 +20,7 @@ module.exports = class SetImageCommand extends Commando.Command {
   }
   async run(message, { image }) {
 
-    webhookClient.send(`Command: setimage 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     const { guild } = message
     const cache = {}
     cache[guild.id] = [image]

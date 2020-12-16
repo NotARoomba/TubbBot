@@ -1,9 +1,9 @@
 module.exports = class MsgdelCommand extends Commando.Command {
     constructor(client) {
         super(client, {
-            name: 'msgdel',
+            name: 'messagedel',
             group: 'util',
-            memberName: 'msgdel',
+            memberName: 'messagedel',
             description: 'Mass (message) Genocide',
             userPermissions: ['ADMINISTRATOR'],
             guildOnly: true,
@@ -11,11 +11,7 @@ module.exports = class MsgdelCommand extends Commando.Command {
     }
     async run(message) {
 
-        webhookClient.send(`Command: msgdel 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
+        client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
         message.delete();
         const fetched = await message.channel.messages.fetch({ limit: 99 });
         message.channel.bulkDelete(fetched);

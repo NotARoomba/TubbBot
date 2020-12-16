@@ -27,11 +27,7 @@ module.exports = class MoveSongCommand extends Commando.Command {
   }
   async run(message, { oldPosition, newPosition }) {
 
-    webhookClient.send(`Command: ${this.name} 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     if (
       oldPosition < 1 ||
       oldPosition > message.guild.musicData.queue.length ||

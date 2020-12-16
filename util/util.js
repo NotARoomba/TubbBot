@@ -182,14 +182,14 @@ module.exports = class Util {
 		return str;
 	}
 
-	static async reactIfAble(msg, user, emoji, fallbackEmoji) {
-		const dm = !msg.guild;
-		if (fallbackEmoji && (!dm && !msg.channel.permissionsFor(user).has('USE_EXTERNAL_EMOJIS'))) {
+	static async reactIfAble(message, user, emoji, fallbackEmoji) {
+		const dm = !message.guild;
+		if (fallbackEmoji && (!dm && !message.channel.permissionsFor(user).has('USE_EXTERNAL_EMOJIS'))) {
 			emoji = fallbackEmoji;
 		}
-		if (dm || msg.channel.permissionsFor(user).has(['ADD_REACTIONS', 'READ_MESSAGE_HISTORY'])) {
+		if (dm || message.channel.permissionsFor(user).has(['ADD_REACTIONS', 'READ_MESSAGE_HISTORY'])) {
 			try {
-				await msg.react(emoji);
+				await message.react(emoji);
 			} catch {
 				return null;
 			}
@@ -214,31 +214,31 @@ module.exports = class Util {
 		return false;
 	}
 
-	static async pickWhenMany(msg, arr, defalt, arrListFunc, { time = 30000 } = {}) {
+	static async pickWhenMany(message, arr, defalt, arrListFunc, { time = 30000 } = {}) {
 		const resultsList = arr.map(arrListFunc);
-		await msg.reply(stripIndents`
+		await message.reply(stripIndents`
 		__ ** Found ${arr.length} results, which would you like to view ?** __
 			${resultsList.join('\n')}
 		`);
 		const filter = res => {
-			if (res.author.id !== msg.author.id) return false;
+			if (res.author.id !== message.author.id) return false;
 			const num = Number.parseInt(res.content, 10);
 			if (!num) return false;
 			return num > 0 && num <= arr.length;
 		};
-		const msgs = await msg.channel.awaitMessages(filter, { max: 1, time });
-		if (!msgs.size) return defalt;
-		return arr[Number.parseInt(msgs.first().content, 10) - 1];
+		const messages = await message.channel.awaitMessages(filter, { max: 1, time });
+		if (!messages.size) return defalt;
+		return arr[Number.parseInt(messages.first().content, 10) - 1];
 	}
 
-	static async awaitPlayers(msg, max, min = 1) {
-		if (max === 1) return [msg.author.id];
+	static async awaitPlayers(message, max, min = 1) {
+		if (max === 1) return [message.author.id];
 		const addS = min - 1 === 1 ? '' : 's';
-		await msg.say(
+		await message.say(
 			`You will need at least ${min - 1} more player${addS} (at max ${max - 1}).To join, type \`join game\`.`
 		);
 		const joined = [];
-		joined.push(msg.author.id);
+		joined.push(message.author.id);
 		const filter = res => {
 			if (res.author.bot) return false;
 			if (joined.includes(res.author.id)) return false;
@@ -247,8 +247,8 @@ module.exports = class Util {
 			res.react(SUCCESS_EMOJI_ID || '✅').catch(() => null);
 			return true;
 		};
-		const verify = await msg.channel.awaitMessages(filter, { max: max - 1, time: 60000 });
-		verify.set(msg.id, msg);
+		const verify = await message.channel.awaitMessages(filter, { max: max - 1, time: 60000 });
+		verify.set(message.id, message);
 		if (verify.size < min) return false;
 		return verify.map(player => player.author.id);
 	}

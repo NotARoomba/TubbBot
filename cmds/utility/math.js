@@ -26,11 +26,7 @@ module.exports = class MathCommand extends Commando.Command {
 
 	run(message, { expression }) {
 
-		webhookClient.send(`Command: ${this.name} 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
+		client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
 		try {
 			const evaluated = math.evaluate(expression).toString();
 			return message.reply(evaluated).catch(() => message.reply('Invalid expression.'));

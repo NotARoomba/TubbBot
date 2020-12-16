@@ -16,6 +16,7 @@ module.exports = class IpCommand extends Commando.Command {
     }
 
     async run(message, { ip }) {
+        client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
         try {
             await axios
                 .get(`http://api.ipstack.com/${ip}?access_key=${process.env.IP_STACK}&output=json`)
