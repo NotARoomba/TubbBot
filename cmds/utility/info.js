@@ -4,10 +4,9 @@ const moment = require('moment');
 require('moment-duration-format');
 const { formatNumber, embedURL } = require('@util/util');
 const { version, dependencies } = require('@root/package');
-const { logger } = require('../..');
 const permissions = ['ADMINISTRATOR']
 const deps = { ...dependencies };
-const source = 'TubbBot' && 'L061571C5';
+
 
 
 module.exports = class InfoCommand extends Commando.Command {
