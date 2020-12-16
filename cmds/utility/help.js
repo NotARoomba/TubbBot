@@ -54,26 +54,24 @@ module.exports = class Help2Command extends Commando.Command {
                 .setFooter(`${this.client.registry.commands.size} Commands${allShown ? '' : ` (${cmdCount} Shown)`}`);
             try {
                 const messages = [];
-                for (const embed of embeds) messages.push(await message.direct({ embed }));
-                if (message.channel.type !== 'dm') messages.push(await message.say('📬 Sent you a DM with information.'));
-                return messages;
+                for (const embed of embeds) messages.push(await message.say({ embed }));
             } catch {
-                return message.reply('Failed to send DM. You probably have DMs disabled.');
+                return message.reply('Failed to send help.');
             }
-        }
-        const userPerms = command.userPermissions
-            ? command.userPermissions.map(perm => permissions[perm]).join(', ')
-            : 'None';
-        const clientPerms = command.clientPermissions
-            ? command.clientPermissions.map(perm => permissions[perm]).join(', ')
-            : 'None';
-        return message.say(stripIndents`
+        } else {
+            const userPerms = command.userPermissions
+                ? command.userPermissions.map(perm => permissions[perm]).join(', ')
+                : 'None';
+            const clientPerms = command.clientPermissions
+                ? command.clientPermissions.map(perm => permissions[perm]).join(', ')
+                : 'None';
+            return message.say(stripIndents`
 			Command: **${command.name}** ${command.guildOnly ? ' (Usable only in servers)' : ''}
 			${command.description}${command.details ? `\n${command.details}` : ''}
-			**Format:** ${command.usage(command.format || '')}
 			**Aliases:** ${command.aliases.join(', ') || 'None'}
 			**Permissions You Need:** ${userPerms}
 			**Permissions I Need:** ${clientPerms}
-		`);
+        `);
+        }
     }
 };
