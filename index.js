@@ -13,6 +13,7 @@ global.path = require('path');
 global.MessageEmbed
 global.Structures
 global.webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
+global.winston = require('winston');
 global.fs = require("fs");
 global.axios = require('axios').default;
 global.ytdl = require('ytdl-core');
@@ -27,7 +28,13 @@ global.serverSchema = require('@schemas/server-schema')
 global.muteSchema = require('@schemas/mute-schema')
 global.Canvas = require('canvas')
 global.math = require('mathjs');
-const { CommandoClient } = require('discord.js-commando');
+const Client = require('@util/Client');
+const client = new Client({
+  commandPrefix: process.env.PREFIX,
+  owner: process.env.OWNERS,
+  invite: process.env.INVITE,
+  disableMentions: 'everyone',
+});
 Structures.extend('Guild', function (Guild) {
   class MusicGuild extends Guild {
     constructor(client, data) {
@@ -47,12 +54,6 @@ Structures.extend('Guild', function (Guild) {
   return MusicGuild;
 });
 
-const client = new CommandoClient({
-  owner: '465917394108547072',
-  commandPrefix: `-`,
-  invite: `https://discord.gg/C8HM2hkTqt`
-
-})
 client.setProvider(
   MongoClient.connect(process.env.MONGO, {
     useUnifiedTopology: true,
@@ -75,6 +76,13 @@ client.on('ready', async (member) => {
 
   await mongo()
 
+  this.logger = winston.createLogger({
+    transports: [new winston.transports.Console()],
+    format: winston.format.combine(
+      winston.format.timestamp({ format: 'MM/DD/YYYY HH:mm:ss' }),
+      winston.format.printf(log => `[${log.timestamp}] [${log.level.toUpperCase()}]: ${log.message}`)
+    )
+  });
 
 
   client.registry
@@ -173,5 +181,21 @@ client.on('guildCreate', guild => {
   }
   channel.send({ embed: invite })
 })
+
+client.on('disconnect', event => {
+  client.logger.error(`[DISCONNECT] Disconnected with code ${event.code}.`);
+  process.exit(0);
+});
+
+client.on('error', err => client.logger.error(err.stack));
+
+client.on('warn', warn => client.logger.warn(warn));
+
+client.on('commandRun', command => {
+  if (command.uses === undefined) return;
+  command.uses++;
+});
+
+client.on('commandError', (command, err) => client.logger.error(`[COMMAND:${command.name}]\n${err.stack}`));
 
 client.login(process.env.TOKEN)

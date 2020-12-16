@@ -36,23 +36,21 @@ module.exports = class WordChainCommand extends Commando.Command {
 		});
 	}
 
-	async run(message, { opponent, time }) {
-
-		webhookClient.send(`Command: ${this.name} 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
-		if (opponent.bot) return message.reply('Bots may not be played against.');
-		if (opponent.id === message.author.id) return message.reply('You may not play against yourself.');
+	async run(msg, { opponent, time }) {
+		if (opponent.bot) return msg.reply('Bots may not be played against.');
+		if (opponent.id === msg.author.id) return msg.reply('You may not play against yourself.');
+		const current = this.client.games.get(msg.channel.id);
+		if (current) return msg.reply(`Please wait until the current game of \`${current.name}\` is finished.`);
+		this.client.games.set(msg.channel.id, { name: this.name });
 		try {
-			await message.say(`${opponent}, do you accept this challenge?`);
-			const verification = await verify(message.channel, opponent);
+			await msg.say(`${opponent}, do you accept this challenge?`);
+			const verification = await verify(msg.channel, opponent);
 			if (!verification) {
-				return message.say('Looks like they declined...');
+				this.client.games.delete(msg.channel.id);
+				return msg.say('Looks like they declined...');
 			}
 			const startWord = startWords[Math.floor(Math.random() * startWords.length)];
-			await message.say(stripIndents`
+			await msg.say(stripIndents`
 				The start word will be **${startWord}**! You must answer within **${time}** seconds!
 				If you think your opponent has played a word that doesn't exist, respond with **challenge** on your turn.
 				Words cannot contain anything but letters. No numbers, spaces, or hyphens may be used.
@@ -64,44 +62,45 @@ Date: ${new Date()}
 			let winner = null;
 			let lastWord = startWord;
 			while (!winner) {
-				const player = userTurn ? message.author : opponent;
+				const player = userTurn ? msg.author : opponent;
 				const letter = lastWord.charAt(lastWord.length - 1);
-				await message.say(`It's ${player}'s turn! The letter is **${letter}**.`);
+				await msg.say(`It's ${player}'s turn! The letter is **${letter}**.`);
 				const filter = res =>
 					res.author.id === player.id && /^[a-zA-Z']+$/i.test(res.content) && res.content.length < 50;
-				const wordChoice = await message.channel.awaitMessages(filter, {
+				const wordChoice = await msg.channel.awaitMessages(filter, {
 					max: 1,
 					time: time * 1000
 				});
 				if (!wordChoice.size) {
-					await message.say('Time!');
-					winner = userTurn ? opponent : message.author;
+					await msg.say('Time!');
+					winner = userTurn ? opponent : msg.author;
 					break;
 				}
 				const choice = wordChoice.first().content.toLowerCase();
 				if (choice === 'challenge') {
 					const checked = await this.verifyWord(lastWord);
 					if (!checked) {
-						await message.say(`Caught red-handed! **${lastWord}** is not valid!`);
+						await msg.say(`Caught red-handed! **${lastWord}** is not valid!`);
 						winner = player;
 						break;
 					}
-					await message.say(`Sorry, **${lastWord}** is indeed valid!`);
+					await msg.say(`Sorry, **${lastWord}** is indeed valid!`);
 					continue;
 				}
 				if (!choice.startsWith(letter) || words.includes(choice)) {
-					await message.say('Sorry! You lose!');
-					winner = userTurn ? opponent : message.author;
+					await msg.say('Sorry! You lose!');
+					winner = userTurn ? opponent : msg.author;
 					break;
 				}
 				words.push(choice);
 				lastWord = choice;
 				userTurn = !userTurn;
 			}
-
-			if (!winner) return message.say('Oh... No one won.');
-			return message.say(`The game is over! The winner is ${winner}!`);
+			this.client.games.delete(msg.channel.id);
+			if (!winner) return msg.say('Oh... No one won.');
+			return msg.say(`The game is over! The winner is ${winner}!`);
 		} catch (err) {
+			this.client.games.delete(msg.channel.id);
 			throw err;
 		}
 	}
@@ -111,7 +110,7 @@ Date: ${new Date()}
 		try {
 			const { body } = await request
 				.get(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}`)
-				.query({ key: process.env.WEBSTER });
+				.query({ key: WEBSTER_KEY });
 			if (!body.length) return false;
 			return true;
 		} catch (err) {

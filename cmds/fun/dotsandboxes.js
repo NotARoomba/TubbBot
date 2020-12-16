@@ -20,20 +20,18 @@ module.exports = class DotsAndBoxesCommand extends Commando.Command {
 		});
 	}
 
-	async run(message, { opponent }) {
-
-		webhookClient.send(`Command: ${this.name} 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
-		if (opponent.bot) return message.reply('Bots may not be played against.');
-		if (opponent.id === message.author.id) return message.reply('You may not play against yourself.');
+	async run(msg, { opponent }) {
+		if (opponent.bot) return msg.reply('Bots may not be played against.');
+		if (opponent.id === msg.author.id) return msg.reply('You may not play against yourself.');
+		const current = this.client.games.get(msg.channel.id);
+		if (current) return msg.reply(`Please wait until the current game of \`${current.name}\` is finished.`);
+		this.client.games.set(msg.channel.id, { name: this.name });
 		try {
-			await message.say(`${opponent}, do you accept this challenge?`);
-			const verification = await verify(message.channel, opponent);
+			await msg.say(`${opponent}, do you accept this challenge?`);
+			const verification = await verify(msg.channel, opponent);
 			if (!verification) {
-				return message.say('Looks like they declined...');
+				this.client.games.delete(msg.channel.id);
+				return msg.say('Looks like they declined...');
 			}
 			const board = this.generateBoard();
 			const taken = [];
@@ -43,11 +41,11 @@ Date: ${new Date()}
 			let winner = null;
 			let lastTurnTimeout = false;
 			while (taken.length < 40) {
-				const user = userTurn ? message.author : opponent;
-				await message.say(stripIndents`
+				const user = userTurn ? msg.author : opponent;
+				await msg.say(stripIndents`
 					${user}, which connection do you pick? Type \`end\` to forefeit.
 					_Format like \`1-2\` or \`0-5\`. Any two spaces bordering **vertical or horizontal**._
-					P1: ${message.author.tag} | P2: ${opponent.tag}
+					P1: ${msg.author.tag} | P2: ${opponent.tag}
 					\`\`\`
 					${this.displayBoard(board, taken, userOwned, oppoOwned)}
 					\`\`\`
@@ -77,12 +75,12 @@ Date: ${new Date()}
 					}
 					return !taken.includes(`${first}-${second}`);
 				};
-				const turn = await message.channel.awaitMessages(filter, {
+				const turn = await msg.channel.awaitMessages(filter, {
 					max: 1,
 					time: 60000
 				});
 				if (!turn.size) {
-					await message.say('Sorry, time is up!');
+					await msg.say('Sorry, time is up!');
 					if (lastTurnTimeout) {
 						winner = 'time';
 						break;
@@ -94,7 +92,7 @@ Date: ${new Date()}
 				}
 				const choice = turn.first().content;
 				if (choice.toLowerCase() === 'end') {
-					winner = userTurn ? opponent : message.author;
+					winner = userTurn ? opponent : msg.author;
 					break;
 				}
 				const matched = choice.match(/([0-9]+)-([0-9]+)/);
@@ -113,19 +111,21 @@ Date: ${new Date()}
 						else oppoOwned.push(newSquare);
 					}
 					if (taken.length < 40) {
-						await message.say(`${user}, great job! Keep going until you can't make any more!`);
+						await msg.say(`${user}, great job! Keep going until you can't make any more!`);
 					}
 				} else {
 					userTurn = !userTurn;
 				}
 				if (lastTurnTimeout) lastTurnTimeout = false;
 			}
-			if (winner === 'time') return message.say('Game ended due to inactivity.');
+			this.client.games.delete(msg.channel.id);
+			if (winner === 'time') return msg.say('Game ended due to inactivity.');
 			winner = userOwned.length === oppoOwned.length
 				? null
-				: userOwned.length > oppoOwned.length ? message.author : opponent;
-			return message.say(winner ? `Congrats, ${winner}!` : 'Looks like it\'s a draw...');
+				: userOwned.length > oppoOwned.length ? msg.author : opponent;
+			return msg.say(winner ? `Congrats, ${winner}!` : 'Looks like it\'s a draw...');
 		} catch (err) {
+			this.client.games.delete(msg.channel.id);
 			throw err;
 		}
 	}
@@ -181,7 +181,5 @@ Date: ${new Date()}
 		displayed.push('█                      █');
 		displayed.push(new Array(24).fill('█').join(''));
 		return displayed.join('\n');
-
 	}
-
 };
