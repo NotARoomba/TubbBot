@@ -161,7 +161,7 @@ client.on('guildCreate', guild => {
       },
       {
         name: `My server if you have any questions`,
-        value: `[Link](https://discord.gg/C8HM2hkTqt)`, // This is optional if you want over people to invite your bot to different servers!
+        value: `[Link](https://discord.com/invite/MZnHS95jx4)`, // This is optional if you want over people to invite your bot to different servers!
         inline: true,
       },
       {
