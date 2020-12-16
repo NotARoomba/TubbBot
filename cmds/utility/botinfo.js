@@ -26,7 +26,7 @@ module.exports = class InfoCommand extends Commando.Command {
   async run(message) {
     client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     const invite = await this.client.generateInvite({ permissions });
-    const repoURL = `https://github.com/L061571C5/TubbBot`;
+    const website = `https://tubb-bot.000webhostapp.com/`;
     const embed = new Discord.MessageEmbed()
       .setColor(0x00AE86)
       .addField('❯ Servers', formatNumber(this.client.guilds.cache.size), true)
@@ -35,7 +35,7 @@ module.exports = class InfoCommand extends Commando.Command {
       .addField('❯ Home Server',
         this.client.options.invite ? embedURL('Invite', this.client.options.invite) : 'None', true)
       .addField('❯ Invite', embedURL('Add Me', invite), true)
-      .addField('❯ Source Code', source ? embedURL('GitHub', repoURL) : 'N/A', true)
+      .addField('❯ Website', embedURL('Website', website), true)
       .addField('❯ Memory Usage', `${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)}MB`, true)
       .addField('❯ Uptime', moment.duration(this.client.uptime).format('d:hh:mm:ss'), true)
       .addField('❯ Version', `v${version}`, true)
