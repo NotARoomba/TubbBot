@@ -21,10 +21,6 @@ module.exports = class JoinCommand extends Commando.Command {
 			message.reply(':no_entry: Please join a voice channel and try again!');
 			return;
 		}
-		if (message.guild.musicData.isPlaying != true) {
-			message.reply(':x: Nothing is Playing');
-			return;
-		}
 		try {
 			await voiceChannel.join();
 			return;

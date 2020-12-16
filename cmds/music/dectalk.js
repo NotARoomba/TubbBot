@@ -49,12 +49,7 @@ module.exports = class DECTalkCommand extends Commando.Command {
 			return message.reply(
 				':no_entry: Please join a voice channel and try again!'
 			);
-		// if (
-		// 	typeof message.guild.musicData.songDispatcher === 'undefined') { } else {
-		// 	message.say(':pause_button: Song was paused!');
 
-		// 	message.guild.musicData.songDispatcher.pause();
-		// }
 
 		const connection = this.client.voice.connections.get(message.guild.id);
 		if (!connection) {
@@ -62,6 +57,12 @@ module.exports = class DECTalkCommand extends Commando.Command {
 			return message.reply(`I am not in a voice channel. Use ${usage} to fix that!`);
 		}
 		try {
+			if (
+				typeof message.guild.musicData.songDispatcher === 'undefined') { } else {
+				message.guild.musicData.loopSong = false;
+				message.guild.musicData.songDispatcher.end();
+				message.say('Song was skipped because of dectalk.')
+			}
 			reactIfAble(message, this.client.user, '💬');
 			const { body } = await request
 				.get('http://tts.cyzon.us/tts')
