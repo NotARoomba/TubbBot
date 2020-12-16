@@ -8,6 +8,7 @@ module.exports = class HangmanCommand extends Commando.Command {
 			group: 'fun',
 			memberName: 'hangman',
 			description: 'Prevent a man from being hanged by guessing a word as fast as you can.',
+			guildOnly: true,
 			credit: [
 				{
 					name: 'Grady Ward',

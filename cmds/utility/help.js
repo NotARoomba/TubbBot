@@ -65,13 +65,12 @@ module.exports = class Help2Command extends Commando.Command {
             const clientPerms = command.clientPermissions
                 ? command.clientPermissions.map(perm => permissions[perm]).join(', ')
                 : 'None';
-            return message.say(stripIndents`
-			Command: **${command.name}** ${command.guildOnly ? ' (Usable only in servers)' : ''}
-			${command.description}${command.details ? `\n${command.details}` : ''}
-			**Aliases:** ${command.aliases.join(', ') || 'None'}
-			**Permissions You Need:** ${userPerms}
-			**Permissions I Need:** ${clientPerms}
-        `);
+            const embed = new Discord.MessageEmbed()
+                .setTitle(`Command: **${command.name}** ${command.guildOnly ? ' (Usable only in servers)' : ''}`)
+                .setDescription(`${command.description}${command.details ? `\n${command.details}` : ''}`)
+                .addField(`**Aliases:**`, `${command.aliases.join(', ') || 'None'}`)
+                .addField(`**Permissions You Need:**`, `${userPerms}`)
+            return message.say(embed);
         }
     }
 };

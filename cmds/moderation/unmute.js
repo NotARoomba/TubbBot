@@ -7,6 +7,7 @@ module.exports = class UnmuteCommand extends Commando.Command {
       userPermissions: ['MUTE_MEMBERS'],
       description: 'Unmutes a user',
       argsType: 'multiple',
+      guildOnly: true,
     })
   }
 

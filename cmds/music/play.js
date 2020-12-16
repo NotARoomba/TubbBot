@@ -4,7 +4,7 @@ module.exports = class PlayCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: 'play',
-      aliases: ['p', 'add'],
+      aliases: ['p'],
       memberName: 'play',
       group: 'music',
       description: 'Play any song or playlist from youtube!',

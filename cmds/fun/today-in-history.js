@@ -6,7 +6,6 @@ module.exports = class TodayInHistoryCommand extends Commando.Command {
             group: 'fun',
             memberName: 'todayinhistory',
             description: 'Gives info about what important event happend today in hisotry',
-            guildOnly: true,
             args: [
                 {
                     key: 'month',

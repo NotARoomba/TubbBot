@@ -6,6 +6,7 @@ module.exports = class MsgdelCommand extends Commando.Command {
             memberName: 'msgdel',
             description: 'Mass (message) Genocide',
             userPermissions: ['ADMINISTRATOR'],
+            guildOnly: true,
         });
     }
     async run(message) {
