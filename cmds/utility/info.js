@@ -4,7 +4,6 @@ const moment = require('moment');
 require('moment-duration-format');
 const { formatNumber, embedURL } = require('@util/util');
 const { version, dependencies } = require('@root/package');
-const permissions = ['ADMINISTRATOR']
 const deps = { ...dependencies };
 
 
@@ -24,7 +23,7 @@ module.exports = class InfoCommand extends Commando.Command {
 
   async run(message) {
     client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
-    const invite = await this.client.generateInvite(permissions);
+    const invite = process.env.INVITE_BOT
     const website = `https://tubb-bot.000webhostapp.com/`;
     const embed = new Discord.MessageEmbed()
       .setColor(0x00AE86)
