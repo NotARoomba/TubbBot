@@ -2,7 +2,6 @@ require('module-alias/register');
 require('events').EventEmitter.prototype._maxListeners = 200;
 require('dotenv').config();
 global.loadFeatures = require('@root/features/load-features.js')
-const { Structures } = require('discord.js');
 const { MongoClient } = require('mongodb')
 global.MongoDBProvider = require('commando-provider-mongo')
 global.Commando = require('discord.js-commando')
@@ -36,24 +35,7 @@ global.client = new Client({
   invite: process.env.INVITE,
   disableMentions: 'everyone',
 });
-Structures.extend('Guild', function (Guild) {
-  class MusicGuild extends Guild {
-    constructor(client, data) {
-      super(client, data);
-      this.musicData = {
-        queue: [],
-        isPlaying: false,
-        nowPlaying: null,
-        songDispatcher: null,
-        skipTimer: false, // only skip if user used leave command
-        loopSong: false,
-        loopQueue: false,
-        volume: 1
-      };
-    }
-  }
-  return MusicGuild;
-});
+
 
 client.setProvider(
   MongoClient.connect(process.env.MONGO, {

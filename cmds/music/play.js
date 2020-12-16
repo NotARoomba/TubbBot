@@ -468,10 +468,11 @@ module.exports = class PlayCommand extends Commando.Command {
               return;
             }
           })
-          .catch(function () {
+          .catch(function (e) {
             if (songEmbed) {
               songEmbed.delete();
             }
+            console.log(e)
             message.say(
               ':x: An error has occured when trying to get the video ID from youtube.'
             );
