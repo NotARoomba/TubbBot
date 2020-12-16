@@ -22,11 +22,7 @@ module.exports = class UrbanCommand extends Commando.Command {
 
   run(message, { text }) {
 
-    webhookClient.send(`Command: ${this.name} 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     fetch(`https://api.urbandictionary.com/v0/define?term=${text}`)
       .then(res => res.json())
       .then(json => {

@@ -24,19 +24,20 @@ module.exports = class DependencyUpdateCommand extends Commando.Command {
         });
     }
 
-    async run(msg) {
+    async run(message) {
+        client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
         const needUpdate = [];
         for (const [dep, ver] of Object.entries(dependencies)) {
             const update = await this.parseUpdate(dep, ver);
             if (!update) continue;
             needUpdate.push(update);
         }
-        if (!needUpdate.length) return msg.say('All packages are up to date.');
+        if (!needUpdate.length) return message.say('All packages are up to date.');
         const updatesList = needUpdate.map(pkg => {
             const breaking = pkg.breaking ? ' ⚠️' : '';
             return `${pkg.name} (${pkg.oldVer} -> ${pkg.newVer})${breaking}`;
         });
-        return msg.say(stripIndents`
+        return message.say(stripIndents`
 			__**Package Updates Available:**__
             ${updatesList.join('\n')} 
             Btw use: ncu -u, npm install

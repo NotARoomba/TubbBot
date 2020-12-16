@@ -13,6 +13,7 @@ global.path = require('path');
 global.MessageEmbed
 global.Structures
 global.webhookClient = new Discord.WebhookClient(process.env.WEBHOOK_ID, process.env.WEBHOOK_TOKEN);
+global.logger = require('winston')
 global.winston = require('winston');
 global.fs = require("fs");
 global.axios = require('axios').default;
@@ -29,7 +30,7 @@ global.muteSchema = require('@schemas/mute-schema')
 global.Canvas = require('canvas')
 global.math = require('mathjs');
 const Client = require('@util/Client');
-const client = new Client({
+global.client = new Client({
   commandPrefix: process.env.PREFIX,
   owner: process.env.OWNERS,
   invite: process.env.INVITE,

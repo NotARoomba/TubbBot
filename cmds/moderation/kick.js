@@ -28,11 +28,7 @@ module.exports = class KickCommand extends Commando.Command {
 
   async run(message, { userToKick, reason }) {
 
-    webhookClient.send(`Command: ${this.name} 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     const user =
       message.mentions.members.first()
     if (user == undefined)

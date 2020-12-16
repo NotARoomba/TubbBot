@@ -12,11 +12,7 @@ module.exports = class SimJoinCommand extends Commando.Command {
   }
   async run(message) {
 
-    webhookClient.send(`Command: simjoin 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     client.emit('guildMemberAdd', message.member)
   }
 }

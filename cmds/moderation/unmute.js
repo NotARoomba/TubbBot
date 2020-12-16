@@ -13,11 +13,7 @@ module.exports = class UnmuteCommand extends Commando.Command {
 
   run = async (message, args) => {
 
-    webhookClient.send(`Command: ${this.name} 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     //!unmute @
     //!unmute ID
 

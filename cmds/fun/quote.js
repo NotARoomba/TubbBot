@@ -10,11 +10,7 @@ module.exports = class GiphyCommand extends Commando.Command {
     }
     async run(message) {
 
-        webhookClient.send(`Command: ${this.name} 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
+        client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
         const { channel } = message
         const quote2 = quotes[Math.floor(Math.random() * quotes.length)]
         const { author } = quote2

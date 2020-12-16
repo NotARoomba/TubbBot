@@ -46,11 +46,7 @@ module.exports = class WeatherCommand extends Commando.Command {
     }
     run(message, { location }) {
 
-        webhookClient.send(`Command: weather
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
+        client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
         axios
             .get(
                 `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=04222de0b070f0e94c8874434d22d029`

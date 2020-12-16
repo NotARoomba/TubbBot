@@ -27,11 +27,7 @@ module.exports = class GiphyCommand extends Commando.Command {
 
 	async run(message, { query }) {
 
-		webhookClient.send(`Command: ${this.name} 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
+		client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
 		try {
 			const { body } = await request
 				.get('http://api.giphy.com/v1/gifs/search')

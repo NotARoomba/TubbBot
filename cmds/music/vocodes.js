@@ -44,11 +44,7 @@ module.exports = class VocodesCommand extends Commando.Command {
 
 	async run(message, { voice, text }) {
 
-		webhookClient.send(`Command: ${this.name} 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
+		client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
 		const connection = this.client.voice.connections.get(message.guild.id);
 		if (!connection) {
 			const usage = this.client.registry.commands.get('join').usage();

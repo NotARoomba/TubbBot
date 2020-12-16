@@ -20,11 +20,7 @@ module.exports = class SetColorCommand extends Commando.Command {
   }
   async run(message, { color }) {
 
-    webhookClient.send(`Command: setcolor 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     const { guild } = message
     const cache = {}
     cache[guild.id] = [color]
