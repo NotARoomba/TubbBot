@@ -6,7 +6,7 @@ module.exports = class WikipediaCommand extends Commando.Command {
 		super(client, {
 			name: 'wikipedia',
 			aliases: ['wiki'],
-			group: 'utility',
+			group: 'util',
 			memberName: 'wikipedia',
 			description: 'Searches Wikipedia for your query.',
 			clientPermissions: ['EMBED_LINKS'],

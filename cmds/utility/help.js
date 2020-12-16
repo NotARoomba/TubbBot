@@ -5,7 +5,7 @@ module.exports = class Help2Command extends Commando.Command {
         super(client, {
             name: 'help',
             aliases: [`h`, `commands`, `cmds`],
-            group: 'utility',
+            group: 'util',
             memberName: 'help',
             description: 'Describes all of this bot`s commands2',
             args: [

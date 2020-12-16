@@ -6,7 +6,7 @@ module.exports = class TranslateCommand extends Commando.Command {
 		super(client, {
 			name: 'translate',
 			aliases: ['google-translate'],
-			group: 'utility',
+			group: 'util',
 			memberName: 'translate',
 			description: 'Translates text to a specific language.',
 			details: `**Codes:** ${codes.join(', ')}`,

@@ -19,22 +19,18 @@ module.exports = class TicTacToeCommand extends Commando.Command {
 		});
 	}
 
-	async run(message, { opponent }) {
-
-
-		webhookClient.send(`Command: ${this.name} 
-Ran by: ${message.author.tag}
-Server: ${message.guild.name}
-Date: ${new Date()}
--------------------------------------------------------------------------------------------`)
-		if (opponent.bot) return message.reply('Bots may not be played against.');
-		if (opponent.id === message.author.id) return message.reply('You may not play against yourself.');
-
+	async run(msg, { opponent }) {
+		if (opponent.bot) return msg.reply('Bots may not be played against.');
+		if (opponent.id === msg.author.id) return msg.reply('You may not play against yourself.');
+		const current = this.client.games.get(msg.channel.id);
+		if (current) return msg.reply(`Please wait until the current game of \`${current.name}\` is finished.`);
+		this.client.games.set(msg.channel.id, { name: this.name });
 		try {
-			await message.say(`${opponent}, do you accept this challenge?`);
-			const verification = await verify(message.channel, opponent);
+			await msg.say(`${opponent}, do you accept this challenge?`);
+			const verification = await verify(msg.channel, opponent);
 			if (!verification) {
-				return message.say('Looks like they declined...');
+				this.client.games.delete(msg.channel.id);
+				return msg.say('Looks like they declined...');
 			}
 			const sides = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
 			const taken = [];
@@ -42,9 +38,9 @@ Date: ${new Date()}
 			let winner = null;
 			let lastTurnTimeout = false;
 			while (!winner && taken.length < 9) {
-				const user = userTurn ? message.author : opponent;
+				const user = userTurn ? msg.author : opponent;
 				const sign = userTurn ? 'X' : 'O';
-				await message.say(stripIndents`
+				await msg.say(stripIndents`
 					${user}, which side do you pick? Type \`end\` to forefeit.
 					\`\`\`
 					${sides[0]} | ${sides[1]} | ${sides[2]}
@@ -60,12 +56,12 @@ Date: ${new Date()}
 					if (choice.toLowerCase() === 'end') return true;
 					return sides.includes(choice) && !taken.includes(choice);
 				};
-				const turn = await message.channel.awaitMessages(filter, {
+				const turn = await msg.channel.awaitMessages(filter, {
 					max: 1,
-					time: 60000
+					time: 30000
 				});
 				if (!turn.size) {
-					await message.say('Sorry, time is up!');
+					await msg.say('Sorry, time is up!');
 					if (lastTurnTimeout) {
 						winner = 'time';
 						break;
@@ -77,18 +73,20 @@ Date: ${new Date()}
 				}
 				const choice = turn.first().content;
 				if (choice.toLowerCase() === 'end') {
-					winner = userTurn ? opponent : message.author;
+					winner = userTurn ? opponent : msg.author;
 					break;
 				}
 				sides[Number.parseInt(choice, 10) - 1] = sign;
 				taken.push(choice);
-				if (this.verifyWin(sides)) winner = userTurn ? message.author : opponent;
+				if (this.verifyWin(sides)) winner = userTurn ? msg.author : opponent;
 				if (lastTurnTimeout) lastTurnTimeout = false;
 				userTurn = !userTurn;
 			}
-			if (winner === 'time') return message.say('Game ended due to inactivity.');
-			return message.say(winner ? `Congrats, ${winner}!` : 'Oh... The cat won.');
+			this.client.games.delete(msg.channel.id);
+			if (winner === 'time') return msg.say('Game ended due to inactivity.');
+			return msg.say(winner ? `Congrats, ${winner}!` : 'Oh... The cat won.');
 		} catch (err) {
+			this.client.games.delete(msg.channel.id);
 			throw err;
 		}
 	}

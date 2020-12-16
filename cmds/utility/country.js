@@ -3,7 +3,7 @@ module.exports = class CountryCommand extends Commando.Command {
 	constructor(client) {
 		super(client, {
 			name: 'country',
-			group: 'utility',
+			group: 'util',
 			memberName: 'country',
 			description: 'Responds with information on a country.',
 			clientPermissions: ['EMBED_LINKS'],
