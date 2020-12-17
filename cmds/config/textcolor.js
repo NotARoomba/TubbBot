@@ -37,7 +37,7 @@ module.exports = class SetColorCommand extends Commando.Command {
       }
     )
 
-    webhookClient.send('UPDATED IMAGE DATABASE')
+    client.logger.info('UPDATED IMAGE DATABASE')
     message.reply('Server color set! Please make sure that it is a hex code.')
   } catch(error) {
     console.error(error);

@@ -38,7 +38,7 @@ module.exports = class SetWelcomeCommand extends Commando.Command {
         upsert: true,
       }
     )
-    webhookClient.send('UPDATED DATABASE')
+    client.logger.info('UPDATED DATABASE')
     channel.reply('Welcome message and channel set!')
   }
 }

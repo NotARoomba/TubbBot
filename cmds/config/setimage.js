@@ -37,7 +37,7 @@ module.exports = class SetImageCommand extends Commando.Command {
       }
     )
 
-    webhookClient.send('UPDATED IMAGE DATABASE')
+    client.logger.info('UPDATED IMAGE DATABASE')
 
     message.reply('Welcome image set! Please make sure that it is the proper link for your image.')
   } catch(error) {
