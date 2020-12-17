@@ -46,6 +46,7 @@ module.exports = class CreatePlaylistCommand extends Commando.Command {
       const urlsArrayClone = savedPlaylistsClone[location].urls;
       if (urlsArrayClone.length == 0) {
         message.reply(`**${playlistName}** is empty!`);
+        return
       }
       const savedSongsEmbed = new Pagination.FieldsEmbed()
         .setArray(urlsArrayClone)
@@ -55,7 +56,7 @@ module.exports = class CreatePlaylistCommand extends Commando.Command {
         .formatField('# - Title', function (e) {
           return `**${urlsArrayClone.indexOf(e) + 1}**: ${e.title}`;
         });
-      savedSongsEmbed.embed.setColor('#ff7373').setTitle('Saved Songs');
+      savedSongsEmbed.embed.setColor('#DE9E36').setTitle('Saved Songs');
       savedSongsEmbed.build();
     } else {
       message.reply(`You have no playlist named ${playlistName}`);

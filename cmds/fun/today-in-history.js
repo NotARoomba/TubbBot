@@ -31,7 +31,7 @@ module.exports = class TodayInHistoryCommand extends Commando.Command {
             const events = body.data.Events;
             const event = events[Math.floor(Math.random() * events.length)];
             const embed = new Discord.MessageEmbed()
-                .setColor(0x9797FF)
+                .setColor('#484848')
                 .setURL(body.url)
                 .setTitle(`On this day (${body.date})...`)
                 .setTimestamp()

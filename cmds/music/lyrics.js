@@ -64,18 +64,18 @@ module.exports = class LyricsCommand extends Commando.Command {
                 }
                 if (lyrics.length < 2048) {
                   const lyricsEmbed = new MessageEmbed()
-                    .setColor('#00724E')
+                    .setColor('#FFB400')
                     .setDescription(lyrics.trim())
                     .setFooter('Provided by genius.com');
                   return sentMessage.edit('', lyricsEmbed);
                 } else {
                   // 2048 < lyrics.length < 4096
                   const firstLyricsEmbed = new MessageEmbed()
-                    .setColor('#00724E')
+                    .setColor('#FFB400')
                     .setDescription(lyrics.slice(0, 2048))
                     .setFooter('Provided by genius.com');
                   const secondLyricsEmbed = new MessageEmbed()
-                    .setColor('#00724E')
+                    .setColor('#FFB400')
                     .setDescription(lyrics.slice(2048, lyrics.length))
                     .setFooter('Provided by genius.com');
                   sentMessage.edit('', firstLyricsEmbed);

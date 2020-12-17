@@ -26,7 +26,7 @@ module.exports = class InfoCommand extends Commando.Command {
     const invite = process.env.INVITE_BOT
     const website = `https://tubb-bot.000webhostapp.com/`;
     const embed = new Discord.MessageEmbed()
-      .setColor(0x00AE86)
+      .setColor('#f0c018')
       .addField('❯ Servers', formatNumber(this.client.guilds.cache.size), true)
       .addField('❯ Commands', formatNumber(this.client.registry.commands.size), true)
       .addField('❯ Shards', formatNumber(this.client.options.shardCount), true)

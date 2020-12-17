@@ -27,7 +27,7 @@ module.exports = class UrbanCommand extends Commando.Command {
       .then(res => res.json())
       .then(json => {
         const embed = new Discord.MessageEmbed()
-          .setColor('#BB7D61')
+          .setColor('#f0c018')
           .setTitle(`${text}`)
           .setAuthor(
             'Urban Dictionary',

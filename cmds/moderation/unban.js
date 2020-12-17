@@ -26,7 +26,7 @@ module.exports = class UnbanCommand extends Commando.Command {
         })
 
         const ubyesEmbed = new Discord.MessageEmbed()
-            .setColor('#228B22')
+            .setColor('#484848')
             .setTitle(`Success`)
             .setDescription(`${member} has been unbanned`)
 

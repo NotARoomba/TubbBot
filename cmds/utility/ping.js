@@ -12,7 +12,7 @@ module.exports = class PingCommand extends Commando.Command {
 
         client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
         const waitEmbed = new Discord.MessageEmbed()
-            .setColor('#C0C0C0')
+            .setColor('#ffc018')
             .setTitle(`Ping`)
             .setDescription(`:green_apple: Finding ping to bot... 
        

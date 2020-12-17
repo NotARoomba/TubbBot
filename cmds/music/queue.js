@@ -26,7 +26,7 @@ module.exports = class QueueCommand extends Commando.Command {
         return `**${queueClone.indexOf(e) + 1}**: ${e.title}`;
       });
 
-    queueEmbed.embed.setColor('#ff7373').setTitle('Music Queue');
+    queueEmbed.embed.setColor('#FFB400').setTitle('Music Queue');
     queueEmbed.build();
   }
 };

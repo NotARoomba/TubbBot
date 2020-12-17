@@ -56,7 +56,7 @@ module.exports = class TranslateCommand extends Commando.Command {
 		try {
 			const { text: result, from } = await translate(text, { to: target, from: base });
 			const embed = new Discord.MessageEmbed()
-				.setColor(0x4285F4)
+				.setColor('#484848')
 				.setFooter('Powered by Google Translate', 'https://i.imgur.com/h3RoHyp.png')
 				.addField(`❯ From: ${translate.languages[from.language.iso]}`, from.text.value || text)
 				.addField(`❯ To: ${translate.languages[target]}`, result);

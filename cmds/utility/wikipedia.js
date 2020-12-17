@@ -48,7 +48,7 @@ module.exports = class WikipediaCommand extends Commando.Command {
 			const data = body.query.pages[0];
 			if (data.missing) return message.say('Could not find any results.');
 			const embed = new Discord.MessageEmbed()
-				.setColor(0xE7E7E7)
+				.setColor('#484848')
 				.setTitle(data.title)
 				.setAuthor('Wikipedia', 'https://i.imgur.com/Z7NJBK2.png', 'https://www.wikipedia.org/')
 				.setThumbnail(data.thumbnail ? data.thumbnail.source : null)

@@ -56,7 +56,7 @@ module.exports = class PlayCommand extends Commando.Command {
       }
       if (found) {
         const embed = new Discord.MessageEmbed()
-          .setColor('#ff0000')
+          .setColor('#FFED00')
           .setTitle(':eyes: Clarification Please.')
           .setDescription(
             `You have a playlist named **${query}**, did you mean to play the playlist or search for **${query}** on YouTube?`
@@ -125,12 +125,12 @@ module.exports = class PlayCommand extends Commando.Command {
         /^(?!.*\?.*\bv=)https:\/\/www\.youtube\.com\/.*\?.*\blist=.*$/
       )
     ) {
-      const playlist = await youtube.getPlaylist(query).catch(function() {
+      const playlist = await youtube.getPlaylist(query).catch(function () {
         message.say(':x: Playlist is either private or it does not exist!');
         return;
       });
       // add 10 as an argument in getVideos() if you choose to limit the queue
-      const videosArr = await playlist.getVideos().catch(function() {
+      const videosArr = await playlist.getVideos().catch(function () {
         message.say(
           ':x: There was a problem getting one of the videos in the playlist!'
         );
@@ -176,7 +176,7 @@ module.exports = class PlayCommand extends Commando.Command {
         return PlayCommand.playSong(message.guild.musicData.queue, message);
       } else if (message.guild.musicData.isPlaying == true) {
         const PlayListEmbed = new Discord.MessageEmbed()
-          .setColor('#ff0000')
+          .setColor('#FFED00')
           .setTitle(`:musical_note: ${playlist.title}`)
           .addField(
             `Playlist has added ${message.guild.musicData.queue.length} songs to queue!`,
@@ -196,7 +196,7 @@ module.exports = class PlayCommand extends Commando.Command {
         .replace(/(>|<)/gi, '')
         .split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
       const id = query[2].split(/[^0-9a-z_\-]/i)[0];
-      const video = await youtube.getVideoByID(id).catch(function() {
+      const video = await youtube.getVideoByID(id).catch(function () {
         message.say(':x: There was a problem getting the video you provided!');
         return;
       });
@@ -225,7 +225,7 @@ module.exports = class PlayCommand extends Commando.Command {
         return PlayCommand.playSong(message.guild.musicData.queue, message);
       } else if (message.guild.musicData.isPlaying == true) {
         const addedEmbed = new Discord.MessageEmbed()
-          .setColor('#ff0000')
+          .setColor('#FFED00')
           .setTitle(`:musical_note: ${video.title}`)
           .addField(
             `Has been added to queue. `,
@@ -254,7 +254,7 @@ module.exports = class PlayCommand extends Commando.Command {
     }
     queue[0].voiceChannel
       .join()
-      .then(function(connection) {
+      .then(function (connection) {
         const dispatcher = connection
           .play(
             ytdl(queue[0].url, {
@@ -263,7 +263,7 @@ module.exports = class PlayCommand extends Commando.Command {
               highWaterMark: 1 << 25
             })
           )
-          .on('start', function() {
+          .on('start', function () {
             message.guild.musicData.songDispatcher = dispatcher;
             if (!db.get(`${message.guild.id}.serverSettings.volume`))
               dispatcher.setVolume(message.guild.musicData.volume);
@@ -274,7 +274,7 @@ module.exports = class PlayCommand extends Commando.Command {
 
             const videoEmbed = new Discord.MessageEmbed()
               .setThumbnail(queue[0].thumbnail)
-              .setColor('#ff0000')
+              .setColor('#FFED00')
               .addField(':notes: Now Playing:', queue[0].title)
               .addField(':stopwatch: Duration:', queue[0].duration)
               .setURL(queue[0].url)
@@ -290,7 +290,7 @@ module.exports = class PlayCommand extends Commando.Command {
             queue.shift();
             return;
           })
-          .on('finish', function() {
+          .on('finish', function () {
             queue = message.guild.musicData.queue;
             if (message.guild.musicData.loopSong) {
               queue.unshift(message.guild.musicData.nowPlaying);
@@ -327,7 +327,7 @@ module.exports = class PlayCommand extends Commando.Command {
               }
             }
           })
-          .on('error', function(e) {
+          .on('error', function (e) {
             message.say(':x: Cannot play song!');
             console.error(e);
             if (queue.length > 1) {
@@ -344,7 +344,7 @@ module.exports = class PlayCommand extends Commando.Command {
             return;
           });
       })
-      .catch(function() {
+      .catch(function () {
         message.say(':no_entry: I have no permission to join your channel!');
         message.guild.musicData.queue.length = 0;
         message.guild.musicData.isPlaying = false;
@@ -359,7 +359,7 @@ module.exports = class PlayCommand extends Commando.Command {
   }
 
   static async searchYoutube(query, message, voiceChannel) {
-    const videos = await youtube.searchVideos(query, 5).catch(async function() {
+    const videos = await youtube.searchVideos(query, 5).catch(async function () {
       await message.say(
         ':x: There was a problem searching the video you requested!'
       );
@@ -385,7 +385,7 @@ module.exports = class PlayCommand extends Commando.Command {
     }
     vidNameArr.push('cancel');
     const embed = new Discord.MessageEmbed()
-      .setColor('#ff0000')
+      .setColor('#FFED00')
       .setTitle(`:mag: Search Results!`)
       .addField(':notes: Result 1', vidNameArr[0])
       .setURL(videos[0].url)
@@ -399,7 +399,7 @@ module.exports = class PlayCommand extends Commando.Command {
     var songEmbed = await message.channel.send({ embed });
     message.channel
       .awaitMessages(
-        function(msg) {
+        function (msg) {
           return (
             (msg.content > 0 && msg.content < 6) || msg.content === 'cancel'
           );
@@ -410,7 +410,7 @@ module.exports = class PlayCommand extends Commando.Command {
           errors: ['time']
         }
       )
-      .then(function(response) {
+      .then(function (response) {
         const videoIndex = parseInt(response.first().content);
         if (response.first().content === 'cancel') {
           songEmbed.delete();
@@ -418,7 +418,7 @@ module.exports = class PlayCommand extends Commando.Command {
         }
         youtube
           .getVideoByID(videos[videoIndex - 1].id)
-          .then(function(video) {
+          .then(function (video) {
             // // can be uncommented if you don't want the bot to play live streams
             // if (video.raw.snippet.liveBroadcastContent === 'live') {
             //   songEmbed.delete();
@@ -456,7 +456,7 @@ module.exports = class PlayCommand extends Commando.Command {
                 songEmbed.delete();
               }
               const addedEmbed = new Discord.MessageEmbed()
-                .setColor('#ff0000')
+                .setColor('#FFED00')
                 .setTitle(`:musical_note: ${video.title}`)
                 .addField(
                   `Has been added to queue. `,
@@ -468,7 +468,7 @@ module.exports = class PlayCommand extends Commando.Command {
               return;
             }
           })
-          .catch(function() {
+          .catch(function () {
             if (songEmbed) {
               songEmbed.delete();
             }
@@ -478,7 +478,7 @@ module.exports = class PlayCommand extends Commando.Command {
             return;
           });
       })
-      .catch(function() {
+      .catch(function () {
         if (songEmbed) {
           songEmbed.delete();
         }
@@ -505,15 +505,13 @@ module.exports = class PlayCommand extends Commando.Command {
   }
   // prettier-ignore
   static formatDuration(durationObj) {
-    const duration = `${durationObj.hours ? (durationObj.hours + ':') : ''}${
-      durationObj.minutes ? durationObj.minutes : '00'
-    }:${
-      (durationObj.seconds < 10)
+    const duration = `${durationObj.hours ? (durationObj.hours + ':') : ''}${durationObj.minutes ? durationObj.minutes : '00'
+      }:${(durationObj.seconds < 10)
         ? ('0' + durationObj.seconds)
         : (durationObj.seconds
-        ? durationObj.seconds
-        : '00')
-    }`;
+          ? durationObj.seconds
+          : '00')
+      }`;
     return duration;
   }
 };

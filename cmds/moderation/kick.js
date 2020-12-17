@@ -39,7 +39,7 @@ module.exports = class KickCommand extends Commando.Command {
         const kickEmbed = new Discord.MessageEmbed()
           .addField('Kicked:', userToKick)
           .addField('Reason:', reason)
-          .setColor('#420626');
+          .setColor('#484848');
         message.channel.send(kickEmbed);
       })
       .catch(err => {

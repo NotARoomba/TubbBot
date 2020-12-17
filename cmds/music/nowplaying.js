@@ -37,7 +37,7 @@ module.exports = class NowPlayingCommand extends Commando.Command {
 
     const videoEmbed = new Discord.MessageEmbed()
       .setThumbnail(video.thumbnail)
-      .setColor('#e9f931')
+      .setColor('#AEA200')
       .setTitle(`:notes: ${title}`)
       .setURL(video.url)
       .setDescription(description);

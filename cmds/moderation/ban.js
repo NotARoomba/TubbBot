@@ -38,7 +38,7 @@ module.exports = class BanCommand extends Commando.Command {
         const banEmbed = new Discord.MessageEmbed()
           .addField('Banned:', userToBan)
           .addField('Reason', reason)
-          .setColor('#420626');
+          .setColor('#484848');
         message.channel.send(banEmbed);
       })
       .catch(err => {

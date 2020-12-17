@@ -30,7 +30,7 @@ module.exports = class Help2Command extends Commando.Command {
 						To run a command, use ${message.anyUsage('<command>')}.
 						${nsfw ? '' : 'Use in an NSFW channel to see NSFW commands.'}
 					`)
-                    .setColor(0x00AE86);
+                    .setColor('#ffc018')
                 embeds.push(embed);
             }
             let cmdCount = 0;

@@ -27,7 +27,7 @@ module.exports = class IpCommand extends Commando.Command {
                         return
                     }
                     const embed = new Discord.MessageEmbed()
-                        .setColor(0x00AE86)
+                        .setColor('#484848')
                         .setTitle(`Results for: ${data.ip}`)
                         .setThumbnail(`https://www.countryflags.io/${data.country_code}/flat/64.png`)
                         .addField('❯ Country', data.country_name)

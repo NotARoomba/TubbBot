@@ -34,7 +34,7 @@ module.exports = class MyPlaylistsCommand extends Commando.Command {
         return `**${savedPlaylistsClone.indexOf(e) + 1}**: ${e.name}`;
       });
 
-    playlistsEmbed.embed.setColor('#ff7373').setTitle('Saved Playlists');
+    playlistsEmbed.embed.setColor('#FFB400').setTitle('Saved Playlists');
     playlistsEmbed.build();
   }
 };
