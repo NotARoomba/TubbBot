@@ -51,7 +51,7 @@ client.setProvider(
 client.on('ready', async (member) => {
   console.log('Tubb is starting!')
   setInterval(() => {
-    client.user.setActivity(`!help in ${client.guilds.cache.size} Servers | Made by L061571C5#5281`, { type: 'WATCHING' })
+    client.user.setActivity(`-help in ${client.guilds.cache.size} Servers | Made by L061571C5#5281`, { type: 'WATCHING' })
   }, 60000);
 
 
