@@ -39,7 +39,7 @@ module.exports = class SetWelcomeCommand extends Commando.Command {
       }
     )
     client.logger.info('UPDATED DATABASE')
-    channel.reply('Welcome message and channel set!')
+    message.say('Welcome message and channel set!')
   }
 }
 

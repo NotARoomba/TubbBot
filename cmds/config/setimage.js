@@ -39,7 +39,7 @@ module.exports = class SetImageCommand extends Commando.Command {
 
     client.logger.info('UPDATED IMAGE DATABASE')
 
-    message.reply('Welcome image set! Please make sure that it is the proper link for your image.')
+    message.say('Welcome image set! Please make sure that it is the proper link for your image.')
   } catch(error) {
     console.error(error);
     return message.reply(error.message).catch(console.error);

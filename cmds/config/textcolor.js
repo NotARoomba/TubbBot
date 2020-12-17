@@ -38,7 +38,7 @@ module.exports = class SetColorCommand extends Commando.Command {
     )
 
     client.logger.info('UPDATED IMAGE DATABASE')
-    message.reply('Server color set! Please make sure that it is a hex code.')
+    message.say('Server color set! Please make sure that it is a hex code.')
   } catch(error) {
     console.error(error);
     return message.reply(error.message).catch(console.error);
