@@ -50,7 +50,7 @@ module.exports = class ShuffleQueueCommand extends Commando.Command {
       });
 
     queueEmbed.embed
-      .setColor('#494400')
+      .setColor('#dbc300')
       .setTitle(':twisted_rightwards_arrows: New Music Queue!');
     queueEmbed.build();
   }

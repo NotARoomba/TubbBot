@@ -50,7 +50,7 @@
     "stream": "0.0.2",
     "winston": "^3.3.3",
     "winston-syslog": "^2.4.4",
-    "ytdl-core": "^4.1.7",
+    "ytdl-core": "^4.2.0",
     "ytdl-core-discord": "^1.2.4"
   },
   "_moduleAliases": {
