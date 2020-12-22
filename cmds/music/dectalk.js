@@ -55,7 +55,7 @@ module.exports = class DECTalkCommand extends Commando.Command {
 		if (!connection) {
 			const usage = this.client.registry.commands.get('join').usage();
 			return message.reply(`I am not in a voice channel. Use ${usage} to fix that!`);
-			
+
 		}
 		if (
 			typeof message.guild.musicData.songDispatcher === undefined) { } else {
