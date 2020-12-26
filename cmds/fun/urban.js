@@ -22,7 +22,7 @@ module.exports = class UrbanCommand extends Commando.Command {
 
   run(message, { text }) {
 
-    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     fetch(`https://api.urbandictionary.com/v0/define?term=${text}`)
       .then(res => res.json())
       .then(json => {

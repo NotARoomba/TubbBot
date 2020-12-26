@@ -23,7 +23,7 @@ module.exports = class TodayInHistoryCommand extends Commando.Command {
 
     async run(message, { month, day }) {
 
-        client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+        logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
         const date = month && day ? `/${month}/${day}` : '';
         try {
             const { text } = await request.get(`http://history.muffinlabs.com/date${date}`);

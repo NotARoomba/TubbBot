@@ -27,7 +27,7 @@ module.exports = class BanCommand extends Commando.Command {
 
   async run(message, { userToBan, reason }) {
 
-    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     const user =
       message.mentions.members.first()
     if (user == undefined || 'all')

@@ -52,7 +52,7 @@ module.exports = class TranslateCommand extends Commando.Command {
 	}
 	async run(message, { base, target, text }) {
 
-		client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+		logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
 		try {
 			const { text: result, from } = await translate(text, { to: target, from: base });
 			const embed = new Discord.MessageEmbed()

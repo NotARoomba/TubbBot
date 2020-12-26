@@ -28,7 +28,7 @@ module.exports = class KickCommand extends Commando.Command {
 
   async run(message, { userToKick, reason }) {
 
-    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     const user =
       message.mentions.members.first()
     if (user == undefined)

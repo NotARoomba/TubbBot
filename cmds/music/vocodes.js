@@ -44,7 +44,7 @@ module.exports = class VocodesCommand extends Commando.Command {
 
 	async run(message, { voice, text }) {
 
-		client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+		logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
 		const connection = this.client.voice.connections.get(message.guild.id);
 		if (!connection) {
 			const usage = this.client.registry.commands.get('join').usage();

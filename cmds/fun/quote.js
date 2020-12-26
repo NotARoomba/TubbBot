@@ -10,7 +10,7 @@ module.exports = class GiphyCommand extends Commando.Command {
     }
     async run(message) {
 
-        client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+        logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
         const { channel } = message
         const quote2 = quotes[Math.floor(Math.random() * quotes.length)]
         const { author } = quote2

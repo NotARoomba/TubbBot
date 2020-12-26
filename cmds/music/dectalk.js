@@ -43,7 +43,7 @@ module.exports = class DECTalkCommand extends Commando.Command {
 
 	async run(message, { text }) {
 
-		client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+		logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
 		var voiceChannel = message.member.voice.channel;
 		if (!voiceChannel)
 			return message.reply(

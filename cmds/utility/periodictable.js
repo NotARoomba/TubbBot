@@ -54,7 +54,7 @@ module.exports = class PeriodicTableCommand extends Commando.Command {
 
 	async run(message, { element }) {
 
-		client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+		logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
 		const canvas = createCanvas(500, 500);
 		const ctx = canvas.getContext('2d');
 		ctx.fillStyle = 'black';

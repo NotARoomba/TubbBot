@@ -26,7 +26,7 @@ module.exports = class LyricsCommand extends Commando.Command {
   }
   async run(message, { songName }) {
 
-    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     if (
       songName == '' &&
       message.guild.musicData.isPlaying

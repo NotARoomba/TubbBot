@@ -13,7 +13,7 @@ module.exports = class NowPlayingCommand extends Commando.Command {
 
   run(message) {
 
-    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     if (
       (!message.guild.musicData.isPlaying &&
         !message.guild.musicData.nowPlaying)
