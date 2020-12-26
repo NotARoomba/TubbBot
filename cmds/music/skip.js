@@ -13,7 +13,7 @@ module.exports = class SkipCommand extends Commando.Command {
 
   run(message) {
 
-    logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     const voiceChannel = message.member.voice.channel;
     if (!voiceChannel)
       return message.reply(

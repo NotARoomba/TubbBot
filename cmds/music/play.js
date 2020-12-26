@@ -29,7 +29,7 @@ module.exports = class PlayCommand extends Commando.Command {
 
   async run(message, { query }) {
 
-    logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     const voiceChannel = message.member.voice.channel;
     if (!voiceChannel) {
       message.say(':no_entry: Please join a voice channel and try again!');

@@ -25,7 +25,7 @@ module.exports = class DependencyUpdateCommand extends Commando.Command {
     }
 
     async run(message) {
-        logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+        client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
         const needUpdate = [];
         for (const [dep, ver] of Object.entries(dependencies)) {
             const update = await this.parseUpdate(dep, ver);

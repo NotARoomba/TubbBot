@@ -30,7 +30,7 @@ module.exports = class WikipediaCommand extends Commando.Command {
 
 	async run(message, { query }) {
 
-		logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+		client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
 		try {
 			const { body } = await request
 				.get('https://en.wikipedia.org/w/api.php')

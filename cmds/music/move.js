@@ -27,7 +27,7 @@ module.exports = class MoveSongCommand extends Commando.Command {
   }
   async run(message, { oldPosition, newPosition }) {
 
-    logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     if (
       oldPosition < 1 ||
       oldPosition > message.guild.musicData.queue.length ||

@@ -24,7 +24,7 @@ module.exports = class messagedelCommand extends Commando.Command {
     }
     async run(message, { count }) {
 
-        logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+        client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
         count++;
 		try {
 			const messages = await message.channel.messages.fetch({ limit: count > 100 ? 100 : count });

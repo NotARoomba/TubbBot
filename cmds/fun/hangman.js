@@ -27,7 +27,7 @@ module.exports = class HangmanCommand extends Commando.Command {
 	}
 
 	async run(message) {
-		logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+		client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
 		const current = this.client.games.get(message.channel.id);
 		if (current) return message.reply(`Please wait until the current game of \`${current.name}\` is finished.`);
 		this.client.games.set(message.channel.id, { name: this.name });

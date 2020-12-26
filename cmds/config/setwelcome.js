@@ -20,7 +20,7 @@ module.exports = class SetWelcomeCommand extends Commando.Command {
   }
   async run(message, { text }) {
 
-    logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     const { guild, channel } = message
     const cache = {}
     cache[guild.id] = [channel.id, text]
@@ -38,7 +38,7 @@ module.exports = class SetWelcomeCommand extends Commando.Command {
         upsert: true,
       }
     )
-    logger.info('UPDATED DATABASE')
+    client.logger.info('UPDATED DATABASE')
     message.say('Welcome message and channel set!')
   }
 }

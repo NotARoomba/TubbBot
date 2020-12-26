@@ -22,7 +22,7 @@ module.exports = class InfoCommand extends Commando.Command {
   }
 
   async run(message) {
-    logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     const invite = process.env.INVITE_BOT
     const website = `https://tubb-bot.000webhostapp.com/`;
     const embed = new Discord.MessageEmbed()

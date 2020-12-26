@@ -21,7 +21,7 @@ module.exports = class LoopQueueCommand extends Commando.Command {
 
   run(message) {
 
-    logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     if (!message.guild.musicData.isPlaying) {
       message.say(':x: There is no song playing right now!');
       return;

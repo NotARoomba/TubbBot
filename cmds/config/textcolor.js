@@ -20,7 +20,7 @@ module.exports = class SetColorCommand extends Commando.Command {
   }
   async run(message, { color }) {
 
-    logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     const { guild } = message
     const cache = {}
     cache[guild.id] = [color]
@@ -37,7 +37,7 @@ module.exports = class SetColorCommand extends Commando.Command {
       }
     )
 
-    logger.info('UPDATED IMAGE DATABASE')
+    client.logger.info('UPDATED IMAGE DATABASE')
     message.say('Server color set! Please make sure that it is a hex code.')
   } catch(error) {
     console.error(error);

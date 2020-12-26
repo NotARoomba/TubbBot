@@ -13,7 +13,7 @@ module.exports = class QueueCommand extends Commando.Command {
 
   run(message) {
 
-    logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     if (message.guild.musicData.queue.length == 0)
       return message.say(':x: There are no songs in queue!');
     const queueClone = message.guild.musicData.queue;

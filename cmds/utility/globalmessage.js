@@ -17,7 +17,7 @@ module.exports = class GlobalMessageCommand extends Commando.Command {
     })
   }
   async run(message, { query }) {
-    logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     if (message.author.id === "465917394108547072") {
       try {
         let toSay = query

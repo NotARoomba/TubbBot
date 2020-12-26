@@ -20,7 +20,7 @@ module.exports = class DeletePlaylistCommand extends Commando.Command {
 
   run(message, { playlistName }) {
 
-    logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     // check if user has playlists or user is in the db
     const dbUserFetch = db.get(message.member.id);
     if (!dbUserFetch) {

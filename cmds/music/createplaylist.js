@@ -19,7 +19,7 @@ module.exports = class CreatePlaylistCommand extends Commando.Command {
 
   run(message, { playlistName }) {
 
-    logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     // check if the user exists in the db
     if (!db.get(message.member.id)) {
       db.set(message.member.id, {

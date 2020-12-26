@@ -27,7 +27,7 @@ module.exports = class CountryCommand extends Commando.Command {
 
 	async run(message, { query }) {
 
-		logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+		client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
 		try {
 			const { body } = await request.get(`https://restcountries.eu/rest/v2/name/${query}`);
 			const data = body[0];

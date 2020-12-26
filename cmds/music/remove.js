@@ -19,7 +19,7 @@ module.exports = class RemoveSongCommand extends Commando.Command {
   }
   run(message, { songNumber }) {
 
-    logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     if (songNumber < 1 || songNumber >= message.guild.musicData.queue.length) {
       return message.reply(':x: Please enter a valid song number!');
     }

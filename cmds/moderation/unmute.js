@@ -13,7 +13,7 @@ module.exports = class UnmuteCommand extends Commando.Command {
 
   run = async (message, args) => {
 
-    logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     //!unmute @
     //!unmute ID
 

@@ -12,7 +12,7 @@ module.exports = class SimJoinCommand extends Commando.Command {
   }
   async run(message) {
 
-    logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     client.emit('guildMemberAdd', message.member)
   }
 }

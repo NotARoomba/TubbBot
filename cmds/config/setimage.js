@@ -20,7 +20,7 @@ module.exports = class SetImageCommand extends Commando.Command {
   }
   async run(message, { image }) {
 
-    logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     const { guild } = message
     const cache = {}
     cache[guild.id] = [image]
@@ -37,7 +37,7 @@ module.exports = class SetImageCommand extends Commando.Command {
       }
     )
 
-    logger.info('UPDATED IMAGE DATABASE')
+    client.logger.info('UPDATED IMAGE DATABASE')
 
     message.say('Welcome image set! Please make sure that it is the proper link for your image.')
   } catch(error) {

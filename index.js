@@ -2,8 +2,8 @@ require('module-alias/register');
 require('events').EventEmitter.prototype._maxListeners = 200;
 require('dotenv').config();
 global.loadFeatures = require('@root/features/load-features.js')
-global.MongoClient = require('mongodb').MongoClient;
-global.MongoDBProvider = require('commando-provider-mongo').MongoDBProvider;
+const { MongoClient } = require('mongodb')
+global.MongoDBProvider = require('commando-provider-mongo')
 global.Commando = require('discord.js-commando')
 //const client = new Discord.Client
 global.mongo = require('@util/mongo');
@@ -27,45 +27,8 @@ global.serverSchema = require('@schemas/server-schema')
 global.muteSchema = require('@schemas/mute-schema')
 global.Canvas = require('canvas')
 global.math = require('mathjs');
-global.Collection = require('@discordjs/collection');
-require('winston-syslog')
-const localhost = require("os").hostname
-const { CommandoClient } = require('discord.js-commando');
-const { Structures } = require('discord.js');
-Structures.extend('Guild', function (Guild) {
-    class MusicGuild extends Guild {
-        constructor(client, data) {
-            super(client, data);
-            this.musicData = {
-                queue: [],
-                isPlaying: false,
-                nowPlaying: null,
-                songDispatcher: null,
-                skipTimer: false, // only skip if user used leave command
-                loopSong: false,
-                loopQueue: false,
-                volume: 1
-            };
-        }
-    }
-    return MusicGuild;
-});
-
-module.exports = class TubbClient extends CommandoClient {
-    constructor(options) {
-        super(options);
-        const option = {
-            host: 'logs3.papertrailapp.com',
-            port: process.env.PORT,
-            app_name: "Tubb",
-            localhost: localhost
-        }
-        this.logger = winston.createLogger();
-        this.logger.add(new winston.transports.Syslog(option))
-        this.games = new Collection();
-    }
-}
-global.client = new CommandoClient({
+const Client = require('@util/Client.js');
+global.client = new Client({
   commandPrefix: process.env.PREFIX,
   owner: process.env.OWNERS,
   invite: process.env.INVITE,
@@ -199,5 +162,21 @@ client.on('guildCreate', guild => {
   }
   channel.send({ embed: invite })
 })
+
+client.on('disconnect', event => {
+  client.logger.error(`[DISCONNECT] Disconnected with code ${event.code}.`);
+  process.exit(0);
+});
+
+client.on('error', err => client.logger.error(err.stack));
+
+client.on('warn', warn => client.logger.warn(warn));
+
+client.on('commandRun', command => {
+  if (command.uses === undefined) return;
+  command.uses++;
+});
+
+client.on('commandError', (command, err) => client.logger.error(`[COMMAND:${command.name}]\n${err.stack}`));
 
 client.login(process.env.TOKEN)

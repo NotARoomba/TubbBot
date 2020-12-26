@@ -20,7 +20,7 @@ module.exports = class UnbanCommand extends Commando.Command {
     }
     async run(message, { member }) {
 
-        logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+        client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
         message.guild.fetchBans().then(bans => {
             message.guild.members.unban(member)
         })
