@@ -2,8 +2,8 @@ require('module-alias/register');
 require('events').EventEmitter.prototype._maxListeners = 200;
 require('dotenv').config();
 global.loadFeatures = require('@root/features/load-features.js')
-const { MongoClient } = require('mongodb')
-global.MongoDBProvider = require('commando-provider-mongo')
+global.MongoClient = require('mongodb').MongoClient;
+global.MongoDBProvider = require('commando-provider-mongo').MongoDBProvider;
 global.Commando = require('discord.js-commando')
 //const client = new Discord.Client
 global.mongo = require('@util/mongo');
@@ -27,7 +27,7 @@ global.serverSchema = require('@schemas/server-schema')
 global.muteSchema = require('@schemas/mute-schema')
 global.Canvas = require('canvas')
 global.math = require('mathjs');
-const Client = require('@util/Client.js');
+const Client = require('@util/client.js');
 global.client = new Client({
   commandPrefix: process.env.PREFIX,
   owner: process.env.OWNERS,
