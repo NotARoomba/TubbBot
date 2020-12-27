@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const Entities = require('html-entities').AllHtmlEntities;
 const entities = new Entities();
+const { Readable } = require('stream');
 const { stripIndents } = require('common-tags');
 const { SUCCESS_EMOJI_ID } = process.env;
 const yes = ['yes', 'y', 'ye', 'yeah', 'yup', 'yea', 'ya', 'hai', 'si', 'sí', 'oui', 'はい', 'correct'];
@@ -195,6 +196,20 @@ module.exports = class Util {
 			}
 		}
 		return null;
+	}
+	static async dectalk(text) {
+		try {
+			reactIfAble(message, this.client.user, '💬');
+			const { body } = await request
+				.get('http://tts.cyzon.us/tts')
+				.query({ text });
+			connection.play(Readable.from([body]));
+			reactIfAble(message, this.client.user, '🔉');
+			return null;
+		} catch (err) {
+			reactIfAble(message, this.client.user, '⚠️');
+			return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
+		}
 	}
 
 	static async verify(channel, user, { time = 30000, extraYes = [], extraNo = [] } = {}) {

@@ -1,6 +1,5 @@
+const { dectalk } = require('@util/util');
 
-const { Readable } = require('stream');
-const { reactIfAble } = require('@util/util');
 module.exports = class DECTalkCommand extends Commando.Command {
 	constructor(client) {
 		super(client, {
@@ -58,22 +57,15 @@ module.exports = class DECTalkCommand extends Commando.Command {
 
 		}
 		if (
-			typeof message.guild.musicData.songDispatcher === undefined || null) { } else {
-			message.guild.musicData.loopSong = false;
-			message.guild.musicData.songDispatcher.pause();
-			message.say('Song was skipped and paused because of dectalk.')
-		}
-		try {
-			reactIfAble(message, this.client.user, '💬');
-			const { body } = await request
-				.get('http://tts.cyzon.us/tts')
-				.query({ text });
-			connection.play(Readable.from([body]));
-			reactIfAble(message, this.client.user, '🔉');
-			return null;
-		} catch (err) {
-			reactIfAble(message, this.client.user, '⚠️');
-			return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
-		}
+			typeof message.guild.musicData.songDispatcher == 'undefined' ||
+			message.guild.musicData.songDispatcher == null
+		  ) {
+			dectalk(connection, text)
+		  
+	
+	} else {
+		dectalk(connection, text)
 	}
+	
+} 
 };

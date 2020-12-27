@@ -24,11 +24,11 @@ module.exports = class DictionaryCommand extends Commando.Command {
 			if (!body.length) return null;
 			const data = body[0];
 			if (typeof data === 'string') return null;
-			return {
-				name: data.meta.stems[0],
-				partOfSpeech: data.fl,
-				definiton: data.shortdef.map((definition, i) => `(${i + 1}) ${definition}`).join('\n')
-			};
+				const name = data.meta.stems[0]
+				const partOfSpeech = data.fl
+                const definiton = data.shortdef.map((definition, i) => `(${i + 1}) ${definition}`).join('\n')
+                message.say(`${name} \n ${partOfSpeech} \n ${definiton}`)
+            
 		} catch (err) {
 			return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
 		}
