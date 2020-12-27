@@ -73,14 +73,18 @@ module.exports = class DECTalkCommand extends Commando.Command {
 					return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
 				}
 	} else {
+		
 		try {
+			message.guild.musicData.loopSong = false;
+			message.guild.musicData.songDispatcher.end();
+			message.guild.musicData.songDispatcher.pause();
 			reactIfAble(message, this.client.user, '💬');
 			const { body } = await request
 				.get('http://tts.cyzon.us/tts')
 				.query({ text });
 			connection.play(Readable.from([body]));
 			reactIfAble(message, this.client.user, '🔉');
-			message.guild.musicData.songDispatcher.end();
+			
 			message.say(`Song skipped because dectalk terminates the stream`)
 			return null;
 		} catch (err) {
