@@ -30,7 +30,7 @@ module.exports = class DictionaryCommand extends Commando.Command {
 				definiton: data.shortdef.map((definition, i) => `(${i + 1}) ${definition}`).join('\n')
 			};
 		} catch (err) {
-			return null;
+			return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
 		}
     }
 }
