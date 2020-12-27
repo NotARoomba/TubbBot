@@ -58,7 +58,7 @@ module.exports = class DECTalkCommand extends Commando.Command {
 
 		}
 		if (
-			typeof message.guild.musicData.songDispatcher === undefined) { } else {
+			typeof message.guild.musicData.songDispatcher === undefined || null) { } else {
 			message.guild.musicData.loopSong = false;
 			message.guild.musicData.songDispatcher.pause();
 			message.say('Song was skipped and paused because of dectalk.')

@@ -20,7 +20,7 @@ module.exports = class DictionaryCommand extends Commando.Command {
         try {
 			const { body } = await request
 				.get(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}`)
-				.query({ key: process.env.WEBSTER_KEY });
+				.query({ key: process.env.WEBSTER });
 			if (!body.length) return null;
 			const data = body[0];
 			if (typeof data === 'string') return null;
