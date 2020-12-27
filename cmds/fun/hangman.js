@@ -111,6 +111,7 @@ module.exports = class HangmanCommand extends Commando.Command {
 			if (!body.length) return null;
 			const data = body[0];
 			if (typeof data === 'string') return null;
+			console.log(data)
 			return {
 				name: data.meta.stems[0],
 				partOfSpeech: data.fl,
