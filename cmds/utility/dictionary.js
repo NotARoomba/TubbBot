@@ -30,7 +30,7 @@ module.exports = class DictionaryCommand extends Commando.Command {
             const info = new Discord.MessageEmbed()
             .setColor('#f0c018')
             .setTitle(name)
-            .addField(partOfSpeech)
+            .setDescription(partOfSpeech)
             .setDescription(definition)
 			message.channel.send(info)
                 //message.say(`${name} \n ${partOfSpeech} \n ${definiton}`)
