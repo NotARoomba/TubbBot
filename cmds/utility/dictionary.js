@@ -28,10 +28,11 @@ module.exports = class DictionaryCommand extends Commando.Command {
 				const partOfSpeech = data.fl
                 const definition = data.shortdef.map((definition, i) => `(${i + 1}) ${definition}`).join('\n')
             const info = new Discord.MessageEmbed()
-            .title(name)
+            .setColor('#f0c018')
+            .setTitle(name)
             .addField(partOfSpeech)
-            .description(definition)
-			message.say(info)
+            .setDescription(definition)
+			message.channel.send(info)
                 //message.say(`${name} \n ${partOfSpeech} \n ${definiton}`)
             
 		} catch (err) {

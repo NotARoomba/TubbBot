@@ -1,5 +1,5 @@
 const { reactIfAble } = require('@util/util');
-
+const { Readable } = require('stream');
 module.exports = class DECTalkCommand extends Commando.Command {
 	constructor(client) {
 		super(client, {
