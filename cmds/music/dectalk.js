@@ -84,9 +84,8 @@ module.exports = class DECTalkCommand extends Commando.Command {
 				.query({ text });
 			connection.play(Readable.from([body]));
 			reactIfAble(message, this.client.user, '🔉');
-			message.say(`Song skipped because dectalk terminates the stream`)
-			message.guild.musicData.songDispatcher.resume();
-			return null;
+			message.say(`Song skipped and paused because dectalk terminates the stream`)
+			return message.guild.musicData.songDispatcher.resume();;
 		} catch (err) {
 			reactIfAble(message, this.client.user, '⚠️');
 	}
