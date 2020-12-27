@@ -50,13 +50,13 @@ module.exports = class TranslateCommand extends Commando.Command {
 			]
 		});
 	}
-	async run(message, { base, target, text }) {
+	async run(message, { text, target, base }) {
 
 		client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
 		try {
 			const { text: result, from } = await translate(text, { to: target, from: base });
-			const embed = new Discord.MessageEmbed()
-				.setColor('#484848')
+			const embed = new MessageEmbed()
+				.setColor(0x4285F4)
 				.setFooter('Powered by Google Translate', 'https://i.imgur.com/h3RoHyp.png')
 				.addField(`❯ From: ${translate.languages[from.language.iso]}`, from.text.value || text)
 				.addField(`❯ To: ${translate.languages[target]}`, result);
