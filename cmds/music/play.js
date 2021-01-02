@@ -41,7 +41,10 @@ module.exports = class PlayCommand extends Commando.Command {
       { name: '3', urls: [ [Object], [Object] ] }
      ]
     */
-
+   const spotifyApi = new SpotifyWebApi({
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+  });
     if (db.get(message.member.id) !== null) {
       const userPlaylists = db.get(message.member.id).savedPlaylists;
       let found = false;
@@ -54,7 +57,7 @@ module.exports = class PlayCommand extends Commando.Command {
         }
       }
       if (found) {
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.Discord.MessageEmbed()
           .setColor('#FFED00')
           .setTitle(':eyes: Clarification Please.')
           .setDescription(
@@ -174,7 +177,7 @@ module.exports = class PlayCommand extends Commando.Command {
         message.guild.musicData.isPlaying = true;
         return PlayCommand.playSong(message.guild.musicData.queue, message);
       } else if (message.guild.musicData.isPlaying == true) {
-        const PlayListEmbed = new Discord.MessageEmbed()
+        const PlayListEmbed = new Discord.Discord.MessageEmbed()
           .setColor('#FFED00')
           .setTitle(`:musical_note: ${playlist.title}`)
           .addField(
@@ -225,7 +228,7 @@ module.exports = class PlayCommand extends Commando.Command {
         message.guild.musicData.isPlaying = true;
         return PlayCommand.playSong(message.guild.musicData.queue, message);
       } else if (message.guild.musicData.isPlaying == true) {
-        const addedEmbed = new Discord.MessageEmbed()
+        const addedEmbed = new Discord.Discord.MessageEmbed()
           .setColor('#FFED00')
           .setTitle(`:musical_note: ${video.title}`)
           .addField(
@@ -254,16 +257,64 @@ module.exports = class PlayCommand extends Commando.Command {
     if (
       query.match(/^https?:\/\/(open.spotify\.com)\/(.*)$/)
     ) {
-    //   const trackInfo = await scdl.getInfo(query, SOUNDCLOUD_CLIENT_ID);
-    //   song = {
-    //     title: trackInfo.title,
-    //     url: url,
-    //   };
-    //   message.guild.musicData.queue.push(
-    //     PlayCommand.constructSongObj(video, voiceChannel, message.member.user)
-    //   );
-    return message.say(`Spotify not supported yet...`)
-    }
+      // let songData;
+      // let songInfo;
+      // const spotifyTracks = [];
+      // let spotifyEmbed = new Discord.MessageEmbed().setTimestamp(); 
+  
+      // try {
+      //   songData = spotifyUri.parse(query);
+      // } catch (err) {
+      //   console.log(err);
+      //   return message.reply(err)
+      // }
+  
+      // if (songData.type === "track") {
+      //   spotifyApi
+      //     .getTrack(songData.id)
+      //     .then(async (data) => {
+      //       const track = data.body;
+      //       const results = await youtube.searchVideos(
+      //         `${track.name} ${track.artists[0].name}`
+      //       );
+      //       songInfo = await ytdl.getInfo(results[0].url);
+  
+      //       await spotifyTracks.push({
+      //         title: track.name,
+      //         url: songInfo.videoDetails.video_url,
+      //         duration: Math.floor(track.duration_ms / 1000),
+      //         thumbnail:
+      //           songInfo.videoDetails.thumbnail.thumbnails[
+      //             songInfo.videoDetails.thumbnail.thumbnails.length - 1
+      //           ].url,
+      //       });
+  
+      //       spotifyEmbed
+      //         .setAuthor(
+      //           `✔️ ${songInfo.videoDetails.title} has been added to queue.`,
+      //           message.client.config.resources.spotifyIcon
+      //         )
+      //         .setThumbnail(
+      //           songInfo.videoDetails.thumbnail.thumbnails[
+      //             songInfo.videoDetails.thumbnail.thumbnails.length - 1
+      //           ].url
+      //         );
+      //       message.channel.send(spotifyEmbed);
+      //     })
+      //     .catch((err) => console.log(err));
+    
+
+      // setTimeout(async () => {
+      //   spotifyTracks.forEach((track) => {
+      //     if (serverQueue) {
+      //       serverQueue.songs.push(track);
+      //     } else {
+      //       queueConstruct.songs.push(track);
+      //     }
+      //   }
+      // })
+      return message.say(`Spotify not supported yet...`)
+    } 
 
     // if user provided a song/video name
     await PlayCommand.searchYoutube(query, message, voiceChannel);
@@ -299,7 +350,7 @@ module.exports = class PlayCommand extends Commando.Command {
                 db.get(`${message.guild.id}.serverSettings.volume`)
               );
 
-            const videoEmbed = new Discord.MessageEmbed()
+            const videoEmbed = new Discord.Discord.MessageEmbed()
               .setThumbnail(queue[0].thumbnail)
               .setColor('#FFED00')
               .addField(':notes: Now Playing:', queue[0].title)
@@ -411,7 +462,7 @@ module.exports = class PlayCommand extends Commando.Command {
       );
     }
     vidNameArr.push('cancel');
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.Discord.MessageEmbed()
       .setColor('#FFED00')
       .setTitle(`:mag: Search Results!`)
       .addField(':notes: Result 1', vidNameArr[0])
@@ -482,7 +533,7 @@ module.exports = class PlayCommand extends Commando.Command {
               if (songEmbed) {
                 songEmbed.delete();
               }
-              const addedEmbed = new Discord.MessageEmbed()
+              const addedEmbed = new Discord.Discord.MessageEmbed()
                 .setColor('#FFED00')
                 .setTitle(`:musical_note: ${video.title}`)
                 .addField(
