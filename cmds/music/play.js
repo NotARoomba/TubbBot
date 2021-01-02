@@ -201,6 +201,7 @@ module.exports = class PlayCommand extends Commando.Command {
         message.say(':x: There was a problem getting the video you provided!');
         return;
       });
+
       // // can be uncommented if you don't want the bot to play live streams
       // if (video.raw.snippet.liveBroadcastContent === 'live') {
       //   return message.say("I don't support live streams!");
@@ -254,108 +255,69 @@ module.exports = class PlayCommand extends Commando.Command {
     if (
       query.match(/^https?:\/\/(open.spotify\.com)\/(.*)$/)
     ) {
-      let songData;
-      let songInfo;
-      const spotifyTracks = [];
-      try {
-        songData = spotifyUri.parse(query);
-      } catch (err) {
-        console.log(err);
-        return message.channel.send(
-          new MessageEmbed()
-            .setAuthor(
-              language("error").spotify_invalid_uri,
-              message.client.config.resources.spotifyIcon
-            )
-            .setColor(message.client.config.colors.failed)
-        );
-      }
-      if (songData.type === "track") {
-        spotifyApi
-          .getTrack(songData.id)
-          .then(async (data) => {
-            const track = data.body;
-            const results = await youtube.searchVideos(
-              `${track.name} ${track.artists[0].name}`
-            );
-            songInfo = await ytdl.getInfo(results[0].url);
+//       let songData;
+//       let songInfo;
+//       const spotifyTracks = [];
+//       try {
+//         songData = spotifyUri.parse(query);
+//       } catch (err) {
+//         console.log(err);
+//       }
+//       if (songData.type === "track") {
+//         spotifyApi
+//           .getTrack(songData.id)
+//           .then(async (data) => {
+//             const track = data.body;
+//             console.log(track)
+//             const results = await youtube.searchVideos(
+//               `${track.name} ${track.artists[0].name}`
+//             );
+//             songInfo = await ytdl.getInfo(results[0].url);
   
-            await spotifyTracks.push({
-              title: track.name,
-              url: songInfo.videoDetails.video_url,
-              duration: Math.floor(track.duration_ms / 1000),
-              thumbnail:
-                songInfo.videoDetails.thumbnail.thumbnails[
-                  songInfo.videoDetails.thumbnail.thumbnails.length - 1
-                ].url,
-            });
-            console.log(spotifyTracks)
-            spotifyTracks.forEach(async (track) => {
-              track.url = query
-              query = query
-        .replace(/(>|<)/gi, '')
-        .split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-      const id = query[2].split(/[^0-9a-z_\-]/i)[0];
-      const video = await youtube.getVideoByID(id).catch(function() {
-        message.say(':x: There was a problem getting the video you provided!');
-        return;
-      });
-              message.guild.musicData.queue.push(
-              PlayCommand.constructSongObj(video, voiceChannel, message.member.user)
-              );
-              if (
-              message.guild.musicData.isPlaying == false ||
-              typeof message.guild.musicData.isPlaying == 'undefined'
-              ) {
-              message.guild.musicData.isPlaying = true;
-              return PlayCommand.playSong(message.guild.musicData.queue, message);
-              } else if (message.guild.musicData.isPlaying == true) {
-              const spotaddedEmbed = new Discord.Discord.MessageEmbed()
-              .setColor('#FFED00')
-              .setTitle(`:musical_note: ${songInfo.videoDetails.title}`)
-              .addField(
-                `Has been added to queue. `,
-                `This song is #${message.guild.musicData.queue.length} in queue`
-              )
-              .setThumbnail(songInfo.videoDetails.thumbnail.thumbnails[
-                songInfo.videoDetails.thumbnail.thumbnails.length - 1
-              ].url)
-              .setURL(video);
-              message.say(spotaddedEmbed);
+//             await spotifyTracks.push({
+//               title: track.name,
+//               url: songInfo.videoDetails.video_url,
+//               duration: Math.floor(track.duration_ms / 1000),
+//               thumbnail:
+//                 songInfo.videoDetails.thumbnail.thumbnails[
+//                   songInfo.videoDetails.thumbnail.thumbnails.length - 1
+//                 ].url,
+//             });
+//             console.log(spotifyTracks)
+//             spotifyTracks.forEach(async (track) => {
+//               const url = track.url
+//               const video = PlayCommand.lookup(url)
+//               message.guild.musicData.queue.push(
+//               PlayCommand.constructSongObj(video, voiceChannel, message.member.user)
+//               );
+//               if (
+//               message.guild.musicData.isPlaying == false ||
+//               typeof message.guild.musicData.isPlaying == 'undefined'
+//               ) {
+//               message.guild.musicData.isPlaying = true;
+//               return PlayCommand.playSong(message.guild.musicData.queue, message);
+//               } else if (message.guild.musicData.isPlaying == true) {
+//               const spotaddedEmbed = new Discord.Discord.MessageEmbed()
+//               .setColor('#FFED00')
+//               .setTitle(`:musical_note: ${songInfo.videoDetails.title}`)
+//               .addField(
+//                 `Has been added to queue. `,
+//                 `This song is #${message.guild.musicData.queue.length} in queue`
+//               )
+//               .setThumbnail(songInfo.videoDetails.thumbnail.thumbnails[
+//                 songInfo.videoDetails.thumbnail.thumbnails.length - 1
+//               ].url)
+//               .setURL(video);
+//               message.say(spotaddedEmbed);
               
-              }   
-              }) 
-          })
-          .catch((err) => console.log(err)); 
-        } else if (songData.type === "album") {
-            spotifyApi.getAlbum(songData.id).then((data) => {
-              const album = data.body;
-              const tracks = album.tracks.items;
-              let thumbnail;
-    
-              console.log(tracks);
-    
-              tracks.forEach(async (track) => {
-                const results = await youtube.searchVideos(
-                  `${track.name} ${track.artists[0].name}`
-                );
-                songInfo = await ytdl.getInfo(results[0].url);
-                thumbnail =
-                  songInfo.videoDetails.thumbnail.thumbnails[
-                    songInfo.videoDetails.thumbnail.thumbnails.length - 1
-                  ].url;
-                await spotifyTracks.push({
-                  title: track.name,
-                  url: songInfo.videoDetails.video_url,
-                  duration: Math.floor(track.duration_ms / 1000),
-                  thumbnail: thumbnail,
-                })
-              })
-            })
-} else {
-  return message.say(`An error has occured`)
-}
-      //return message.say(`Spotify not supported yet...`)
+//               }   
+//               }) 
+//           })
+//           .catch((err) => console.log(err)); 
+// } else {
+//   return message.say(`An error has occured`)
+// }
+      return message.say(`Spotify not supported yet...`)
     } 
   
     // if user provided a song/video name
@@ -635,5 +597,15 @@ module.exports = class PlayCommand extends Commando.Command {
         : '00')
     }`;
     return duration;
+  }
+  static async lookup(url) {
+    url = url
+    .replace(/(>|<)/gi, '')
+    .split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+  const id = url[2].split(/[^0-9a-z_\-]/i)[0];
+  const video = await youtube.getVideoByID(id).catch(function() {
+    message.say(':x: There was a problem getting the video you provided!');
+    return video
+  });
   }
 };
