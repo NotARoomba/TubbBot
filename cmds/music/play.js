@@ -54,7 +54,7 @@ module.exports = class PlayCommand extends Commando.Command {
         }
       }
       if (found) {
-        const embed = new Discord.Discord.MessageEmbed()
+        const embed = new Discord.MessageEmbed()
           .setColor('#FFED00')
           .setTitle(':eyes: Clarification Please.')
           .setDescription(
@@ -174,7 +174,7 @@ module.exports = class PlayCommand extends Commando.Command {
         message.guild.musicData.isPlaying = true;
         return PlayCommand.playSong(message.guild.musicData.queue, message);
       } else if (message.guild.musicData.isPlaying == true) {
-        const PlayListEmbed = new Discord.Discord.MessageEmbed()
+        const PlayListEmbed = new Discord.MessageEmbed()
           .setColor('#FFED00')
           .setTitle(`:musical_note: ${playlist.title}`)
           .addField(
@@ -226,7 +226,7 @@ module.exports = class PlayCommand extends Commando.Command {
         message.guild.musicData.isPlaying = true;
         return PlayCommand.playSong(message.guild.musicData.queue, message);
       } else if (message.guild.musicData.isPlaying == true) {
-        const addedEmbed = new Discord.Discord.MessageEmbed()
+        const addedEmbed = new Discord.MessageEmbed()
           .setColor('#FFED00')
           .setTitle(`:musical_note: ${video.title}`)
           .addField(
@@ -297,7 +297,7 @@ module.exports = class PlayCommand extends Commando.Command {
 //               message.guild.musicData.isPlaying = true;
 //               return PlayCommand.playSong(message.guild.musicData.queue, message);
 //               } else if (message.guild.musicData.isPlaying == true) {
-//               const spotaddedEmbed = new Discord.Discord.MessageEmbed()
+//               const spotaddedEmbed = new Discord.MessageEmbed()
 //               .setColor('#FFED00')
 //               .setTitle(`:musical_note: ${songInfo.videoDetails.title}`)
 //               .addField(
@@ -354,7 +354,7 @@ module.exports = class PlayCommand extends Commando.Command {
                 db.get(`${message.guild.id}.serverSettings.volume`)
               );
 
-            const videoEmbed = new Discord.Discord.MessageEmbed()
+            const videoEmbed = new Discord.MessageEmbed()
               .setThumbnail(queue[0].thumbnail)
               .setColor('#FFED00')
               .addField(':notes: Now Playing:', queue[0].title)
@@ -466,7 +466,7 @@ module.exports = class PlayCommand extends Commando.Command {
       );
     }
     vidNameArr.push('cancel');
-    const embed = new Discord.Discord.MessageEmbed()
+    const embed = new Discord.MessageEmbed()
       .setColor('#FFED00')
       .setTitle(`:mag: Search Results!`)
       .addField(':notes: Result 1', vidNameArr[0])
@@ -537,7 +537,7 @@ module.exports = class PlayCommand extends Commando.Command {
               if (songEmbed) {
                 songEmbed.delete();
               }
-              const addedEmbed = new Discord.Discord.MessageEmbed()
+              const addedEmbed = new Discord.MessageEmbed()
                 .setColor('#FFED00')
                 .setTitle(`:musical_note: ${video.title}`)
                 .addField(
@@ -597,15 +597,5 @@ module.exports = class PlayCommand extends Commando.Command {
         : '00')
     }`;
     return duration;
-  }
-  static async lookup(url) {
-    url = url
-    .replace(/(>|<)/gi, '')
-    .split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-  const id = url[2].split(/[^0-9a-z_\-]/i)[0];
-  const video = await youtube.getVideoByID(id).catch(function() {
-    message.say(':x: There was a problem getting the video you provided!');
-    return video
-  });
   }
 };
