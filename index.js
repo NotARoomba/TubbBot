@@ -11,6 +11,7 @@ global.Discord = require('discord.js')
 global.path = require('path');
 global.MessageEmbed
 global.Structures
+//global.scdl = require("soundcloud-downloader");
 global.logger = require('winston')
 global.winston = require('winston');
 global.fs = require("fs");

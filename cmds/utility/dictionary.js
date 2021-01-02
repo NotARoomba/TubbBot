@@ -28,7 +28,8 @@ module.exports = class DictionaryCommand extends Commando.Command {
 				const partOfSpeech = data.fl
                 const definition = data.shortdef.map((definition, i) => `(${i + 1}) ${definition}`).join('\n')
             const info = new Discord.MessageEmbed()
-            .setColor('#f0c018')
+			.setColor('#f0c018')
+			.setFooter('Powered by Merriam-Webster', 'https://merriam-webster.com/assets/mw/static/social-media-share/mw-logo-245x245@1x.png')
             .setTitle(`${name}, ${partOfSpeech}`)
             .setDescription(definition)
 			message.channel.send(info)
