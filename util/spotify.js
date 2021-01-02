@@ -1,27 +1,15 @@
-module.exports = {
-    getSpotifyAccessToken: (spotifyApi) => {
-      try {
-        spotifyApi.clientCredentialsGrant().then(
-          (data) => {
-            console.log(
-              "Spotify access token expires in " + data.body["expires_in"]
-            );
-            spotifyApi.setAccessToken(data.body["access_token"]);
-            setTimeout(
-              () => module.exports.getSpotifyAccessToken(spotifyApi),
-              (data.body["expires_in"] - 20) * 1000
-            );
-          },
-          (err) => {
-            console.log(
-              "Something went wrong when retrieving an access token",
-              err
-            );
-            this.process.exit(1);
-          }
-        );
-      } catch (err) {
-        console.log(err);
-      }
-    },
-  };
+var SpotifyWebApi = require('spotify-web-api-node');
+var spotifyApi = new SpotifyWebApi({
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+    redirectUri: process.env.REDIRECT_URI,
+  });
+  spotifyApi.clientCredentialsGrant().then( (data) => {
+    console.log('The access token is ' + data.body['access_token']);
+    spotifyApi.setAccessToken(data.body['access_token']);
+    spotifyApi.setRefreshToken(data.body['refresh_token']);
+  },  (err) =>  {
+    console.log('Something went wrong!', err);
+  })
+  
+  exports.spotifyApi = spotifyApi

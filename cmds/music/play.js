@@ -1,5 +1,5 @@
-const spotifyUtil = require("@util/spotify");
-var SpotifyWebApi = require("spotify-web-api-node");
+var spotify = require('@util/spotify')
+var spotifyApi = spotify.spotifyApi
 const youtube = new Youtube(process.env.YOUTUBE_API);
 module.exports = class PlayCommand extends Commando.Command {
   constructor(client) {
@@ -30,11 +30,6 @@ module.exports = class PlayCommand extends Commando.Command {
 
   async run(message, { query }) {
     client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
-    const spotifyApi = new SpotifyWebApi({
-      clientId: process.env.SPOTIFY_CLIENT_ID,
-      clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-    });
-    spotifyApi.setAccessToken(spotifyUtil.getSpotifyAccessToken(spotifyApi));
     const voiceChannel = message.member.voice.channel;
     if (!voiceChannel) {
       message.say(':no_entry: Please join a voice channel and try again!');
@@ -47,10 +42,6 @@ module.exports = class PlayCommand extends Commando.Command {
       { name: '3', urls: [ [Object], [Object] ] }
      ]
     */
-  //  const spotifyApi = new SpotifyWebApi({
-  //   clientId: process.env.SPOTIFY_CLIENT_ID,
-  //   clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-  // });
     if (db.get(message.member.id) !== null) {
       const userPlaylists = db.get(message.member.id).savedPlaylists;
       let found = false;
@@ -298,6 +289,42 @@ module.exports = class PlayCommand extends Commando.Command {
                   songInfo.videoDetails.thumbnail.thumbnails.length - 1
                 ].url,
             });
+            console.log(spotifyTracks)
+            spotifyTracks.forEach(async (track) => {
+              track.url = query
+              query = query
+        .replace(/(>|<)/gi, '')
+        .split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+      const id = query[2].split(/[^0-9a-z_\-]/i)[0];
+      const video = await youtube.getVideoByID(id).catch(function() {
+        message.say(':x: There was a problem getting the video you provided!');
+        return;
+      });
+              message.guild.musicData.queue.push(
+              PlayCommand.constructSongObj(video, voiceChannel, message.member.user)
+              );
+              if (
+              message.guild.musicData.isPlaying == false ||
+              typeof message.guild.musicData.isPlaying == 'undefined'
+              ) {
+              message.guild.musicData.isPlaying = true;
+              return PlayCommand.playSong(message.guild.musicData.queue, message);
+              } else if (message.guild.musicData.isPlaying == true) {
+              const spotaddedEmbed = new Discord.Discord.MessageEmbed()
+              .setColor('#FFED00')
+              .setTitle(`:musical_note: ${songInfo.videoDetails.title}`)
+              .addField(
+                `Has been added to queue. `,
+                `This song is #${message.guild.musicData.queue.length} in queue`
+              )
+              .setThumbnail(songInfo.videoDetails.thumbnail.thumbnails[
+                songInfo.videoDetails.thumbnail.thumbnails.length - 1
+              ].url)
+              .setURL(video);
+              message.say(spotaddedEmbed);
+              
+              }   
+              }) 
           })
           .catch((err) => console.log(err)); 
         } else if (songData.type === "album") {
@@ -317,45 +344,18 @@ module.exports = class PlayCommand extends Commando.Command {
                   songInfo.videoDetails.thumbnail.thumbnails[
                     songInfo.videoDetails.thumbnail.thumbnails.length - 1
                   ].url;
-    
                 await spotifyTracks.push({
                   title: track.name,
                   url: songInfo.videoDetails.video_url,
                   duration: Math.floor(track.duration_ms / 1000),
                   thumbnail: thumbnail,
-                });
-              });
-            });
-          setTimeout(async () => {
-            spotifyTracks.forEach((track) => {
-      message.guild.musicData.queue.push(
-        PlayCommand.constructSongObj(track, voiceChannel, message.member.user)
-      );
-      if (
-        message.guild.musicData.isPlaying == false ||
-        typeof message.guild.musicData.isPlaying == 'undefined'
-      ) {
-        message.guild.musicData.isPlaying = true;
-        return PlayCommand.playSong(message.guild.musicData.queue, message);
-      } else if (message.guild.musicData.isPlaying == true) {
-        const spotaddedEmbed = new Discord.Discord.MessageEmbed()
-          .setColor('#FFED00')
-          .setTitle(`:musical_note: ${songInfo.videoDetails.title}`)
-          .addField(
-            `Has been added to queue. `,
-            `This song is #${message.guild.musicData.queue.length} in queue`
-          )
-          .setThumbnail(songInfo.videoDetails.thumbnail.thumbnails[
-            songInfo.videoDetails.thumbnail.thumbnails.length - 1
-          ].url)
-          .setURL(track.url);
-        message.say(spotaddedEmbed);
-      
-      }   
-    }) 
-  }, 6000);
-      return message.say(`Spotify not supported yet...`)
-      }
+                })
+              })
+            })
+} else {
+  return message.say(`An error has occured`)
+}
+      //return message.say(`Spotify not supported yet...`)
     } 
   
     // if user provided a song/video name
