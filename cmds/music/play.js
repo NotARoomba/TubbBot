@@ -251,6 +251,19 @@ module.exports = class PlayCommand extends Commando.Command {
     //   );
     return message.say(`Soundcloud not supported yet...`)
     }
+    if (
+      query.match(/^https?:\/\/(open.spotify\.com)\/(.*)$/)
+    ) {
+    //   const trackInfo = await scdl.getInfo(query, SOUNDCLOUD_CLIENT_ID);
+    //   song = {
+    //     title: trackInfo.title,
+    //     url: url,
+    //   };
+    //   message.guild.musicData.queue.push(
+    //     PlayCommand.constructSongObj(video, voiceChannel, message.member.user)
+    //   );
+    return message.say(`Spotify not supported yet...`)
+    }
 
     // if user provided a song/video name
     await PlayCommand.searchYoutube(query, message, voiceChannel);
