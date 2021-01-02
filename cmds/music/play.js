@@ -41,10 +41,10 @@ module.exports = class PlayCommand extends Commando.Command {
       { name: '3', urls: [ [Object], [Object] ] }
      ]
     */
-   const spotifyApi = new SpotifyWebApi({
-    clientId: process.env.SPOTIFY_CLIENT_ID,
-    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-  });
+  //  const spotifyApi = new SpotifyWebApi({
+  //   clientId: process.env.SPOTIFY_CLIENT_ID,
+  //   clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+  // });
     if (db.get(message.member.id) !== null) {
       const userPlaylists = db.get(message.member.id).savedPlaylists;
       let found = false;
