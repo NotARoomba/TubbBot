@@ -1,4 +1,5 @@
-
+const spotifyUtil = require("@util/spotify");
+var SpotifyWebApi = require("spotify-web-api-node");
 const youtube = new Youtube(process.env.YOUTUBE_API);
 module.exports = class PlayCommand extends Commando.Command {
   constructor(client) {
@@ -29,6 +30,11 @@ module.exports = class PlayCommand extends Commando.Command {
 
   async run(message, { query }) {
     client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    const spotifyApi = new SpotifyWebApi({
+      clientId: process.env.SPOTIFY_CLIENT_ID,
+      clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+    });
+    spotifyApi.setAccessToken(spotifyUtil.getSpotifyAccessToken(spotifyApi));
     const voiceChannel = message.member.voice.channel;
     if (!voiceChannel) {
       message.say(':no_entry: Please join a voice channel and try again!');
@@ -260,6 +266,19 @@ module.exports = class PlayCommand extends Commando.Command {
       let songData;
       let songInfo;
       const spotifyTracks = [];
+      try {
+        songData = spotifyUri.parse(query);
+      } catch (err) {
+        console.log(err);
+        return message.channel.send(
+          new MessageEmbed()
+            .setAuthor(
+              language("error").spotify_invalid_uri,
+              message.client.config.resources.spotifyIcon
+            )
+            .setColor(message.client.config.colors.failed)
+        );
+      }
       if (songData.type === "track") {
         spotifyApi
           .getTrack(songData.id)
@@ -281,6 +300,32 @@ module.exports = class PlayCommand extends Commando.Command {
             });
           })
           .catch((err) => console.log(err)); 
+        } else if (songData.type === "album") {
+            spotifyApi.getAlbum(songData.id).then((data) => {
+              const album = data.body;
+              const tracks = album.tracks.items;
+              let thumbnail;
+    
+              console.log(tracks);
+    
+              tracks.forEach(async (track) => {
+                const results = await youtube.searchVideos(
+                  `${track.name} ${track.artists[0].name}`
+                );
+                songInfo = await ytdl.getInfo(results[0].url);
+                thumbnail =
+                  songInfo.videoDetails.thumbnail.thumbnails[
+                    songInfo.videoDetails.thumbnail.thumbnails.length - 1
+                  ].url;
+    
+                await spotifyTracks.push({
+                  title: track.name,
+                  url: songInfo.videoDetails.video_url,
+                  duration: Math.floor(track.duration_ms / 1000),
+                  thumbnail: thumbnail,
+                });
+              });
+            });
           setTimeout(async () => {
             spotifyTracks.forEach((track) => {
       message.guild.musicData.queue.push(

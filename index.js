@@ -13,7 +13,6 @@ global.MessageEmbed
 global.Structures
 global.scdl = require("soundcloud-downloader");
 global.spotifyUri = require("spotify-uri");
-global.SpotifyWebApi = require("spotify-web-api-node");
 global.logger = require('winston')
 global.winston = require('winston');
 global.fs = require("fs");
