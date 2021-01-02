@@ -249,7 +249,7 @@ module.exports = class PlayCommand extends Commando.Command {
     //   message.guild.musicData.queue.push(
     //     PlayCommand.constructSongObj(video, voiceChannel, message.member.user)
     //   );
-    message.say(`Soundcloud not supported yet`)
+    return message.say(`Soundcloud not supported yet...`)
     }
 
     // if user provided a song/video name
