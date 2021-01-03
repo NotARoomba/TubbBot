@@ -239,6 +239,7 @@ module.exports = class PlayCommand extends Commando.Command {
         return;
       }
     }
+    //Soundcloud Links
     if (
       query.match(/^https?:\/\/(soundcloud\.com)\/(.*)$/)
     ) {
@@ -252,6 +253,7 @@ module.exports = class PlayCommand extends Commando.Command {
     //   );
     return message.say(`Soundcloud not supported yet...`)
     }
+    //Spotify links
     if (
       query.match(/^https?:\/\/(open.spotify\.com)\/(.*)$/)
     ) {
