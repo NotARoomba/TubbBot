@@ -1,6 +1,5 @@
 var SpotifyWebApi = require('spotify-web-api-node');
 const spotifyUri = require("spotify-uri");
-const TOKEN = require('@root/token.json')
 const youtube = new Youtube(process.env.YOUTUBE_API);
 module.exports = class PlayCommand extends Commando.Command {
   constructor(client) {
@@ -262,23 +261,15 @@ module.exports = class PlayCommand extends Commando.Command {
       spotifyApi.setCredentials({
         clientId: process.env.SPOTIFY_CLIENT_ID,
         clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-        accessToken: TOKEN.TOKEN
       })
       // Retrieve an access token.
 
-      spotifyApi.clientCredentialsGrant().then(
-        function (data) {
-          console.log('The access token expires in ' + data.body['expires_in']);
-          console.log('The access token is ' + data.body['access_token']);
-
-          // Save the access token so that it's used in future calls
-          fs.writeFileSync('token.json', `{"TOKEN": "${data.body['access_token']}"}`);
-          spotifyApi.setAccessToken(data.body['access_token']);
-        },
-        function (err) {
-          console.log('Something went wrong when retrieving an access token', err);
-        }
-      );
+      const d = await spotifyApi.clientCredentialsGrant();
+      spotifyApi.setAccessToken(d.body.access_token);
+      spotifyApi.setRefreshToken(process.env.SPOTIFY_REFRESH);
+      const refreshed = await spotifyApi.refreshAccessToken().catch(console.error);
+      console.log("Refreshed Spotify Access Token");
+      await spotifyApi.setAccessToken(refreshed.body.access_token);
       let songData;
       let songInfo;
       const spotifyTracks = [];
