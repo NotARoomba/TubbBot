@@ -1,7 +1,6 @@
-//var SpotifyWebApi = require('spotify-web-api-node');
-const spotify = require('@util/spotify')
+var SpotifyWebApi = require('spotify-web-api-node');
 const spotifyUri = require("spotify-uri");
-let spotifyApi = spotify.spotifyApi
+const TOKEN = require('@root/token.json')
 const youtube = new Youtube(process.env.YOUTUBE_API);
 module.exports = class PlayCommand extends Commando.Command {
   constructor(client) {
@@ -259,6 +258,27 @@ module.exports = class PlayCommand extends Commando.Command {
     if (
       query.includes('open.spotify\.com')
     ) {
+      var spotifyApi = new SpotifyWebApi()
+      spotifyApi.setCredentials({
+        clientId: process.env.SPOTIFY_CLIENT_ID,
+        clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+        accessToken: TOKEN.TOKEN
+      })
+      // Retrieve an access token.
+
+      spotifyApi.clientCredentialsGrant().then(
+        function (data) {
+          console.log('The access token expires in ' + data.body['expires_in']);
+          console.log('The access token is ' + data.body['access_token']);
+
+          // Save the access token so that it's used in future calls
+          fs.writeFileSync('token.json', `{"TOKEN": "${data.body['access_token']}"}`);
+          spotifyApi.setAccessToken(data.body['access_token']);
+        },
+        function (err) {
+          console.log('Something went wrong when retrieving an access token', err);
+        }
+      );
       let songData;
       let songInfo;
       const spotifyTracks = [];
@@ -322,6 +342,7 @@ module.exports = class PlayCommand extends Commando.Command {
             message.say(':x: There was a problem getting the video you provided!');
             return;
           });
+          console.log(video)
           message.guild.musicData.queue.push(
             PlayCommand.constructSongObj(video, voiceChannel, message.member.user)
           );
@@ -351,6 +372,10 @@ module.exports = class PlayCommand extends Commando.Command {
 
     // if user provided a song/video name
     await PlayCommand.searchYoutube(query, message, voiceChannel);
+  }
+  static matchYoutubeUrl(url) {
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return (url.match(p)) ? RegExp.$1 : false;
   }
   static playSong(queue, message) {
     const classThis = this; // use classThis instead of 'this' because of lexical scope below
