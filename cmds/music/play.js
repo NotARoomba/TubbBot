@@ -1,6 +1,7 @@
-var SpotifyWebApi = require('spotify-web-api-node');
+//var SpotifyWebApi = require('spotify-web-api-node');
+const spotify = require('@util/spotify')
 const spotifyUri = require("spotify-uri");
-const { extractID } = require('simple-youtube-api')
+let spotifyApi = spotify.spotifyApi
 const youtube = new Youtube(process.env.YOUTUBE_API);
 module.exports = class PlayCommand extends Commando.Command {
   constructor(client) {
@@ -125,12 +126,12 @@ module.exports = class PlayCommand extends Commando.Command {
         /^(?!.*\?.*\bv=)https:\/\/www\.youtube\.com\/.*\?.*\blist=.*$/
       )
     ) {
-      const playlist = await youtube.getPlaylist(query).catch(function () {
+      const playlist = await youtube.getPlaylist(query).catch(function() {
         message.say(':x: Playlist is either private or it does not exist!');
         return;
       });
       // add 10 as an argument in getVideos() if you choose to limit the queue
-      const videosArr = await playlist.getVideos().catch(function () {
+      const videosArr = await playlist.getVideos().catch(function() {
         message.say(
           ':x: There was a problem getting one of the videos in the playlist!'
         );
@@ -198,7 +199,7 @@ module.exports = class PlayCommand extends Commando.Command {
         .replace(/(>|<)/gi, '')
         .split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
       const id = query[2].split(/[^0-9a-z_\-]/i)[0];
-      const video = await youtube.getVideoByID(id).catch(function () {
+      const video = await youtube.getVideoByID(id).catch(function() {
         message.say(':x: There was a problem getting the video you provided!');
         return;
       });
@@ -244,136 +245,61 @@ module.exports = class PlayCommand extends Commando.Command {
     if (
       query.match(/^https?:\/\/(soundcloud\.com)\/(.*)$/)
     ) {
-      //   const trackInfo = await scdl.getInfo(query, SOUNDCLOUD_CLIENT_ID);
-      //   song = {
-      //     title: trackInfo.title,
-      //     url: url,
-      //   };
-      //   message.guild.musicData.queue.push(
-      //     PlayCommand.constructSongObj(video, voiceChannel, message.member.user)
-      //   );
-      return message.say(`Soundcloud not supported yet...`)
+    //   const trackInfo = await scdl.getInfo(query, SOUNDCLOUD_CLIENT_ID);
+    //   song = {
+    //     title: trackInfo.title,
+    //     url: url,
+    //   };
+    //   message.guild.musicData.queue.push(
+    //     PlayCommand.constructSongObj(video, voiceChannel, message.member.user)
+    //   );
+    return message.say(`Soundcloud not supported yet...`)
     }
     //Spotify links
     if (
       query.includes('open.spotify\.com')
     ) {
-      var spotifyApi = new SpotifyWebApi()
-      spotifyApi.setCredentials({
-        clientId: process.env.SPOTIFY_CLIENT_ID,
-        clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-        accessToken: process.env.SPOTIFY_TOKEN
-      })
-      // Retrieve an access token.
-
-      spotifyApi.clientCredentialsGrant().then(
-        function (data) {
-          console.log('The access token expires in ' + data.body['expires_in']);
-          console.log('The access token is ' + data.body['access_token']);
-
-          // Save the access token so that it's used in future calls
-          process.env.SPOTIFY_TOKEN = data.body['access_token']
-          spotifyApi.setAccessToken(data.body['access_token']);
-        },
-        function (err) {
-          console.log('Something went wrong when retrieving an access token', err);
-        }
-      );
       let songData;
       let songInfo;
       const spotifyTracks = [];
+      console.log(spotifyApi)
       try {
         songData = spotifyUri.parse(query);
+        console.log(songData.id)
       } catch (err) {
         console.log(err);
       }
       if (songData.type === "track") {
+        console.log(songData.id)
         spotifyApi.getTrack(songData.id)
           .then(async (data) => {
             const track = data.body;
+            console.log(track)
             const results = await youtube.searchVideos(
               `${track.name} ${track.artists[0].name}`
             );
             songInfo = await ytdl.getInfo(results[0].url);
-
+  
             await spotifyTracks.push({
+              title: track.name,
               url: songInfo.videoDetails.video_url,
+              duration: Math.floor(track.duration_ms / 1000),
+              thumbnail:
+                songInfo.videoDetails.thumbnail.thumbnails[
+                  songInfo.videoDetails.thumbnail.thumbnails.length - 1
+                ].url,
             });
+            console.log(spotifyTracks)
           })
-          .catch((err) => console.log(err));
-      } else if (songData.type === "album") {
-        spotifyApi.getAlbum(songData.id).then((data) => {
-          const album = data.body;
-          const tracks = album.tracks.items;
-
-          tracks.forEach(async (track) => {
-            const results = await youtube.searchVideos(
-              `${track.name} ${track.artists[0].name}`
-            );
-            songInfo = await ytdl.getInfo(results[0].url);
-
-
-            await spotifyTracks.push({
-              url: songInfo.videoDetails.video_url,
-            });
-          });
-        });
-      } else if (songData.type === "playlist") {
-        spotifyApi.getPlaylistTracks(songData.id).then((data) => {
-          const playlist = data.body;
-
-          playlist.items.forEach(async (item) => {
-            const results = await youtube.searchVideos(
-              `${item.track.name} ${item.track.artists[0].name}`
-            );
-            songInfo = await ytdl.getInfo(results[0].url);
-
-            await spotifyTracks.push({
-              url: songInfo.videoDetails.video_url,
-            });
-          });
-        })
-      }
-
-      setTimeout(async () => {
-        spotifyTracks.forEach(async (track) => {
-          const id = PlayCommand.matchYoutubeUrl(track.url)
-          const video = await youtube.getVideoByID(id).catch(function () {
-            message.say(':x: There was a problem getting the video you provided!');
-            return;
-          });
-          message.guild.musicData.queue.push(
-            PlayCommand.constructSongObj(video, voiceChannel, message.member.user)
-          );
-          if (
-            message.guild.musicData.isPlaying == false ||
-            typeof message.guild.musicData.isPlaying == 'undefined'
-          ) {
-            message.guild.musicData.isPlaying = true;
-            return PlayCommand.playSong(message.guild.musicData.queue, message);
-          } else if (message.guild.musicData.isPlaying == true) {
-            const addedEmbed = new Discord.MessageEmbed()
-              .setColor('#FFED00')
-              .setTitle(`:musical_note: ${video.title}`)
-              .addField(
-                `Has been added to queue. `,
-                `This song is #${message.guild.musicData.queue.length} in queue`
-              )
-              .setThumbnail(video.thumbnails.high.url)
-              .setURL(video.url);
-            message.say(addedEmbed);
-            return;
-          }
-        });
-      }, 6000);
-    }
-
+          .catch((err) => console.log(err)); 
+        
+}   message.say(`Spotify not supported yet...`)
+      return 
+  
+    } 
+  
     // if user provided a song/video name
     await PlayCommand.searchYoutube(query, message, voiceChannel);
-  }
-  static matchYoutubeUrl(url) {
-    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-    return (url.match(p)) ? RegExp.$1 : false;
   }
   static playSong(queue, message) {
     const classThis = this; // use classThis instead of 'this' because of lexical scope below
@@ -388,7 +314,7 @@ module.exports = class PlayCommand extends Commando.Command {
     }
     queue[0].voiceChannel
       .join()
-      .then(function (connection) {
+      .then(function(connection) {
         const dispatcher = connection
           .play(
             ytdl(queue[0].url, {
@@ -397,7 +323,7 @@ module.exports = class PlayCommand extends Commando.Command {
               highWaterMark: 1 << 25
             })
           )
-          .on('start', function () {
+          .on('start', function() {
             message.guild.musicData.songDispatcher = dispatcher;
             if (!db.get(`${message.guild.id}.serverSettings.volume`))
               dispatcher.setVolume(message.guild.musicData.volume);
@@ -424,7 +350,7 @@ module.exports = class PlayCommand extends Commando.Command {
             queue.shift();
             return;
           })
-          .on('finish', function () {
+          .on('finish', function() {
             queue = message.guild.musicData.queue;
             if (message.guild.musicData.loopSong) {
               queue.unshift(message.guild.musicData.nowPlaying);
@@ -461,7 +387,7 @@ module.exports = class PlayCommand extends Commando.Command {
               }
             }
           })
-          .on('error', function (e) {
+          .on('error', function(e) {
             message.say(':x: Cannot play song!');
             console.error(e);
             if (queue.length > 1) {
@@ -478,7 +404,7 @@ module.exports = class PlayCommand extends Commando.Command {
             return;
           });
       })
-      .catch(function () {
+      .catch(function() {
         message.say(':no_entry: I have no permission to join your channel!');
         message.guild.musicData.queue.length = 0;
         message.guild.musicData.isPlaying = false;
@@ -493,7 +419,7 @@ module.exports = class PlayCommand extends Commando.Command {
   }
 
   static async searchYoutube(query, message, voiceChannel) {
-    const videos = await youtube.searchVideos(query, 5).catch(async function () {
+    const videos = await youtube.searchVideos(query, 5).catch(async function() {
       await message.say(
         ':x: There was a problem searching the video you requested!'
       );
@@ -533,7 +459,7 @@ module.exports = class PlayCommand extends Commando.Command {
     var songEmbed = await message.channel.send({ embed });
     message.channel
       .awaitMessages(
-        function (msg) {
+        function(msg) {
           return (
             (msg.content > 0 && msg.content < 6) || msg.content === 'cancel'
           );
@@ -544,7 +470,7 @@ module.exports = class PlayCommand extends Commando.Command {
           errors: ['time']
         }
       )
-      .then(function (response) {
+      .then(function(response) {
         const videoIndex = parseInt(response.first().content);
         if (response.first().content === 'cancel') {
           songEmbed.delete();
@@ -552,7 +478,7 @@ module.exports = class PlayCommand extends Commando.Command {
         }
         youtube
           .getVideoByID(videos[videoIndex - 1].id)
-          .then(function (video) {
+          .then(function(video) {
             // // can be uncommented if you don't want the bot to play live streams
             // if (video.raw.snippet.liveBroadcastContent === 'live') {
             //   songEmbed.delete();
@@ -602,7 +528,7 @@ module.exports = class PlayCommand extends Commando.Command {
               return;
             }
           })
-          .catch(function () {
+          .catch(function() {
             if (songEmbed) {
               songEmbed.delete();
             }
@@ -612,7 +538,7 @@ module.exports = class PlayCommand extends Commando.Command {
             return;
           });
       })
-      .catch(function () {
+      .catch(function() {
         if (songEmbed) {
           songEmbed.delete();
         }
@@ -639,13 +565,15 @@ module.exports = class PlayCommand extends Commando.Command {
   }
   // prettier-ignore
   static formatDuration(durationObj) {
-    const duration = `${durationObj.hours ? (durationObj.hours + ':') : ''}${durationObj.minutes ? durationObj.minutes : '00'
-      }:${(durationObj.seconds < 10)
+    const duration = `${durationObj.hours ? (durationObj.hours + ':') : ''}${
+      durationObj.minutes ? durationObj.minutes : '00'
+    }:${
+      (durationObj.seconds < 10)
         ? ('0' + durationObj.seconds)
         : (durationObj.seconds
-          ? durationObj.seconds
-          : '00')
-      }`;
+        ? durationObj.seconds
+        : '00')
+    }`;
     return duration;
   }
 };
