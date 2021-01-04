@@ -1,6 +1,6 @@
 const crypto = require('crypto');
-const Entities = require('html-entities').AllHtmlEntities;
-const entities = new Entities();
+//const Entities = require('html-entities').AllHtmlEntities;
+//const entities = new Entities();
 const { stripIndents } = require('common-tags');
 const { SUCCESS_EMOJI_ID } = process.env;
 const yes = ['yes', 'y', 'ye', 'yeah', 'yup', 'yea', 'ya', 'hai', 'si', 'sí', 'oui', 'はい', 'correct'];
@@ -253,18 +253,18 @@ module.exports = class Util {
 		return verify.map(player => player.author.id);
 	}
 
-	static cleanAnilistHTML(html, removeLineBreaks = true) {
-		let clean = html;
-		if (removeLineBreaks) clean = clean.replace(/\r|\n|\f/g, '');
-		clean = entities.decode(clean);
-		clean = clean
-			.replaceAll('<br>', '\n')
-			.replace(/<\/?i>/g, '*')
-			.replace(/<\/?b>/g, '**')
-			.replace(/~!|!~/g, '||');
-		if (clean.length > 2000) clean = `${clean.substr(0, 1995)}...`;
-		const spoilers = (clean.match(/\|\|/g) || []).length;
-		if (spoilers !== 0 && (spoilers && (spoilers % 2))) clean += '||';
-		return clean;
-	}
+	// 	static cleanAnilistHTML(html, removeLineBreaks = true) {
+	// 		let clean = html;
+	// 		if (removeLineBreaks) clean = clean.replace(/\r|\n|\f/g, '');
+	// 		clean = entities.decode(clean);
+	// 		clean = clean
+	// 			.replaceAll('<br>', '\n')
+	// 			.replace(/<\/?i>/g, '*')
+	// 			.replace(/<\/?b>/g, '**')
+	// 			.replace(/~!|!~/g, '||');
+	// 		if (clean.length > 2000) clean = `${clean.substr(0, 1995)}...`;
+	// 		const spoilers = (clean.match(/\|\|/g) || []).length;
+	// 		if (spoilers !== 0 && (spoilers && (spoilers % 2))) clean += '||';
+	// 		return clean;
+	// 	}
 };
