@@ -1,5 +1,7 @@
-var spotify = require('@util/spotify')
-var spotifyApi = spotify.spotifyApi
+//var SpotifyWebApi = require('spotify-web-api-node');
+const spotify = require('@util/spotify')
+const spotifyUri = require("spotify-uri");
+let spotifyApi = spotify.spotifyApi
 const youtube = new Youtube(process.env.YOUTUBE_API);
 module.exports = class PlayCommand extends Commando.Command {
   constructor(client) {
@@ -255,71 +257,45 @@ module.exports = class PlayCommand extends Commando.Command {
     }
     //Spotify links
     if (
-      query.match(/^https?:\/\/(open.spotify\.com)\/(.*)$/)
+      query.includes('open.spotify\.com')
     ) {
-//       let songData;
-//       let songInfo;
-//       const spotifyTracks = [];
-//       try {
-//         songData = spotifyUri.parse(query);
-//       } catch (err) {
-//         console.log(err);
-//       }
-//       if (songData.type === "track") {
-//         spotifyApi
-//           .getTrack(songData.id)
-//           .then(async (data) => {
-//             const track = data.body;
-//             console.log(track)
-//             const results = await youtube.searchVideos(
-//               `${track.name} ${track.artists[0].name}`
-//             );
-//             songInfo = await ytdl.getInfo(results[0].url);
+      let songData;
+      let songInfo;
+      const spotifyTracks = [];
+      console.log(spotifyApi)
+      try {
+        songData = spotifyUri.parse(query);
+        console.log(songData.id)
+      } catch (err) {
+        console.log(err);
+      }
+      if (songData.type === "track") {
+        console.log(songData.id)
+        spotifyApi.getTrack(songData.id)
+          .then(async (data) => {
+            const track = data.body;
+            console.log(track)
+            const results = await youtube.searchVideos(
+              `${track.name} ${track.artists[0].name}`
+            );
+            songInfo = await ytdl.getInfo(results[0].url);
   
-//             await spotifyTracks.push({
-//               title: track.name,
-//               url: songInfo.videoDetails.video_url,
-//               duration: Math.floor(track.duration_ms / 1000),
-//               thumbnail:
-//                 songInfo.videoDetails.thumbnail.thumbnails[
-//                   songInfo.videoDetails.thumbnail.thumbnails.length - 1
-//                 ].url,
-//             });
-//             console.log(spotifyTracks)
-//             spotifyTracks.forEach(async (track) => {
-//               const url = track.url
-//               const video = PlayCommand.lookup(url)
-//               message.guild.musicData.queue.push(
-//               PlayCommand.constructSongObj(video, voiceChannel, message.member.user)
-//               );
-//               if (
-//               message.guild.musicData.isPlaying == false ||
-//               typeof message.guild.musicData.isPlaying == 'undefined'
-//               ) {
-//               message.guild.musicData.isPlaying = true;
-//               return PlayCommand.playSong(message.guild.musicData.queue, message);
-//               } else if (message.guild.musicData.isPlaying == true) {
-//               const spotaddedEmbed = new Discord.MessageEmbed()
-//               .setColor('#FFED00')
-//               .setTitle(`:musical_note: ${songInfo.videoDetails.title}`)
-//               .addField(
-//                 `Has been added to queue. `,
-//                 `This song is #${message.guild.musicData.queue.length} in queue`
-//               )
-//               .setThumbnail(songInfo.videoDetails.thumbnail.thumbnails[
-//                 songInfo.videoDetails.thumbnail.thumbnails.length - 1
-//               ].url)
-//               .setURL(video);
-//               message.say(spotaddedEmbed);
-              
-//               }   
-//               }) 
-//           })
-//           .catch((err) => console.log(err)); 
-// } else {
-//   return message.say(`An error has occured`)
-// }
-      return message.say(`Spotify not supported yet...`)
+            await spotifyTracks.push({
+              title: track.name,
+              url: songInfo.videoDetails.video_url,
+              duration: Math.floor(track.duration_ms / 1000),
+              thumbnail:
+                songInfo.videoDetails.thumbnail.thumbnails[
+                  songInfo.videoDetails.thumbnail.thumbnails.length - 1
+                ].url,
+            });
+            console.log(spotifyTracks)
+          })
+          .catch((err) => console.log(err)); 
+        
+}   message.say(`Spotify not supported yet...`)
+      return 
+  
     } 
   
     // if user provided a song/video name

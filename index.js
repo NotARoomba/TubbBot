@@ -12,7 +12,6 @@ global.path = require('path');
 global.MessageEmbed
 global.Structures
 global.scdl = require("soundcloud-downloader");
-global.spotifyUri = require("spotify-uri");
 global.logger = require('winston')
 global.winston = require('winston');
 global.fs = require("fs");
