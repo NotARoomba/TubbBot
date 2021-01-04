@@ -282,7 +282,6 @@ module.exports = class PlayCommand extends Commando.Command {
       let songData;
       let songInfo;
       const spotifyTracks = [];
-      console.log(spotifyApi)
       try {
         songData = spotifyUri.parse(query);
       } catch (err) {
@@ -300,7 +299,6 @@ module.exports = class PlayCommand extends Commando.Command {
             await spotifyTracks.push({
               url: songInfo.videoDetails.video_url,
             });
-            console.log(spotifyTracks)
           })
           .catch((err) => console.log(err));
       } else if (songData.type === "album") {
@@ -342,7 +340,6 @@ module.exports = class PlayCommand extends Commando.Command {
             message.say(':x: There was a problem getting the video you provided!');
             return;
           });
-          console.log(video)
           message.guild.musicData.queue.push(
             PlayCommand.constructSongObj(video, voiceChannel, message.member.user)
           );
