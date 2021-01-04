@@ -278,9 +278,7 @@ module.exports = class PlayCommand extends Commando.Command {
       } catch (err) {
         console.log(err);
       }
-      message.reply(`Fetching songs...`).then(message => {
-        message.delete(5000)
-      })
+      message.reply(`Fetching songs...`)
       if (songData.type === "track") {
         spotifyApi.getTrack(songData.id)
           .then(async (data) => {
