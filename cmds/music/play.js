@@ -239,9 +239,16 @@ module.exports = class PlayCommand extends Commando.Command {
         return;
       }
     }
+    //Google Drive Links
+    if (
+      query.match('drive\.google\.com')
+    ) {
+
+      return message.say(`Google Drive not supported yet...`)
+    }
     //Soundcloud Links
     if (
-      query.match(/^https?:\/\/(soundcloud\.com)\/(.*)$/)
+      query.match('soundcloud\.com')
     ) {
       //   const trackInfo = await scdl.getInfo(query, SOUNDCLOUD_CLIENT_ID);
       //   song = {
