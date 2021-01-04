@@ -31,7 +31,6 @@ module.exports = class MinecraftCommand extends Commando.Command {
                     const Embed = new Discord.MessageEmbed()
                         .setColor('#00000')
                         .setTitle(res.name)
-                        .setDescription("Profile:")
                         .addField("UUID", res.id, true)
                         .addField("Username", res.name, true)
                         .setImage(skin)
