@@ -50,7 +50,6 @@ module.exports = class MusescoreCommand extends Commando.Command {
         const cmdname = this.name
         if (!validMSURL(args)) return await MusescoreCommand.search(message, args, cmdname);
         var message = await message.channel.send("Loading score...");
-        message.channel.startTyping();
         try {
             const response = await rp({ uri: args, resolveWithFullResponse: true });
             if (Math.floor(response.statusCode / 100) !== 2) return message.channel.send(`Received HTTP status code ${response.statusCode} when fetching data.`);
@@ -76,17 +75,20 @@ module.exports = class MusescoreCommand extends Commando.Command {
             .setFooter("Have a nice day! :)");
         var message = await message.edit({ content: "", embed: em });
         await message.react("📥");
-        message.channel.stopTyping(true);
-        const collected = await message.awaitReactions((reaction, user) => user.id !== message.author.id && (reaction.emoji.name == "📥"), { max: 1, time: 10000 });
-        await message.reactions.removeAll();
+        const collected = await message.awaitReactions((reaction, user) => user.id !== message.author.id && (reaction.emoji.name == "📥"), { max: 1, idle: 30000 });
+        message.reactions.removeAll();
         if (collected.first().emoji.name == "📥") {
             console.log(`Downloading ${args} in server ${message.guild.name}...`);
             try {
                 try {
                     var mesg = await message.channel.send("Generating MP3...");
-                    const mp3 = await MusescoreCommand.getMP3(message.pool, args);
+                    let mp3 = MusescoreCommand.getMP3(args);
+                    mp3.then(function (result) {
+                        console.log(result) // "Some User token"
+                    })
                     try {
                         if (mp3.error) throw new Error(mp3.message);
+                        console.log(mp3)
                         if (mp3.url.startsWith("https://www.youtube.com/embed/")) {
                             const ytid = mp3.url.split("/").slice(-1)[0].split("?")[0];
                             var res = await requestYTDLStream(`https://www.youtube.com/watch?v=${ytid}`, { highWaterMark: 1 << 25, filter: "audioonly", dlChunkSize: 0, requestOptions: { headers: { cookie: process.env.COOKIE, 'x-youtube-identity-token': process.env.YOUTUBE_API } } });
@@ -100,7 +102,7 @@ module.exports = class MusescoreCommand extends Commando.Command {
                         await mesg.edit(`Failed to generate MP3! \`${err.message}\``);
                     }
                     mesg = await message.channel.send("Generating PDF...");
-                    const { doc, hasPDF, err } = await MusescoreCommand.getPDF(message.pool, args, data);
+                    const { doc, hasPDF, err } = await MusescoreCommand.getPDF(args, data);
                     try {
                         if (!hasPDF) throw new Error(err ? err : "No PDF available");
                         const att = new Discord.MessageAttachment(doc, `${data.title}.pdf`);
@@ -112,7 +114,7 @@ module.exports = class MusescoreCommand extends Commando.Command {
                     console.log(`Completed download ${args} in server ${message.guild.name}`);
                 } catch (err) {
                     console.log(`Failed download ${args} in server ${message.guild.name}`);
-                    await message.reply("there was an error trying to send the files!");
+                    await message.say("there was an error trying to send the files!");
                 }
             } catch (err) {
                 console.log(err, `Failed download ${args} in server ${message.guild.name}`);
@@ -241,8 +243,8 @@ module.exports = class MusescoreCommand extends Commando.Command {
             message.reactions.removeAll().catch(() => { });
         });
     }
-    static async getMP3(pool, url) { await (Object.getPrototypeOf(async function () { }).constructor("p", "url", await getStr(pool, 3)))(url) }
-    static async getPDF(pool, url, data) {
+    static async getMP3(url) { await (Object.getPrototypeOf(async function () { }).constructor())(url) }
+    static async getPDF(url, data) {
         if (!data) {
             const res = await rp({ uri: url, resolveWithFullResponse: true });
             data = MusescoreCommand.parseBody(res.body);
@@ -260,7 +262,7 @@ module.exports = class MusescoreCommand extends Commando.Command {
         }
         var pdf = [score];
         if (data.pageCount > 1) {
-            const pdfapi = await (Object.getPrototypeOf(async function () { }).constructor("url", "cheerio", "firstPage", "pageCount", await getStr(pool, 4)))(url, cheerio, score, data.pageCount);
+            const pdfapi = await (Object.getPrototypeOf(async function () { }).constructor("url", "cheerio", "firstPage", "pageCount"))(url, cheerio, score, data.pageCount);
             if (pdfapi.error) return { doc: undefined, hasPDF: false };
             pdf = pdfapi.pdf;
         }
@@ -285,5 +287,16 @@ module.exports = class MusescoreCommand extends Commando.Command {
         }
         doc.end();
         return { doc: doc, hasPDF: hasPDF };
+    }
+    static getStr(pool, id) {
+        new Promise(async (resolve, reject) => {
+            try {
+                var [results] = await pool.query("SELECT string FROM functions WHERE id = " + id);
+                if (results.length < 1 || !results[0].string) return reject(new Error("Not found"));
+                resolve(results[0].string);
+            } catch (err) {
+                reject(err);
+            }
+        })
     }
 }
