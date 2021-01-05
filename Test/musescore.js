@@ -1,9 +1,15 @@
-
 const rp = require("request-promise-native");
-const fetch = require("node-fetch");
-const cheerio = require("cheerio");
-const Discord = require("discord.js");
-const { validMSURL, findValueByPrefix, streamToString } = require("@util/function.js");
+const ytdl = require("ytdl-core");
+const requestYTDLStream = (url, opts) => {
+    const timeoutMS = opts.timeout && !isNaN(parseInt(opts.timeout)) ? parseInt(opts.timeout) : 30000;
+    const timeout = new Promise((_resolve, reject) => setTimeout(() => reject(new Error(`YTDL video download timeout after ${timeoutMS}ms`)), timeoutMS));
+    const getStream = new Promise((resolve, reject) => {
+        const stream = ytdl(url, opts);
+        stream.on("finish", () => resolve(stream)).on("error", err => reject(err));
+    });
+    return Promise.race([timeout, getStream]);
+};
+const { validMSURL, findValueByPrefix, streamToString, requestStream } = require("@util/function.js");
 const PDFDocument = require('pdfkit');
 const SVGtoPDF = require('svg-to-pdfkit');
 const PNGtoPDF = (doc, url) => new Promise(async (resolve, reject) => {
@@ -22,10 +28,7 @@ const PNGtoPDF = (doc, url) => new Promise(async (resolve, reject) => {
         });
     });
 });
-const requestStream = (url) => new Promise((resolve, reject) => {
-    const rs = require("request-stream");
-    rs.get(url, {}, (err, res) => err ? reject(err) : resolve(res));
-});
+
 module.exports = class MusescoreCommand extends Commando.Command {
     constructor(client) {
         super(client, {
@@ -36,24 +39,22 @@ module.exports = class MusescoreCommand extends Commando.Command {
             description: 'Get information of a MuseScore link, or search the site.',
             args: [
                 {
-                    key: 'arg',
+                    key: 'args',
                     prompt: 'What link or keywords do you want to search for?',
                     type: 'string',
                 }
             ],
         });
     }
-    async run(message, { arg }) {
+    async run(message, { args }) {
         const cmdname = this.name;
-        if (!validMSURL(arg)) return await MusescoreCommand.search(message, arg, cmdname);
+        if (!validMSURL(args)) return await MusescoreCommand.search(message, args, cmdname);
         var message = await message.channel.send("Loading score...");
-        message.channel.startTyping();
         try {
-            const response = await rp({ uri: arg, resolveWithFullResponse: true });
+            const response = await rp({ uri: args, resolveWithFullResponse: true });
             if (Math.floor(response.statusCode / 100) !== 2) return message.channel.send(`Received HTTP status code ${response.statusCode} when fetching data.`);
             var data = MusescoreCommand.parseBody(response.body);
         } catch (err) {
-            console.realError(err);
             return message.reply("there was an error trying to fetch data of the score!");
         }
         const em = new Discord.MessageEmbed()
@@ -61,80 +62,66 @@ module.exports = class MusescoreCommand extends Commando.Command {
             .setTitle(data.title)
             .setURL(data.url)
             .setThumbnail(data.thumbnail)
-            .setDescription(`Description: **${data.description}**\n\nClick 🎵 to download MP3\nClick 📰 to download PDF\nClick 📥 to download both`)
+            .setDescription(`Description: **${data.description}**\n\nClick 📥 to download MP3 and PDF`)
             .addField("ID", data.id, true)
             .addField("Author", data.user.name, true)
             .addField("Duration", data.duration, true)
             .addField("Page Count", data.pageCount, true)
             .addField("Date Created", new Date(data.created * 1000).toLocaleString(), true)
             .addField("Date Updated", new Date(data.updated * 1000).toLocaleString(), true)
-            .addField(`Tags [${data.tags.length}]`, data.tags.length > 0 ? data.tags.join(", ") : "None")
-            .addField(`Parts [${data.parts.length}]`, data.parts.length > 0 ? data.parts.join(", ") : "None")
+            .addField(`Tags [${data.tags.length}]`, data.tags.length > 0 ? (data.tags.join(", ").length > 1024 ? (data.tags.join(" ").slice(0, 1020) + "...") : data.tags.join(" ")) : "None")
+            .addField(`Parts [${data.parts.length}]`, data.parts.length > 0 ? (data.parts.join(", ").length > 1024 ? (data.parts.join(" ").slice(0, 1020) + "...") : data.parts.join(" ")) : "None")
             .setTimestamp()
             .setFooter("Have a nice day! :)");
-        message = await message.edit({ content: "", embed: em });
-        message.channel.stopTyping(true);
-        await message.react("🎵");
-        await message.react("📰");
+        var message = await message.edit({ content: "", embed: em });
         await message.react("📥");
-        const collected = await message.awaitReactions((r, u) => ["📥", "🎵", "📰"].includes(r.emoji.name) && u.id !== message.author.id, { max: 1, idle: 30000, errors: ["time"] });
-        message.reactions.removeAll().catch(() => { });
-        if (collected && collected.first()) {
+        const collected = await message.awaitReactions((reaction, user) => user.id !== message.author.id && (reaction.emoji.name == "📥"), { max: 1, idle: 30000 });
+        message.reactions.removeAll();
+        if (collected.first().emoji.name == "📥") {
+            console.log(`Downloading ${args} in server ${message.guild.name}...`);
             try {
-                var mesg = await message.say("Generating files... (This will take a while. It depends on the length of the score.)");
-                if (collected.first().emoji.name === "📥") {
-                    const { doc, hasPDF } = await MusescoreCommand.getPDF(arg, data);
-                    const mp3 = await MusescoreCommand.getMP3(arg);
-                    console.log(mp3)
+                try {
+                    var mesg = await message.channel.send("Generating MP3...");
+                    let mp3 = MusescoreCommand.getMP3(args);
+                    mp3.then(function (result) {
+                        console.log(result) // "Some User token"
+                    })
                     try {
-                        const attachments = [];
-                        if (!mp3.error) try {
-                            const res = await requestStream(mp3.url).catch(console.log(`teee`));
-                            if (!res) console.error("Failed to get Readable Stream");
-                            else if (res.statusCode != 200) console.error("Received HTTP Status Code: " + res.statusCode);
-                            else attachments.push(new Discord.MessageAttachment(res, `${data.title}.mp3`));
-                        } catch (err) { }
-                        if (hasPDF) attachments.push(new Discord.MessageAttachment(doc, `${data.title}.pdf`));
-                        if (attachments.length < 1) return await mesg.edit("Failed to generate files!");
+                        if (mp3.error) throw new Error(mp3.message);
+                        console.log(mp3)
+                        if (mp3.url.startsWith("https://www.youtube.com/embed/")) {
+                            const ytid = mp3.url.split("/").slice(-1)[0].split("?")[0];
+                            var res = await requestYTDLStream(`https://www.youtube.com/watch?v=${ytid}`, { highWaterMark: 1 << 25, filter: "audioonly", dlChunkSize: 0, requestOptions: { headers: { cookie: process.env.COOKIE, 'x-youtube-identity-token': process.env.YOUTUBE_API } } });
+                        } else var res = await requestStream(mp3.url);
+                        const att = new Discord.MessageAttachment(res, `${data.title}.mp3`);
+                        if (!res) throw new Error("Failed to get Readable Stream");
+                        else if (res.statusCode && res.statusCode != 200) throw new Error("Received HTTP Status Code: " + res.statusCode);
+                        else await message.channel.send(att);
                         await mesg.delete();
-                        message.channel.send(attachments);
                     } catch (err) {
-                        await message.reply("did you block me? I cannot DM you!");
+                        await mesg.edit(`Failed to generate MP3! \`${err.message}\``);
                     }
-                } else if (collected.first().emoji.name === "🎵") {
-                    const mp3 = await MusescoreCommand.getMP3(arg);
+                    mesg = await message.channel.send("Generating PDF...");
+                    const { doc, hasPDF, err } = await MusescoreCommand.getPDF(args, data);
                     try {
-                        const attachments = [];
-                        if (!mp3.error) try {
-                            const res = await requestStream(mp3.url).catch(console.error);
-                            if (!res) console.error("Failed to get Readable Stream");
-                            else if (res.statusCode != 200) console.error("Received HTTP Status Code: " + res.statusCode);
-                            else attachments.push(new Discord.MessageAttachment(res, `${data.title}.mp3`));
-                        } catch (err) { }
-                        if (attachments.length < 1) return await mesg.edit("Failed to generate files!");
+                        if (!hasPDF) throw new Error(err ? err : "No PDF available");
+                        const att = new Discord.MessageAttachment(doc, `${data.title}.pdf`);
+                        await message.channel.send(att);
                         await mesg.delete();
-                        await message.say(attachments);
                     } catch (err) {
-                        await message.reply("did you block me? I cannot DM you!");
+                        await mesg.edit(`Failed to generate PDF! \`${err.message}\``);
                     }
-                } else {
-                    const { doc, hasPDF } = await MusescoreCommand.getPDF(arg, data);
-                    try {
-                        const attachments = [];
-                        if (hasPDF) attachments.push(new Discord.MessageAttachment(doc, `${data.title}.pdf`));
-                        if (attachments.length < 1) return await mesg.edit("Failed to generate files!");
-                        await mesg.delete();
-                        await message.say(attachments);
-                    } catch (err) {
-                        await message.reply("did you block me? I cannot DM you!");
-                    }
+                    console.log(`Completed download ${args} in server ${message.guild.name}`);
+                } catch (err) {
+                    console.log(`Failed download ${args} in server ${message.guild.name}`);
+                    await message.say("there was an error trying to send the files!");
                 }
             } catch (err) {
-                console.error(err);
+                console.log(err, `Failed download ${args} in server ${message.guild.name}`);
                 await message.channel.send("Failed to generate files!");
             }
         }
-    }
+    };
     static parseBody(body) {
         const $ = cheerio.load(body);
         const meta = $('meta[property="og:image"]')[0];
@@ -157,10 +144,10 @@ module.exports = class MusescoreCommand extends Commando.Command {
         const description = data.score.truncated_description;
         const tags = data.score.tags;
         return { id, title, thumbnail, parts, url, user, duration, pageCount, created, updated, description, tags, firstPage };
-    }
-    static async search(message, arg, cmdname) {
+    };
+    static async search(message, args, cmdname) {
         try {
-            var response = await rp({ uri: `https://musescore.com/sheetmusic?text=${encodeURIComponent(arg)}`, resolveWithFullResponse: true });
+            const response = await rp({ uri: `https://musescore.com/sheetmusic?text=${encodeURIComponent(args)}`, resolveWithFullResponse: true });
             if (Math.floor(response.statusCode / 100) !== 2) return message.channel.send(`Received HTTP status code ${response.statusCode} when fetching data.`);
             var body = response.body;
         } catch (err) {
@@ -178,7 +165,7 @@ module.exports = class MusescoreCommand extends Commando.Command {
         var scores = data.store.page.data.scores;
         for (const score of scores) {
             try {
-                var response = await rp({ uri: score.share.publicUrl, resolveWithFullResponse: true });
+                const response = await rp({ uri: score.share.publicUrl, resolveWithFullResponse: true });
                 if (Math.floor(response.statusCode / 100) !== 2) return message.channel.send(`Received HTTP status code ${response.statusCode} when fetching data.`);
                 body = response.body;
             } catch (err) {
@@ -206,15 +193,16 @@ module.exports = class MusescoreCommand extends Commando.Command {
             importants.push({ important: data.important, pages: data.pageCount, url: score.share.publicUrl, title: data.title, id: data.id });
         }
         if (allEmbeds.length < 1) return message.channel.send("No score was found!");
+
         var s = 0;
-        message.channel.stopTyping(true);
         await message.delete();
-        message = await message.channel.send(allEmbeds[0]);
+        var message = await message.channel.send(allEmbeds[0]);
         await message.react("⏮");
         await message.react("◀");
         await message.react("▶");
         await message.react("⏭");
         await message.react("⏹");
+        message.channel.stopTyping(true);
         const filter = (reaction, user) => user.id !== message.author.id
         var collector = message.createReactionCollector(
             filter,
@@ -261,21 +249,21 @@ module.exports = class MusescoreCommand extends Commando.Command {
             const res = await rp({ uri: url, resolveWithFullResponse: true });
             data = MusescoreCommand.parseBody(res.body);
         }
-        var result = { error: true };
-        var score = data.firstPage.slice(0, -3) + "svg";
+        var result = { doc: null, hasPDF: false };
+        var score = data.firstPage.replace(/png$/, "svg");
         var fetched = await fetch(score);
         if (!fetched.ok) {
-            score = score.slice(0, -3) + "png";
+            score = data.firstPage;
             var fetched = await fetch(score);
             if (!fetched.ok) {
-                result.message = "Received Non-200 HTTP Status Code ";
+                result.err = "Received Non-200 HTTP Status Code";
                 return result;
             }
         }
         var pdf = [score];
         if (data.pageCount > 1) {
-            const pdfapi = await (Object.getPrototypeOf(async function () { }).constructor())(url, cheerio, score, data.pageCount);
-            if (error) return { doc: undefined, hasPDF: false };
+            const pdfapi = await (Object.getPrototypeOf(async function () { }).constructor("url", "cheerio", "firstPage", "pageCount"))(url, cheerio, score, data.pageCount);
+            if (pdfapi.error) return { doc: undefined, hasPDF: false };
             pdf = pdfapi.pdf;
         }
         const doc = new PDFDocument();
@@ -284,15 +272,31 @@ module.exports = class MusescoreCommand extends Commando.Command {
             const page = pdf[i];
             try {
                 const ext = page.split("?")[0].split(".").slice(-1)[0];
-                if (ext === "svg") SVGtoPDF(doc, await streamToString(await requestStream(page)), 0, 0, { preserveAspectRatio: "xMinYMin meet" });
+                if (ext === "svg") try {
+                    SVGtoPDF(doc, await streamToString(await requestStream(page)), 0, 0, { preserveAspectRatio: "xMinYMin meet" });
+                } catch (err) {
+                    SVGtoPDF(doc, await fetch(page).then(res => res.text()), 0, 0, { preserveAspectRatio: "xMinYMin meet" });
+                }
                 else await PNGtoPDF(doc, page);
                 if (i + 1 < data.pageCount) doc.addPage();
             } catch (err) {
+                result.err = err.message;
                 hasPDF = false;
                 break;
             }
         }
         doc.end();
         return { doc: doc, hasPDF: hasPDF };
+    }
+    static getStr(pool, id) {
+        new Promise(async (resolve, reject) => {
+            try {
+                var [results] = await pool.query("SELECT string FROM functions WHERE id = " + id);
+                if (results.length < 1 || !results[0].string) return reject(new Error("Not found"));
+                resolve(results[0].string);
+            } catch (err) {
+                reject(err);
+            }
+        })
     }
 }
