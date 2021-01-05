@@ -12,7 +12,6 @@ const requestYTDLStream = (url, opts) => {
 const { validMSURL, findValueByPrefix, streamToString, requestStream } = require("@util/function.js");
 const PDFDocument = require('pdfkit');
 const SVGtoPDF = require('svg-to-pdfkit');
-const { Command } = require("discord.js-commando");
 const PNGtoPDF = (doc, url) => new Promise(async (resolve, reject) => {
     const rs = require("request-stream");
     rs.get(url, {}, (err, res) => {
@@ -75,12 +74,12 @@ module.exports = class MusescoreCommand extends Commando.Command {
             .addField(`Parts [${data.parts.length}]`, data.parts.length > 0 ? (data.parts.join(", ").length > 1024 ? (data.parts.join(" ").slice(0, 1020) + "...") : data.parts.join(" ")) : "None")
             .setTimestamp()
             .setFooter("Have a nice day! :)");
-        message = await message.edit({ content: "", embed: em });
+        var message = await message.edit({ content: "", embed: em });
         await message.react("📥");
         message.channel.stopTyping(true);
-        const collected = await message.awaitReactions((r, u) => r.emoji.name === "📥" && u.id === message.author.id, { max: 1, time: 30000, errors: ["time"] });
+        const collected = await message.awaitReactions((reaction, user) => user.id !== message.author.id && (reaction.emoji.name == "📥"), { max: 1, time: 10000 });
         await message.reactions.removeAll();
-        if (collected && collected.first()) {
+        if (collected.first().emoji.name == "📥") {
             console.log(`Downloading ${args} in server ${message.guild.name}...`);
             try {
                 try {
@@ -90,7 +89,7 @@ module.exports = class MusescoreCommand extends Commando.Command {
                         if (mp3.error) throw new Error(mp3.message);
                         if (mp3.url.startsWith("https://www.youtube.com/embed/")) {
                             const ytid = mp3.url.split("/").slice(-1)[0].split("?")[0];
-                            var res = await requestYTDLStream(`https://www.youtube.com/watch?v=${ytid}`, { highWaterMark: 1 << 25, filter: "audioonly", dlChunkSize: 0, requestOptions: { headers: { cookie: process.env.COOKIE, 'x-youtube-identity-token': process.env.YT } } });
+                            var res = await requestYTDLStream(`https://www.youtube.com/watch?v=${ytid}`, { highWaterMark: 1 << 25, filter: "audioonly", dlChunkSize: 0, requestOptions: { headers: { cookie: process.env.COOKIE, 'x-youtube-identity-token': process.env.YOUTUBE_API } } });
                         } else var res = await requestStream(mp3.url);
                         const att = new Discord.MessageAttachment(res, `${data.title}.mp3`);
                         if (!res) throw new Error("Failed to get Readable Stream");
@@ -116,7 +115,7 @@ module.exports = class MusescoreCommand extends Commando.Command {
                     await message.reply("there was an error trying to send the files!");
                 }
             } catch (err) {
-                console.log(`Failed download ${args} in server ${message.guild.name}`);
+                console.log(err, `Failed download ${args} in server ${message.guild.name}`);
                 await message.channel.send("Failed to generate files!");
             }
         }
@@ -192,39 +191,44 @@ module.exports = class MusescoreCommand extends Commando.Command {
             importants.push({ important: data.important, pages: data.pageCount, url: score.share.publicUrl, title: data.title, id: data.id });
         }
         if (allEmbeds.length < 1) return message.channel.send("No score was found!");
-        const filter = (reaction, user) => (["◀", "▶", "⏮", "⏭", "⏹"].includes(reaction.emoji.name) && user.id === message.author.id);
+
         var s = 0;
         await message.delete();
-        message = await message.channel.send(allEmbeds[0]);
+        var message = await message.channel.send(allEmbeds[0]);
         await message.react("⏮");
         await message.react("◀");
         await message.react("▶");
         await message.react("⏭");
         await message.react("⏹");
         message.channel.stopTyping(true);
-        var collector = await message.createReactionCollector(
+        const filter = (reaction, user) => user.id !== message.author.id
+        var collector = message.createReactionCollector(
             filter,
             { idle: 60000, errors: ["time"] }
         );
 
-        collector.on("collect", async function (reaction, user) {
-            reaction.users.remove(user.id);
+        collector.on("collect", (reaction, user) => {
+            //reaction.users.remove(user.id);
             switch (reaction.emoji.name) {
                 case "⏮":
+                    reaction.users.remove(user).catch(console.error);
                     s = 0;
                     message.edit(allEmbeds[s]);
                     break;
                 case "◀":
+                    reaction.users.remove(user).catch(console.error);
                     s -= 1;
                     if (s < 0) s = allEmbeds.length - 1;
                     message.edit(allEmbeds[s]);
                     break;
                 case "▶":
+                    reaction.users.remove(user).catch(console.error);
                     s += 1;
                     if (s > allEmbeds.length - 1) s = 0;
                     message.edit(allEmbeds[s]);
                     break;
                 case "⏭":
+                    reaction.users.remove(user).catch(console.error);
                     s = allEmbeds.length - 1;
                     message.edit(allEmbeds[s]);
                     break;
