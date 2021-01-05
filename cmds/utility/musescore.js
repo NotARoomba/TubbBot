@@ -12,6 +12,7 @@ const requestYTDLStream = (url, opts) => {
 const { validMSURL, findValueByPrefix, streamToString, requestStream } = require("@util/function.js");
 const PDFDocument = require('pdfkit');
 const SVGtoPDF = require('svg-to-pdfkit');
+const { Command } = require("discord.js-commando");
 const PNGtoPDF = (doc, url) => new Promise(async (resolve, reject) => {
     const rs = require("request-stream");
     rs.get(url, {}, (err, res) => {
@@ -47,7 +48,8 @@ module.exports = class MusescoreCommand extends Commando.Command {
         });
     }
     async run(message, { args }) {
-        if (!validMSURL(args)) return await MusescoreCommand.search(message, args);
+        const cmdname = this.name
+        if (!validMSURL(args)) return await MusescoreCommand.search(message, args, cmdname);
         var message = await message.channel.send("Loading score...");
         message.channel.startTyping();
         try {
@@ -142,7 +144,7 @@ module.exports = class MusescoreCommand extends Commando.Command {
         const tags = data.score.tags;
         return { id, title, thumbnail, parts, url, user, duration, pageCount, created, updated, description, tags, firstPage };
     };
-    static async search(message, args) {
+    static async search(message, args, cmdname) {
         try {
             const response = await rp({ uri: `https://musescore.com/sheetmusic?text=${encodeURIComponent(args)}`, resolveWithFullResponse: true });
             if (Math.floor(response.statusCode / 100) !== 2) return message.channel.send(`Received HTTP status code ${response.statusCode} when fetching data.`);
@@ -175,7 +177,7 @@ module.exports = class MusescoreCommand extends Commando.Command {
                 .setTitle(data.title)
                 .setURL(data.url)
                 .setThumbnail(data.thumbnail)
-                .setDescription(`Description: **${data.description}**\n\nTo download, please copy the URL and use \`${message.guild.commandPrefix}${this.name} <link>\``)
+                .setDescription(`Description: **${data.description}**\n\nTo download, please copy the URL and use \`${message.guild.commandPrefix}${cmdname} <link>\``)
                 .addField("ID", data.id, true)
                 .addField("Author", data.user.name, true)
                 .addField("Duration", data.duration, true)
