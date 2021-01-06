@@ -31,17 +31,6 @@ module.exports = class TranslateCommand extends Commando.Command {
 					parse: target => translate.languages.getCode(target)
 				},
 				{
-					key: 'base',
-					prompt: `Which language would you like to use as the base? Either ${list(Object.keys(codes), 'or')}.`,
-					type: 'string',
-					default: 'auto',
-					validate: base => {
-						if (translate.languages.isSupported(base)) return true;
-						return `Invalid base, please enter either ${list(codes, 'or')}.`;
-					},
-					parse: base => translate.languages.getCode(base)
-				},
-				{
 					key: 'text',
 					prompt: 'What text would you like to translate?',
 					type: 'string',
@@ -51,8 +40,9 @@ module.exports = class TranslateCommand extends Commando.Command {
 		});
 	}
 
-	async run(message, { text, target, base }) {
+	async run(message, { text, target }) {
 		try {
+			var base = 'auto'
 			const { text: result, from } = await translate(text, { to: target, from: base });
 			const embed = new Discord.MessageEmbed()
 				.setColor(0x4285F4)
