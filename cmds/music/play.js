@@ -1,5 +1,10 @@
 var SpotifyWebApi = require('spotify-web-api-node');
 const spotifyUri = require("spotify-uri");
+const rp = require("request-promise-native");
+const StreamConcat = require('stream-concat');
+const moment = require("moment");
+require("moment-duration-format")(moment);
+const mm = require("music-metadata");
 const youtube = new Youtube(process.env.YOUTUBE_API);
 module.exports = class PlayCommand extends Commando.Command {
   constructor(client) {
@@ -64,7 +69,7 @@ module.exports = class PlayCommand extends Commando.Command {
           .addField(':mag: YouTube', '2. Search on YouTube')
           .addField(':x: Cancel', '3. Cancel')
           .setFooter('Choose by commenting a number between 1 and 3.');
-        const clarifyEmbed = await message.channel.send({ embed });
+        const clarifyEmbed = await message.say({ embed });
         message.channel
           .awaitMessages(
             function onMessage(msg) {
@@ -93,7 +98,7 @@ module.exports = class PlayCommand extends Commando.Command {
                 message.guild.musicData.queue.push(urlsArray[i]);
               }
               if (message.guild.musicData.isPlaying == true) {
-                message.channel.send(
+                message.say(
                   `Playlist **${query} has been added to queue**`
                 );
               } else if (message.guild.musicData.isPlaying == false) {
@@ -243,8 +248,67 @@ module.exports = class PlayCommand extends Commando.Command {
     if (
       query.match('drive\.google\.com')
     ) {
-
-      return message.say(`Google Drive not supported yet...`)
+      const formats = [/https:\/\/drive\.google\.com\/file\/d\/(?<id>.*?)\/(?:edit|view)\?usp=sharing/, /https:\/\/drive\.google\.com\/open\?id=(?<id>.*?)$/];
+      const alphanumeric = /^[a-zA-Z0-9\-_]+$/;
+      let id;
+      formats.forEach((regex) => {
+        const matches = query.match(regex)
+        if (matches && matches.groups && matches.groups.id) id = matches.groups.id
+      });
+      if (!id) {
+        if (alphanumeric.test(query)) id = query;
+        else {
+          message.say(`The link/keywords you provided is invalid! Usage: \`${message.guild.commandPrefix}${this.name} <link or search>\``);
+          return { error: true };
+        }
+      }
+      var link = "https://drive.google.com/uc?export=download&id=" + id;
+      var stream = await fetch(link).then(res => res.body);
+      var title = "No Title";
+      try {
+        var metadata = await mm.parseStream(stream, {}, { duration: true });
+        var html = await rp(query);
+        var $ = cheerio.load(html);
+        title = $("title").text().split(" - ").slice(0, -1).join(" - ").split(".").slice(0, -1).join(".");
+      } catch (err) {
+        message.reply("there was an error trying to parse your link!");
+        return { error: true };
+      }
+      if (!metadata) {
+        message.say("An error occured while parsing the audio file into stream! Maybe it is not link to the file?");
+        return { error: true };
+      }
+      var songLength = Math.round(metadata.format.duration);
+      var video = {
+        title: title,
+        url: link,
+        duration: songLength,
+        thumbnail: "https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg",
+      };
+      message.guild.musicData.queue.push(
+        PlayCommand.constructSongObj(video, voiceChannel, message.member.user)
+      );
+      if (
+        message.guild.musicData.isPlaying == false ||
+        typeof message.guild.musicData.isPlaying == 'undefined'
+      ) {
+        message.guild.musicData.isPlaying = true;
+        return PlayCommand.playSong(message.guild.musicData.queue, message);
+      } else if (message.guild.musicData.isPlaying == true) {
+        const addedEmbed = new Discord.MessageEmbed()
+          .setColor('#FFED00')
+          .setTitle(`:musical_note: ${video.title}`)
+          .addField(
+            `Has been added to queue. `,
+            `This song is #${message.guild.musicData.queue.length} in queue`
+          )
+          .setThumbnail(video.thumbnail)
+          .setURL(video.url);
+        message.say(addedEmbed);
+        return;
+      }
+      return { error: false, songs: songs };
+      // return message.say(`Google Drive not supported yet...`)
     }
     //Soundcloud Links
     if (
@@ -373,7 +437,7 @@ module.exports = class PlayCommand extends Commando.Command {
     var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
     return (url.match(p)) ? RegExp.$1 : false;
   }
-  static playSong(queue, message) {
+  static async playSong(queue, message) {
     const classThis = this; // use classThis instead of 'this' because of lexical scope below
     if (queue[0].voiceChannel == undefined) {
       // happens when loading a saved playlist
@@ -384,6 +448,7 @@ module.exports = class PlayCommand extends Commando.Command {
         queue[0].voiceChannel = message.guild.me.voice.channel;
       }
     }
+    const a = await requestStream(queue[0].url);
     queue[0].voiceChannel
       .join()
       .then(function (connection) {
@@ -394,7 +459,7 @@ module.exports = class PlayCommand extends Commando.Command {
               quality: 'highestaudio',
               highWaterMark: 1 << 25
             })
-          )
+            || new StreamConcat(a, { highWaterMark: 1 << 25 }), { seek: seek })
           .on('start', function () {
             message.guild.musicData.songDispatcher = dispatcher;
             if (!db.get(`${message.guild.id}.serverSettings.volume`))
@@ -451,7 +516,7 @@ module.exports = class PlayCommand extends Commando.Command {
                     message.guild.me.voice.channel
                   ) {
                     message.guild.me.voice.channel.leave();
-                    message.channel.send(
+                    message.say(
                       ':zzz: Left channel due to inactivity.'
                     );
                   }
@@ -528,7 +593,7 @@ module.exports = class PlayCommand extends Commando.Command {
       .setThumbnail(videos[0].thumbnails.high.url)
       .setFooter('Choose a song by commenting a number between 1 and 5')
       .addField(':x: Cancel', 'to cancel ');
-    var songEmbed = await message.channel.send({ embed });
+    var songEmbed = await message.say({ embed });
     message.channel
       .awaitMessages(
         function (msg) {
@@ -625,11 +690,11 @@ module.exports = class PlayCommand extends Commando.Command {
     let duration = this.formatDuration(video.duration);
     if (duration == '00:00') duration = ':red_circle: Live Stream';
     return {
-      url: `https://www.youtube.com/watch?v=${video.raw.id}`,
+      url: `https://www.youtube.com/watch?v=${video.raw.id}` || video.url,
       title: video.title,
       rawDuration: video.duration,
       duration,
-      thumbnail: video.thumbnails.high.url,
+      thumbnail: video.thumbnails.high.url || video.thumbnail,
       voiceChannel,
       memberDisplayName: user.username,
       memberAvatar: user.avatarURL('webp', false, 16)
