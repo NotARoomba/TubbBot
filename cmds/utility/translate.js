@@ -21,6 +21,16 @@ module.exports = class TranslateCommand extends Commando.Command {
 			],
 			args: [
 				{
+					key: 'target',
+					prompt: `Which language would you like to translate to? Either ${list(codes, 'or')}.`,
+					type: 'string',
+					validate: target => {
+						if (translate.languages.isSupported(target)) return true;
+						return `Invalid target, please enter either ${list(codes, 'or')}.`;
+					},
+					parse: target => translate.languages.getCode(target)
+				},
+				{
 					key: 'base',
 					prompt: `Which language would you like to use as the base? Either ${list(Object.keys(codes), 'or')}.`,
 					type: 'string',
@@ -32,16 +42,6 @@ module.exports = class TranslateCommand extends Commando.Command {
 					parse: base => translate.languages.getCode(base)
 				},
 				{
-					key: 'target',
-					prompt: `Which language would you like to translate to? Either ${list(codes, 'or')}.`,
-					type: 'string',
-					validate: target => {
-						if (translate.languages.isSupported(target)) return true;
-						return `Invalid target, please enter either ${list(codes, 'or')}.`;
-					},
-					parse: target => translate.languages.getCode(target)
-				},
-				{
 					key: 'text',
 					prompt: 'What text would you like to translate?',
 					type: 'string',
@@ -50,12 +50,11 @@ module.exports = class TranslateCommand extends Commando.Command {
 			]
 		});
 	}
-	async run(message, { text, target, base }) {
 
-		client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+	async run(message, { text, target, base }) {
 		try {
 			const { text: result, from } = await translate(text, { to: target, from: base });
-			const embed = new MessageEmbed()
+			const embed = new Discord.MessageEmbed()
 				.setColor(0x4285F4)
 				.setFooter('Powered by Google Translate', 'https://i.imgur.com/h3RoHyp.png')
 				.addField(`❯ From: ${translate.languages[from.language.iso]}`, from.text.value || text)

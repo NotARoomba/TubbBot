@@ -4,7 +4,7 @@ module.exports = class MoveSongCommand extends Commando.Command {
     super(client, {
       name: 'move',
       memberName: 'move',
-      aliases: ['m', 'movesong'],
+      aliases: ['movesong'],
       description: 'Move song to a desired position in queue!',
       group: 'music',
       throttling: {
