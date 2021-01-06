@@ -42,7 +42,7 @@ module.exports = class TicTacToeCommand extends Commando.Command {
 				const user = userTurn ? message.author : opponent;
 				const sign = userTurn ? 'X' : 'O';
 				await message.say(stripIndents`
-					${user}, which side do you pick? Type \`end\` to forefeit.
+					${user}, which number do you pick? Type \`end\` to forefeit.
 					\`\`\`
 					${sides[0]} | ${sides[1]} | ${sides[2]}
 					—————————

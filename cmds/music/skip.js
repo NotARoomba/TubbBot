@@ -1,4 +1,3 @@
-
 module.exports = class SkipCommand extends Commando.Command {
   constructor(client) {
     super(client, {
@@ -33,5 +32,6 @@ module.exports = class SkipCommand extends Commando.Command {
     }
     message.guild.musicData.loopSong = false;
     message.guild.musicData.songDispatcher.end();
+    message.say(`:track_next: Song Skipped!`)
   }
 };
