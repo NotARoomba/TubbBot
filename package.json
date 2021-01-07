@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "^0.3.3",
+    "@justalk/pornhub-api": "^3.4.0",
     "@vitalets/google-translate-api": "^4.0.0",
     "axios": "^0.21.1",
     "canvas": "^2.6.1",
@@ -60,10 +61,14 @@
     "stream": "0.0.2",
     "stream-concat": "^0.3.0",
     "svg-to-pdfkit": "^0.1.8",
+    "webmscore": "^0.16.2",
     "winston": "^3.3.3",
     "winston-syslog": "^2.4.4",
+    "youtube-sr": "^2.0.5",
     "ytdl-core": "^4.4.0",
-    "ytdl-core-discord": "^1.2.5"
+    "ytdl-core-discord": "^1.2.5",
+    "ytpl": "^2.0.4",
+    "ytsr": "^3.2.1"
   },
   "_moduleAliases": {
     "@root": ".",
