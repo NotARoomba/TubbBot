@@ -1,4 +1,4 @@
-const { getQueues } = require("./main.js");
+
 module.exports = class RemoveSongCommand extends Commando.Command {
   constructor(client) {
     super(client, {
@@ -18,11 +18,9 @@ module.exports = class RemoveSongCommand extends Commando.Command {
     });
   }
   run(message, { songNumber }) {
-    const queue = getQueues();
-    const serverQueue = queue.get(message.guild.id);
-    console.log(serverQueue.length)
+
     client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
-    if (songNumber < 1 || songNumber >= serverQueue.length) {
+    if (songNumber < 1 || songNumber >= message.guild.musicData.queue.length) {
       return message.reply(':x: Please enter a valid song number!');
     }
     var voiceChannel = message.member.voice.channel;
@@ -32,8 +30,8 @@ module.exports = class RemoveSongCommand extends Commando.Command {
     }
 
     if (
-      typeof serverQueue.connection.dispatcher == 'undefined' ||
-      serverQueue.connection.dispatcher == null
+      typeof message.guild.musicData.songDispatcher == 'undefined' ||
+      message.guild.musicData.songDispatcher == null
     ) {
       message.reply(':x: There is no song playing right now!');
       return;
@@ -44,7 +42,7 @@ module.exports = class RemoveSongCommand extends Commando.Command {
       return;
     }
 
-    serverQueue.splice(songNumber - 1, 1);
+    message.guild.musicData.queue.splice(songNumber - 1, 1);
     message.say(`:wastebasket: Removed song number ${songNumber} from queue!`);
   }
 };

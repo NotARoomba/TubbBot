@@ -3,7 +3,25 @@ var winston = require('winston');
 require('winston-syslog')
 const localhost = require("os").hostname
 const { CommandoClient } = require('discord.js-commando');
-
+const { Structures } = require('discord.js');
+Structures.extend('Guild', function (Guild) {
+    class MusicGuild extends Guild {
+        constructor(client, data) {
+            super(client, data);
+            this.musicData = {
+                queue: [],
+                isPlaying: false,
+                nowPlaying: null,
+                songDispatcher: null,
+                skipTimer: false, // only skip if user used leave command
+                loopSong: false,
+                loopQueue: false,
+                volume: 1
+            };
+        }
+    }
+    return MusicGuild;
+});
 
 module.exports = class TubbClient extends CommandoClient {
     constructor(options) {

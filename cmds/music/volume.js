@@ -1,5 +1,4 @@
 
-const { updateQueue, setQueue, getQueues } = require("./main.js");
 module.exports = class VolumeCommand extends Commando.Command {
   constructor(client) {
     super(client, {
@@ -17,26 +16,40 @@ module.exports = class VolumeCommand extends Commando.Command {
         {
           key: 'wantedVolume',
           prompt:
-            ':loud_sound: What volume would you like to set? From 1 to 1000!',
+            ':loud_sound: What volume would you like to set? from 1 to 200!',
           type: 'integer',
           // default: 25,
           validate: function (wantedVolume) {
-            return wantedVolume >= 1 && wantedVolume <= 1000;
+            return wantedVolume >= 1 && wantedVolume <= 200;
           }
         }
       ]
     });
   }
 
-  async run(message, { wantedVolume }) {
-    const queue = getQueues();
-    let serverQueue = queue.get(message.guild.id);
-    if (!serverQueue || !serverQueue.songs || !Array.isArray(serverQueue.songs)) serverQueue = setQueue(message.guild.id, [], false, false, message.pool);
-    if (!serverQueue.songs.length) return await message.channel.send("There is nothing playing. Volume didn't change.");
-    if ((message.member.voice.channelID !== message.guild.me.voice.channelID) && serverQueue.playing) return message.channel.send("You have to be in a voice channel to alter the volume when the bot is playing!");
-    serverQueue.volume = wantedVolume / 100;
-    message.channel.send("Volume has been changed to **" + (serverQueue.volume * 100) + "%**.");
-    if (serverQueue.connection && serverQueue.playing && serverQueue.connection.dispatcher) serverQueue.connection.dispatcher.setVolume(serverQueue.songs[0] && serverQueue.songs[0].volume ? serverQueue.volume * serverQueue.songs[0].volume : serverQueue.volume);
-    updateQueue(message, serverQueue, null);
+  run(message, { wantedVolume }) {
+
+    client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+    const voiceChannel = message.member.voice.channel;
+    if (!voiceChannel)
+      return message.reply(
+        ':no_entry: Please join a voice channel and try again!'
+      );
+
+    if (
+      typeof message.guild.musicData.songDispatcher == 'undefined' ||
+      message.guild.musicData.songDispatcher == null
+    ) {
+      return message.reply(':x: There is no song playing right now!');
+    } else if (voiceChannel.id !== message.guild.me.voice.channel.id) {
+      message.reply(
+        `:no_entry: You must be in the same voice channel as the bot's in order to use that!`
+      );
+      return;
+    }
+    const volume = wantedVolume / 100;
+    message.guild.musicData.volume = volume;
+    message.guild.musicData.songDispatcher.setVolume(volume);
+    message.say(`:loud_sound: Setting the volume to: ${wantedVolume}%!`);
   }
-}
+};
