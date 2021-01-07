@@ -248,21 +248,10 @@ module.exports = class PlayCommand extends Commando.Command {
     if (
       query.match('drive\.google\.com')
     ) {
-      const formats = [/https:\/\/drive\.google\.com\/file\/d\/(?<id>.*?)\/(?:edit|view)\?usp=sharing/, /https:\/\/drive\.google\.com\/open\?id=(?<id>.*?)$/];
-      const alphanumeric = /^[a-zA-Z0-9\-_]+$/;
-      let id;
-      formats.forEach((regex) => {
-        const matches = query.match(regex)
-        if (matches && matches.groups && matches.groups.id) id = matches.groups.id
-      });
-      if (!id) {
-        if (alphanumeric.test(query)) id = query;
-        else {
-          message.say(`The link/keywords you provided is invalid! Usage: \`${message.guild.commandPrefix}${this.name} <link or search>\``);
-          return { error: true };
-        }
-      }
-      var link = "https://drive.google.com/uc?export=download&id=" + id;
+      let id = PlayCommand.getIdFromUrl(query)
+      id = id[0]
+      console.log(id)
+      var link = `https://drive.google.com/uc?export=download&id=${id}`;
       var stream = await fetch(link).then(res => res.body);
       var title = "No Title";
       try {
@@ -433,6 +422,7 @@ module.exports = class PlayCommand extends Commando.Command {
     // if user provided a song/video name
     await PlayCommand.searchYoutube(query, message, voiceChannel);
   }
+  static getIdFromUrl(url) { return url.match(/[-\w]{25,}/); }
   static matchYoutubeUrl(url) {
     var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
     return (url.match(p)) ? RegExp.$1 : false;
