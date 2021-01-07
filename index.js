@@ -27,6 +27,7 @@ global.request = require('node-superfetch')
 global.serverSchema = require('@schemas/server-schema')
 global.muteSchema = require('@schemas/mute-schema')
 global.Canvas = require('canvas')
+console.exit = [];
 global.math = require('mathjs');
 const Client = require('@util/Client.js');
 global.client = new Client({
@@ -89,25 +90,19 @@ client.on('ready', async (member) => {
   console.log('Done!')
 
 });
-
-client.on('voiceStateUpdate', async (___, newState) => {
-  if (
-    newState.member.user.bot &&
-    !newState.channelID &&
-    newState.guild.musicData.songDispatcher &&
-    newState.member.user.id == client.user.id
-  ) {
-    newState.guild.musicData.queue.length = 0;
-    newState.guild.musicData.songDispatcher.end();
-    return;
-  }
-  if (
-    newState.member.user.bot &&
-    newState.channelID &&
-    newState.member.user.id == client.user.id &&
-    !newState.selfDeaf
-  ) {
-    newState.setSelfDeaf(true);
+client.on('voiceStateUpdate', async (oldState, newState) => {
+  const exit = console.exit;
+  const guild = oldState.guild || newState.guild;
+  const mainMusic = require("@cmds/music/main.js");
+  if ((oldState.id == guild.me.id || newState.id == guild.me.id) && (!guild.me.voice || !guild.me.voice.channel)) return await mainMusic.stop(guild);
+  if (!guild.me.voice || !guild.me.voice.channel || (newState.channelID !== guild.me.voice.channelID && oldState.channelID !== guild.me.voice.channelID)) return;
+  if (guild.me.voice.channel.members.size <= 1) {
+    if (exit.find(x => x === guild.id)) return;
+    exit.push(guild.id);
+    setTimeout(async () => (exit.find(x => x === guild.id)) ? mainMusic.stop(guild) : 0, 30000);
+  } else {
+    var index = exit.indexOf(guild.id);
+    if (index !== -1) exit.splice(index, 1);
   }
 });
 
