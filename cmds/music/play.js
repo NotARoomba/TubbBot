@@ -828,305 +828,6 @@ module.exports = class PlayCommand extends Commando.Command {
     });
   }
   static createEmbed() { createEmbed }
-
-  // if (
-  //   // Handles PlayList Links
-  //   query.match(
-  //     /^(?!.*\?.*\bv=)https:\/\/www\.youtube\.com\/.*\?.*\blist=.*$/
-  //   )
-  // ) {
-  //   const playlist = await youtube.getPlaylist(query).catch(function () {
-  //     message.say(':x: Playlist is either private or it does not exist!');
-  //     return;
-  //   });
-  //   // add 10 as an argument in getVideos() if you choose to limit the queue
-  //   const videosArr = await playlist.getVideos().catch(function () {
-  //     message.say(
-  //       ':x: There was a problem getting one of the videos in the playlist!'
-  //     );
-  //     return;
-  //   });
-
-  //   // Uncommented if you want to shuffle the playlist
-
-  //   /*for (let i = videosArr.length - 1; i > 0; i--) {
-  //     const j = Math.floor(Math.random() * (i + 1));
-  //     [videosArr[i], videosArr[j]] = [videosArr[j], videosArr[i]];
-  //   }
-  //   */
-
-  //   for (let i = 0; i < videosArr.length; i++) {
-  //     if (videosArr[i].raw.status.privacyStatus == 'private') {
-  //       continue;
-  //     } else {
-  //       try {
-  //         const video = await videosArr[i].fetch();
-  //         // this can be uncommented if you choose to limit the queue
-  //         // if (message.guild.musicData.queue.length < 10) {
-  //         //
-  //         message.guild.musicData.queue.push(
-  //           PlayCommand.constructSongObj(
-  //             video,
-  //             voiceChannel,
-  //             message.member.user
-  //           )
-  //         );
-  //         // } else {
-  //         //   return message.say(
-  //         //     `I can't play the full playlist because there will be more than 10 songs in queue`
-  //         //   );
-  //         // }
-  //       } catch (err) {
-  //         return console.error(err);
-  //       }
-  //     }
-  //   }
-  //   if (message.guild.musicData.isPlaying == false) {
-  //     message.guild.musicData.isPlaying = true;
-  //     return PlayCommand.playSong(message.guild.musicData.queue, message);
-  //   } else if (message.guild.musicData.isPlaying == true) {
-  //     const PlayListEmbed = new Discord.MessageEmbed()
-  //       .setColor('#FFED00')
-  //       .setTitle(`:musical_note: ${playlist.title}`)
-  //       .addField(
-  //         `Playlist has added ${message.guild.musicData.queue.length} songs to queue!`,
-  //         playlist.url
-  //       )
-  //       .setThumbnail(playlist.thumbnails.high.url)
-  //       .setURL(playlist.url);
-  //     message.say(PlayListEmbed);
-  //     // @TODO add the the position number of queue of the when a playlist is added
-  //     return;
-  //   }
-  // }
-
-  // // This if statement checks if the user entered a youtube url, it can be any kind of youtube url
-  // if (
-  //   query.match(/^(http(s)?:\/\/)?(m.)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+/)
-  // ) {
-  //   query = query
-  //     .replace(/(>|<)/gi, '')
-  //     .split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-  //   const id = query[2].split(/[^0-9a-z_\-]/i)[0];
-  //   const video = await youtube.getVideoByID(id).catch(function () {
-  //     message.say(':x: There was a problem getting the video you provided!');
-  //     return;
-  //   });
-
-  //   // // can be uncommented if you don't want the bot to play live streams
-  //   // if (video.raw.snippet.liveBroadcastContent === 'live') {
-  //   //   return message.say("I don't support live streams!");
-  //   // }
-  //   // // can be uncommented if you don't want the bot to play videos longer than 1 hour
-  //   // if (video.duration.hours !== 0) {
-  //   //   return message.say('I cannot play videos longer than 1 hour');
-  //   // }
-  //   // // can be uncommented if you want to limit the queue
-  //   // if (message.guild.musicData.queue.length > 10) {
-  //   //   return message.say(
-  //   //     'There are too many songs in the queue already, skip or wait a bit'
-  //   //   );
-  //   // }
-  //   message.guild.musicData.queue.push(
-  //     PlayCommand.constructSongObj(video, voiceChannel, message.member.user)
-  //   );
-  //   if (
-  //     message.guild.musicData.isPlaying == false ||
-  //     typeof message.guild.musicData.isPlaying == 'undefined'
-  //   ) {
-  //     message.guild.musicData.isPlaying = true;
-  //     return PlayCommand.playSong(message.guild.musicData.queue, message);
-  //   } else if (message.guild.musicData.isPlaying == true) {
-  //     const addedEmbed = new Discord.MessageEmbed()
-  //       .setColor('#FFED00')
-  //       .setTitle(`:musical_note: ${video.title}`)
-  //       .addField(
-  //         `Has been added to queue. `,
-  //         `This song is #${message.guild.musicData.queue.length} in queue`
-  //       )
-  //       .setThumbnail(video.thumbnails.high.url)
-  //       .setURL(video.url);
-  //     message.say(addedEmbed);
-  //     return;
-  //   }
-  // }
-  // //Google Drive Links
-  // if (
-  //   query.match('drive\.google\.com')
-  // ) {
-  //   let id = PlayCommand.getIdFromUrl(query)
-  //   id = id[0]
-  //   console.log(id)
-  //   var link = `https://drive.google.com/uc?export=download&id=${id}`;
-  //   var stream = await fetch(link).then(res => res.body);
-  //   var title = "No Title";
-  //   try {
-  //     var metadata = await mm.parseStream(stream, {}, { duration: true });
-  //     var html = await rp(query);
-  //     var $ = cheerio.load(html);
-  //     title = $("title").text().split(" - ").slice(0, -1).join(" - ").split(".").slice(0, -1).join(".");
-  //   } catch (err) {
-  //     message.reply("there was an error trying to parse your link!");
-  //     return { error: true };
-  //   }
-  //   if (!metadata) {
-  //     message.say("An error occured while parsing the audio file into stream! Maybe it is not link to the file?");
-  //     return { error: true };
-  //   }
-  //   var songLength = Math.round(metadata.format.duration);
-  //   var video = {
-  //     title: title,
-  //     url: link,
-  //     duration: songLength,
-  //     thumbnail: "https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg",
-  //   };
-  //   message.guild.musicData.queue.push(
-  //     PlayCommand.constructSongObj(video, voiceChannel, message.member.user)
-  //   );
-  //   if (
-  //     message.guild.musicData.isPlaying == false ||
-  //     typeof message.guild.musicData.isPlaying == 'undefined'
-  //   ) {
-  //     message.guild.musicData.isPlaying = true;
-  //     return PlayCommand.playSong(message.guild.musicData.queue, message);
-  //   } else if (message.guild.musicData.isPlaying == true) {
-  //     const addedEmbed = new Discord.MessageEmbed()
-  //       .setColor('#FFED00')
-  //       .setTitle(`:musical_note: ${video.title}`)
-  //       .addField(
-  //         `Has been added to queue. `,
-  //         `This song is #${message.guild.musicData.queue.length} in queue`
-  //       )
-  //       .setThumbnail(video.thumbnail)
-  //       .setURL(video.url);
-  //     message.say(addedEmbed);
-  //     return;
-  //   }
-  //   return
-  //   // return message.say(`Google Drive not supported yet...`)
-  // }
-  // //Soundcloud Links
-  // if (
-  //   query.match('soundcloud\.com')
-  // ) {
-  //   //   const trackInfo = await scdl.getInfo(query, SOUNDCLOUD_CLIENT_ID);
-  //   //   song = {
-  //   //     title: trackInfo.title,
-  //   //     url: url,
-  //   //   };
-  //   //   message.guild.musicData.queue.push(
-  //   //     PlayCommand.constructSongObj(video, voiceChannel, message.member.user)
-  //   //   );
-  //   return message.say(`Soundcloud not supported yet...`)
-  // }
-  // //Spotify links
-  // if (
-  //   query.includes('open.spotify\.com')
-  // ) {
-  //   var spotifyApi = new SpotifyWebApi()
-  //   spotifyApi.setCredentials({
-  //     clientId: process.env.SPOTIFY_CLIENT_ID,
-  //     clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-  //   })
-  //   // Retrieve an access token.
-
-  //   const d = await spotifyApi.clientCredentialsGrant();
-  //   spotifyApi.setAccessToken(d.body.access_token);
-  //   spotifyApi.setRefreshToken(process.env.SPOTIFY_REFRESH);
-  //   const refreshed = await spotifyApi.refreshAccessToken().catch(console.error);
-  //   console.log("Refreshed Spotify Access Token");
-  //   await spotifyApi.setAccessToken(refreshed.body.access_token);
-  //   let songData;
-  //   let songInfo;
-  //   const spotifyTracks = [];
-  //   try {
-  //     songData = spotifyUri.parse(query);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  //   message.reply(`Fetching songs...`)
-  //   if (songData.type === "track") {
-  //     spotifyApi.getTrack(songData.id)
-  //       .then(async (data) => {
-  //         const track = data.body;
-  //         const results = await youtube.searchVideos(
-  //           `${track.name} ${track.artists[0].name}`
-  //         );
-  //         songInfo = await ytdl.getInfo(results[0].url);
-
-  //         await spotifyTracks.push({
-  //           url: songInfo.videoDetails.video_url,
-  //         });
-  //       })
-  //       .catch((err) => console.log(err));
-  //   } else if (songData.type === "album") {
-  //     spotifyApi.getAlbum(songData.id).then((data) => {
-  //       const album = data.body;
-  //       const tracks = album.tracks.items;
-
-  //       tracks.forEach(async (track) => {
-  //         const results = await youtube.searchVideos(
-  //           `${track.name} ${track.artists[0].name}`
-  //         );
-  //         songInfo = await ytdl.getInfo(results[0].url);
-
-  //         await spotifyTracks.push({
-  //           url: songInfo.videoDetails.video_url,
-  //         });
-  //       });
-  //     });
-  //   } else if (songData.type === "playlist") {
-  //     spotifyApi.getPlaylistTracks(songData.id).then((data) => {
-  //       const playlist = data.body;
-
-  //       playlist.items.forEach(async (item) => {
-  //         const results = await youtube.searchVideos(
-  //           `${item.track.name} ${item.track.artists[0].name}`
-  //         );
-  //         songInfo = await ytdl.getInfo(results[0].url);
-
-  //         await spotifyTracks.push({
-  //           url: songInfo.videoDetails.video_url,
-  //         });
-  //       });
-  //     })
-  //   }
-  //   setTimeout(async () => {
-  //     spotifyTracks.forEach(async (track) => {
-  //       const id = PlayCommand.matchYoutubeUrl(track.url)
-  //       const video = await youtube.getVideoByID(id).catch(function () {
-  //         message.say(':x: There was a problem getting the video you provided!');
-  //         return;
-  //       });
-  //       message.guild.musicData.queue.push(
-  //         PlayCommand.constructSongObj(video, voiceChannel, message.member.user)
-  //       );
-  //       if (
-  //         message.guild.musicData.isPlaying == false ||
-  //         typeof message.guild.musicData.isPlaying == 'undefined'
-  //       ) {
-  //         message.guild.musicData.isPlaying = true;
-  //         return PlayCommand.playSong(message.guild.musicData.queue, message);
-  //       } else if (message.guild.musicData.isPlaying == true) {
-  //         const addedEmbed = new Discord.MessageEmbed()
-  //           .setColor('#FFED00')
-  //           .setTitle(`:musical_note: ${video.title}`)
-  //           .addField(
-  //             `Has been added to queue. `,
-  //             `This song is #${message.guild.musicData.queue.length} in queue`
-  //           )
-  //           .setThumbnail(video.thumbnails.high.url)
-  //           .setURL(video.url);
-  //         message.say(addedEmbed);
-  //         return;
-  //       }
-  //     });
-  //   }, 6000);
-  //   return
-  // }
-
-  // if user provided a song/video name
-
   static getIdFromUrl(url) { return url.match(/[-\w]{25,}/); }
   static matchYoutubeUrl(url) {
     var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
@@ -1135,7 +836,7 @@ module.exports = class PlayCommand extends Commando.Command {
   static async playSong(queue, message, seek = 0) {
     //console.log(queue[0])
     const classThis = this; // use classThis instead of 'this' because of lexical scope below
-    if (queue[0].voiceChannel == undefined) {
+    if (typeof queue[0].voiceChannel == 'undefined') {
       // happens when loading a saved playlist
       queue[0].voiceChannel = message.member.voice.channel;
     }
@@ -1157,72 +858,485 @@ module.exports = class PlayCommand extends Commando.Command {
     try {
       //const dispatcher = queue[0].voicechannel.join()
       //console.log(dispatcher)
-      message.guild.musicData.songDispatcher = await queue[0].voiceChannel.join();
-      const dispatcher = message.guild.musicData.songDispatcher;
-      //message.guild.musicData.songDispatcher = dispatcher;
-      console.log(message.guild.musicData.songDispatcher)
+      //message.guild.musicData.songDispatcher = await queue[0].voiceChannel.join();
+      //let dispatcher = message.guild.musicData.songDispatcher;
+
+      //console.log(queue)
       const silence = await requestStream("https://raw.githubusercontent.com/anars/blank-audio/master/1-second-of-silence.mp3");
       if (queue[0].type == 4) {
-        message.guild.musicData.connection = await queue[0].voiceChannel.join();
-        const a = await requestStream(queue[0].url);
-        dispatcher.play(new StreamConcat([a, silence], { highWaterMark: 1 << 25 }), { seek: seek });
-        message.say(videoEmbed)
+        await queue[0].voiceChannel.join().then(async (connection) => {
+          const a = await requestStream(queue[0].url);
+          const dispatcher = connection.play(new StreamConcat([a, silence], { highWaterMark: 1 << 25 })).on('start', function () {
+            message.guild.musicData.songDispatcher = dispatcher;
+            if (!db.get(`${message.guild.id}.serverSettings.volume`))
+              dispatcher.setVolume(message.guild.musicData.volume);
+            else
+              dispatcher.setVolume(
+                db.get(`${message.guild.id}.serverSettings.volume`)
+              );
+
+            if (queue[1] && !message.guild.musicData.loopSong)
+              videoEmbed.addField(':track_next: Next Song:', queue[1].title);
+            message.say(videoEmbed);
+            message.guild.musicData.nowPlaying = queue[0];
+            queue.shift();
+            return;
+          })
+            .on('finish', function () {
+              queue = message.guild.musicData.queue;
+              if (message.guild.musicData.loopSong) {
+                queue.unshift(message.guild.musicData.nowPlaying);
+              } else if (message.guild.musicData.loopQueue) {
+                queue.push(message.guild.musicData.nowPlaying);
+              }
+              if (queue.length >= 1) {
+                classThis.playSong(queue, message);
+                return;
+              } else {
+                message.guild.musicData.isPlaying = false;
+                message.guild.musicData.nowPlaying = null;
+                message.guild.musicData.songDispatcher = null;
+                if (
+                  message.guild.me.voice.channel &&
+                  message.guild.musicData.skipTimer
+                ) {
+                  message.guild.me.voice.channel.leave();
+                  message.guild.musicData.skipTimer = false;
+                  return;
+                }
+                if (message.guild.me.voice.channel) {
+                  setTimeout(function onTimeOut() {
+                    if (
+                      message.guild.musicData.isPlaying == false &&
+                      message.guild.me.voice.channel
+                    ) {
+                      message.guild.me.voice.channel.leave();
+                      message.say(
+                        ':zzz: Left channel due to inactivity.'
+                      );
+                    }
+                  }, 90000);
+                }
+              }
+            })
+            .on('error', function (e) {
+              message.say(':x: Cannot play song!');
+              console.error(e);
+              if (queue.length > 1) {
+                queue.shift();
+                classThis.playSong(queue, message);
+                return;
+              }
+              message.guild.musicData.queue.length = 0;
+              message.guild.musicData.isPlaying = false;
+              message.guild.musicData.nowPlaying = null;
+              message.guild.musicData.loopSong = false;
+              message.guild.musicData.songDispatcher = null;
+              message.guild.me.voice.channel.leave();
+              return;
+            });
+        })
       }
       else if (queue[0].type == 3) {
-        dispatcher.play(await scdl.download(queue[0].url));
-        message.say(videoEmbed)
+        await queue[0].voiceChannel.join().then(async (connection) => {
+          const dispatcher = connection.play(await scdl.download(queue[0].url)).on('start', function () {
+            message.guild.musicData.songDispatcher = dispatcher;
+            if (!db.get(`${message.guild.id}.serverSettings.volume`))
+              dispatcher.setVolume(message.guild.musicData.volume);
+            else
+              dispatcher.setVolume(
+                db.get(`${message.guild.id}.serverSettings.volume`)
+              );
+
+            if (queue[1] && !message.guild.musicData.loopSong)
+              videoEmbed.addField(':track_next: Next Song:', queue[1].title);
+            message.say(videoEmbed);
+            message.guild.musicData.nowPlaying = queue[0];
+            queue.shift();
+            return;
+          })
+            .on('finish', function () {
+              queue = message.guild.musicData.queue;
+              if (message.guild.musicData.loopSong) {
+                queue.unshift(message.guild.musicData.nowPlaying);
+              } else if (message.guild.musicData.loopQueue) {
+                queue.push(message.guild.musicData.nowPlaying);
+              }
+              if (queue.length >= 1) {
+                classThis.playSong(queue, message);
+                return;
+              } else {
+                message.guild.musicData.isPlaying = false;
+                message.guild.musicData.nowPlaying = null;
+                message.guild.musicData.songDispatcher = null;
+                if (
+                  message.guild.me.voice.channel &&
+                  message.guild.musicData.skipTimer
+                ) {
+                  message.guild.me.voice.channel.leave();
+                  message.guild.musicData.skipTimer = false;
+                  return;
+                }
+                if (message.guild.me.voice.channel) {
+                  setTimeout(function onTimeOut() {
+                    if (
+                      message.guild.musicData.isPlaying == false &&
+                      message.guild.me.voice.channel
+                    ) {
+                      message.guild.me.voice.channel.leave();
+                      message.say(
+                        ':zzz: Left channel due to inactivity.'
+                      );
+                    }
+                  }, 90000);
+                }
+              }
+            })
+            .on('error', function (e) {
+              message.say(':x: Cannot play song!');
+              console.error(e);
+              if (queue.length > 1) {
+                queue.shift();
+                classThis.playSong(queue, message);
+                return;
+              }
+              message.guild.musicData.queue.length = 0;
+              message.guild.musicData.isPlaying = false;
+              message.guild.musicData.nowPlaying = null;
+              message.guild.musicData.loopSong = false;
+              message.guild.musicData.songDispatcher = null;
+              message.guild.me.voice.channel.leave();
+              return;
+            });
+        })
       }
       else if (queue[0].type == 5) {
-        console.log(queue[0])
-        const c = await getMP3(queue.pool, queue[0].url);
-        if (c.error) throw new Error(c.message);
-        if (c.url.startsWith("https://www.youtube.com/embed/")) var d = ytdl(c.url);
-        else var d = await requestStream(c.url);
-        dispatcher.play(new StreamConcat([d, silence], { highWaterMark: 1 << 25 }), { seek: seek });
-        message.say(videoEmbed)
+        await queue[0].voiceChannel.join().then(async (connection) => {
+          console.log(queue[0])
+          const c = await getMP3(queue.pool, queue[0].url);
+          if (c.error) throw new Error(c.message);
+          if (c.url.startsWith("https://www.youtube.com/embed/")) var d = ytdl(c.url);
+          else var d = await requestStream(c.url);
+          const dispatcher = connection.play(new StreamConcat([d, silence], { highWaterMark: 1 << 25 })).on('start', function () {
+            message.guild.musicData.songDispatcher = dispatcher;
+            if (!db.get(`${message.guild.id}.serverSettings.volume`))
+              dispatcher.setVolume(message.guild.musicData.volume);
+            else
+              dispatcher.setVolume(
+                db.get(`${message.guild.id}.serverSettings.volume`)
+              );
+
+            if (queue[1] && !message.guild.musicData.loopSong)
+              videoEmbed.addField(':track_next: Next Song:', queue[1].title);
+            message.say(videoEmbed);
+            message.guild.musicData.nowPlaying = queue[0];
+            queue.shift();
+            return;
+          })
+            .on('finish', function () {
+              queue = message.guild.musicData.queue;
+              if (message.guild.musicData.loopSong) {
+                queue.unshift(message.guild.musicData.nowPlaying);
+              } else if (message.guild.musicData.loopQueue) {
+                queue.push(message.guild.musicData.nowPlaying);
+              }
+              if (queue.length >= 1) {
+                classThis.playSong(queue, message);
+                return;
+              } else {
+                message.guild.musicData.isPlaying = false;
+                message.guild.musicData.nowPlaying = null;
+                message.guild.musicData.songDispatcher = null;
+                if (
+                  message.guild.me.voice.channel &&
+                  message.guild.musicData.skipTimer
+                ) {
+                  message.guild.me.voice.channel.leave();
+                  message.guild.musicData.skipTimer = false;
+                  return;
+                }
+                if (message.guild.me.voice.channel) {
+                  setTimeout(function onTimeOut() {
+                    if (
+                      message.guild.musicData.isPlaying == false &&
+                      message.guild.me.voice.channel
+                    ) {
+                      message.guild.me.voice.channel.leave();
+                      message.say(
+                        ':zzz: Left channel due to inactivity.'
+                      );
+                    }
+                  }, 90000);
+                }
+              }
+            })
+            .on('error', function (e) {
+              message.say(':x: Cannot play song!');
+              console.error(e);
+              if (queue.length > 1) {
+                queue.shift();
+                classThis.playSong(queue, message);
+                return;
+              }
+              message.guild.musicData.queue.length = 0;
+              message.guild.musicData.isPlaying = false;
+              message.guild.musicData.nowPlaying = null;
+              message.guild.musicData.loopSong = false;
+              message.guild.musicData.songDispatcher = null;
+              message.guild.me.voice.channel.leave();
+              return;
+            });
+        })
       }
       else if (queue[0].type == 6) {
-        var f = await requestStream(queue[0].download);
-        if (f.statusCode != 200) {
-          const g = await module.exports.addPHURL(message, query);
-          if (g.error) throw "Failed to find video";
-          queue[0] = g;
-          queue.songs[queue.songs.indexOf(queue[0])] = queue[0];
-          updateQueue(message, queue, queue.pool);
-          f = await requestStream(queue[0].download);
-          if (f.statusCode != 200) throw new Error("Received HTTP Status Code: " + f.statusCode);
-        }
-        dispatcher.play(new StreamConcat([f, silence], { highWaterMark: 1 << 25 }), { seek: seek });
-        message.say(videoEmbed)
+        await queue[0].voiceChannel.join().then(async (connection) => {
+          var f = await requestStream(queue[0].download);
+          if (f.statusCode != 200) {
+            const g = await module.exports.addPHURL(message, query);
+            if (g.error) throw "Failed to find video";
+            queue[0] = g;
+            queue.songs[queue.songs.indexOf(queue[0])] = queue[0];
+            updateQueue(message, queue, queue.pool);
+            f = await requestStream(queue[0].download);
+            if (f.statusCode != 200) throw new Error("Received HTTP Status Code: " + f.statusCode);
+          }
+          const dispatcher = connection.play(new StreamConcat([f, silence], { highWaterMark: 1 << 25 })).on('start', function () {
+            message.guild.musicData.songDispatcher = dispatcher;
+            if (!db.get(`${message.guild.id}.serverSettings.volume`))
+              dispatcher.setVolume(message.guild.musicData.volume);
+            else
+              dispatcher.setVolume(
+                db.get(`${message.guild.id}.serverSettings.volume`)
+              );
+
+            if (queue[1] && !message.guild.musicData.loopSong)
+              videoEmbed.addField(':track_next: Next Song:', queue[1].title);
+            message.say(videoEmbed);
+            message.guild.musicData.nowPlaying = queue[0];
+            queue.shift();
+            return;
+          })
+            .on('finish', function () {
+              queue = message.guild.musicData.queue;
+              if (message.guild.musicData.loopSong) {
+                queue.unshift(message.guild.musicData.nowPlaying);
+              } else if (message.guild.musicData.loopQueue) {
+                queue.push(message.guild.musicData.nowPlaying);
+              }
+              if (queue.length >= 1) {
+                classThis.playSong(queue, message);
+                return;
+              } else {
+                message.guild.musicData.isPlaying = false;
+                message.guild.musicData.nowPlaying = null;
+                message.guild.musicData.songDispatcher = null;
+                if (
+                  message.guild.me.voice.channel &&
+                  message.guild.musicData.skipTimer
+                ) {
+                  message.guild.me.voice.channel.leave();
+                  message.guild.musicData.skipTimer = false;
+                  return;
+                }
+                if (message.guild.me.voice.channel) {
+                  setTimeout(function onTimeOut() {
+                    if (
+                      message.guild.musicData.isPlaying == false &&
+                      message.guild.me.voice.channel
+                    ) {
+                      message.guild.me.voice.channel.leave();
+                      message.say(
+                        ':zzz: Left channel due to inactivity.'
+                      );
+                    }
+                  }, 90000);
+                }
+              }
+            })
+            .on('error', function (e) {
+              message.say(':x: Cannot play song!');
+              console.error(e);
+              if (queue.length > 1) {
+                queue.shift();
+                classThis.playSong(queue, message);
+                return;
+              }
+              message.guild.musicData.queue.length = 0;
+              message.guild.musicData.isPlaying = false;
+              message.guild.musicData.nowPlaying = null;
+              message.guild.musicData.loopSong = false;
+              message.guild.musicData.songDispatcher = null;
+              message.guild.me.voice.channel.leave();
+              return;
+            });
+        })
       }
       else if (queue[0].type == 7) {
-        const h = await fetch(queue[0].url);
-        if (!h.ok) throw new Error("Received HTTP Status Code: " + h.status);
-        await WebMscore.ready;
-        const i = await WebMscore.load(queue[0].url.split(".").slice(-1)[0], new Uint8Array(await h.arrayBuffer()));
-        const sf3 = await fetch("https://drive.google.com/uc?export=download&id=1IifZ2trH4gAlbzNWUylCCEvbN3trOYep").then(res => res.arrayBuffer());
-        await i.setSoundFont(new Uint8Array(sf3));
-        const j = bufferToStream(Buffer.from((await i.saveAudio("wav")).buffer));
-        dispatcher.play(new StreamConcat([j, silence], { highWaterMark: 1 << 25 }), { seek: seek });
-        message.say(videoEmbed)
+        await queue[0].voiceChannel.join().then(async (connection) => {
+          const h = await fetch(queue[0].url);
+          if (!h.ok) throw new Error("Received HTTP Status Code: " + h.status);
+          await WebMscore.ready;
+          const i = await WebMscore.load(queue[0].url.split(".").slice(-1)[0], new Uint8Array(await h.arrayBuffer()));
+          const sf3 = await fetch("https://drive.google.com/uc?export=download&id=1IifZ2trH4gAlbzNWUylCCEvbN3trOYep").then(res => res.arrayBuffer());
+          await i.setSoundFont(new Uint8Array(sf3));
+          const j = bufferToStream(Buffer.from((await i.saveAudio("wav")).buffer));
+          const dispatcher = connection.play(new StreamConcat([j, silence], { highWaterMark: 1 << 25 })).on('start', function () {
+            message.guild.musicData.songDispatcher = dispatcher;
+            if (!db.get(`${message.guild.id}.serverSettings.volume`))
+              dispatcher.setVolume(message.guild.musicData.volume);
+            else
+              dispatcher.setVolume(
+                db.get(`${message.guild.id}.serverSettings.volume`)
+              );
+
+            if (queue[1] && !message.guild.musicData.loopSong)
+              videoEmbed.addField(':track_next: Next Song:', queue[1].title);
+            message.say(videoEmbed);
+            message.guild.musicData.nowPlaying = queue[0];
+            queue.shift();
+            return;
+          })
+            .on('finish', function () {
+              queue = message.guild.musicData.queue;
+              if (message.guild.musicData.loopSong) {
+                queue.unshift(message.guild.musicData.nowPlaying);
+              } else if (message.guild.musicData.loopQueue) {
+                queue.push(message.guild.musicData.nowPlaying);
+              }
+              if (queue.length >= 1) {
+                classThis.playSong(queue, message);
+                return;
+              } else {
+                message.guild.musicData.isPlaying = false;
+                message.guild.musicData.nowPlaying = null;
+                message.guild.musicData.songDispatcher = null;
+                if (
+                  message.guild.me.voice.channel &&
+                  message.guild.musicData.skipTimer
+                ) {
+                  message.guild.me.voice.channel.leave();
+                  message.guild.musicData.skipTimer = false;
+                  return;
+                }
+                if (message.guild.me.voice.channel) {
+                  setTimeout(function onTimeOut() {
+                    if (
+                      message.guild.musicData.isPlaying == false &&
+                      message.guild.me.voice.channel
+                    ) {
+                      message.guild.me.voice.channel.leave();
+                      message.say(
+                        ':zzz: Left channel due to inactivity.'
+                      );
+                    }
+                  }, 90000);
+                }
+              }
+            })
+            .on('error', function (e) {
+              message.say(':x: Cannot play song!');
+              console.error(e);
+              if (queue.length > 1) {
+                queue.shift();
+                classThis.playSong(queue, message);
+                return;
+              }
+              message.guild.musicData.queue.length = 0;
+              message.guild.musicData.isPlaying = false;
+              message.guild.musicData.nowPlaying = null;
+              message.guild.musicData.loopSong = false;
+              message.guild.musicData.songDispatcher = null;
+              message.guild.me.voice.channel.leave();
+              return;
+            });
+        })
       } else if (queue[0].type == 0) {
-        if (queue[0].isLive) {
-          const k = await module.exports.addYTURL(message, query, queue[0].type);
-          if (k.error) throw "Failed to find video";
-          if (!isEquivalent(k.songs[0], queue[0])) {
-            queue[0] = k.songs[0];
-            queue.songs[queue.songs.indexOf(queue[0])] = queue[0];
+        await queue[0].voiceChannel.join().then(async (connection) => {
+          if (queue[0].isLive) {
+            const k = await module.exports.addYTURL(message, query, queue[0].type);
+            if (k.error) throw "Failed to find video";
+            if (!isEquivalent(k.songs[0], queue[0])) {
+              queue[0] = k.songs[0];
+              queue.songs[queue.songs.indexOf(queue[0])] = queue[0];
+            }
           }
-        }
 
-        if (!queue[0].isLive && !queue[0].isPastLive) dispatcher.play(ytdl(queue[0].url, { filter: "audioonly", dlChunkSize: 0, highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }), { seek: seek });
-        else if (queue[0].isPastLive) dispatcher.play(ytdl(queue[0].url, { highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }), { seek: seek });
-        else dispatcher.play(ytdl(queue[0].url, { highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }));
-        message.say(videoEmbed)
+          // if (!queue[0].isLive && !queue[0].isPastLive) const dispatcher = connection.play(ytdl(queue[0].url, { filter: "audioonly", dlChunkSize: 0, highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }));
+          // else if (queue[0].isPastLive) const dispatcher = connection.play(ytdl(queue[0].url, { highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }));
+          const dispatcher = connection.play(ytdl(queue[0].url, { highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } })).on('start', function () {
+            message.guild.musicData.songDispatcher = dispatcher;
+            if (!db.get(`${message.guild.id}.serverSettings.volume`))
+              dispatcher.setVolume(message.guild.musicData.volume);
+            else
+              dispatcher.setVolume(
+                db.get(`${message.guild.id}.serverSettings.volume`)
+              );
+
+            if (queue[1] && !message.guild.musicData.loopSong)
+              videoEmbed.addField(':track_next: Next Song:', queue[1].title);
+            message.say(videoEmbed);
+            message.guild.musicData.nowPlaying = queue[0];
+            queue.shift();
+            return;
+          })
+            .on('finish', function () {
+              queue = message.guild.musicData.queue;
+              if (message.guild.musicData.loopSong) {
+                queue.unshift(message.guild.musicData.nowPlaying);
+              } else if (message.guild.musicData.loopQueue) {
+                queue.push(message.guild.musicData.nowPlaying);
+              }
+              if (queue.length >= 1) {
+                classThis.playSong(queue, message);
+                return;
+              } else {
+                message.guild.musicData.isPlaying = false;
+                message.guild.musicData.nowPlaying = null;
+                message.guild.musicData.songDispatcher = null;
+                if (
+                  message.guild.me.voice.channel &&
+                  message.guild.musicData.skipTimer
+                ) {
+                  message.guild.me.voice.channel.leave();
+                  message.guild.musicData.skipTimer = false;
+                  return;
+                }
+                if (message.guild.me.voice.channel) {
+                  setTimeout(function onTimeOut() {
+                    if (
+                      message.guild.musicData.isPlaying == false &&
+                      message.guild.me.voice.channel
+                    ) {
+                      message.guild.me.voice.channel.leave();
+                      message.say(
+                        ':zzz: Left channel due to inactivity.'
+                      );
+                    }
+                  }, 90000);
+                }
+              }
+            })
+            .on('error', function (e) {
+              message.say(':x: Cannot play song!');
+              console.error(e);
+              if (queue.length > 1) {
+                queue.shift();
+                classThis.playSong(queue, message);
+                return;
+              }
+              message.guild.musicData.queue.length = 0;
+              message.guild.musicData.isPlaying = false;
+              message.guild.musicData.nowPlaying = null;
+              message.guild.musicData.loopSong = false;
+              message.guild.musicData.songDispatcher = null;
+              message.guild.me.voice.channel.leave();
+              return;
+            })
+        })
       }
-
     } catch (err) {
       console.error(err);
+      message.say(`An error occured, please try`)
       return
     }
     // const a = await requestStream(queue[0].url);
@@ -1236,76 +1350,76 @@ module.exports = class PlayCommand extends Commando.Command {
     //           quality: 'highestaudio',
     //           highWaterMark: 1 << 25
     //         })
-    //         || new StreamConcat(a, { highWaterMark: 1 << 25 }), { seek: seek })
-    client.on('start', function () {
-      message.guild.musicData.songDispatcher = dispatcher;
-      if (!db.get(`${message.guild.id}.serverSettings.volume`))
-        dispatcher.setVolume(message.guild.musicData.volume);
-      else
-        dispatcher.setVolume(
-          db.get(`${message.guild.id}.serverSettings.volume`)
-        );
+    //         || new StreamConcat(a, { highWaterMark: 1 << 25 }))
+    // .on('start', function () {
+    //   message.guild.musicData.songDispatcher = dispatcher;
+    //   if (!db.get(`${message.guild.id}.serverSettings.volume`))
+    //     dispatcher.setVolume(message.guild.musicData.volume);
+    //   else
+    //     dispatcher.setVolume(
+    //       db.get(`${message.guild.id}.serverSettings.volume`)
+    //     );
 
-      if (queue[1] && !message.guild.musicData.loopSong)
-        videoEmbed.addField(':track_next: Next Song:', queue[1].title);
-      message.say(videoEmbed);
-      message.guild.musicData.nowPlaying = queue[0];
-      queue.shift();
-      return;
-    })
-      .on('finish', function () {
-        queue = message.guild.musicData.queue;
-        if (message.guild.musicData.loopSong) {
-          queue.unshift(message.guild.musicData.nowPlaying);
-        } else if (message.guild.musicData.loopQueue) {
-          queue.push(message.guild.musicData.nowPlaying);
-        }
-        if (queue.length >= 1) {
-          classThis.playSong(queue, message);
-          return;
-        } else {
-          message.guild.musicData.isPlaying = false;
-          message.guild.musicData.nowPlaying = null;
-          message.guild.musicData.songDispatcher = null;
-          if (
-            message.guild.me.voice.channel &&
-            message.guild.musicData.skipTimer
-          ) {
-            message.guild.me.voice.channel.leave();
-            message.guild.musicData.skipTimer = false;
-            return;
-          }
-          if (message.guild.me.voice.channel) {
-            setTimeout(function onTimeOut() {
-              if (
-                message.guild.musicData.isPlaying == false &&
-                message.guild.me.voice.channel
-              ) {
-                message.guild.me.voice.channel.leave();
-                message.say(
-                  ':zzz: Left channel due to inactivity.'
-                );
-              }
-            }, 90000);
-          }
-        }
-      })
-      .on('error', function (e) {
-        message.say(':x: Cannot play song!');
-        console.error(e);
-        if (queue.length > 1) {
-          queue.shift();
-          classThis.playSong(queue, message);
-          return;
-        }
-        message.guild.musicData.queue.length = 0;
-        message.guild.musicData.isPlaying = false;
-        message.guild.musicData.nowPlaying = null;
-        message.guild.musicData.loopSong = false;
-        message.guild.musicData.songDispatcher = null;
-        message.guild.me.voice.channel.leave();
-        return;
-      });
+    //   if (queue[1] && !message.guild.musicData.loopSong)
+    //     videoEmbed.addField(':track_next: Next Song:', queue[1].title);
+    //   message.say(videoEmbed);
+    //   message.guild.musicData.nowPlaying = queue[0];
+    //   queue.shift();
+    //   return;
+    // })
+    // .on('finish', function () {
+    //   queue = message.guild.musicData.queue;
+    //   if (message.guild.musicData.loopSong) {
+    //     queue.unshift(message.guild.musicData.nowPlaying);
+    //   } else if (message.guild.musicData.loopQueue) {
+    //     queue.push(message.guild.musicData.nowPlaying);
+    //   }
+    //   if (queue.length >= 1) {
+    //     classThis.playSong(queue, message);
+    //     return;
+    //   } else {
+    //     message.guild.musicData.isPlaying = false;
+    //     message.guild.musicData.nowPlaying = null;
+    //     message.guild.musicData.songDispatcher = null;
+    //     if (
+    //       message.guild.me.voice.channel &&
+    //       message.guild.musicData.skipTimer
+    //     ) {
+    //       message.guild.me.voice.channel.leave();
+    //       message.guild.musicData.skipTimer = false;
+    //       return;
+    //     }
+    //     if (message.guild.me.voice.channel) {
+    //       setTimeout(function onTimeOut() {
+    //         if (
+    //           message.guild.musicData.isPlaying == false &&
+    //           message.guild.me.voice.channel
+    //         ) {
+    //           message.guild.me.voice.channel.leave();
+    //           message.say(
+    //             ':zzz: Left channel due to inactivity.'
+    //           );
+    //         }
+    //       }, 90000);
+    //     }
+    //   }
+    // })
+    // .on('error', function (e) {
+    //   message.say(':x: Cannot play song!');
+    //   console.error(e);
+    //   if (queue.length > 1) {
+    //     queue.shift();
+    //     classThis.playSong(queue, message);
+    //     return;
+    //   }
+    //   message.guild.musicData.queue.length = 0;
+    //   message.guild.musicData.isPlaying = false;
+    //   message.guild.musicData.nowPlaying = null;
+    //   message.guild.musicData.loopSong = false;
+    //   message.guild.musicData.songDispatcher = null;
+    //   message.guild.me.voice.channel.leave();
+    //   return;
+    // });
     // })
     // .catch(function () {
     //   message.say(':no_entry: I have no permission to join your channel!');

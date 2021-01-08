@@ -25,7 +25,7 @@ module.exports = class NowPlayingCommand extends Commando.Command {
 
     const video = message.guild.musicData.nowPlaying;
     let description;
-    if (video.duration == 'Live Stream') {
+    if (video.isLive) {
       description = ':red_circle: Live Stream';
     } else {
       description = NowPlayingCommand.playbackBar(message, video);
@@ -55,7 +55,7 @@ module.exports = class NowPlayingCommand extends Commando.Command {
       passedTimeInMSObj
     );
 
-    const totalDurationObj = video.rawDuration;
+    const totalDurationObj = video.time;
     const totalDurationFormatted = NowPlayingCommand.formatDuration(
       totalDurationObj
     );
