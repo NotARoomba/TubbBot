@@ -6,6 +6,7 @@ var spotifyApi = new SpotifyWebApi({
   clientId: process.env.SPOTIFY_CLIENT_ID,
   clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
 });
+//require('@discordjs/opus')
 const WebMscore = require("webmscore").default;
 const fetch = require("fetch-retry")(require("node-fetch"), { retries: 5, retryDelay: attempt => Math.pow(2, attempt) * 1000 });
 const mm = require("music-metadata");
@@ -140,17 +141,19 @@ module.exports = class PlayCommand extends Commando.Command {
     }
     try {
       var result = { error: true };
-      if (validYTPlaylistURL(query)) result = await PlayCommand.addYTPlaylist(message, query);
-      else if (validYTURL(query)) result = await PlayCommand.addYTURL(message, query);
-      else if (validSPURL(query)) result = await PlayCommand.addSPURL(message, query);
       else if (validSCURL(query)) result = await PlayCommand.addSCURL(message, query);
-      else if (validGDURL(query)) result = await PlayCommand.addGDURL(message, query);
-      else if (validMSURL(query)) result = await PlayCommand.addMSURL(message, query);
-      else if (validPHURL(query)) result = await PlayCommand.addPHURL(message, query);
-      else if (validURL(query)) result = await PlayCommand.addURL(message, query);
-      else if (message.attachments.size > 0) result = await PlayCommand.addAttachment(message);
+      if (validYTPlaylistURL(query)) result = await PlayCommand.addYTPlaylist(message, query, voiceChannel);
+      else if (validYTURL(query)) result = await PlayCommand.addYTURL(message, query), voiceChannel;
+      else if (validSPURL(query)) result = await PlayCommand.addSPURL(message, query, voiceChannel);
+      else if (validSCURL(query)) result = await PlayCommand.addSCURL(message, query, voiceChannel);
+      else if (validGDURL(query)) result = await PlayCommand.addGDURL(message, query, voiceChannel);
+      else if (validMSURL(query)) result = await PlayCommand.addMSURL(message, query, voiceChannel);
+      else if (validPHURL(query)) result = await PlayCommand.addPHURL(message, query, voiceChannel);
+      else if (validURL(query)) result = await PlayCommand.addURL(message, query, voiceChannel);
+      else if (message.attachments.size > 0) result = await PlayCommand.addAttachment(message, voiceChannel);
       else result = await PlayCommand.searchYoutube(query, message, voiceChannel);
-      console.log(message.guild.musicData.queue)
+      //console.log(message.guild.musicData.queue)
+      //console.log(result)
       message.guild.musicData.queue.push(result)
     } catch (err) {
       await message.reply("there was an error trying to connect to the voice channel!");
@@ -158,7 +161,7 @@ module.exports = class PlayCommand extends Commando.Command {
       console.error(err);
     }
   }
-  static async addAttachment(message) {
+  static async addAttachment(message, voiceChannel) {
     const files = message.attachments;
 
     for (const file of files.values()) {
@@ -176,9 +179,11 @@ module.exports = class PlayCommand extends Commando.Command {
           url: file.url,
           type: 7,
           time: duration,
-
+          voiceChannel: voiceChannel,
           thumbnail: "https://pbs.twimg.com/profile_images/1155047958326517761/IUgssah__400x400.jpg",
-          isLive: false
+          isLive: false,
+          memberDisplayName: message.member.user.username,
+          memberAvatar: message.member.user.avatarURL('webp', false, 16)
         });
         continue;
       }
@@ -201,14 +206,16 @@ module.exports = class PlayCommand extends Commando.Command {
         url: file.url,
         type: 2,
         time: songLength,
-
+        voiceChannel: voiceChannel,
         thumbnail: "https://www.flaticon.com/svg/static/icons/svg/2305/2305904.svg",
-        isLive: false
+        isLive: false,
+        memberDisplayName: message.member.user.username,
+        memberAvatar: message.member.user.avatarURL('webp', false, 16)
       });
     }
     return { error: false, songs };
   }
-  static async addYTPlaylist(message, query) {
+  static async addYTPlaylist(message, query, voiceChannel) {
     try {
       var playlistInfo = await ytpl(query, { limit: Infinity });
     } catch (err) {
@@ -220,6 +227,7 @@ module.exports = class PlayCommand extends Commando.Command {
       return { error: true };
     }
     const videos = playlistInfo.items;
+    //console.log(playlistInfo)
 
     for (const video of videos) message.guild.musicData.queue.push({
       id: ID(),
@@ -228,14 +236,31 @@ module.exports = class PlayCommand extends Commando.Command {
       type: 0,
       time: video.duration,
       thumbnail: video.thumbnail,
-
-      isLive: video.isLive
+      voiceChannel: voiceChannel,
+      isLive: video.isLive,
+      memberDisplayName: message.member.user.username,
+      memberAvatar: message.member.user.avatarURL('webp', false, 16)
     });
-    message.say(`Track processing completed`).then(msg => msg.delete({ timeout: 10000 }).catch(() => { })).catch(() => { });
-    PlayCommand.playSong(message.guild.musicData.queue, message)
-    return
+    if (message.guild.musicData.isPlaying == false) {
+      message.guild.musicData.isPlaying = true;
+      return PlayCommand.playSong(message.guild.musicData.queue, message);
+    } else if (message.guild.musicData.isPlaying == true) {
+      const PlayListEmbed = new Discord.MessageEmbed()
+        .setColor('##FFED00')
+        .setTitle(`:musical_note: ${playlistInfo.title}`)
+        .addField(
+          `Playlist has added ${message.guild.musicData.queue.length} songs to queue!`,
+          playlistInfo.url
+        )
+        .setThumbnail(playlistInfo.thumbnails[0].url)
+        .setURL(playlistInfo.url);
+      message.say(PlayListEmbed);
+      // @TODO add the the position number of queue of the when a playlist is added
+      return;
+      //PlayCommand.playSong(message.guild.musicData.queue, message)
+    }
   }
-  static async addYTURL(message, query, type = 0) {
+  static async addYTURL(message, query, voiceChannel) {
     try {
       var songInfo = await ytdl.getInfo(query, { requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } });
     } catch (err) {
@@ -267,16 +292,37 @@ module.exports = class PlayCommand extends Commando.Command {
       id: ID(),
       title: decodeHtmlEntity(songInfo.videoDetails.title),
       url: songInfo.videoDetails.video_url,
-      type: type,
+      type: 0,
       time: songLength,
       thumbnail: thumbUrl,
-
+      voiceChannel: voiceChannel,
       isLive: length == 0,
-      isPastLive: songInfo.videoDetails.isLiveContent
+      isPastLive: songInfo.videoDetails.isLiveContent,
+      memberDisplayName: message.member.user.username,
+      memberAvatar: message.member.user.avatarURL('webp', false, 16)
     })
+    if (
+      message.guild.musicData.isPlaying == false ||
+      typeof message.guild.musicData.isPlaying == 'undefined'
+    ) {
+      message.guild.musicData.isPlaying = true;
+      return PlayCommand.playSong(message.guild.musicData.queue, message);
+    } else if (message.guild.musicData.isPlaying == true) {
+      const addedEmbed = new Discord.MessageEmbed()
+        .setColor('##FFED00')
+        .setTitle(`:musical_note: ${decodeHtmlEntity(songInfo.videoDetails.title)}`)
+        .addField(
+          `Has been added to queue. `,
+          `This song is #${message.guild.musicData.queue.length} in queue`
+        )
+        .setThumbnail(thumbUrl)
+        .setURL(songInfo.videoDetails.video_url);
+      message.say(addedEmbed);
+      return;
+    }
     return PlayCommand.playSong(message.guild.musicData.queue, message)
   }
-  static async addSPURL(message, query) {
+  static async addSPURL(message, query, voiceChannel) {
     const d = await spotifyApi.clientCredentialsGrant();
     spotifyApi.setAccessToken(d.body.access_token);
     spotifyApi.setRefreshToken(process.env.SPOTIFY_REFRESH);
@@ -336,8 +382,10 @@ module.exports = class PlayCommand extends Commando.Command {
                 spot: tracks[i].track.external_urls.spotify,
                 thumbnail: tracks[i].track.album.images[0].url,
                 time: songLength,
-
-                isLive: results[o].live
+                voiceChannel: voiceChannel,
+                isLive: results[o].live,
+                memberDisplayName: message.member.user.username,
+                memberAvatar: message.member.user.avatarURL('webp', false, 16)
               });
             }
           }
@@ -397,8 +445,10 @@ module.exports = class PlayCommand extends Commando.Command {
                 spot: tracks[i].external_urls.spotify,
                 thumbnail: highlight ? tracks[i].album.images[o].url : image,
                 time: songLength,
-
-                isLive: results[o].live
+                voiceChannel: voiceChannel,
+                isLive: results[o].live,
+                memberDisplayName: message.member.user.username,
+                memberAvatar: message.member.user.avatarURL('webp', false, 16)
               });
             }
           }
@@ -436,8 +486,10 @@ module.exports = class PlayCommand extends Commando.Command {
                 spot: tracks[i].external_urls.spotify,
                 thumbnail: tracks[i].album.images[o].url,
                 time: songLength,
-
-                isLive: results[o].live
+                voiceChannel: voiceChannel,
+                isLive: results[o].live,
+                memberDisplayName: message.member.user.username,
+                memberAvatar: message.member.user.avatarURL('webp', false, 16)
               });
             }
           }
@@ -446,7 +498,7 @@ module.exports = class PlayCommand extends Commando.Command {
     }
     return
   }
-  static async addSCURL(message, query) {
+  static async addSCURL(message, query, voiceChannel) {
     const res = await fetch(`https://api.soundcloud.com/resolve?url=${query}&client_id=${process.env.SCID}`);
     if (res.status !== 200) {
       message.channel.send("A problem occured while fetching the track information! Status Code: " + res.status);
@@ -470,8 +522,10 @@ module.exports = class PlayCommand extends Commando.Command {
           time: songLength,
           thumbnail: track.artwork_url,
           url: track.permalink_url,
-
-          isLive: false
+          voiceChannel: voiceChannel,
+          isLive: false,
+          memberDisplayName: message.member.user.username,
+          memberAvatar: message.member.user.avatarURL('webp', false, 16)
         });
       }
     } else {
@@ -485,13 +539,15 @@ module.exports = class PlayCommand extends Commando.Command {
         time: songLength,
         thumbnail: data.artwork_url,
         url: data.permalink_url,
-
-        isLive: false
+        voiceChannel: voiceChannel,
+        isLive: false,
+        memberDisplayName: message.member.user.username,
+        memberAvatar: message.member.user.avatarURL('webp', false, 16)
       });
     }
     return
   }
-  static async addGDURL(message, query) {
+  static async addGDURL(message, query, voiceChannel) {
     const formats = [/https:\/\/drive\.google\.com\/file\/d\/(?<id>.*?)\/(?:edit|view)\?usp=sharing/, /https:\/\/drive\.google\.com\/open\?id=(?<id>.*?)$/];
     const alphanumeric = /^[a-zA-Z0-9\-_]+$/;
     let id;
@@ -524,20 +580,40 @@ module.exports = class PlayCommand extends Commando.Command {
     }
     var length = Math.round(metadata.format.duration);
     var songLength = moment.duration(length, "seconds").format();
-    var song = {
+    message.guild.musicData.queue.push({
       id: ID(),
       title: title,
       url: link,
       type: 4,
       time: songLength,
-
+      voiceChannel: voiceChannel,
       thumbnail: "https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg",
-      isLive: false
-    };
-    var songs = [song];
-    return
+      isLive: false,
+      memberDisplayName: message.member.user.username,
+      memberAvatar: message.member.user.avatarURL('webp', false, 16)
+    });
+    if (
+      message.guild.musicData.isPlaying == false ||
+      typeof message.guild.musicData.isPlaying == 'undefined'
+    ) {
+      message.guild.musicData.isPlaying = true;
+      return PlayCommand.playSong(message.guild.musicData.queue, message);
+    } else if (message.guild.musicData.isPlaying == true) {
+      const addedEmbed = new Discord.MessageEmbed()
+        .setColor('##FFED00')
+        .setTitle(`:musical_note: ${title}`)
+        .addField(
+          `Has been added to queue. `,
+          `This song is #${message.guild.musicData.queue.length} in queue`
+        )
+        .setThumbnail("https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg")
+        .setURL(link);
+      message.say(addedEmbed);
+      return;
+    }
+    return PlayCommand.playSong(message.guild.musicData.queue, message)
   }
-  static async addMSURL(message, query) {
+  static async addMSURL(message, query, voiceChannel) {
     try {
       var response = await rp({ uri: query, resolveWithFullResponse: true });
       if (Math.floor(response.statusCode / 100) !== 2) {
@@ -557,14 +633,16 @@ module.exports = class PlayCommand extends Commando.Command {
       url: query,
       type: 5,
       time: songLength,
-
+      voiceChannel: voiceChannel,
       thumbnail: "https://pbs.twimg.com/profile_images/1155047958326517761/IUgssah__400x400.jpg",
-      isLive: false
+      isLive: false,
+      memberDisplayName: message.member.user.username,
+      memberAvatar: message.member.user.avatarURL('webp', false, 16)
     };
     var songs = [song];
     return
   }
-  static async addPHURL(message, query) {
+  static async addPHURL(message, query, voiceChannel) {
     try {
       const video = await ph.page(query, ["title", "duration", "download_urls"]);
       if (video.error) throw new Error(video.error);
@@ -578,10 +656,12 @@ module.exports = class PlayCommand extends Commando.Command {
         url: query,
         type: 6,
         time: songLength,
-
+        voiceChannel: voiceChannel,
         thumbnail: "https://plasticmick.com/wp-content/uploads/2019/07/pornhub-logo.jpg",
         isLive: false,
-        download: video.download_urls[download]
+        download: video.download_urls[download],
+        memberDisplayName: message.member.user.username,
+        memberAvatar: message.member.user.avatarURL('webp', false, 16)
       };
       return { error: false, songs: [song] };
     } catch (err) {
@@ -589,7 +669,7 @@ module.exports = class PlayCommand extends Commando.Command {
       return { error: true };
     }
   }
-  static async addURL(message, query) {
+  static async addURL(message, query, voiceChannel) {
     var title = query.split("/").slice(-1)[0].split(".").slice(0, -1).join(".").replace(/_/g, " ");
     try {
       var stream = await fetch(query).then(res => res.body);
@@ -611,14 +691,16 @@ module.exports = class PlayCommand extends Commando.Command {
       url: query,
       type: 2,
       time: songLength,
-
+      voiceChannel: voiceChannel,
       thumbnail: "https://www.flaticon.com/svg/static/icons/svg/2305/2305904.svg",
-      isLive: false
+      isLive: false,
+      memberDisplayName: message.member.user.username,
+      memberAvatar: message.member.user.avatarURL('webp', false, 16)
     };
     const songs = [song];
     return
   }
-  static async search(message, query) {
+  static async search(message, query, voiceChannel) {
     const allEmbeds = [];
     const Embed = new Discord.MessageEmbed()
       .setTitle(`Search result of ${query} on YouTube`)
@@ -654,7 +736,7 @@ module.exports = class PlayCommand extends Commando.Command {
       type: 0,
       time: !x.live ? x.duration : "∞",
       thumbnail: x.thumbnail,
-
+      voiceChannel: voiceChannel,
       isLive: x.live
     })).filter(x => !!x.url);
     var num = 0;
@@ -1051,7 +1133,8 @@ module.exports = class PlayCommand extends Commando.Command {
     var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
     return (url.match(p)) ? RegExp.$1 : false;
   }
-  static async playSong(queue, message) {
+  static async playSong(queue, message, seek = 0) {
+    //console.log(queue[0])
     const classThis = this; // use classThis instead of 'this' because of lexical scope below
     if (queue[0].voiceChannel == undefined) {
       // happens when loading a saved playlist
@@ -1062,188 +1145,180 @@ module.exports = class PlayCommand extends Commando.Command {
         queue[0].voiceChannel = message.guild.me.voice.channel;
       }
     }
+    const videoEmbed = new Discord.MessageEmbed()
+      .setThumbnail(queue[0].thumbnail)
+      .setColor('#FFED00')
+      .addField(':notes: Now Playing:', queue[0].title)
+      .addField(':stopwatch: Duration:', queue[0].time)
+      .setURL(queue[0].url)
+      .setFooter(
+        `Requested by ${queue[0].memberDisplayName}!`,
+        queue[0].memberAvatar
+      );
     try {
       //const dispatcher = queue[0].voicechannel.join()
       //console.log(dispatcher)
+      message.guild.musicData.connection = await queue[0].voiceChannel.join();
+      let dispatcher = message.guild.musicData.connection;
+      message.guild.musicData.songDispatcher = dispatcher;
       const silence = await requestStream("https://raw.githubusercontent.com/anars/blank-audio/master/1-second-of-silence.mp3");
-      if (condition) {
+      if (queue[0].type == 4) {
+        message.guild.musicData.connection = await queue[0].voiceChannel.join();
         const a = await requestStream(queue[0].url);
         dispatcher.play(new StreamConcat([a, silence], { highWaterMark: 1 << 25 }), { seek: seek });
-        break;
+        message.say(videoEmbed)
       }
-      else if (condition) {
-        
+      else if (queue[0].type == 3) {
+        dispatcher.play(await scdl.download(queue[0].url));
+        message.say(videoEmbed)
       }
-      else if (condition) {
-        
+      else if (queue[0].type == 5) {
+        console.log(queue[0])
+        const c = await getMP3(queue.pool, queue[0].url);
+        if (c.error) throw new Error(c.message);
+        if (c.url.startsWith("https://www.youtube.com/embed/")) var d = ytdl(c.url);
+        else var d = await requestStream(c.url);
+        dispatcher.play(new StreamConcat([d, silence], { highWaterMark: 1 << 25 }), { seek: seek });
+        message.say(videoEmbed)
       }
-      else if (condition) {
-        
+      else if (queue[0].type == 6) {
+        var f = await requestStream(queue[0].download);
+        if (f.statusCode != 200) {
+          const g = await module.exports.addPHURL(message, query);
+          if (g.error) throw "Failed to find video";
+          queue[0] = g;
+          queue.songs[queue.songs.indexOf(queue[0])] = queue[0];
+          updateQueue(message, queue, queue.pool);
+          f = await requestStream(queue[0].download);
+          if (f.statusCode != 200) throw new Error("Received HTTP Status Code: " + f.statusCode);
+        }
+        dispatcher.play(new StreamConcat([f, silence], { highWaterMark: 1 << 25 }), { seek: seek });
+        message.say(videoEmbed)
       }
-      else if (condition) {
-        
-      }
-        case 2:
-        case 4:
-         
-        case 3:
-          dispatcher.play(await scdl.download(queue[0].url));
-          break;
-        case 5:
-          const c = await getMP3(queue.pool, queue[0].url);
-          if (c.error) throw new Error(c.message);
-          if (c.url.startsWith("https://www.youtube.com/embed/")) var d = ytdl(c.url);
-          else var d = await requestStream(c.url);
-          dispatcher.play(new StreamConcat([d, silence], { highWaterMark: 1 << 25 }), { seek: seek });
-          break;
-        case 6:
-          var f = await requestStream(queue[0].download);
-          if (f.statusCode != 200) {
-            const g = await module.exports.addPHURL(message, query);
-            if (g.error) throw "Failed to find video";
-            queue[0] = g;
+      else if (queue[0].type == 7) {
+        const h = await fetch(queue[0].url);
+        if (!h.ok) throw new Error("Received HTTP Status Code: " + h.status);
+        await WebMscore.ready;
+        const i = await WebMscore.load(queue[0].url.split(".").slice(-1)[0], new Uint8Array(await h.arrayBuffer()));
+        const sf3 = await fetch("https://drive.google.com/uc?export=download&id=1IifZ2trH4gAlbzNWUylCCEvbN3trOYep").then(res => res.arrayBuffer());
+        await i.setSoundFont(new Uint8Array(sf3));
+        const j = bufferToStream(Buffer.from((await i.saveAudio("wav")).buffer));
+        dispatcher.play(new StreamConcat([j, silence], { highWaterMark: 1 << 25 }), { seek: seek });
+        message.say(videoEmbed)
+      } else if (queue[0].type == 0) {
+        if (queue[0].isLive) {
+          const k = await module.exports.addYTURL(message, query, queue[0].type);
+          if (k.error) throw "Failed to find video";
+          if (!isEquivalent(k.songs[0], queue[0])) {
+            queue[0] = k.songs[0];
             queue.songs[queue.songs.indexOf(queue[0])] = queue[0];
-            updateQueue(message, queue, queue.pool);
-            f = await requestStream(queue[0].download);
-            if (f.statusCode != 200) throw new Error("Received HTTP Status Code: " + f.statusCode);
           }
-          dispatcher.play(new StreamConcat([f, silence], { highWaterMark: 1 << 25 }), { seek: seek });
-          break;
-        case 7:
-          const h = await fetch(queue[0].url);
-          if (!h.ok) throw new Error("Received HTTP Status Code: " + h.status);
-          await WebMscore.ready;
-          const i = await WebMscore.load(queue[0].url.split(".").slice(-1)[0], new Uint8Array(await h.arrayBuffer()));
-          const sf3 = await fetch("https://drive.google.com/uc?export=download&id=1IifZ2trH4gAlbzNWUylCCEvbN3trOYep").then(res => res.arrayBuffer());
-          await i.setSoundFont(new Uint8Array(sf3));
-          const j = bufferToStream(Buffer.from((await i.saveAudio("wav")).buffer));
-          dispatcher.play(new StreamConcat([j, silence], { highWaterMark: 1 << 25 }), { seek: seek });
-          break;
-          default:
-          if (queue[0].isLive) {
-            const k = await module.exports.addYTURL(message, query, queue[0].type);
-            if (k.error) throw "Failed to find video";
-            if (!isEquivalent(k.songs[0], queue[0])) {
-              queue[0] = k.songs[0];
-              queue.songs[queue.songs.indexOf(queue[0])] = queue[0];
-            }
-          }
-          
-          if (!queue[0].isLive && !queue[0].isPastLive) dispatcher = connection.play(ytdl(queue[0].url, { filter: "audioonly", dlChunkSize: 0, highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }), { seek: seek });
-          else if (queue[0].isPastLive) dispatcher = connection.play(ytdl(queue[0].url, { highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }), { seek: seek });
-          else queue[0].voiceChannel.join().then(function (connection) {dispatcher = connection.play(ytdl(queue[0].url, { highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }))};
-          break;
-      } 
-      
+        }
+
+        if (!queue[0].isLive && !queue[0].isPastLive) message.guild.musicData.connection.play(ytdl(queue[0].url, { filter: "audioonly", dlChunkSize: 0, highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }), { seek: seek });
+        else if (queue[0].isPastLive) message.guild.musicData.connection.play(ytdl(queue[0].url, { highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }), { seek: seek });
+        else message.guild.musicData.connection.play(ytdl(queue[0].url, { highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }));
+        message.say(videoEmbed)
+      }
+
     } catch (err) {
       console.error(err);
-      return;
+      return
     }
-    const a = await requestStream(queue[0].url);
-    queue[0].voiceChannel
-      .join()
-      .then(function (connection) {
-        const dispatcher = connection
-          .play(
-            ytdl(queue[0].url, {
-              filter: 'audio',
-              quality: 'highestaudio',
-              highWaterMark: 1 << 25
-            })
-            || new StreamConcat(a, { highWaterMark: 1 << 25 }), { seek: seek })
-          .on('start', function () {
-            message.guild.musicData.songDispatcher = dispatcher;
-            if (!db.get(`${message.guild.id}.serverSettings.volume`))
-              dispatcher.setVolume(message.guild.musicData.volume);
-            else
-              dispatcher.setVolume(
-                db.get(`${message.guild.id}.serverSettings.volume`)
-              );
+    // const a = await requestStream(queue[0].url);
+    // queue[0].voiceChannel
+    //   .join()
+    //   .then(function (connection) {
+    //     const dispatcher = connection
+    //       .play(
+    //         ytdl(queue[0].url, {
+    //           filter: 'audio',
+    //           quality: 'highestaudio',
+    //           highWaterMark: 1 << 25
+    //         })
+    //         || new StreamConcat(a, { highWaterMark: 1 << 25 }), { seek: seek })
+    client.on('start', function () {
+      message.guild.musicData.songDispatcher = dispatcher;
+      if (!db.get(`${message.guild.id}.serverSettings.volume`))
+        dispatcher.setVolume(message.guild.musicData.volume);
+      else
+        dispatcher.setVolume(
+          db.get(`${message.guild.id}.serverSettings.volume`)
+        );
 
-            const videoEmbed = new Discord.MessageEmbed()
-              .setThumbnail(queue[0].thumbnail)
-              .setColor('#FFED00')
-              .addField(':notes: Now Playing:', queue[0].title)
-              .addField(':stopwatch: Duration:', queue[0].duration)
-              .setURL(queue[0].url)
-              .setFooter(
-                `Requested by ${queue[0].memberDisplayName}!`,
-                queue[0].memberAvatar
-              );
-
-            if (queue[1] && !message.guild.musicData.loopSong)
-              videoEmbed.addField(':track_next: Next Song:', queue[1].title);
-            message.say(videoEmbed);
-            message.guild.musicData.nowPlaying = queue[0];
-            queue.shift();
+      if (queue[1] && !message.guild.musicData.loopSong)
+        videoEmbed.addField(':track_next: Next Song:', queue[1].title);
+      message.say(videoEmbed);
+      message.guild.musicData.nowPlaying = queue[0];
+      queue.shift();
+      return;
+    })
+      .on('finish', function () {
+        queue = message.guild.musicData.queue;
+        if (message.guild.musicData.loopSong) {
+          queue.unshift(message.guild.musicData.nowPlaying);
+        } else if (message.guild.musicData.loopQueue) {
+          queue.push(message.guild.musicData.nowPlaying);
+        }
+        if (queue.length >= 1) {
+          classThis.playSong(queue, message);
+          return;
+        } else {
+          message.guild.musicData.isPlaying = false;
+          message.guild.musicData.nowPlaying = null;
+          message.guild.musicData.songDispatcher = null;
+          if (
+            message.guild.me.voice.channel &&
+            message.guild.musicData.skipTimer
+          ) {
+            message.guild.me.voice.channel.leave();
+            message.guild.musicData.skipTimer = false;
             return;
-          })
-          .on('finish', function () {
-            queue = message.guild.musicData.queue;
-            if (message.guild.musicData.loopSong) {
-              queue.unshift(message.guild.musicData.nowPlaying);
-            } else if (message.guild.musicData.loopQueue) {
-              queue.push(message.guild.musicData.nowPlaying);
-            }
-            if (queue.length >= 1) {
-              classThis.playSong(queue, message);
-              return;
-            } else {
-              message.guild.musicData.isPlaying = false;
-              message.guild.musicData.nowPlaying = null;
-              message.guild.musicData.songDispatcher = null;
+          }
+          if (message.guild.me.voice.channel) {
+            setTimeout(function onTimeOut() {
               if (
-                message.guild.me.voice.channel &&
-                message.guild.musicData.skipTimer
+                message.guild.musicData.isPlaying == false &&
+                message.guild.me.voice.channel
               ) {
                 message.guild.me.voice.channel.leave();
-                message.guild.musicData.skipTimer = false;
-                return;
+                message.say(
+                  ':zzz: Left channel due to inactivity.'
+                );
               }
-              if (message.guild.me.voice.channel) {
-                setTimeout(function onTimeOut() {
-                  if (
-                    message.guild.musicData.isPlaying == false &&
-                    message.guild.me.voice.channel
-                  ) {
-                    message.guild.me.voice.channel.leave();
-                    message.say(
-                      ':zzz: Left channel due to inactivity.'
-                    );
-                  }
-                }, 90000);
-              }
-            }
-          })
-          .on('error', function (e) {
-            message.say(':x: Cannot play song!');
-            console.error(e);
-            if (queue.length > 1) {
-              queue.shift();
-              classThis.playSong(queue, message);
-              return;
-            }
-            message.guild.musicData.queue.length = 0;
-            message.guild.musicData.isPlaying = false;
-            message.guild.musicData.nowPlaying = null;
-            message.guild.musicData.loopSong = false;
-            message.guild.musicData.songDispatcher = null;
-            message.guild.me.voice.channel.leave();
-            return;
-          });
+            }, 90000);
+          }
+        }
       })
-      .catch(function () {
-        message.say(':no_entry: I have no permission to join your channel!');
+      .on('error', function (e) {
+        message.say(':x: Cannot play song!');
+        console.error(e);
+        if (queue.length > 1) {
+          queue.shift();
+          classThis.playSong(queue, message);
+          return;
+        }
         message.guild.musicData.queue.length = 0;
         message.guild.musicData.isPlaying = false;
         message.guild.musicData.nowPlaying = null;
         message.guild.musicData.loopSong = false;
         message.guild.musicData.songDispatcher = null;
-        if (message.guild.me.voice.channel) {
-          message.guild.me.voice.channel.leave();
-        }
+        message.guild.me.voice.channel.leave();
         return;
       });
+    // })
+    // .catch(function () {
+    //   message.say(':no_entry: I have no permission to join your channel!');
+    //   message.guild.musicData.queue.length = 0;
+    //   message.guild.musicData.isPlaying = false;
+    //   message.guild.musicData.nowPlaying = null;
+    //   message.guild.musicData.loopSong = false;
+    //   message.guild.musicData.songDispatcher = null;
+    //   if (message.guild.me.voice.channel) {
+    //     message.guild.me.voice.channel.leave();
+    //   }
+    //   return;
+    // });
   }
 
   static async searchYoutube(query, message, voiceChannel) {
@@ -1326,13 +1401,17 @@ module.exports = class PlayCommand extends Commando.Command {
             //     'There are too many songs in the queue already, skip or wait a bit'
             //   );
             // }
-            message.guild.musicData.queue.push(
-              PlayCommand.constructSongObj(
-                video,
-                voiceChannel,
-                message.member.user
-              )
-            );
+            message.guild.musicData.queue.push({
+              id: ID(),
+              url: `https://www.youtube.com/watch?v=${video.raw.id}`,
+              title: video.title,
+              time: video.duration,
+              thumbnail: video.thumbnails.high.url,
+              voiceChannel: voiceChannel,
+              memberDisplayName: message.member.user.username,
+              memberAvatar: message.member.user.avatarURL('webp', false, 16)
+            })
+
             if (message.guild.musicData.isPlaying == false) {
               message.guild.musicData.isPlaying = true;
               if (songEmbed) {

@@ -22,9 +22,10 @@ module.exports = class QueueCommand extends Commando.Command {
       .setAuthorizedUsers([message.author.id])
       .setChannel(message.channel)
       .setElementsPerPage(10)
-      .formatField('# - Song', function (e) {
-        return `**${queueClone.indexOf(e) + 1}**: ${e.title}`;
-      });
+      .formatField('# - Song', queueClone.map((queueClone, i) => {
+        return `**#${i + 1}**: ${queueClone[1].title}`;
+        //return `**${queueClone.indexOf(e) + 1}**: ${queueClone[1].title}`;
+      }));
 
     queueEmbed.embed.setColor('#dbc300').setTitle('Music Queue');
     queueEmbed.build();
