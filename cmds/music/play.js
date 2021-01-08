@@ -1064,28 +1064,28 @@ module.exports = class PlayCommand extends Commando.Command {
     }
     try {
       //const dispatcher = queue[0].voicechannel.join()
-      console.log(dispatcher)
+      //console.log(dispatcher)
       const silence = await requestStream("https://raw.githubusercontent.com/anars/blank-audio/master/1-second-of-silence.mp3");
-      switch (queue[0].type) {
-        case 0:
-          if (queue[0].isLive) {
-            const k = await module.exports.addYTURL(message, query, queue[0].type);
-            if (k.error) throw "Failed to find video";
-            if (!isEquivalent(k.songs[0], queue[0])) {
-              queue[0] = k.songs[0];
-              queue.songs[queue.songs.indexOf(queue[0])] = queue[0];
-            }
-          }
-          queue[0].voicechannel.join()
-          if (!queue[0].isLive && !queue[0].isPastLive) dispatcher = connection.play(ytdl(queue[0].url, { filter: "audioonly", dlChunkSize: 0, highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }), { seek: seek });
-          else if (queue[0].isPastLive) dispatcher = connection.play(ytdl(queue[0].url, { highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }), { seek: seek });
-          else dispatcher = connection.play(ytdl(queue[0].url, { highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }));
-          break;
+      if (condition) {
+        const a = await requestStream(queue[0].url);
+        dispatcher.play(new StreamConcat([a, silence], { highWaterMark: 1 << 25 }), { seek: seek });
+        break;
+      }
+      else if (condition) {
+        
+      }
+      else if (condition) {
+        
+      }
+      else if (condition) {
+        
+      }
+      else if (condition) {
+        
+      }
         case 2:
         case 4:
-          const a = await requestStream(queue[0].url);
-          dispatcher.play(new StreamConcat([a, silence], { highWaterMark: 1 << 25 }), { seek: seek });
-          break;
+         
         case 3:
           dispatcher.play(await scdl.download(queue[0].url));
           break;
@@ -1118,6 +1118,20 @@ module.exports = class PlayCommand extends Commando.Command {
           await i.setSoundFont(new Uint8Array(sf3));
           const j = bufferToStream(Buffer.from((await i.saveAudio("wav")).buffer));
           dispatcher.play(new StreamConcat([j, silence], { highWaterMark: 1 << 25 }), { seek: seek });
+          break;
+          default:
+          if (queue[0].isLive) {
+            const k = await module.exports.addYTURL(message, query, queue[0].type);
+            if (k.error) throw "Failed to find video";
+            if (!isEquivalent(k.songs[0], queue[0])) {
+              queue[0] = k.songs[0];
+              queue.songs[queue.songs.indexOf(queue[0])] = queue[0];
+            }
+          }
+          
+          if (!queue[0].isLive && !queue[0].isPastLive) dispatcher = connection.play(ytdl(queue[0].url, { filter: "audioonly", dlChunkSize: 0, highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }), { seek: seek });
+          else if (queue[0].isPastLive) dispatcher = connection.play(ytdl(queue[0].url, { highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }), { seek: seek });
+          else queue[0].voiceChannel.join().then(function (connection) {dispatcher = connection.play(ytdl(queue[0].url, { highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }))};
           break;
       } 
       
