@@ -141,7 +141,6 @@ module.exports = class PlayCommand extends Commando.Command {
     }
     try {
       var result = { error: true };
-      else if (validSCURL(query)) result = await PlayCommand.addSCURL(message, query);
       if (validYTPlaylistURL(query)) result = await PlayCommand.addYTPlaylist(message, query, voiceChannel);
       else if (validYTURL(query)) result = await PlayCommand.addYTURL(message, query), voiceChannel;
       else if (validSPURL(query)) result = await PlayCommand.addSPURL(message, query, voiceChannel);
