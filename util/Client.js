@@ -12,7 +12,6 @@ Structures.extend('Guild', function (Guild) {
                 queue: [],
                 isPlaying: false,
                 nowPlaying: null,
-                connection: null,
                 songDispatcher: null,
                 skipTimer: false, // only skip if user used leave command
                 loopSong: false,

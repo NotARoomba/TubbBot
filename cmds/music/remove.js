@@ -28,7 +28,7 @@ module.exports = class RemoveSongCommand extends Commando.Command {
       message.reply(':no_entry: Please join a voice channel and try again!');
       return;
     }
-    //console.log(message.guild.musicData.songDispatcher)
+
     if (
       typeof message.guild.musicData.songDispatcher == 'undefined' ||
       message.guild.musicData.songDispatcher == null
