@@ -1157,9 +1157,10 @@ module.exports = class PlayCommand extends Commando.Command {
     try {
       //const dispatcher = queue[0].voicechannel.join()
       //console.log(dispatcher)
-      message.guild.musicData.connection = await queue[0].voiceChannel.join();
-      let dispatcher = message.guild.musicData.connection;
-      message.guild.musicData.songDispatcher = dispatcher;
+      message.guild.musicData.songDispatcher = await queue[0].voiceChannel.join();
+      const dispatcher = message.guild.musicData.songDispatcher;
+      //message.guild.musicData.songDispatcher = dispatcher;
+      console.log(message.guild.musicData.songDispatcher)
       const silence = await requestStream("https://raw.githubusercontent.com/anars/blank-audio/master/1-second-of-silence.mp3");
       if (queue[0].type == 4) {
         message.guild.musicData.connection = await queue[0].voiceChannel.join();
@@ -1214,9 +1215,9 @@ module.exports = class PlayCommand extends Commando.Command {
           }
         }
 
-        if (!queue[0].isLive && !queue[0].isPastLive) message.guild.musicData.connection.play(ytdl(queue[0].url, { filter: "audioonly", dlChunkSize: 0, highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }), { seek: seek });
-        else if (queue[0].isPastLive) message.guild.musicData.connection.play(ytdl(queue[0].url, { highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }), { seek: seek });
-        else message.guild.musicData.connection.play(ytdl(queue[0].url, { highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }));
+        if (!queue[0].isLive && !queue[0].isPastLive) dispatcher.play(ytdl(queue[0].url, { filter: "audioonly", dlChunkSize: 0, highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }), { seek: seek });
+        else if (queue[0].isPastLive) dispatcher.play(ytdl(queue[0].url, { highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }), { seek: seek });
+        else dispatcher.play(ytdl(queue[0].url, { highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }));
         message.say(videoEmbed)
       }
 
