@@ -492,6 +492,7 @@ module.exports = class PlayCommand extends Commando.Command {
             }
           }
         }
+        
         break;
     }
     if (
@@ -508,8 +509,8 @@ module.exports = class PlayCommand extends Commando.Command {
           `Has been added to queue. `,
           `This song is #${message.guild.musicData.queue.length} in queue`
         )
-        .setThumbnail("https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg")
-        .setURL(link);
+        .setThumbnail(thumbnail)
+        .setURL(url);
       message.say(addedEmbed);
       return;
     }
@@ -545,6 +546,26 @@ module.exports = class PlayCommand extends Commando.Command {
           memberAvatar: message.member.user.avatarURL('webp', false, 16)
         });
       }
+      if (
+        message.guild.musicData.isPlaying == false ||
+        typeof message.guild.musicData.isPlaying == 'undefined'
+      ) {
+        message.guild.musicData.isPlaying = true;
+        return PlayCommand.playSong(message.guild.musicData.queue, message);
+      } else if (message.guild.musicData.isPlaying == true) {
+        const addedEmbed = new Discord.MessageEmbed()
+          .setColor('##FFED00')
+          .setTitle(`:musical_note: Playlist`)
+          .addField(
+            `Has been added to queue. `,
+            `This playlist is #${message.guild.musicData.queue.length} in queue`
+          )
+          .setThumbnail(data.artwork_url)
+          .setURL(data.permalink_url);
+        message.say(addedEmbed);
+        return;
+      }
+      return PlayCommand.playSong(message.guild.musicData.queue, message)
     } else {
       const length = Math.round(data.duration / 1000);
       const songLength = moment.duration(length, "seconds").format();
@@ -571,13 +592,13 @@ module.exports = class PlayCommand extends Commando.Command {
     } else if (message.guild.musicData.isPlaying == true) {
       const addedEmbed = new Discord.MessageEmbed()
         .setColor('##FFED00')
-        .setTitle(`:musical_note: ${title}`)
+        .setTitle(`:musical_note: Playlist`)
         .addField(
           `Has been added to queue. `,
-          `This song is #${message.guild.musicData.queue.length} in queue`
+          `This playlist is #${message.guild.musicData.queue.length} in queue`
         )
-        .setThumbnail("https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg")
-        .setURL(link);
+        .setThumbnail(data.artwork_url)
+        .setURL(data.permalink_url);
       message.say(addedEmbed);
       return;
     }
