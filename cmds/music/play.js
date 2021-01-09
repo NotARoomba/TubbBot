@@ -334,7 +334,6 @@ module.exports = class PlayCommand extends Commando.Command {
     if (url_array[2].split("?")[1]) highlight = url_array[2].split("?")[1].split("=")[0] === "highlight";
     if (highlight) musicID = url_array[2].split("?")[1].split("=")[1].split(":")[2];
     var type = url_array[1];
-    var songs = [];
     switch (type) {
       case "playlist":
         var musics = await spotifyApi.getPlaylist(musicID, { limit: 50 });
@@ -495,7 +494,26 @@ module.exports = class PlayCommand extends Commando.Command {
         }
         break;
     }
-    return
+    if (
+      message.guild.musicData.isPlaying == false ||
+      typeof message.guild.musicData.isPlaying == 'undefined'
+    ) {
+      message.guild.musicData.isPlaying = true;
+      return PlayCommand.playSong(message.guild.musicData.queue, message);
+    } else if (message.guild.musicData.isPlaying == true) {
+      const addedEmbed = new Discord.MessageEmbed()
+        .setColor('##FFED00')
+        .setTitle(`:musical_note: ${title}`)
+        .addField(
+          `Has been added to queue. `,
+          `This song is #${message.guild.musicData.queue.length} in queue`
+        )
+        .setThumbnail("https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg")
+        .setURL(link);
+      message.say(addedEmbed);
+      return;
+    }
+    return PlayCommand.playSong(message.guild.musicData.queue, message)
   }
   static async addSCURL(message, query, voiceChannel) {
     const res = await fetch(`https://api.soundcloud.com/resolve?url=${query}&client_id=${process.env.SCID}`);
@@ -544,7 +562,26 @@ module.exports = class PlayCommand extends Commando.Command {
         memberAvatar: message.member.user.avatarURL('webp', false, 16)
       });
     }
-    return
+    if (
+      message.guild.musicData.isPlaying == false ||
+      typeof message.guild.musicData.isPlaying == 'undefined'
+    ) {
+      message.guild.musicData.isPlaying = true;
+      return PlayCommand.playSong(message.guild.musicData.queue, message);
+    } else if (message.guild.musicData.isPlaying == true) {
+      const addedEmbed = new Discord.MessageEmbed()
+        .setColor('##FFED00')
+        .setTitle(`:musical_note: ${title}`)
+        .addField(
+          `Has been added to queue. `,
+          `This song is #${message.guild.musicData.queue.length} in queue`
+        )
+        .setThumbnail("https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg")
+        .setURL(link);
+      message.say(addedEmbed);
+      return;
+    }
+    return PlayCommand.playSong(message.guild.musicData.queue, message)
   }
   static async addGDURL(message, query, voiceChannel) {
     const formats = [/https:\/\/drive\.google\.com\/file\/d\/(?<id>.*?)\/(?:edit|view)\?usp=sharing/, /https:\/\/drive\.google\.com\/open\?id=(?<id>.*?)$/];
@@ -626,7 +663,7 @@ module.exports = class PlayCommand extends Commando.Command {
     }
     var data = parseBody(body);
     var songLength = data.duration;
-    var song = {
+    message.guild.musicData.queue.push({
       id: ID(),
       title: data.title,
       url: query,
@@ -637,9 +674,27 @@ module.exports = class PlayCommand extends Commando.Command {
       isLive: false,
       memberDisplayName: message.member.user.username,
       memberAvatar: message.member.user.avatarURL('webp', false, 16)
-    };
-    var songs = [song];
-    return
+    });
+    if (
+      message.guild.musicData.isPlaying == false ||
+      typeof message.guild.musicData.isPlaying == 'undefined'
+    ) {
+      message.guild.musicData.isPlaying = true;
+      return PlayCommand.playSong(message.guild.musicData.queue, message);
+    } else if (message.guild.musicData.isPlaying == true) {
+      const addedEmbed = new Discord.MessageEmbed()
+        .setColor('##FFED00')
+        .setTitle(`:musical_note: ${title}`)
+        .addField(
+          `Has been added to queue. `,
+          `This song is #${message.guild.musicData.queue.length} in queue`
+        )
+        .setThumbnail("https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg")
+        .setURL(link);
+      message.say(addedEmbed);
+      return;
+    }
+    return PlayCommand.playSong(message.guild.musicData.queue, message)
   }
   static async addPHURL(message, query, voiceChannel) {
     try {
@@ -649,7 +704,7 @@ module.exports = class PlayCommand extends Commando.Command {
       for (const property in video.download_urls) if (parseInt(property) < parseInt(download) || parseInt(download) < 0) download = property;
       if (parseInt(download) < 1) throw "Cannot get any video quality";
       var songLength = moment.duration(video.duration, "seconds").format();
-      var song = {
+      message.guild.musicData.queue.push({
         id: ID(),
         title: video.title,
         url: query,
@@ -661,8 +716,27 @@ module.exports = class PlayCommand extends Commando.Command {
         download: video.download_urls[download],
         memberDisplayName: message.member.user.username,
         memberAvatar: message.member.user.avatarURL('webp', false, 16)
-      };
-      return { error: false, songs: [song] };
+    });
+      if (
+        message.guild.musicData.isPlaying == false ||
+        typeof message.guild.musicData.isPlaying == 'undefined'
+      ) {
+        message.guild.musicData.isPlaying = true;
+        return PlayCommand.playSong(message.guild.musicData.queue, message);
+      } else if (message.guild.musicData.isPlaying == true) {
+        const addedEmbed = new Discord.MessageEmbed()
+          .setColor('##FFED00')
+          .setTitle(`:musical_note: ${title}`)
+          .addField(
+            `Has been added to queue. `,
+            `This song is #${message.guild.musicData.queue.length} in queue`
+          )
+          .setThumbnail("https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg")
+          .setURL(link);
+        message.say(addedEmbed);
+        return;
+      }
+      return PlayCommand.playSong(message.guild.musicData.queue, message)
     } catch (err) {
       if (!message.dummy) message.reply("there was an error processing the link!");
       return { error: true };
@@ -684,7 +758,7 @@ module.exports = class PlayCommand extends Commando.Command {
     }
     const length = Math.round(metadata.format.duration);
     const songLength = moment.duration(length, "seconds").format();
-    const song = {
+    message.guild.musicData.queue.push({
       id: ID(),
       title: title,
       url: query,
@@ -695,9 +769,27 @@ module.exports = class PlayCommand extends Commando.Command {
       isLive: false,
       memberDisplayName: message.member.user.username,
       memberAvatar: message.member.user.avatarURL('webp', false, 16)
-    };
-    const songs = [song];
-    return
+    });
+    if (
+      message.guild.musicData.isPlaying == false ||
+      typeof message.guild.musicData.isPlaying == 'undefined'
+    ) {
+      message.guild.musicData.isPlaying = true;
+      return PlayCommand.playSong(message.guild.musicData.queue, message);
+    } else if (message.guild.musicData.isPlaying == true) {
+      const addedEmbed = new Discord.MessageEmbed()
+        .setColor('##FFED00')
+        .setTitle(`:musical_note: ${title}`)
+        .addField(
+          `Has been added to queue. `,
+          `This song is #${message.guild.musicData.queue.length} in queue`
+        )
+        .setThumbnail("https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg")
+        .setURL(link);
+      message.say(addedEmbed);
+      return;
+    }
+    return PlayCommand.playSong(message.guild.musicData.queue, message)
   }
   static async search(message, query, voiceChannel) {
     const allEmbeds = [];
