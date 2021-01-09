@@ -7,7 +7,8 @@ module.exports = class Help2Command extends Commando.Command {
             aliases: [`h`, `commands`, `cmds`],
             group: 'util',
             memberName: 'help',
-            description: 'Describes all of this bot`s commands2',
+            description: 'Describes all of this bot`s commands',
+            usage: `help`,
             args: [
                 {
                     key: 'command',
@@ -69,6 +70,7 @@ module.exports = class Help2Command extends Commando.Command {
             const embed = new Discord.MessageEmbed()
                 .setTitle(`Command: **${command.name}** ${command.guildOnly ? ' (Usable only in servers)' : ''}`)
                 .setDescription(`${command.description}${command.details ? `\n${command.details}` : ''}`)
+                .addField(`**Format:** ${command.usage(command)}`)
                 .addField(`**Aliases:**`, `${command.aliases.join(', ') || 'None'}`)
                 .addField(`**Permissions You Need:**`, `${userPerms}`)
             return message.say(embed);
