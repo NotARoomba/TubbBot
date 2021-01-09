@@ -338,6 +338,7 @@ module.exports = class PlayCommand extends Commando.Command {
       case "playlist":
         var musics = await spotifyApi.getPlaylist(musicID, { limit: 50 });
         var tracks = musics.body.tracks.items;
+        //console.log(tracks)
         async function checkAll() {
           if (musics.body.tracks.next) {
             var offset = musics.body.tracks.offset + 50;
@@ -354,13 +355,17 @@ module.exports = class PlayCommand extends Commando.Command {
           try {
             const searched = await ytsr(`${tracks[i].track.artists[0].name} - ${tracks[i].track.name}`, { limit: 20 });
             results = searched.items.filter(x => x.type === "video" && x.duration.split(":").length < 3);
+            //console.log(results)
           } catch (err) {
+            console.log(err)
             try {
               const searched = await ytsr2.search(`${tracks[i].track.artists[0].name} - ${tracks[i].track.name}`, { limit: 20 });
               results = searched.map(x => {
                 return { live: false, duration: x.durationFormatted, link: `https://www.youtube.com/watch?v=${x.id}` };
               });
+              //console.log(results)
             } catch (err) {
+              console.log(err)
               return { error: true };
             }
           }
@@ -372,10 +377,11 @@ module.exports = class PlayCommand extends Commando.Command {
             }
             if (s + 1 == results.length) {
               const songLength = !results[o].live ? results[o].duration : "∞";
+              //console.log(results[o].url)
               message.guild.musicData.queue.push({
                 id: ID(),
                 title: tracks[i].track.name,
-                url: results[o].link,
+                url: results[o].url,
                 type: 1,
                 spot: tracks[i].track.external_urls.spotify,
                 thumbnail: tracks[i].track.album.images[0].url,
@@ -388,8 +394,28 @@ module.exports = class PlayCommand extends Commando.Command {
             }
           }
         }
-        mesg.edit("Process completed").then(msg => msg.delete({ timeout: 10000 }).catch(() => { })).catch(() => { });
-        break;
+        //console.log(message.guild.musicData.queue)
+        mesg.edit("Track processing completed").then(msg => msg.delete({ timeout: 10000 })).catch(() => { });
+        if (
+          message.guild.musicData.isPlaying == false ||
+          typeof message.guild.musicData.isPlaying == 'undefined'
+        ) {
+          message.guild.musicData.isPlaying = true;
+          return PlayCommand.playSong(message.guild.musicData.queue, message);
+        } else if (message.guild.musicData.isPlaying == true) {
+          const addedEmbed = new Discord.MessageEmbed()
+            .setColor('##FFED00')
+            .setTitle(`:musical_note: Spotify Playlist`)
+            .addField(
+              `Has been added to queue. `,
+              `The tracks are #${message.guild.musicData.queue.length} in queue`
+            )
+            .setThumbnail(tracks[0].track.album.images[0].url)
+            .setURL(query);
+          message.say(addedEmbed);
+          return;
+        }
+        return PlayCommand.playSong(message.guild.musicData.queue, message);
       case "album":
         var tracks;
         var image;
@@ -415,15 +441,17 @@ module.exports = class PlayCommand extends Commando.Command {
           await mesg.edit(`Processing track: **${i + 1}/${tracks.length}**`).catch(() => { });
           var results = [];
           try {
-            const searched = await ytsr(`${tracks[i].track.artists[0].name} - ${tracks[i].track.name}`, { limit: 20 });
+            const searched = await ytsr(`${tracks[i].artists[0].name} - ${tracks[i].name}`, { limit: 20 });
             results = searched.items.filter(x => x.type === "video" && x.duration.split(":").length < 3);
           } catch (err) {
+            console.log(err)
             try {
-              const searched = await ytsr2.search(`${tracks[i].track.artists[0].name} - ${tracks[i].track.name}`, { limit: 20 });
+              const searched = await ytsr2.search(`${tracks[i].artists[0].name} - ${tracks[i].name}`, { limit: 20 });
               results = searched.map(x => {
                 return { live: false, duration: x.durationFormatted, link: `https://www.youtube.com/watch?v=${x.id}` };
               });
             } catch (err) {
+              console.log(err)
               return { error: true };
             }
           }
@@ -438,7 +466,7 @@ module.exports = class PlayCommand extends Commando.Command {
               message.guild.musicData.queue.push({
                 id: ID(),
                 title: tracks[i].name,
-                url: results[o].link,
+                url: results[o].url,
                 type: 1,
                 spot: tracks[i].external_urls.spotify,
                 thumbnail: highlight ? tracks[i].album.images[o].url : image,
@@ -452,19 +480,43 @@ module.exports = class PlayCommand extends Commando.Command {
           }
         }
         mesg.edit("Track processing completed").then(msg => msg.delete({ timeout: 10000 })).catch(() => { });
-        break;
+        if (
+          message.guild.musicData.isPlaying == false ||
+          typeof message.guild.musicData.isPlaying == 'undefined'
+        ) {
+          message.guild.musicData.isPlaying = true;
+          return PlayCommand.playSong(message.guild.musicData.queue, message);
+        } else if (message.guild.musicData.isPlaying == true) {
+          const addedEmbed = new Discord.MessageEmbed()
+            .setColor('##FFED00')
+            .setTitle(`:musical_note: Spotify Album`)
+            .addField(
+              `Has been added to queue. `,
+              `The tracks are #${message.guild.musicData.queue.length} in queue`
+            )
+            .setThumbnail(image)
+            .setURL(query);
+          message.say(addedEmbed);
+          return;
+        }
+        return PlayCommand.playSong(message.guild.musicData.queue, message);
       case "track":
-        var tracks = await spotifyApi.getTracks([musicID]).body.tracks;
+        var tracks = await (await spotifyApi.getTracks([musicID])).body.tracks;
+        //console.log(tracks[0].artists[0].name)
+        var mesg = await message.channel.send(`Processing track: **0/${tracks.length}**`);
         for (var i = 0; i < tracks.length; i++) {
+          await mesg.edit(`Processing track: **${i + 1}/${tracks.length}**`).catch(() => { });
           var results;
           try {
-            const searched = await ytsr(`${tracks[i].track.artists[0].name} - ${tracks[i].track.name}`, { limit: 20 });
+            const searched = await ytsr(`${tracks[i].artists[0].name} - ${tracks[i].name}`, { limit: 20 });
             results = searched.items.filter(x => x.type === "video" && x.duration.split(":").length < 3);
           } catch (err) {
+            console.log(err)
             try {
-              const searched = await ytsr2.search(tracks[i].track.artists[0].name + " - " + tracks[i].track.name, { limit: 20 });
+              const searched = await ytsr2.search(tracks[i].artists[0].name + " - " + tracks[i].name, { limit: 20 });
               results = searched.map(x => { return { live: false, duration: x.durationFormatted, link: `https://www.youtube.com/watch?v=${x.id}` }; });
             } catch (err) {
+              console.log(err)
               return { error: true };
             }
           }
@@ -479,7 +531,7 @@ module.exports = class PlayCommand extends Commando.Command {
               message.guild.musicData.queue.push({
                 id: ID(),
                 title: tracks[i].name,
-                url: results[o].link,
+                url: results[o].url,
                 type: 1,
                 spot: tracks[i].external_urls.spotify,
                 thumbnail: tracks[i].album.images[o].url,
@@ -489,34 +541,35 @@ module.exports = class PlayCommand extends Commando.Command {
                 memberDisplayName: message.member.user.username,
                 memberAvatar: message.member.user.avatarURL('webp', false, 16)
               });
+              mesg.edit("Track processing completed").then(msg => msg.delete({ timeout: 10000 })).catch(() => { });
+              if (
+                message.guild.musicData.isPlaying == false ||
+                typeof message.guild.musicData.isPlaying == 'undefined'
+              ) {
+                message.guild.musicData.isPlaying = true;
+                return PlayCommand.playSong(message.guild.musicData.queue, message);
+              } else if (message.guild.musicData.isPlaying == true) {
+                const addedEmbed = new Discord.MessageEmbed()
+                  .setColor('##FFED00')
+                  .setTitle(`:musical_note: Spotify Track`)
+                  .addField(
+                    `Has been added to queue. `,
+                    `The track is #${message.guild.musicData.queue.length} in queue`
+                  )
+                  .setThumbnail(tracks[0].album.images[0].url)
+                  .setURL(query);
+                message.say(addedEmbed);
+                return;
+              }
+              return PlayCommand.playSong(message.guild.musicData.queue, message)
             }
           }
         }
-        break;
+       break;
     }
-    if (
-      message.guild.musicData.isPlaying == false ||
-      typeof message.guild.musicData.isPlaying == 'undefined'
-    ) {
-      message.guild.musicData.isPlaying = true;
-      return PlayCommand.playSong(message.guild.musicData.queue, message);
-    } else if (message.guild.musicData.isPlaying == true) {
-      const addedEmbed = new Discord.MessageEmbed()
-        .setColor('##FFED00')
-        .setTitle(`:musical_note: ${title}`)
-        .addField(
-          `Has been added to queue. `,
-          `This song is #${message.guild.musicData.queue.length} in queue`
-        )
-        .setThumbnail("https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg")
-        .setURL(link);
-      message.say(addedEmbed);
-      return;
-    }
-    return PlayCommand.playSong(message.guild.musicData.queue, message)
   }
   static async addSCURL(message, query, voiceChannel) {
-    const res = await fetch(`https://api.soundcloud.com/resolve?url=${query}&client_id=${process.env.SCID}`);
+    const res = await fetch(`https://api.soundcloud.com/resolve?url=${query}&client_id=${process.env.SOUNDCLOUD_ID}`);
     if (res.status !== 200) {
       message.channel.send("A problem occured while fetching the track information! Status Code: " + res.status);
       return { error: true };
@@ -545,6 +598,26 @@ module.exports = class PlayCommand extends Commando.Command {
           memberAvatar: message.member.user.avatarURL('webp', false, 16)
         });
       }
+      if (
+        message.guild.musicData.isPlaying == false ||
+        typeof message.guild.musicData.isPlaying == 'undefined'
+      ) {
+        message.guild.musicData.isPlaying = true;
+        return PlayCommand.playSong(message.guild.musicData.queue, message);
+      } else if (message.guild.musicData.isPlaying == true) {
+        const addedEmbed = new Discord.MessageEmbed()
+          .setColor('##FFED00')
+          .setTitle(`:musical_note: Playlist`)
+          .addField(
+            `Has been added to queue. `,
+            `This playlist is #${message.guild.musicData.queue.length} in queue`
+          )
+          .setThumbnail(data.artwork_url)
+          .setURL(data.permalink_url);
+        message.say(addedEmbed);
+        return;
+      }
+      return PlayCommand.playSong(message.guild.musicData.queue, message)
     } else {
       const length = Math.round(data.duration / 1000);
       const songLength = moment.duration(length, "seconds").format();
@@ -571,13 +644,13 @@ module.exports = class PlayCommand extends Commando.Command {
     } else if (message.guild.musicData.isPlaying == true) {
       const addedEmbed = new Discord.MessageEmbed()
         .setColor('##FFED00')
-        .setTitle(`:musical_note: ${title}`)
+        .setTitle(`:musical_note: Playlist`)
         .addField(
           `Has been added to queue. `,
-          `This song is #${message.guild.musicData.queue.length} in queue`
+          `This playlist is #${message.guild.musicData.queue.length} in queue`
         )
-        .setThumbnail("https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg")
-        .setURL(link);
+        .setThumbnail(data.artwork_url)
+        .setURL(data.permalink_url);
       message.say(addedEmbed);
       return;
     }
@@ -1342,7 +1415,7 @@ module.exports = class PlayCommand extends Commando.Command {
               return;
             });
         })
-      } else if (queue[0].type == 0) {
+      } else {
         await queue[0].voiceChannel.join().then(async (connection) => {
           if (queue[0].isLive) {
             const k = await module.exports.addYTURL(message, query, queue[0].type);
@@ -1355,7 +1428,7 @@ module.exports = class PlayCommand extends Commando.Command {
 
           // if (!queue[0].isLive && !queue[0].isPastLive) const dispatcher = connection.play(ytdl(queue[0].url, { filter: "audioonly", dlChunkSize: 0, highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }));
           // else if (queue[0].isPastLive) const dispatcher = connection.play(ytdl(queue[0].url, { highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }));
-          const dispatcher = connection.play(ytdl(queue[0].url, { highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } })).on('start', function () {
+          const dispatcher = connection.play(ytdl(queue[0].url, { quality: 'highestaudio', highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } })).on('start', function () {
             message.guild.musicData.songDispatcher = dispatcher;
             if (!db.get(`${message.guild.id}.serverSettings.volume`))
               dispatcher.setVolume(message.guild.musicData.volume);
