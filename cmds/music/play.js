@@ -153,7 +153,7 @@ module.exports = class PlayCommand extends Commando.Command {
       else result = await PlayCommand.searchYoutube(query, message, voiceChannel);
       //console.log(message.guild.musicData.queue)
       //console.log(result)
-      message.guild.musicData.queue.push(result)
+      //message.guild.musicData.queue.push(result)
     } catch (err) {
       await message.reply("there was an error trying to connect to the voice channel!");
       if (message.guild.me.voice.channel) await message.guild.me.voice.channel.leave();
@@ -861,7 +861,7 @@ module.exports = class PlayCommand extends Commando.Command {
       //message.guild.musicData.songDispatcher = await queue[0].voiceChannel.join();
       //let dispatcher = message.guild.musicData.songDispatcher;
 
-      //console.log(queue)
+      console.log(queue)
       const silence = await requestStream("https://raw.githubusercontent.com/anars/blank-audio/master/1-second-of-silence.mp3");
       if (queue[0].type == 4) {
         await queue[0].voiceChannel.join().then(async (connection) => {
