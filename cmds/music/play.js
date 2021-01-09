@@ -19,7 +19,6 @@ const scdl = require("soundcloud-downloader").default;
 const rp = require("request-promise-native");
 const cheerio = require("cheerio");
 const StreamConcat = require('stream-concat');
-const ph = require("@justalk/pornhub-api");
 //const { setQueue, updateQueue, getQueues } = require("./main.js");
 var cookie = { cookie: process.env.COOKIE, id: 0 };
 const youtube = new Youtube(process.env.YOUTUBE_API);
@@ -147,7 +146,6 @@ module.exports = class PlayCommand extends Commando.Command {
       else if (validSCURL(query)) result = await PlayCommand.addSCURL(message, query, voiceChannel);
       else if (validGDURL(query)) result = await PlayCommand.addGDURL(message, query, voiceChannel);
       else if (validMSURL(query)) result = await PlayCommand.addMSURL(message, query, voiceChannel);
-      else if (validPHURL(query)) result = await PlayCommand.addPHURL(message, query, voiceChannel);
       else if (validURL(query)) result = await PlayCommand.addURL(message, query, voiceChannel);
       else if (message.attachments.size > 0) result = await PlayCommand.addAttachment(message, voiceChannel);
       else result = await PlayCommand.searchYoutube(query, message, voiceChannel);
@@ -757,63 +755,17 @@ module.exports = class PlayCommand extends Commando.Command {
     } else if (message.guild.musicData.isPlaying == true) {
       const addedEmbed = new Discord.MessageEmbed()
         .setColor('##FFED00')
-        .setTitle(`:musical_note: ${title}`)
+        .setTitle(`:musical_note: ${data.title}`)
         .addField(
           `Has been added to queue. `,
           `This song is #${message.guild.musicData.queue.length} in queue`
         )
-        .setThumbnail("https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg")
-        .setURL(link);
+        .setThumbnail("https://pbs.twimg.com/profile_images/1155047958326517761/IUgssah__400x400.jpg")
+        .setURL(query);
       message.say(addedEmbed);
       return;
     }
     return PlayCommand.playSong(message.guild.musicData.queue, message)
-  }
-  static async addPHURL(message, query, voiceChannel) {
-    try {
-      const video = await ph.page(query, ["title", "duration", "download_urls"]);
-      if (video.error) throw new Error(video.error);
-      var download = "-1";
-      for (const property in video.download_urls) if (parseInt(property) < parseInt(download) || parseInt(download) < 0) download = property;
-      if (parseInt(download) < 1) throw "Cannot get any video quality";
-      var songLength = moment.duration(video.duration, "seconds").format();
-      message.guild.musicData.queue.push({
-        id: ID(),
-        title: video.title,
-        url: query,
-        type: 6,
-        time: songLength,
-        voiceChannel: voiceChannel,
-        thumbnail: "https://plasticmick.com/wp-content/uploads/2019/07/pornhub-logo.jpg",
-        isLive: false,
-        download: video.download_urls[download],
-        memberDisplayName: message.member.user.username,
-        memberAvatar: message.member.user.avatarURL('webp', false, 16)
-    });
-      if (
-        message.guild.musicData.isPlaying == false ||
-        typeof message.guild.musicData.isPlaying == 'undefined'
-      ) {
-        message.guild.musicData.isPlaying = true;
-        return PlayCommand.playSong(message.guild.musicData.queue, message);
-      } else if (message.guild.musicData.isPlaying == true) {
-        const addedEmbed = new Discord.MessageEmbed()
-          .setColor('##FFED00')
-          .setTitle(`:musical_note: ${title}`)
-          .addField(
-            `Has been added to queue. `,
-            `This song is #${message.guild.musicData.queue.length} in queue`
-          )
-          .setThumbnail("https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg")
-          .setURL(link);
-        message.say(addedEmbed);
-        return;
-      }
-      return PlayCommand.playSong(message.guild.musicData.queue, message)
-    } catch (err) {
-      if (!message.dummy) message.reply("there was an error processing the link!");
-      return { error: true };
-    }
   }
   static async addURL(message, query, voiceChannel) {
     var title = query.split("/").slice(-1)[0].split(".").slice(0, -1).join(".").replace(/_/g, " ");
@@ -857,8 +809,8 @@ module.exports = class PlayCommand extends Commando.Command {
           `Has been added to queue. `,
           `This song is #${message.guild.musicData.queue.length} in queue`
         )
-        .setThumbnail("https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg")
-        .setURL(link);
+        .setThumbnail("https://www.flaticon.com/svg/static/icons/svg/2305/2305904.svg")
+        .setURL(query);
       message.say(addedEmbed);
       return;
     }
@@ -1183,89 +1135,6 @@ module.exports = class PlayCommand extends Commando.Command {
           if (c.url.startsWith("https://www.youtube.com/embed/")) var d = ytdl(c.url);
           else var d = await requestStream(c.url);
           const dispatcher = connection.play(new StreamConcat([d, silence], { highWaterMark: 1 << 25 })).on('start', function () {
-            message.guild.musicData.songDispatcher = dispatcher;
-            if (!db.get(`${message.guild.id}.serverSettings.volume`))
-              dispatcher.setVolume(message.guild.musicData.volume);
-            else
-              dispatcher.setVolume(
-                db.get(`${message.guild.id}.serverSettings.volume`)
-              );
-
-            if (queue[1] && !message.guild.musicData.loopSong)
-              videoEmbed.addField(':track_next: Next Song:', queue[1].title);
-            message.say(videoEmbed);
-            message.guild.musicData.nowPlaying = queue[0];
-            queue.shift();
-            return;
-          })
-            .on('finish', function () {
-              queue = message.guild.musicData.queue;
-              if (message.guild.musicData.loopSong) {
-                queue.unshift(message.guild.musicData.nowPlaying);
-              } else if (message.guild.musicData.loopQueue) {
-                queue.push(message.guild.musicData.nowPlaying);
-              }
-              if (queue.length >= 1) {
-                classThis.playSong(queue, message);
-                return;
-              } else {
-                message.guild.musicData.isPlaying = false;
-                message.guild.musicData.nowPlaying = null;
-                message.guild.musicData.songDispatcher = null;
-                if (
-                  message.guild.me.voice.channel &&
-                  message.guild.musicData.skipTimer
-                ) {
-                  message.guild.me.voice.channel.leave();
-                  message.guild.musicData.skipTimer = false;
-                  return;
-                }
-                if (message.guild.me.voice.channel) {
-                  setTimeout(function onTimeOut() {
-                    if (
-                      message.guild.musicData.isPlaying == false &&
-                      message.guild.me.voice.channel
-                    ) {
-                      message.guild.me.voice.channel.leave();
-                      message.say(
-                        ':zzz: Left channel due to inactivity.'
-                      );
-                    }
-                  }, 90000);
-                }
-              }
-            })
-            .on('error', function (e) {
-              message.say(':x: Cannot play song!');
-              console.error(e);
-              if (queue.length > 1) {
-                queue.shift();
-                classThis.playSong(queue, message);
-                return;
-              }
-              message.guild.musicData.queue.length = 0;
-              message.guild.musicData.isPlaying = false;
-              message.guild.musicData.nowPlaying = null;
-              message.guild.musicData.loopSong = false;
-              message.guild.musicData.songDispatcher = null;
-              message.guild.me.voice.channel.leave();
-              return;
-            });
-        })
-      }
-      else if (queue[0].type == 6) {
-        await queue[0].voiceChannel.join().then(async (connection) => {
-          var f = await requestStream(queue[0].download);
-          if (f.statusCode != 200) {
-            const g = await module.exports.addPHURL(message, query);
-            if (g.error) throw "Failed to find video";
-            queue[0] = g;
-            queue.songs[queue.songs.indexOf(queue[0])] = queue[0];
-            updateQueue(message, queue, queue.pool);
-            f = await requestStream(queue[0].download);
-            if (f.statusCode != 200) throw new Error("Received HTTP Status Code: " + f.statusCode);
-          }
-          const dispatcher = connection.play(new StreamConcat([f, silence], { highWaterMark: 1 << 25 })).on('start', function () {
             message.guild.musicData.songDispatcher = dispatcher;
             if (!db.get(`${message.guild.id}.serverSettings.volume`))
               dispatcher.setVolume(message.guild.musicData.volume);

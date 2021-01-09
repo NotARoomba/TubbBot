@@ -16,11 +16,11 @@ module.exports = class VolumeCommand extends Commando.Command {
         {
           key: 'wantedVolume',
           prompt:
-            ':loud_sound: What volume would you like to set? from 1 to 200!',
+            ':loud_sound: What volume would you like to set? from 1 to 1000!',
           type: 'integer',
           // default: 25,
           validate: function (wantedVolume) {
-            return wantedVolume >= 1 && wantedVolume <= 200;
+            return wantedVolume >= 1 && wantedVolume <= 1000;
           }
         }
       ]
