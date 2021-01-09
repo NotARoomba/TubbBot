@@ -224,20 +224,21 @@ module.exports = class PlayCommand extends Commando.Command {
       return { error: true };
     }
     const videos = playlistInfo.items;
-    //console.log(playlistInfo)
-
-    for (const video of videos) message.guild.musicData.queue.push({
+    for (const video of videos) {
+      //console.log(video)
+      message.guild.musicData.queue.push({
       id: ID(),
       title: video.title,
       url: video.shortUrl,
       type: 0,
       time: video.duration,
-      thumbnail: video.thumbnail,
+      thumbnail: video.bestThumbnail.url,
       voiceChannel: voiceChannel,
       isLive: video.isLive,
       memberDisplayName: message.member.user.username,
       memberAvatar: message.member.user.avatarURL('webp', false, 16)
     });
+  }
     if (message.guild.musicData.isPlaying == false) {
       message.guild.musicData.isPlaying = true;
       return PlayCommand.playSong(message.guild.musicData.queue, message);
@@ -284,6 +285,7 @@ module.exports = class PlayCommand extends Commando.Command {
         thumbUrl = thumbnail.url;
       }
     }
+    console.log(songLength)
     message.guild.musicData.queue.push({
 
       id: ID(),
@@ -965,7 +967,7 @@ module.exports = class PlayCommand extends Commando.Command {
     const videoEmbed = new Discord.MessageEmbed()
       .setThumbnail(queue[0].thumbnail)
       .setColor('#FFED00')
-      .addField(':notes: Now Playing:', queue[0].title)
+      .addField(`:notes: Now Playing:`, ` [${queue[0].title}](${queue[0].url})`)
       .addField(':stopwatch: Duration:', queue[0].time)
       .setURL(queue[0].url)
       .setFooter(
@@ -1549,11 +1551,12 @@ module.exports = class PlayCommand extends Commando.Command {
             //     'There are too many songs in the queue already, skip or wait a bit'
             //   );
             // }
+            const duration = PlayCommand.formatDuration(video.duration)
             message.guild.musicData.queue.push({
               id: ID(),
               url: `https://www.youtube.com/watch?v=${video.raw.id}`,
               title: video.title,
-              time: video.duration,
+              time: duration,
               thumbnail: video.thumbnails.high.url,
               voiceChannel: voiceChannel,
               memberDisplayName: message.member.user.username,
@@ -1583,7 +1586,8 @@ module.exports = class PlayCommand extends Commando.Command {
               return;
             }
           })
-          .catch(function () {
+          .catch(function (err) {
+            console.log(err)
             if (songEmbed) {
               songEmbed.delete();
             }
