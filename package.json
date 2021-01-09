@@ -13,7 +13,6 @@
   "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "^0.3.3",
-    "@justalk/pornhub-api": "^3.4.0",
     "@vitalets/google-translate-api": "^4.0.0",
     "axios": "^0.21.1",
     "canvas": "^2.6.1",

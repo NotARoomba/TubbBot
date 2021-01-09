@@ -3,7 +3,7 @@ module.exports = class LeaveCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: 'leave',
-      aliases: ['end', 'stop'],
+      aliases: ['end'],
       group: 'music',
       memberName: 'leave',
       guildOnly: true,
@@ -46,6 +46,7 @@ module.exports = class LeaveCommand extends Commando.Command {
       setTimeout(() => {
         message.guild.musicData.songDispatcher.end();
         message.guild.me.voice.channel.leave();
+        message.say(':wave:')
       }, 100);
       return;
     } else {
@@ -55,6 +56,7 @@ module.exports = class LeaveCommand extends Commando.Command {
       message.guild.musicData.loopQueue = false;
       message.guild.musicData.songDispatcher.end();
       message.guild.me.voice.channel.leave();
+      message.say(':wave:')
       return;
     }
   }
