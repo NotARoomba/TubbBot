@@ -25,7 +25,7 @@ module.exports = class JoinCommand extends Commando.Command {
 			await voiceChannel.join();
 			return;
 		} catch {
-			message.reply(':x Something went wrong when moving channels');
+			message.reply(':x: Something went wrong when moving channels');
 			return;
 		}
 	}
