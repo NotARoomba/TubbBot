@@ -23,7 +23,7 @@ module.exports = class QueueCommand extends Commando.Command {
       .setChannel(message.channel)
       .setElementsPerPage(10)
       .formatField('# - Song', function (e) {
-        return `**${queueClone.indexOf(e) + 1}**: ${e.title}`;
+        return `**${queueClone.indexOf(e) + 1}**:  ${e.title}`;
       });
 
     queueEmbed.embed.setColor('#dbc300').setTitle('Music Queue');
