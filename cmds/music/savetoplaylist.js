@@ -1,5 +1,5 @@
-const { validURL, validYTURL, validSPURL, validGDURL, isGoodMusicVideoContent, decodeHtmlEntity, validYTPlaylistURL, validSCURL, validMSURL, validPHURL, isEquivalent, ID, requestStream, bufferToStream, moveArray } = require("@util/function.js");
-const { parseBody, getMP3 } = require("@cmds/utility/musescore.js");
+const { validURL, validYTURL, validSPURL, validGDURL, isGoodMusicVideoContent, decodeHtmlEntity, validYTPlaylistURL, validSCURL, validMSURL, ID } = require("@util/function.js");
+const { parseBody } = require("@cmds/utility/musescore.js");
 const ytdl = require("ytdl-core");
 var SpotifyWebApi = require("spotify-web-api-node");
 var spotifyApi = new SpotifyWebApi({
