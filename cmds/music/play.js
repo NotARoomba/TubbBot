@@ -1,4 +1,4 @@
-const { validURL, validYTURL, validSPURL, validGDURL, isGoodMusicVideoContent, decodeHtmlEntity, validYTPlaylistURL, validSCURL, validMSURL, validPHURL, isEquivalent, ID, requestStream, bufferToStream, moveArray } = require("@util/function.js");
+const { validURL, validYTURL, validSPURL, validGDURL, isGoodMusicVideoContent, decodeHtmlEntity, validYTPlaylistURL, validSCURL, validMSURL, validPHURL, isEquivalent, ID, requestStream, bufferToStream } = require("@util/function.js");
 const { parseBody, getMP3 } = require("@cmds/utility/musescore.js");
 const ytdl = require("ytdl-core");
 var SpotifyWebApi = require("spotify-web-api-node");
@@ -227,18 +227,18 @@ module.exports = class PlayCommand extends Commando.Command {
     for (const video of videos) {
       //console.log(video)
       message.guild.musicData.queue.push({
-      id: ID(),
-      title: video.title,
-      url: video.shortUrl,
-      type: 0,
-      time: video.duration,
-      thumbnail: video.bestThumbnail.url,
-      voiceChannel: voiceChannel,
-      isLive: video.isLive,
-      memberDisplayName: message.member.user.username,
-      memberAvatar: message.member.user.avatarURL('webp', false, 16)
-    });
-  }
+        id: ID(),
+        title: video.title,
+        url: video.shortUrl,
+        type: 0,
+        time: video.duration,
+        thumbnail: video.bestThumbnail.url,
+        voiceChannel: voiceChannel,
+        isLive: video.isLive,
+        memberDisplayName: message.member.user.username,
+        memberAvatar: message.member.user.avatarURL('webp', false, 16)
+      });
+    }
     if (message.guild.musicData.isPlaying == false) {
       message.guild.musicData.isPlaying = true;
       return PlayCommand.playSong(message.guild.musicData.queue, message);
@@ -565,7 +565,7 @@ module.exports = class PlayCommand extends Commando.Command {
             }
           }
         }
-       break;
+        break;
     }
   }
   static async addSCURL(message, query, voiceChannel) {
