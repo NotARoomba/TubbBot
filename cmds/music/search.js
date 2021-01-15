@@ -56,7 +56,7 @@ module.exports = class SearchSongCommand extends Commando.Command {
         }
         vidNameArr.push('cancel');
         const embed = new Discord.MessageEmbed()
-            .setColor('#ff0000')
+            .setColor('#FFED00')
             .setTitle(`:mag: Search Results!`)
             .addField(':notes: Result 1', vidNameArr[0])
             .setURL(videos[0].url)
@@ -133,7 +133,7 @@ module.exports = class SearchSongCommand extends Commando.Command {
                             PlayCommand.playSong(message.guild.musicData.queue, message);
                         } else if (message.guild.musicData.isPlaying == true) {
                             const addedEmbed = new Discord.MessageEmbed()
-                                .setColor('#ff0000')
+                                .setColor('#FFED00')
                                 .setTitle(`:musical_note: ${video.title}`)
                                 .addField(
                                     `Has been added to queue. `,
