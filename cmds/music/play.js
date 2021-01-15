@@ -285,7 +285,7 @@ module.exports = class PlayCommand extends Commando.Command {
         thumbUrl = thumbnail.url;
       }
     }
-    console.log(songLength)
+    //console.log(songLength)
     message.guild.musicData.queue.push({
 
       id: ID(),
