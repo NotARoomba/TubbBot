@@ -18,17 +18,13 @@ module.exports = class VolumeCommand extends Commando.Command {
           prompt:
             ':loud_sound: What volume would you like to set? from 1 to 1000!',
           type: 'integer',
-          default: null,
-          validate: function (wantedVolume) {
-            return wantedVolume >= 1 && wantedVolume <= 1000;
-          }
+          default: 'NaN',
         }
       ]
     });
   }
 
   run(message, { wantedVolume }) {
-
     client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     const voiceChannel = message.member.voice.channel;
     if (!voiceChannel)
@@ -47,6 +43,8 @@ module.exports = class VolumeCommand extends Commando.Command {
       );
       return;
     }
+    if (wantedVolume == 'NaN') return message.say(`The volume is currently at ${message.guild.musicData.volume}%`)
+    if (!wantedVolume >= 1 && wantedVolume <= 1000) return message.say(`Please make sure that the volume is within 1-1000`)
     const volume = wantedVolume / 100;
     message.guild.musicData.volume = volume;
     message.guild.musicData.songDispatcher.setVolume(volume);
