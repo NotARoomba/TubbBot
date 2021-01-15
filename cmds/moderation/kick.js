@@ -32,7 +32,7 @@ module.exports = class KickCommand extends Commando.Command {
     const user =
       message.mentions.members.first()
     if (user == undefined)
-      return message.channel.send(':x: Please try again with a valid user.');
+      return message.channel.send('Please try again with a valid user.');
     user
       .kick(reason)
       .then(() => {
@@ -44,7 +44,7 @@ module.exports = class KickCommand extends Commando.Command {
       })
       .catch(err => {
         message.say(
-          ':x: Something went wrong when trying to kick this user, I probably do not have the permission to kick him!'
+          'Something went wrong when trying to kick this user, I probably do not have the permission to kick him!'
         );
         return console.error(err);
       });

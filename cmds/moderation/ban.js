@@ -31,7 +31,7 @@ module.exports = class BanCommand extends Commando.Command {
     const user =
       message.mentions.members.first()
     if (user == undefined || 'all')
-      return message.channel.send(':x: Please try again with a valid user.');
+      return message.channel.send('Please try again with a valid user.');
     user
       .ban({ reason: reason })
       .then(() => {
@@ -43,7 +43,7 @@ module.exports = class BanCommand extends Commando.Command {
       })
       .catch(err => {
         message.say(
-          ':x: Something went wrong when trying to ban this user, I probably do not have the permission to ban him!'
+          'Something went wrong when trying to ban this user, I probably do not have the permission to ban him!'
         );
         return console.error(err);
       });

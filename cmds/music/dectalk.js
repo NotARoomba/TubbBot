@@ -46,7 +46,7 @@ module.exports = class DECTalkCommand extends Commando.Command {
 		var voiceChannel = message.member.voice.channel;
 		if (!voiceChannel)
 			return message.reply(
-				':no_entry: Please join a voice channel and try again!'
+				'Please join a voice channel and try again!'
 			);
 
 
@@ -59,37 +59,37 @@ module.exports = class DECTalkCommand extends Commando.Command {
 		if (
 			typeof message.guild.musicData.songDispatcher == 'undefined' ||
 			message.guild.musicData.songDispatcher == null
-		  ) {
-				try {
-					reactIfAble(message, this.client.user, '💬');
-					const { body } = await request
-						.get('http://tts.cyzon.us/tts')
-						.query({ text });
-					connection.play(Readable.from([body]));
-					reactIfAble(message, this.client.user, '🔉');
-					return null;
-				} catch (err) {
-					reactIfAble(message, this.client.user, '⚠️');
-					return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
-				}
-	} else {
-		
-		try {
-			message.guild.musicData.loopSong = false;
-			message.guild.musicData.songDispatcher.end();
-			message.guild.musicData.songDispatcher.pause();
-			reactIfAble(message, this.client.user, '💬');
-			const { body } = await request
-				.get('http://tts.cyzon.us/tts')
-				.query({ text });
-			connection.play(Readable.from([body]));
-			reactIfAble(message, this.client.user, '🔉');
-			message.say(`Song skipped and paused because dectalk terminates the stream`)
-			return null;
-		} catch (err) {
-			reactIfAble(message, this.client.user, '⚠️');
-	}
-	
-} 
-};
+		) {
+			try {
+				reactIfAble(message, this.client.user, '💬');
+				const { body } = await request
+					.get('http://tts.cyzon.us/tts')
+					.query({ text });
+				connection.play(Readable.from([body]));
+				reactIfAble(message, this.client.user, '🔉');
+				return null;
+			} catch (err) {
+				reactIfAble(message, this.client.user, '⚠️');
+				return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
+			}
+		} else {
+
+			try {
+				message.guild.musicData.loopSong = false;
+				message.guild.musicData.songDispatcher.end();
+				message.guild.musicData.songDispatcher.pause();
+				reactIfAble(message, this.client.user, '💬');
+				const { body } = await request
+					.get('http://tts.cyzon.us/tts')
+					.query({ text });
+				connection.play(Readable.from([body]));
+				reactIfAble(message, this.client.user, '🔉');
+				message.say(`Song skipped and paused because dectalk terminates the stream`)
+				return null;
+			} catch (err) {
+				reactIfAble(message, this.client.user, '⚠️');
+			}
+
+		}
+	};
 }
