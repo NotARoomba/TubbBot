@@ -19,7 +19,7 @@ module.exports = class NowPlayingCommand extends Commando.Command {
         !message.guild.musicData.nowPlaying)
     ) {
       return message.say(
-        ':no_entry: Please join a voice channel and try again!'
+        'Please join a voice channel and try again!'
       );
     }
 

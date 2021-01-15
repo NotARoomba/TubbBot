@@ -15,7 +15,7 @@ module.exports = class LoopCommand extends Commando.Command {
 
     client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     if (!message.guild.musicData.isPlaying) {
-      return message.say(':x: There is no song playing right now!');
+      return message.say('There is no song playing right now!');
     } else if (
       message.member.voice.channel.id !== message.guild.me.voice.channel.id
     ) {

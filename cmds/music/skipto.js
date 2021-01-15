@@ -24,28 +24,28 @@ module.exports = class SkipToCommand extends Commando.Command {
 
     client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     if (songNumber < 1 && songNumber >= message.guild.musicData.queue.length) {
-      return message.reply(':x: Please enter a valid song number!');
+      return message.reply('Please enter a valid song number!');
     }
     var voiceChannel = message.member.voice.channel;
     if (!voiceChannel)
       return message.reply(
-        ':no_entry: Please join a voice channel and try again!'
+        'Please join a voice channel and try again!'
       );
 
     if (
       typeof message.guild.musicData.songDispatcher == 'undefined' ||
       message.guild.musicData.songDispatcher == null
     ) {
-      return message.reply(':x: There is no song playing right now!');
+      return message.reply('There is no song playing right now!');
     } else if (voiceChannel.id !== message.guild.me.voice.channel.id) {
       message.reply(
-        `:no_entry: You must be in the same voice channel as the bot's in order to use that!`
+        `You must be in the same voice channel as the bot's in order to use that!`
       );
       return;
     }
 
     if (message.guild.musicData.queue < 1) {
-      message.say(':x: There are no songs in queue!');
+      message.say('There are no songs in queue!');
       return;
     }
 
@@ -53,6 +53,7 @@ module.exports = class SkipToCommand extends Commando.Command {
       message.guild.musicData.queue.splice(0, songNumber - 1);
       message.guild.musicData.loopSong = false;
       message.guild.musicData.songDispatcher.end();
+      message.react(':ok_hand:');
     } else if (message.guild.musicData.loopQueue) {
       const slicedBefore = message.guild.musicData.queue.slice(
         0,
@@ -61,6 +62,7 @@ module.exports = class SkipToCommand extends Commando.Command {
       const slicedAfter = message.guild.musicData.queue.slice(songNumber - 1);
       message.guild.musicData.queue = slicedAfter.concat(slicedBefore);
       message.guild.musicData.songDispatcher.end();
+      message.react(':ok_hand:');
     }
   }
 };

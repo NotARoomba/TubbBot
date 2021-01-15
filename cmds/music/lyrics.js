@@ -34,7 +34,7 @@ module.exports = class LyricsCommand extends Commando.Command {
       songName = message.guild.musicData.nowPlaying.title;
     } else if (songName == '' && !message.guild.musicData.isPlaying) {
       return message.say(
-        ':no_entry: There is no song playing right now, please try again with a song name or play a song first!'
+        'There is no song playing right now, please try again with a song name or play a song first!'
       );
     }
     const sentMessage = await message.channel.send(
@@ -58,7 +58,7 @@ module.exports = class LyricsCommand extends Commando.Command {
               .then(function (lyrics) {
                 if (lyrics.length > 4095) {
                   message.say(
-                    ':x: Lyrics are too long to be returned in a message embed!'
+                    'Lyrics are too long to be returned in a message embed!'
                   );
                   return;
                 }
@@ -111,7 +111,7 @@ module.exports = class LyricsCommand extends Commando.Command {
         const songPath = result.response.hits[0].result.api_path;
         resolve(`https://api.genius.com${songPath}`);
       } catch (e) {
-        reject(':x: No song has been found for this query');
+        reject('No song has been found for this query');
       }
     });
   }
@@ -125,7 +125,7 @@ module.exports = class LyricsCommand extends Commando.Command {
         const body = await fetch(url, { headers });
         const result = await body.json();
         if (!result.response.song.url) {
-          reject(':x: There was a problem finding a URL for this song');
+          reject('There was a problem finding a URL for this song');
         } else {
           resolve(result.response.song.url);
         }
