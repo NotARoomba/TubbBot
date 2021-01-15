@@ -43,7 +43,7 @@ module.exports = class VolumeCommand extends Commando.Command {
       );
       return;
     }
-    if (wantedVolume == 'NaN') return message.say(`The volume is currently at ${message.guild.musicData.volume}%`)
+    if (wantedVolume == 'NaN') return message.say(`The volume is currently at ${message.guild.musicData.volume * 100}%`)
     if (!wantedVolume >= 1 && wantedVolume <= 1000) return message.say(`Please make sure that the volume is within 1-1000`)
     const volume = wantedVolume / 100;
     message.guild.musicData.volume = volume;
