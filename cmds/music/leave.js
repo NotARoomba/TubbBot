@@ -3,7 +3,7 @@ module.exports = class LeaveCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: 'leave',
-      aliases: ['end'],
+      aliases: ['end', 'stop'],
       group: 'music',
       memberName: 'leave',
       guildOnly: true,
@@ -16,7 +16,7 @@ module.exports = class LeaveCommand extends Commando.Command {
     client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     var voiceChannel = message.member.voice.channel;
     if (!voiceChannel) {
-      message.reply(':no_entry: Please join a voice channel and try again!');
+      message.reply('Please join a voice channel and try again!');
       return;
     } else if (
       typeof message.guild.musicData.songDispatcher == 'undefined' ||
@@ -28,16 +28,16 @@ module.exports = class LeaveCommand extends Commando.Command {
       ) {
         message.guild.me.voice.channel.leave();
       } else {
-        message.reply(':x: There is no song playing right now!');
+        message.reply('There is no song playing right now!');
       }
       return;
     } else if (voiceChannel.id !== message.guild.me.voice.channel.id) {
       message.reply(
-        `:no_entry: You must be in the same voice channel as the bot's in order to use that!`
+        `You must be in the same voice channel as the bot's in order to use that!`
       );
       return;
     } else if (!message.guild.musicData.queue) {
-      message.reply(':x: There are no songs in queue');
+      message.reply('There are no songs in queue');
       return;
     } else if (message.guild.musicData.songDispatcher.paused) {
       message.guild.musicData.songDispatcher.resume();

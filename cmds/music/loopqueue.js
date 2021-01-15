@@ -23,21 +23,21 @@ module.exports = class LoopQueueCommand extends Commando.Command {
 
     client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
     if (!message.guild.musicData.isPlaying) {
-      message.say(':x: There is no song playing right now!');
+      message.say('There is no song playing right now!');
       return;
     } else if (
       message.member.voice.channel.id !== message.guild.me.voice.channel.id
     ) {
       message.reply(
-        `:no_entry: You must be in the same voice channel as the bot's in order to use that!`
+        `You must be in the same voice channel as the bot's in order to use that!`
       );
       return;
     } else if (message.guild.musicData.queue.length == 0) {
-      message.say(`:x: I can't loop over an empty queue!`);
+      message.say(`I can't loop over an empty queue!`);
       return;
     } else if (message.guild.musicData.loopSong) {
       message.reply(
-        ':x: Turn off the **loop** Commando.Command before using the **loopqueue** Commando.Command'
+        'Turn off the **loop** command before using the **loopqueue** command'
       );
       return;
     }
