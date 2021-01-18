@@ -1,4 +1,4 @@
-const { validURL, validYTURL, validSPURL, validGDURL, isGoodMusicVideoContent, decodeHtmlEntity, validYTPlaylistURL, validSCURL, validMSURL, validPHURL, isEquivalent, ID, requestStream, bufferToStream } = require("@util/function.js");
+const { validURL, validYTURL, validGDFolderURL, validSPURL, validGDURL, isGoodMusicVideoContent, decodeHtmlEntity, validYTPlaylistURL, validSCURL, validMSURL, validPHURL, isEquivalent, ID, requestStream, bufferToStream } = require("@util/function.js");
 const { parseBody, getMP3 } = require("@cmds/utility/musescore.js");
 const ytdl = require("ytdl-core");
 var SpotifyWebApi = require("spotify-web-api-node");
@@ -145,6 +145,7 @@ module.exports = class PlayCommand extends Commando.Command {
       else if (validSPURL(query)) result = await PlayCommand.addSPURL(message, query, voiceChannel);
       else if (validSCURL(query)) result = await PlayCommand.addSCURL(message, query, voiceChannel);
       else if (validGDURL(query)) result = await PlayCommand.addGDURL(message, query, voiceChannel);
+      else if (validGDFolderURL(query)) result = await PlayCommand.addGDFolderURL(message, query, voiceChannel);
       else if (validMSURL(query)) result = await PlayCommand.addMSURL(message, query, voiceChannel);
       else if (validURL(query)) result = await PlayCommand.addURL(message, query, voiceChannel);
       else if (message.attachments.size > 0) result = await PlayCommand.addAttachment(message, voiceChannel);
