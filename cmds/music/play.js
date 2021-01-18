@@ -322,6 +322,41 @@ module.exports = class PlayCommand extends Commando.Command {
     }
     return PlayCommand.playSong(message.guild.musicData.queue, message)
   }
+  static async addGDFolderURL(message, args) {
+    const songs = [];
+    try {
+      const body = await rp(args.slice(1).join(" "));
+      const $ = cheerio.load(body);
+      const elements = $("div[data-target='doc']");
+      for (const el of elements.toArray()) {
+        const id = el.attribs["data-id"];
+        const link = "https://drive.google.com/uc?export=download&id=" + id;
+        const stream = await fetch(link).then(res => res.body);
+        var title = "No Title";
+        try {
+          const metadata = await mm.parseStream(stream, {}, { duration: true });
+          if (!metadata) continue;
+          const html = await rp("https://drive.google.com/file/d/" + id + "/view");
+          const $1 = cheerio.load(html);
+          title = $1("title").text().split(" - ").slice(0, -1).join(" - ").split(".").slice(0, -1).join(".");
+          const songLength = moment.duration(Math.round(metadata.format.duration), "seconds").format();
+          songs.push({
+            id: ID(),
+            title: title,
+            url: link,
+            type: 4,
+            time: songLength,
+            volume: 1,
+            thumbnail: "https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg",
+            isLive: false
+          });
+        } catch (err) { }
+      }
+    } catch (err) {
+      await message.reply("there was an error trying to open your link!");
+    }
+    return { error: false, songs: songs };
+  }
   static async addSPURL(message, query, voiceChannel) {
     const d = await spotifyApi.clientCredentialsGrant();
     spotifyApi.setAccessToken(d.body.access_token);
