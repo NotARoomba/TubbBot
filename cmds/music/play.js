@@ -139,20 +139,21 @@ module.exports = class PlayCommand extends Commando.Command {
       }
     }
     try {
-      if (validYTPlaylistURL(query)) await PlayCommand.addYTPlaylist(message, query, voiceChannel);
-      else if (validYTURL(query)) await PlayCommand.addYTURL(message, query), voiceChannel;
-      else if (validSPURL(query)) await PlayCommand.addSPURL(message, query, voiceChannel);
-      else if (validSCURL(query)) await PlayCommand.addSCURL(message, query, voiceChannel);
-      else if (validGDURL(query)) await PlayCommand.addGDURL(message, query, voiceChannel);
-      else if (validGDFolderURL(query)) await PlayCommand.addGDFolderURL(message, query, voiceChannel);
-      else if (validMSURL(query)) await PlayCommand.addMSURL(message, query, voiceChannel);
-      else if (validURL(query)) await PlayCommand.addURL(message, query, voiceChannel);
-      else if (message.attachments.size > 0) await PlayCommand.addAttachment(message, voiceChannel);
-      else await PlayCommand.searchYoutube(query, message, voiceChannel);
+      if (validYTPlaylistURL(query)) result = await PlayCommand.addYTPlaylist(message, query, voiceChannel);
+      else if (validYTURL(query)) result = await PlayCommand.addYTURL(message, query), voiceChannel;
+      else if (validSPURL(query)) result = await PlayCommand.addSPURL(message, query, voiceChannel);
+      else if (validSCURL(query)) result = await PlayCommand.addSCURL(message, query, voiceChannel);
+      else if (validGDURL(query)) result = await PlayCommand.addGDURL(message, query, voiceChannel);
+      else if (validGDFolderURL(query)) result = await PlayCommand.addGDFolderURL(message, query, voiceChannel);
+      else if (validMSURL(query)) result = await PlayCommand.addMSURL(message, query, voiceChannel);
+      else if (validURL(query)) result = await PlayCommand.addURL(message, query, voiceChannel);
+      else if (message.attachments.size > 0) result = await PlayCommand.addAttachment(message, voiceChannel);
+      else result = await PlayCommand.searchYoutube(query, message, voiceChannel);
       //console.log(message.guild.musicData.queue)
       //console.log(result)
       //message.guild.musicData.queue.push(result)
     } catch (err) {
+      console.log(result)
       await message.reply("there was an error trying to connect to the voice channel!");
       if (message.guild.me.voice.channel) await message.guild.me.voice.channel.leave();
       console.log(err);
@@ -326,14 +327,12 @@ module.exports = class PlayCommand extends Commando.Command {
       const body = await rp(query);
       const $ = cheerio.load(body);
       const elements = $("div[data-target='doc']");
-      message.channel.send(`Loading metadata, depending on the size of the folder this may take a few minutes.`);
       for (const el of elements.toArray()) {
         const id = el.attribs["data-id"];
         const link = "https://drive.google.com/uc?export=download&id=" + id;
         const stream = await fetch(link).then(res => res.body);
         var title = "No Title";
         try {
-          //console.log(stream)
           const metadata = await mm.parseStream(stream, {}, { duration: true });
           if (!metadata) continue;
           const html = await rp("https://drive.google.com/file/d/" + id + "/view");
@@ -356,30 +355,30 @@ module.exports = class PlayCommand extends Commando.Command {
           console.log(err)
         }
       }
+      if (
+        message.guild.musicData.isPlaying == false ||
+        typeof message.guild.musicData.isPlaying == 'undefined'
+      ) {
+        message.guild.musicData.isPlaying = true;
+        return PlayCommand.playSong(message.guild.musicData.queue, message);
+      } else if (message.guild.musicData.isPlaying == true) {
+        const addedEmbed = new Discord.MessageEmbed()
+          .setColor('##FFED00')
+          .setTitle(`:musical_note: Google Drive Folder`)
+          .addField(
+            `Has been added to queue. `,
+            `The tracks are #${message.guild.musicData.queue.length} in queue`
+          )
+          .setThumbnail('https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg')
+          .setURL(query);
+        message.say(addedEmbed);
+        return;
+      }
+      return PlayCommand.playSong(message.guild.musicData.queue, message);
     } catch (err) {
       console.log(err)
       await message.reply("there was an error trying to open your link!");
     }
-    if (
-      message.guild.musicData.isPlaying == false ||
-      typeof message.guild.musicData.isPlaying == 'undefined'
-    ) {
-      message.guild.musicData.isPlaying = true;
-      return PlayCommand.playSong(message.guild.musicData.queue, message);
-    } else if (message.guild.musicData.isPlaying == true) {
-      const addedEmbed = new Discord.MessageEmbed()
-        .setColor('##FFED00')
-        .setTitle(`:musical_note: Google Drive Folder`)
-        .addField(
-          `Has been added to queue. `,
-          `The tracks are #${message.guild.musicData.queue.length} in queue`
-        )
-        .setThumbnail('https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg')
-        .setURL(query);
-      message.say(addedEmbed);
-      return;
-    }
-    return PlayCommand.playSong(message.guild.musicData.queue, message);
   }
   static async addSPURL(message, query, voiceChannel) {
     const d = await spotifyApi.clientCredentialsGrant();
