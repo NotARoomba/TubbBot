@@ -338,7 +338,7 @@ module.exports = class PlayCommand extends Commando.Command {
           const $1 = cheerio.load(html);
           title = $1("title").text().split(" - ").slice(0, -1).join(" - ").split(".").slice(0, -1).join(".");
           const songLength = moment.duration(Math.round(metadata.format.duration), "seconds").format();
-          message.guild.musicData.queue.push({
+          await message.guild.musicData.queue.push({
             id: ID(),
             title: title,
             url: link,
@@ -884,7 +884,7 @@ module.exports = class PlayCommand extends Commando.Command {
     return (url.match(p)) ? RegExp.$1 : false;
   }
   static async playSong(queue, message, seek = 0) {
-    console.log(queue)
+    //console.log(queue)
     const classThis = this; // use classThis instead of 'this' because of lexical scope below
     if (typeof queue[0].voiceChannel == 'undefined') {
       // happens when loading a saved playlist
