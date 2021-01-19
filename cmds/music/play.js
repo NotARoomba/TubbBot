@@ -218,7 +218,7 @@ module.exports = class PlayCommand extends Commando.Command {
     } catch (err) {
       if (err.message === "This playlist is private.") message.channel.send("The playlist is private!");
       else {
-        console.error(err);
+        console.log(err);
         message.reply("there was an error trying to fetch your playlist!");
       }
       return { error: true };
@@ -264,14 +264,14 @@ module.exports = class PlayCommand extends Commando.Command {
     } catch (err) {
       if (!message.dummy) message.channel.send("Failed to get video data!");
       if (err.message.toLowerCase() == "input stream: Status code: 429".toLowerCase()) {
-        console.error("Received 429 error. Changing ytdl-core cookie...");
+        console.log("Received 429 error. Changing ytdl-core cookie...");
         cookie.id++;
         if (!process.env[`COOKIE${cookie.id}`]) {
           cookie.cookie = process.env.COOKIE;
           cookie.id = 0;
         }
         else cookie.cookie = process.env[`COOKIE${cookie.id}`];
-      } else console.error(err);
+      } else console.log(err);
       return { error: true };
     }
     var length = parseInt(songInfo.videoDetails.lengthSeconds);
@@ -388,7 +388,7 @@ module.exports = class PlayCommand extends Commando.Command {
     const d = await spotifyApi.clientCredentialsGrant();
     spotifyApi.setAccessToken(d.body.access_token);
     spotifyApi.setRefreshToken(process.env.SPOTIFY_REFRESH);
-    const refreshed = await spotifyApi.refreshAccessToken().catch(console.error);
+    const refreshed = await spotifyApi.refreshAccessToken().catch(console.log);
     console.log("Refreshed Spotify Access Token");
     await spotifyApi.setAccessToken(refreshed.body.access_token);
     var url_array = query.replace("https://", "").split("/");
@@ -976,7 +976,7 @@ module.exports = class PlayCommand extends Commando.Command {
             })
             .on('error', function (e) {
               message.say('Cannot play song!');
-              console.error(e);
+              console.log(e);
               if (queue.length > 1) {
                 queue.shift();
                 classThis.playSong(queue, message);
@@ -1049,7 +1049,7 @@ module.exports = class PlayCommand extends Commando.Command {
             })
             .on('error', function (e) {
               message.say('Cannot play song!');
-              console.error(e);
+              console.log(e);
               if (queue.length > 1) {
                 queue.shift();
                 classThis.playSong(queue, message);
@@ -1127,7 +1127,7 @@ module.exports = class PlayCommand extends Commando.Command {
             })
             .on('error', function (e) {
               message.say('Cannot play song!');
-              console.error(e);
+              console.log(e);
               if (queue.length > 1) {
                 queue.shift();
                 classThis.playSong(queue, message);
@@ -1207,7 +1207,7 @@ module.exports = class PlayCommand extends Commando.Command {
             })
             .on('error', function (e) {
               message.say('Cannot play song!');
-              console.error(e);
+              console.log(e);
               if (queue.length > 1) {
                 queue.shift();
                 classThis.playSong(queue, message);
@@ -1290,7 +1290,7 @@ module.exports = class PlayCommand extends Commando.Command {
             })
             .on('error', function (e) {
               message.say('Cannot play song!');
-              console.error(e);
+              console.log(e);
               if (queue.length > 1) {
                 queue.shift();
                 classThis.playSong(queue, message);
@@ -1307,7 +1307,7 @@ module.exports = class PlayCommand extends Commando.Command {
         })
       }
     } catch (err) {
-      console.error(err);
+      console.log(err);
       message.say(`An error occured, please try`)
       return
     }
@@ -1378,7 +1378,7 @@ module.exports = class PlayCommand extends Commando.Command {
     // })
     // .on('error', function (e) {
     //   message.say('Cannot play song!');
-    //   console.error(e);
+    //   console.log(e);
     //   if (queue.length > 1) {
     //     queue.shift();
     //     classThis.playSong(queue, message);
