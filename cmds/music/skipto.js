@@ -53,6 +53,7 @@ module.exports = class SkipToCommand extends Commando.Command {
       message.guild.musicData.queue.splice(0, songNumber - 1);
       message.guild.musicData.loopSong = false;
       message.guild.musicData.songDispatcher.end();
+      message.react("👌");
     } else if (message.guild.musicData.loopQueue) {
       const slicedBefore = message.guild.musicData.queue.slice(
         0,
@@ -61,6 +62,7 @@ module.exports = class SkipToCommand extends Commando.Command {
       const slicedAfter = message.guild.musicData.queue.slice(songNumber - 1);
       message.guild.musicData.queue = slicedAfter.concat(slicedBefore);
       message.guild.musicData.songDispatcher.end();
+      message.react("👌");
     }
   }
 };
