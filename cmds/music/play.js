@@ -327,14 +327,12 @@ module.exports = class PlayCommand extends Commando.Command {
       const body = await rp(query);
       const $ = cheerio.load(body);
       const elements = $("div[data-target='doc']");
-      message.channel.send(`Loading metadata, depending on the size of the folder this may take a few minutes.`);
       for (const el of elements.toArray()) {
         const id = el.attribs["data-id"];
         const link = "https://drive.google.com/uc?export=download&id=" + id;
         const stream = await fetch(link).then(res => res.body);
         var title = "No Title";
         try {
-          //console.log(stream)
           const metadata = await mm.parseStream(stream, {}, { duration: true });
           if (!metadata) continue;
           const html = await rp("https://drive.google.com/file/d/" + id + "/view");
@@ -357,30 +355,30 @@ module.exports = class PlayCommand extends Commando.Command {
           console.log(err)
         }
       }
+      if (
+        message.guild.musicData.isPlaying == false ||
+        typeof message.guild.musicData.isPlaying == 'undefined'
+      ) {
+        message.guild.musicData.isPlaying = true;
+        return PlayCommand.playSong(message.guild.musicData.queue, message);
+      } else if (message.guild.musicData.isPlaying == true) {
+        const addedEmbed = new Discord.MessageEmbed()
+          .setColor('##FFED00')
+          .setTitle(`:musical_note: Google Drive Folder`)
+          .addField(
+            `Has been added to queue. `,
+            `The tracks are #${message.guild.musicData.queue.length} in queue`
+          )
+          .setThumbnail('https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg')
+          .setURL(query);
+        message.say(addedEmbed);
+        return;
+      }
+      return PlayCommand.playSong(message.guild.musicData.queue, message);
     } catch (err) {
       console.log(err)
       await message.reply("there was an error trying to open your link!");
     }
-    if (
-      message.guild.musicData.isPlaying == false ||
-      typeof message.guild.musicData.isPlaying == 'undefined'
-    ) {
-      message.guild.musicData.isPlaying = true;
-      return PlayCommand.playSong(message.guild.musicData.queue, message);
-    } else if (message.guild.musicData.isPlaying == true) {
-      const addedEmbed = new Discord.MessageEmbed()
-        .setColor('##FFED00')
-        .setTitle(`:musical_note: Google Drive Folder`)
-        .addField(
-          `Has been added to queue. `,
-          `The tracks are #${message.guild.musicData.queue.length} in queue`
-        )
-        .setThumbnail('https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg')
-        .setURL(query);
-      message.say(addedEmbed);
-      return;
-    }
-    return PlayCommand.playSong(message.guild.musicData.queue, message);
   }
   static async addSPURL(message, query, voiceChannel) {
     const d = await spotifyApi.clientCredentialsGrant();
