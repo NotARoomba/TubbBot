@@ -360,7 +360,7 @@ module.exports = class PlayCommand extends Commando.Command {
       clearInterval(interval);
       mesg.edit(`Track processing completed`).then(msg => msg.delete({ timeout: 10000 }).catch(() => { })).catch(() => { });
     } catch (err) {
-      console.log(error)
+      console.log(err)
       await message.reply("there was an error trying to open your link!");
     }
     if (
