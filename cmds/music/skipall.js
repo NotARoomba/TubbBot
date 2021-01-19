@@ -37,6 +37,6 @@ module.exports = class SkipAllCommand extends Commando.Command {
     message.guild.musicData.loopSong = false;
     message.guild.musicData.loopQueue = false;
     message.guild.musicData.songDispatcher.end();
-    return message.react('👌');
+    return message.react(':ok_hand:');
   }
 };
