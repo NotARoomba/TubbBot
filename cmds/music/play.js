@@ -323,11 +323,12 @@ module.exports = class PlayCommand extends Commando.Command {
   }
   static async addGDFolderURL(message, query, voiceChannel) {
     try {
+      const songs = []
       const body = await rp(query);
       const $ = cheerio.load(body);
       const elements = $("div[data-target='doc']");
-      var mesg = await message.channel.send(`Processing track: **0/${videos.length}**`);
-      var interval = setInterval(() => (songs.length < videos.length) ? mesg.edit(`Processing track: **${songs.length - 1}/${videos.length}**`).catch(() => { }) : undefined, 1000);
+      var mesg = await message.channel.send(`Processing track: **0/${elements.length}**`);
+      var interval = setInterval(() => (songs.length < elements.length) ? mesg.edit(`Processing track: **${songs.length - 1}/${elements.length}**`).catch(() => { }) : undefined, 1000);
       for (const el of elements.toArray()) {
         const id = el.attribs["data-id"];
         const link = "https://drive.google.com/uc?export=download&id=" + id;
@@ -341,7 +342,7 @@ module.exports = class PlayCommand extends Commando.Command {
           const $1 = cheerio.load(html);
           title = $1("title").text().split(" - ").slice(0, -1).join(" - ").split(".").slice(0, -1).join(".");
           const songLength = moment.duration(Math.round(metadata.format.duration), "seconds").format();
-          message.guild.musicData.queue.push({
+          songs.push({
             id: ID(),
             title: title,
             url: link,
@@ -359,8 +360,9 @@ module.exports = class PlayCommand extends Commando.Command {
       }
       clearInterval(interval);
       mesg.edit(`Track processing completed`).then(msg => msg.delete({ timeout: 10000 }).catch(() => { })).catch(() => { });
+      message.guild.musicData.queue.push(songs)
     } catch (err) {
-      console.log(error)
+      console.log(err)
       await message.reply("there was an error trying to open your link!");
     }
     if (
