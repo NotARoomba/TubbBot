@@ -891,7 +891,7 @@ module.exports = class PlayCommand extends Commando.Command {
     return (url.match(p)) ? RegExp.$1 : false;
   }
   static async playSong(queue, message, seek = 0) {
-    //console.log(queue[0])
+    console.log(queue[0])
     const classThis = this; // use classThis instead of 'this' because of lexical scope below
     if (typeof queue[0].voiceChannel == 'undefined') {
       // happens when loading a saved playlist
