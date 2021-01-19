@@ -20,7 +20,12 @@ module.exports = class SkipAllCommand extends Commando.Command {
         'Please join a voice channel and try again!'
       );
 
-    if (voiceChannel.id !== message.guild.me.voice.channel.id) {
+    if (
+      typeof message.guild.musicData.songDispatcher == 'undefined' ||
+      message.guild.musicData.songDispatcher == null
+    ) {
+      return message.reply('There is no song playing right now!');
+    } else if (voiceChannel.id !== message.guild.me.voice.channel.id) {
       message.reply(
         `You must be in the same voice channel as the bot's in order to use that!`
       );
