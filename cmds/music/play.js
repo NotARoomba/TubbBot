@@ -326,13 +326,15 @@ module.exports = class PlayCommand extends Commando.Command {
       const body = await rp(query);
       const $ = cheerio.load(body);
       const elements = $("div[data-target='doc']");
+      var mesg = await message.channel.send(`Processing track: **0/${videos.length}**`);
+      var interval = setInterval(() => (songs.length < videos.length) ? mesg.edit(`Processing track: **${songs.length - 1}/${videos.length}**`).catch(() => { }) : undefined, 1000);
       for (const el of elements.toArray()) {
         const id = el.attribs["data-id"];
         const link = "https://drive.google.com/uc?export=download&id=" + id;
         const stream = await fetch(link).then(res => res.body);
         var title = "No Title";
         try {
-          console.log(stream)
+          //console.log(stream)
           const metadata = await mm.parseStream(stream, {}, { duration: true });
           if (!metadata) continue;
           const html = await rp("https://drive.google.com/file/d/" + id + "/view");
@@ -355,6 +357,8 @@ module.exports = class PlayCommand extends Commando.Command {
           console.log(err)
         }
       }
+      clearInterval(interval);
+      mesg.edit(`Track processing completed`).then(msg => msg.delete({ timeout: 10000 }).catch(() => { })).catch(() => { });
     } catch (err) {
       console.log(error)
       await message.reply("there was an error trying to open your link!");
