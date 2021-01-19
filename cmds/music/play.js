@@ -139,16 +139,16 @@ module.exports = class PlayCommand extends Commando.Command {
       }
     }
     try {
-      if (validYTPlaylistURL(query)) result = await PlayCommand.addYTPlaylist(message, query, voiceChannel);
-      else if (validYTURL(query)) result = await PlayCommand.addYTURL(message, query), voiceChannel;
-      else if (validSPURL(query)) result = await PlayCommand.addSPURL(message, query, voiceChannel);
-      else if (validSCURL(query)) result = await PlayCommand.addSCURL(message, query, voiceChannel);
-      else if (validGDURL(query)) result = await PlayCommand.addGDURL(message, query, voiceChannel);
-      else if (validGDFolderURL(query)) result = await PlayCommand.addGDFolderURL(message, query, voiceChannel);
-      else if (validMSURL(query)) result = await PlayCommand.addMSURL(message, query, voiceChannel);
-      else if (validURL(query)) result = await PlayCommand.addURL(message, query, voiceChannel);
-      else if (message.attachments.size > 0) result = await PlayCommand.addAttachment(message, voiceChannel);
-      else result = await PlayCommand.searchYoutube(query, message, voiceChannel);
+      if (validYTPlaylistURL(query)) await PlayCommand.addYTPlaylist(message, query, voiceChannel);
+      else if (validYTURL(query)) await PlayCommand.addYTURL(message, query), voiceChannel;
+      else if (validSPURL(query)) await PlayCommand.addSPURL(message, query, voiceChannel);
+      else if (validSCURL(query)) await PlayCommand.addSCURL(message, query, voiceChannel);
+      else if (validGDURL(query)) await PlayCommand.addGDURL(message, query, voiceChannel);
+      else if (validGDFolderURL(query)) await PlayCommand.addGDFolderURL(message, query, voiceChannel);
+      else if (validMSURL(query)) await PlayCommand.addMSURL(message, query, voiceChannel);
+      else if (validURL(query)) await PlayCommand.addURL(message, query, voiceChannel);
+      else if (message.attachments.size > 0) await PlayCommand.addAttachment(message, voiceChannel);
+      else await PlayCommand.searchYoutube(query, message, voiceChannel);
       //console.log(message.guild.musicData.queue)
       //console.log(result)
       //message.guild.musicData.queue.push(result)
