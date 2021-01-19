@@ -739,7 +739,7 @@ module.exports = class PlayCommand extends Commando.Command {
       title = $("title").text().split(" - ").slice(0, -1).join(" - ").split(".").slice(0, -1).join(".");
     } catch (err) {
       message.reply("there was an error trying to parse your link!");
-      return { error: true };
+      return console.log(err)
     }
     if (!metadata) {
       message.channel.send("An error occured while parsing the audio file into stream! Maybe it is not link to the file?");
