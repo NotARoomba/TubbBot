@@ -32,6 +32,6 @@ module.exports = class SkipCommand extends Commando.Command {
     }
     message.guild.musicData.loopSong = false;
     message.guild.musicData.songDispatcher.end();
-    message.react(':ok_hand:');
+    message.react("👌");
   }
 };
