@@ -153,7 +153,6 @@ module.exports = class PlayCommand extends Commando.Command {
       //console.log(result)
       //message.guild.musicData.queue.push(result)
     } catch (err) {
-      console.log(result)
       await message.reply("there was an error trying to connect to the voice channel!");
       if (message.guild.me.voice.channel) await message.guild.me.voice.channel.leave();
       console.log(err);
