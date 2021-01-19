@@ -1,4 +1,4 @@
-const { validURL, validYTURL, validSPURL, validGDURL, isGoodMusicVideoContent, decodeHtmlEntity, validYTPlaylistURL, validSCURL, validMSURL, validPHURL, isEquivalent, ID, requestStream, bufferToStream } = require("@util/function.js");
+const { validURL, validYTURL, validGDFolderURL, validSPURL, validGDURL, isGoodMusicVideoContent, decodeHtmlEntity, validYTPlaylistURL, validSCURL, validMSURL, validPHURL, isEquivalent, ID, requestStream, bufferToStream } = require("@util/function.js");
 const { parseBody, getMP3 } = require("@cmds/utility/musescore.js");
 const ytdl = require("ytdl-core");
 var SpotifyWebApi = require("spotify-web-api-node");
@@ -139,16 +139,16 @@ module.exports = class PlayCommand extends Commando.Command {
       }
     }
     try {
-      var result = { error: true };
-      if (validYTPlaylistURL(query)) result = await PlayCommand.addYTPlaylist(message, query, voiceChannel);
-      else if (validYTURL(query)) result = await PlayCommand.addYTURL(message, query), voiceChannel;
-      else if (validSPURL(query)) result = await PlayCommand.addSPURL(message, query, voiceChannel);
-      else if (validSCURL(query)) result = await PlayCommand.addSCURL(message, query, voiceChannel);
-      else if (validGDURL(query)) result = await PlayCommand.addGDURL(message, query, voiceChannel);
-      else if (validMSURL(query)) result = await PlayCommand.addMSURL(message, query, voiceChannel);
-      else if (validURL(query)) result = await PlayCommand.addURL(message, query, voiceChannel);
-      else if (message.attachments.size > 0) result = await PlayCommand.addAttachment(message, voiceChannel);
-      else result = await PlayCommand.searchYoutube(query, message, voiceChannel);
+      if (validYTPlaylistURL(query)) await PlayCommand.addYTPlaylist(message, query, voiceChannel);
+      else if (validYTURL(query)) await PlayCommand.addYTURL(message, query), voiceChannel;
+      else if (validSPURL(query)) await PlayCommand.addSPURL(message, query, voiceChannel);
+      else if (validSCURL(query)) await PlayCommand.addSCURL(message, query, voiceChannel);
+      else if (validGDURL(query)) await PlayCommand.addGDURL(message, query, voiceChannel);
+      else if (validGDFolderURL(query)) await PlayCommand.addGDFolderURL(message, query, voiceChannel);
+      else if (validMSURL(query)) await PlayCommand.addMSURL(message, query, voiceChannel);
+      else if (validURL(query)) await PlayCommand.addURL(message, query, voiceChannel);
+      else if (message.attachments.size > 0) await PlayCommand.addAttachment(message, voiceChannel);
+      else await PlayCommand.searchYoutube(query, message, voiceChannel);
       //console.log(message.guild.musicData.queue)
       //console.log(result)
       //message.guild.musicData.queue.push(result)
@@ -164,6 +164,7 @@ module.exports = class PlayCommand extends Commando.Command {
     for (const file of files.values()) {
       if (file.url.endsWith("mscz") || file.url.endsWith("mscx")) {
         await message.channel.send("This feature is not finished :/");
+        return { error: true };
         const buffer = await fetch(file.url).then(res => res.arrayBuffer());
         await WebMscore.ready;
         const score = await WebMscore.load(file.url.split(".").slice(-1)[0], new Uint8Array(buffer));
@@ -209,26 +210,7 @@ module.exports = class PlayCommand extends Commando.Command {
         memberAvatar: message.member.user.avatarURL('webp', false, 16)
       });
     }
-    if (
-      message.guild.musicData.isPlaying == false ||
-      typeof message.guild.musicData.isPlaying == 'undefined'
-    ) {
-      message.guild.musicData.isPlaying = true;
-      return PlayCommand.playSong(message.guild.musicData.queue, message);
-    } else if (message.guild.musicData.isPlaying == true) {
-      const addedEmbed = new Discord.MessageEmbed()
-        .setColor('##FFED00')
-        .setTitle(`:musical_note: ${(file.name ? file.name.split(".").slice(0, -1).join(".") : file.url.split("/").slice(-1)[0].split(".").slice(0, -1).join(".")).replace(/_/g, " ")}`)
-        .addField(
-          `Has been added to queue. `,
-          `This song is #${message.guild.musicData.queue.length} in queue`
-        )
-        .setThumbnail("https://www.flaticon.com/svg/static/icons/svg/2305/2305904.svg")
-        .setURL(file.url);
-      message.say(addedEmbed);
-      return;
-    }
-    return PlayCommand.playSong(message.guild.musicData.queue, message)
+    return { error: false, songs };
   }
   static async addYTPlaylist(message, query, voiceChannel) {
     try {
@@ -338,6 +320,65 @@ module.exports = class PlayCommand extends Commando.Command {
       return;
     }
     return PlayCommand.playSong(message.guild.musicData.queue, message)
+  }
+  static async addGDFolderURL(message, query, voiceChannel) {
+    try {
+      const body = await rp(query);
+      const $ = cheerio.load(body);
+      const elements = $("div[data-target='doc']");
+      for (const el of elements.toArray()) {
+        const id = el.attribs["data-id"];
+        const link = "https://drive.google.com/uc?export=download&id=" + id;
+        const stream = await fetch(link).then(res => res.body);
+        var title = "No Title";
+        try {
+          console.log(stream)
+          const metadata = await mm.parseStream(stream, {}, { duration: true });
+          if (!metadata) continue;
+          const html = await rp("https://drive.google.com/file/d/" + id + "/view");
+          const $1 = cheerio.load(html);
+          title = $1("title").text().split(" - ").slice(0, -1).join(" - ").split(".").slice(0, -1).join(".");
+          const songLength = moment.duration(Math.round(metadata.format.duration), "seconds").format();
+          message.guild.musicData.queue.push({
+            id: ID(),
+            title: title,
+            url: link,
+            type: 4,
+            time: songLength,
+            voiceChannel: voiceChannel,
+            thumbnail: "https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg",
+            isLive: false,
+            memberDisplayName: message.member.user.username,
+            memberAvatar: message.member.user.avatarURL('webp', false, 16)
+          });
+        } catch (err) {
+          console.log(err)
+        }
+      }
+    } catch (err) {
+      console.log(error)
+      await message.reply("there was an error trying to open your link!");
+    }
+    if (
+      message.guild.musicData.isPlaying == false ||
+      typeof message.guild.musicData.isPlaying == 'undefined'
+    ) {
+      message.guild.musicData.isPlaying = true;
+      return PlayCommand.playSong(message.guild.musicData.queue, message);
+    } else if (message.guild.musicData.isPlaying == true) {
+      const addedEmbed = new Discord.MessageEmbed()
+        .setColor('##FFED00')
+        .setTitle(`:musical_note: Google Drive Folder`)
+        .addField(
+          `Has been added to queue. `,
+          `The tracks are #${message.guild.musicData.queue.length} in queue`
+        )
+        .setThumbnail('https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg')
+        .setURL(query);
+      message.say(addedEmbed);
+      return;
+    }
+    return PlayCommand.playSong(message.guild.musicData.queue, message);
   }
   static async addSPURL(message, query, voiceChannel) {
     const d = await spotifyApi.clientCredentialsGrant();
