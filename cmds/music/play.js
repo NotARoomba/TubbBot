@@ -155,7 +155,7 @@ module.exports = class PlayCommand extends Commando.Command {
     } catch (err) {
       await message.reply("there was an error trying to connect to the voice channel!");
       if (message.guild.me.voice.channel) await message.guild.me.voice.channel.leave();
-      console.error(err);
+      console.log(err);
     }
   }
   static async addAttachment(message, voiceChannel) {
