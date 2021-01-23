@@ -202,6 +202,7 @@ module.exports = class PlayCommand extends Commando.Command {
         title: (file.name ? file.name.split(".").slice(0, -1).join(".") : file.url.split("/").slice(-1)[0].split(".").slice(0, -1).join(".")).replace(/_/g, " "),
         url: file.url,
         type: 2,
+        timeraw: length,
         time: songLength,
         voiceChannel: voiceChannel,
         thumbnail: "https://www.flaticon.com/svg/static/icons/svg/2305/2305904.svg",
@@ -232,6 +233,7 @@ module.exports = class PlayCommand extends Commando.Command {
         url: video.shortUrl,
         type: 0,
         time: video.duration,
+        timeraw: length,
         thumbnail: video.bestThumbnail.url,
         voiceChannel: voiceChannel,
         isLive: video.isLive,
@@ -292,6 +294,7 @@ module.exports = class PlayCommand extends Commando.Command {
       title: decodeHtmlEntity(songInfo.videoDetails.title),
       url: songInfo.videoDetails.video_url,
       type: 0,
+      timeraw: length,
       time: songLength,
       thumbnail: thumbUrl,
       voiceChannel: voiceChannel,
@@ -343,6 +346,7 @@ module.exports = class PlayCommand extends Commando.Command {
             title: title,
             url: link,
             type: 4,
+            timeraw: length,
             time: songLength,
             voiceChannel: voiceChannel,
             thumbnail: "https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg",
@@ -443,6 +447,7 @@ module.exports = class PlayCommand extends Commando.Command {
                 type: 1,
                 spot: tracks[i].track.external_urls.spotify,
                 thumbnail: tracks[i].track.album.images[0].url,
+                timeraw: length,
                 time: songLength,
                 voiceChannel: voiceChannel,
                 isLive: results[o].live,
@@ -528,6 +533,7 @@ module.exports = class PlayCommand extends Commando.Command {
                 type: 1,
                 spot: tracks[i].external_urls.spotify,
                 thumbnail: highlight ? tracks[i].album.images[o].url : image,
+                timeraw: length,
                 time: songLength,
                 voiceChannel: voiceChannel,
                 isLive: results[o].live,
@@ -593,6 +599,7 @@ module.exports = class PlayCommand extends Commando.Command {
                 type: 1,
                 spot: tracks[i].external_urls.spotify,
                 thumbnail: tracks[i].album.images[o].url,
+                timeraw: length,
                 time: songLength,
                 voiceChannel: voiceChannel,
                 isLive: results[o].live,
@@ -647,6 +654,7 @@ module.exports = class PlayCommand extends Commando.Command {
           title: track.title,
           type: 3,
           id: track.id,
+          timeraw: length,
           time: songLength,
           thumbnail: track.artwork_url,
           url: track.permalink_url,
@@ -684,6 +692,7 @@ module.exports = class PlayCommand extends Commando.Command {
         title: data.title,
         type: 3,
         id: data.id,
+        timeraw: length,
         time: songLength,
         thumbnail: data.artwork_url,
         url: data.permalink_url,
@@ -752,6 +761,7 @@ module.exports = class PlayCommand extends Commando.Command {
       title: title,
       url: link,
       type: 4,
+      timeraw: length,
       time: songLength,
       voiceChannel: voiceChannel,
       thumbnail: "https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg",
@@ -799,6 +809,7 @@ module.exports = class PlayCommand extends Commando.Command {
       title: data.title,
       url: query,
       type: 5,
+      timeraw: length,
       time: songLength,
       voiceChannel: voiceChannel,
       thumbnail: "https://pbs.twimg.com/profile_images/1155047958326517761/IUgssah__400x400.jpg",
@@ -848,6 +859,7 @@ module.exports = class PlayCommand extends Commando.Command {
       title: title,
       url: query,
       type: 2,
+      timeraw: length,
       time: songLength,
       voiceChannel: voiceChannel,
       thumbnail: "https://www.flaticon.com/svg/static/icons/svg/2305/2305904.svg",
@@ -914,7 +926,8 @@ module.exports = class PlayCommand extends Commando.Command {
       //console.log(queue)
       const silence = await requestStream("https://raw.githubusercontent.com/anars/blank-audio/master/1-second-of-silence.mp3");
       if (queue[0].type == 4) {
-        await queue[0].voiceChannel.join().then(async (connection) => {
+        let connection = await queue[0].voiceChannel.join().then(async (connection) => {
+          message.guild.musicData.queue.connection = connection
           const a = await requestStream(queue[0].url);
           const dispatcher = connection.play(new StreamConcat([a, silence], { highWaterMark: 1 << 25 })).on('start', function () {
             message.guild.musicData.songDispatcher = dispatcher;
@@ -988,7 +1001,8 @@ module.exports = class PlayCommand extends Commando.Command {
         })
       }
       else if (queue[0].type == 3) {
-        await queue[0].voiceChannel.join().then(async (connection) => {
+        let connection = await queue[0].voiceChannel.join().then(async (connection) => {
+          message.guild.musicData.queue.connection = connection
           const dispatcher = connection.play(await scdl.download(queue[0].url)).on('start', function () {
             message.guild.musicData.songDispatcher = dispatcher;
             if (!db.get(`${message.guild.id}.serverSettings.volume`))
@@ -1061,7 +1075,8 @@ module.exports = class PlayCommand extends Commando.Command {
         })
       }
       else if (queue[0].type == 5) {
-        await queue[0].voiceChannel.join().then(async (connection) => {
+        let connection = await queue[0].voiceChannel.join().then(async (connection) => {
+          message.guild.musicData.queue.connection = connection
           console.log(queue[0])
           const c = await getMP3(queue.pool, queue[0].url);
           if (c.error) throw new Error(c.message);
@@ -1139,7 +1154,8 @@ module.exports = class PlayCommand extends Commando.Command {
         })
       }
       else if (queue[0].type == 7) {
-        await queue[0].voiceChannel.join().then(async (connection) => {
+        let connection = await queue[0].voiceChannel.join().then(async (connection) => {
+          message.guild.musicData.queue.connection = connection
           const h = await fetch(queue[0].url);
           if (!h.ok) throw new Error("Received HTTP Status Code: " + h.status);
           await WebMscore.ready;
@@ -1218,7 +1234,8 @@ module.exports = class PlayCommand extends Commando.Command {
             });
         })
       } else {
-        await queue[0].voiceChannel.join().then(async (connection) => {
+        let connection = await queue[0].voiceChannel.join().then(async (connection) => {
+          message.guild.musicData.queue.connection = connection
           if (queue[0].isLive) {
             const k = await module.exports.addYTURL(message, query, queue[0].type);
             if (k.error) throw "Failed to find video";
@@ -1443,6 +1460,7 @@ module.exports = class PlayCommand extends Commando.Command {
           url: `https://www.youtube.com/watch?v=${video.raw.id}`,
           title: video.title,
           time: duration,
+          timeraw: video.duration,
           thumbnail: video.thumbnails.high.url,
           voiceChannel: voiceChannel,
           memberDisplayName: message.member.user.username,
