@@ -36,23 +36,23 @@ global.client = new Client({
   disableMentions: 'everyone',
 });
 
-// client.setProvider(
-//   MongoClient.connect(process.env.MONGO, {
-//     useUnifiedTopology: true,
-//   })
-//     .then((client) => {
-//       return new MongoDBProvider(client, 'data')
-//     })
-//     .catch((err) => {
-//       console.error(err)
-//     })
-// )
+client.setProvider(
+  MongoClient.connect(process.env.MONGO, {
+    useUnifiedTopology: true,
+  })
+    .then((client) => {
+      return new MongoDBProvider(client, 'data')
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+)
 
 
 client.on('ready', async (member) => {
   console.log('Tubb is starting!')
   setInterval(() => {
-    client.user.setActivity(`-help in ${client.guilds.cache.size} Servers | Made by L061571C5#5281`, { type: 'WATCHING' })
+    client.user.setActivity(`-help in ${client.guilds.cache.size} Servers`, { type: 'WATCHING' })
   }, 60000);
 
 
