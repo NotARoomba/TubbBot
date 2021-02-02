@@ -926,7 +926,7 @@ module.exports = class PlayCommand extends Commando.Command {
       //console.log(queue)
       const silence = await requestStream("https://raw.githubusercontent.com/anars/blank-audio/master/1-second-of-silence.mp3");
       if (queue[0].type == 4) {
-        let connection = await queue[0].voiceChannel.join().then(async (connection) => {
+        await queue[0].voiceChannel.join().then(async (connection) => {
           message.guild.musicData.queue.connection = connection
           const a = await requestStream(queue[0].url);
           const dispatcher = connection.play(new StreamConcat([a, silence], { highWaterMark: 1 << 25 })).on('start', function () {
@@ -1001,7 +1001,7 @@ module.exports = class PlayCommand extends Commando.Command {
         })
       }
       else if (queue[0].type == 3) {
-        let connection = await queue[0].voiceChannel.join().then(async (connection) => {
+        await queue[0].voiceChannel.join().then(async (connection) => {
           message.guild.musicData.queue.connection = connection
           const dispatcher = connection.play(await scdl.download(queue[0].url)).on('start', function () {
             message.guild.musicData.songDispatcher = dispatcher;
@@ -1075,7 +1075,7 @@ module.exports = class PlayCommand extends Commando.Command {
         })
       }
       else if (queue[0].type == 5) {
-        let connection = await queue[0].voiceChannel.join().then(async (connection) => {
+        await queue[0].voiceChannel.join().then(async (connection) => {
           message.guild.musicData.queue.connection = connection
           console.log(queue[0])
           const c = await getMP3(queue.pool, queue[0].url);
@@ -1154,7 +1154,7 @@ module.exports = class PlayCommand extends Commando.Command {
         })
       }
       else if (queue[0].type == 7) {
-        let connection = await queue[0].voiceChannel.join().then(async (connection) => {
+        await queue[0].voiceChannel.join().then(async (connection) => {
           message.guild.musicData.queue.connection = connection
           const h = await fetch(queue[0].url);
           if (!h.ok) throw new Error("Received HTTP Status Code: " + h.status);
@@ -1234,20 +1234,20 @@ module.exports = class PlayCommand extends Commando.Command {
             });
         })
       } else {
-        let connection = await queue[0].voiceChannel.join().then(async (connection) => {
+        await queue[0].voiceChannel.join().then(async (connection) => {
           message.guild.musicData.queue.connection = connection
-          if (queue[0].isLive) {
-            const k = await module.exports.addYTURL(message, query, queue[0].type);
-            if (k.error) throw "Failed to find video";
-            if (!isEquivalent(k.songs[0], queue[0])) {
-              queue[0] = k.songs[0];
-              queue.songs[queue.songs.indexOf(queue[0])] = queue[0];
-            }
-          }
+          // if (queue[0].isLive) {
+          //   const k = await module.exports.addYTURL(message, query, queue[0].type);
+          //   if (k.error) throw "Failed to find video";
+          //   if (!isEquivalent(k.songs[0], queue[0])) {
+          //     queue[0] = k.songs[0];
+          //     queue.songs[queue.songs.indexOf(queue[0])] = queue[0];
+          //   }
+          // }
 
           // if (!queue[0].isLive && !queue[0].isPastLive) const dispatcher = connection.play(ytdl(queue[0].url, { filter: "audioonly", dlChunkSize: 0, highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }));
           // else if (queue[0].isPastLive) const dispatcher = connection.play(ytdl(queue[0].url, { highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } }));
-          const dispatcher = connection.play(ytdl(queue[0].url, { quality: 'highestaudio', highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } })).on('start', function () {
+          const dispatcher = connection.play(ytdl(queue[0].url, { filter: "audio", dlChunkSize: 0, quality: 'highestaudio', highWaterMark: 1 << 25, requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE_API } } })).on('start', function () {
             message.guild.musicData.songDispatcher = dispatcher;
             if (!db.get(`${message.guild.id}.serverSettings.volume`))
               dispatcher.setVolume(message.guild.musicData.volume);
@@ -1320,7 +1320,7 @@ module.exports = class PlayCommand extends Commando.Command {
       }
     } catch (err) {
       console.log(err);
-      message.say(`An error occured, please try`)
+      message.say(`An error occured, please try again.`)
       return
     }
     // const a = await requestStream(queue[0].url);

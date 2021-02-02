@@ -22,22 +22,10 @@ module.exports = class LeaveCommand extends Commando.Command {
       typeof message.guild.musicData.songDispatcher == 'undefined' ||
       message.guild.musicData.songDispatcher == null
     ) {
-      if (
-        message.guild.musicData.isPlaying == false &&
-        message.guild.me.voice.channel
-      ) {
-        message.guild.me.voice.channel.leave();
-      } else {
-        message.reply('There is no song playing right now!');
-      }
-      return;
     } else if (voiceChannel.id !== message.guild.me.voice.channel.id) {
       message.reply(
         `You must be in the same voice channel as the bot's in order to use that!`
       );
-      return;
-    } else if (!message.guild.musicData.queue) {
-      message.reply('There are no songs in queue');
       return;
     } else if (message.guild.musicData.songDispatcher.paused) {
       message.guild.musicData.songDispatcher.resume();

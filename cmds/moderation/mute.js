@@ -15,13 +15,13 @@ module.exports = class MuteCommand extends Commando.Command {
           type: 'user'
         },
         {
-          key: 'reason',
-          prompt: 'Why do you want to mute them?',
-          type: 'string'
-        },
-        {
           key: 'time',
           prompt: 'When do you want them to be unmuted?',
+          type: 'integer'
+        },
+        {
+          key: 'reason',
+          prompt: 'Why do you want to mute them?',
           type: 'string'
         },
       ],
