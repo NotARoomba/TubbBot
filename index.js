@@ -29,14 +29,11 @@ client.on('ready', () => {
 });
 client.on('message', message => {
     if (message.content.charAt(0) === prefix) {
-        let content = message.content.split(" ");
-        content[0].toString().substring(1);
-        console.log(content[0])
+        let content = message.content.slice(prefix.length).toLowerCase().split(" ");
         if (cmdarr.get(content[0]) || aliasesarr.get(content[0])) {
-            //console.log(cmdarr.get(content))
             const { execute } = require(`${cmdarr.get(content[0]) || aliasesarr.get(content[0])}`)
-            //content.shift();
-            execute(message, content)
+            const args = content.splice(1).join(" ");
+            execute(message, args)
         }
         return
     }

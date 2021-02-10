@@ -12,9 +12,13 @@
     "author": "L061571C5",
     "license": "ISC",
     "dependencies": {
+        "@vitalets/google-translate-api": "^5.0.0",
+        "axios": "^0.21.1",
         "discord.js": "^12.5.1",
         "dotenv": "^8.2.0",
         "fs-readdir-recursive": "^1.1.0",
+        "mojang-api": "0.0.2",
+        "node-superfetch": "^0.1.11",
         "nodemon": "^2.0.7"
     }
 }
