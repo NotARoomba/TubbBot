@@ -1,5 +1,5 @@
-let RedditAPI = require("reddit-wrapper-v2");
 const Discord = require("discord.js");
+let RedditAPI = require("reddit-wrapper-v2");
 const { validImgurURL } = require("../../function.js")
 let redditConn = new RedditAPI({
     // Options for Reddit Wrapper
@@ -21,13 +21,15 @@ module.exports = {
         arg = arg.split(" ")
         let subreddits = ["memes", "dankmemes", "meme"];
         let chosen = arg[0] || subreddits[Math.floor(Math.random() * subreddits.length)];
-        let response = await redditConn.api.get(`/r/${chosen}/${arg[1] || `top`}`, { limit: 100 }).catch(console.error);
-        //console.log(response)
-        if (!response) return await execute(message, arg);
-        if (response[1] === undefined) return await execute(message, arg);
-        if (response[1].data === undefined || response[1].data.children[0] === undefined || response[1].data.children[0].data === undefined || response[1].data.children[0].data.url === undefined) return await execute(message, arg);
+        let response = await redditConn.api.get(`/r/${chosen}/${arg[1] || 'hot'}`, { limit: 100 }).catch(console.error).then(async (response) =>
+            response = await redditConn.api.get(`/r/${chosen}/hot`, { limit: 100 })
+        )
+        //console.log(`/r/${chosen}/${arg[1] || 'hot'}`)
+        if (!response) await execute(message, arg);
+        if (response[1] === undefined) await execute(message, arg);
+        if (response[1].data === undefined || response[1].data.children[0] === undefined || response[1].data.children[0].data === undefined || response[1].data.children[0].data.url === undefined) await execute(message, arg);
         let data = response[1].data.children[Math.floor(Math.random() * response[1].data.children.length)].data;
-        if (!data || data.url === undefined || (!data.url.endsWith(".jpg") && !data.url.endsWith(".png") && !data.url.endsWith(".gif") && !validImgurURL(data.url))) return await execute(message, arg);
+        if (!data || data.url === undefined || (!data.url.endsWith(".jpg") && !data.url.endsWith(".png") && !data.url.endsWith(".gif") && !validImgurURL(data.url))) await execute(message, arg);
 
         const em = new Discord.MessageEmbed()
             .setTitle(`${data.title.substring(0, 256)}`)

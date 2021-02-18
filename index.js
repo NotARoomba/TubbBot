@@ -1,12 +1,33 @@
-const Discord = require('discord.js')
+const Discord = require('discord.js');
 const client = new Discord.Client();
 require('dotenv').config();
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize(`mysql://${process.env.DBUSER}:${process.env.DBPASS}@freedb.tech:3306/${process.env.DBNAME}`)
 var fs = require('fs');
 const prefix = '!'
 let cmdarr = new Map()
 let aliasesarr = new Map()
-client.on('ready', () => {
-    console.log('Tubb is starting!')
+Discord.Structures.extend('Guild', function (Guild) {
+    class MusicGuild extends Guild {
+    }
+    this.musicData = {
+        queue: [],
+        isPlaying: false,
+        dispatcher: null,
+        nowPlaying: null,
+        volume: 1,
+        loopSong: false,
+        loopQueue: false
+    }
+    return MusicGuild;
+})
+client.on('ready', async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('Connection has been established successfully.');
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }
     setInterval(() => {
         client.user.setActivity(`-help in ${client.guilds.cache.size} Servers`, { type: 'WATCHING' })
     }, 60000);
