@@ -6,7 +6,7 @@ module.exports = {
     name: 'prefix',
     description: 'Changes the prefix for your server.',
     async execute(message, args) {
-        const Prefix = sequelize.define('Prefix', {
+        const Prefix = sequelize.define('prefix', {
             guild: Sequelize.STRING,
             prefix: Sequelize.STRING
         })
@@ -14,13 +14,13 @@ module.exports = {
         const prefix = await Prefix.findOne({ where: { guild: message.guild.id } });
         if (prefix) {
             await Prefix.update({ prefix: args }, { where: { guild: message.guild.id } });
-            message.channel.send(`Prefix updated to \`\`\`${args}\`\`\``)
+            message.channel.send(`Prefix updated to \`${args}\``)
         } else {
             const prefix = await Prefix.create({
                 guild: message.guild.id,
                 prefix: args,
             });
-            message.channel.send(`Prefix changed to \`\`\`${prefix.prefix}\`\`\``)
+            message.channel.send(`Prefix changed to \`${prefix.prefix}\``)
         }
     }
 }

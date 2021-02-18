@@ -2,9 +2,10 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 require('dotenv').config();
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize(`mysql://${process.env.DBUSER}:${process.env.DBPASS}@freedb.tech:3306/${process.env.DBNAME}`)
+const sequelize = new Sequelize(`mysql://${process.env.DBUSER}:${process.env.DBPASS}@freedb.tech:3306/${process.env.DBNAME}`, {
+    logging: false
+})
 var fs = require('fs');
-const prefix = '!'
 let cmdarr = new Map()
 let aliasesarr = new Map()
 Discord.Structures.extend('Guild', function (Guild) {
@@ -28,6 +29,20 @@ client.on('ready', async () => {
     } catch (error) {
         console.error('Unable to connect to the database:', error);
     }
+    client.guilds.cache.forEach(async (guild) => {
+        const Prefix = sequelize.define('prefix', {
+            guild: Sequelize.STRING,
+            prefix: Sequelize.STRING
+        })
+        Prefix.sync();
+        const prefix = await Prefix.findOne({ where: { guild: guild.id } });
+        if (prefix == null || undefined) {
+            await Prefix.create({
+                guild: guild.id,
+                prefix: process.env.PREFIX,
+            });
+        }
+    });
     setInterval(() => {
         client.user.setActivity(`-help in ${client.guilds.cache.size} Servers`, { type: 'WATCHING' })
     }, 60000);
@@ -53,18 +68,23 @@ client.on('ready', async () => {
     });
     //console.log(cmdarr)
 });
-client.on('message', message => {
-    if (message.content.charAt(0) === prefix) {
+client.on('message', async (message) => {
+    if (message.author.bot) return;
+    const Prefix = sequelize.define('prefix', {
+        guild: Sequelize.STRING,
+        prefix: Sequelize.STRING
+    })
+    const guildPrefix = await Prefix.findOne({ where: { guild: message.guild.id } });
+    let prefix = guildPrefix.prefix
+    if (message.content.startsWith(prefix)) {
         let content = message.content.slice(prefix.length).toLowerCase().split(" ");
         if (cmdarr.get(content[0]) || aliasesarr.get(content[0])) {
             const { execute } = require(`${cmdarr.get(content[0]) || aliasesarr.get(content[0])}`)
             const args = content.splice(1).join(" ");
             execute(message, args)
         }
-        return
     }
-
+    return
 })
-
 
 client.login(process.env.TOKEN);

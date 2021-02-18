@@ -8,7 +8,7 @@ module.exports = {
             .setTitle(`Ping`)
             .setDescription(`:green_apple: Finding ping to bot... 
        
-       :alarm_clock: Your ping is ${(Date.now() - message.createdTimestamp) / 100} ms`)
+       :alarm_clock: Your ping is ${(Date.now() - message.createdTimestamp)} ms`)
         message.reply(waitEmbed)
     }
 }
