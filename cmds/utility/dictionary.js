@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const request = require('node-superfetch');
 module.exports = {
     name: 'dictionary',
-    aliases: 'd',
+    aliases: ['d', 'word'],
     description: 'Responds with information on a word.',
     async execute(message, word) {
         try {

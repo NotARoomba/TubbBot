@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 module.exports = {
     name: 'minecraft',
     subcommands: 'pro/profile, server/srv, history/his',
-    aliases: 'mc',
+    aliases: ['mc'],
     description: 'Connect to the Minecraft API and display information.',
     async execute(message, args) {
         if (!args) return message.reply(`usage: <profile/server/history> <profile name/server ip/ profile name>. Check -help minecraft for more info.`)

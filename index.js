@@ -18,10 +18,15 @@ client.on('ready', () => {
         categories.forEach(cmds => {
             cmd = cmds.replace('.js', '')
             cmdpath = require(`./cmds/${folder}/${cmd}.js`)
-            let aliases = cmdpath.aliases
+            //console.log(cmdpath.aliases)
+            if (cmdpath.aliases !== undefined) {
+                for (const alias of cmdpath.aliases) {
+                    aliasesarr.set(alias, `./cmds/${folder}/${cmd}.js`)
+                }
+            }
             cmdarr.set(cmd, `./cmds/${folder}/${cmd}.js`)
             //console.log(cmdarr)
-            aliasesarr.set(aliases, `./cmds/${folder}/${cmd}.js`)
+            //console.log(aliasesarr)
 
         });
     });
