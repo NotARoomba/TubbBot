@@ -1,12 +1,11 @@
 module.exports = {
     name: 'messagedel',
-    aliases: 'msgdel',
+    aliases: ['msgdel'],
     description: 'Mass (message) Genocide',
     async execute(message, count) {
         try {
             const deleteCount = parseInt(count, 10);
             message.channel.bulkDelete(deleteCount || 100)
-                .then(() => message.reply('Removing messages'))
                 .catch(console.error);
         } catch (err) {
             console.log(err)
