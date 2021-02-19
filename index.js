@@ -59,7 +59,7 @@ client.on('message', async (message) => {
     const guildPrefix = await Prefix.findOne({ where: { guild: message.guild.id } });
     let prefix = guildPrefix.prefix
     if (message.content.startsWith(prefix)) {
-        let content = message.content.slice(prefix.length).toLowerCase().split(" ");
+        let content = message.content.slice(prefix.length).split(" ");
         if (cmdarr.get(content[0]) || aliasesarr.get(content[0])) {
             const { execute } = require(`${cmdarr.get(content[0]) || aliasesarr.get(content[0])}`)
             const args = content.splice(1).join(" ");
