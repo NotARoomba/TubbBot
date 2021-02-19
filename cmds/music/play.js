@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-
 module.exports = {
     name: 'play',
     aliases: ['p'],
@@ -9,7 +8,7 @@ module.exports = {
         client.player.on('trackStart', (message, track) => {
             const embed = new Discord.MessageEmbed()
                 .setColor('#FFED00')
-                .addField(`:notes: Now Playing:`, `[${track.title}](${track.url})`)
+                .setTitle(`:notes: Now Playing: ${track.title}`)
                 .addField(':stopwatch: Duration:', track.duration)
                 .setThumbnail(track.thumbnail)
                 .setURL(track.url)
@@ -32,9 +31,10 @@ module.exports = {
             message.channel.send(embed)
         })
         client.player.on('channelEmpty', (message) => {
-            setTimeout(function onTimeOut() {
-                message.channel.send(`:zzz: Left channel due to inactivity.`)
-            }, 90000)
+            message.channel.send(`:zzz: Left channel due to inactivity.`)
+        })
+        client.player.on('botDisconnect', (message) => {
+            message.channel.send(`:zzz: Left channel due to inactivity.`)
         })
         client.player.on('error', (error, message) => {
             message.reply(`An error occured: ${error}`)
