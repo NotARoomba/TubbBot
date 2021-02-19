@@ -77,12 +77,12 @@ client.on('guildCreate', async (guild) => {
         fields: [
             {
                 name: `My default prefix is`,
-                value: `\`\`!\`\` but you can always change it by running \n-prefix`,
+                value: `\`\`-\`\` but you can always change it by running \n-prefix`,
                 inline: true,
             },
             {
                 name: `My commands`,
-                value: `Run !help or !commands to show all of my commands!`,
+                value: `Run -help or -commands to show all of my commands!`,
                 inline: true,
             },
             {
