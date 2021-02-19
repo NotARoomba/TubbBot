@@ -1,7 +1,10 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const { Player } = require("discord-player");
-const player = new Player(client);
+const player = new Player(client, {
+    leaveOnEndCooldown: 90000, // wait for 5 seconds
+    leaveOnEnd: true
+});
 client.player = player;
 require('dotenv').config();
 const Sequelize = require('sequelize');
