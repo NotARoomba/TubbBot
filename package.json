@@ -12,6 +12,7 @@
     "author": "L061571C5",
     "license": "ISC",
     "dependencies": {
+        "@discordjs/opus": "^0.4.0",
         "@vitalets/google-translate-api": "^5.0.0",
         "axios": "^0.21.1",
         "discord-paginationembed": "^2.1.0",
