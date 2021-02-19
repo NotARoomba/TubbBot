@@ -7,7 +7,6 @@ module.exports = {
         queue = queue.tracks
         if (args < 0 || args > queue.length) return message.reply(`that is not a valid queued song.`)
         client.player.remove(message, args)
-
         message.channel.send(`:wastebasket: Removed song number ${args} from queue!`);
     }
 }
