@@ -27,7 +27,7 @@ module.exports = {
             })
             .catch(() => {
                 message.channel.send('Failed to deliver definition :sob:');
-                // console.error(err); // no need to spam console for each time it doesn't find a query
+                // console.error(err); 
                 return;
             });
     }
