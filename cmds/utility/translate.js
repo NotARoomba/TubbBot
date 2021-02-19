@@ -1,57 +1,23 @@
-
-const { list } = require('@util/util');
-const codes = Object.keys(translate.languages).filter(code => typeof translate.languages[code] !== 'function');
-module.exports = class TranslateCommand extends Commando.Command {
-	constructor(client) {
-		super(client, {
-			name: 'translate',
-			aliases: ['google-translate'],
-			group: 'util',
-			memberName: 'translate',
-			description: 'Translates text to a specific language.',
-			details: `**Codes:** ${codes.join(', ')}`,
-			clientPermissions: ['EMBED_LINKS'],
-			credit: [
-				{
-					name: 'Google',
-					url: 'https://www.google.com/',
-					reason: 'Google Translate',
-					reasonURL: 'https://translate.google.com/'
-				}
-			],
-			args: [
-				{
-					key: 'target',
-					prompt: `Which language would you like to translate to? Either ${list(codes, 'or')}.`,
-					type: 'string',
-					validate: target => {
-						if (translate.languages.isSupported(target)) return true;
-						return `Invalid target, please enter either ${list(codes, 'or')}.`;
-					},
-					parse: target => translate.languages.getCode(target)
-				},
-				{
-					key: 'text',
-					prompt: 'What text would you like to translate?',
-					type: 'string',
-					max: 500
-				},
-			]
-		});
-	}
-
-	async run(message, { text, target }) {
-		try {
-			var base = 'auto'
-			const { text: result, from } = await translate(text, { to: target, from: base });
-			const embed = new Discord.MessageEmbed()
-				.setColor(0x4285F4)
-				.setFooter('Powered by Google Translate', 'https://i.imgur.com/h3RoHyp.png')
-				.addField(`❯ From: ${translate.languages[from.language.iso]}`, from.text.value || text)
-				.addField(`❯ To: ${translate.languages[target]}`, result);
-			return message.embed(embed);
-		} catch (err) {
-			return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
-		}
-	}
-};
+const Discord = require('discord.js');
+const translate = require('@vitalets/google-translate-api');
+module.exports = {
+    name: 'translate',
+    description: 'Translates text to a specific language.',
+    async execute(message, args) {
+        if (!args) return message.reply(`usage: <language code to translate to> <text to translate>. Check -help translate for more info. Language Codes -> (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)`)
+        var i = args.indexOf(' ');
+        args = [args.slice(0, i), args.slice(i + 1)];
+        try {
+            var base = 'auto'
+            const { text: result, from } = await translate(args[1], { to: args[0], from: base });
+            const embed = new Discord.MessageEmbed()
+                .setColor(0x4285F4)
+                .setFooter('Powered by Google Translate', 'https://i.imgur.com/h3RoHyp.png')
+                .addField(`❯ From: ${translate.languages[from.language.iso]}`, from.text.value || args[1])
+                .addField(`❯ To: ${translate.languages[args[0]]}`, result);
+            return message.reply(embed);
+        } catch (err) {
+            return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try a different language code as noted here: (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)`);
+        }
+    }
+}

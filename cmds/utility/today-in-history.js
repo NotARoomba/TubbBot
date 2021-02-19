@@ -1,29 +1,14 @@
-module.exports = class TodayInHistoryCommand extends Commando.Command {
-    constructor(client) {
-        super(client, {
-            name: 'todayinhistory',
-            aliases: ['tih'],
-            group: 'fun',
-            memberName: 'todayinhistory',
-            description: 'Gives info about what important event happend today in hisotry',
-            args: [
-                {
-                    key: 'month',
-                    prompt: 'What month (in number form)?',
-                    type: 'string'
-                },
-                {
-                    key: 'day',
-                    prompt: 'What day (in number form)?',
-                    type: 'string'
-                }
-            ]
-        });
-    }
-
-    async run(message, { month, day }) {
-
-        client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+const Discord = require("discord.js");
+const request = require('node-superfetch');
+module.exports = {
+    name: 'todayinhistory',
+    aliases: ['tih'],
+    description: 'Gives info about what important event happend today in hisotry',
+    async execute(message, args) {
+        args = args.split(" ")
+        //console.log(args)
+        let month = args[0]
+        let day = args[1]
         const date = month && day ? `/${month}/${day}` : '';
         try {
             const { text } = await request.get(`http://history.muffinlabs.com/date${date}`);
@@ -42,7 +27,7 @@ module.exports = class TodayInHistoryCommand extends Commando.Command {
             return message.channel.send(embed);
         }
         catch (err) {
-            if (err.status === 404 || err.status === 500) return message.reply('Invalid date.');
+            if (err.status === 404 || err.status === 500) return message.reply('Invalid date. The date should be in month-day number form, 1 1 or 12 31.');
             return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
         }
     }

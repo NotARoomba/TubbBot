@@ -1,25 +1,13 @@
-module.exports = class SummonCommand extends Commando.Command {
-    constructor(client) {
-        super(client, {
-            name: 'summon',
-            group: 'util',
-            memberName: 'summon',
-            description: '*Holy Music stops*',
-            args: [
-                {
-                    key: 'user',
-                    prompt: 'What user would you like to summon?',
-                    type: 'user',
-                }
-            ]
-        });
-    }
-
-    run(message, { user }) {
-        message.say(`Summoning ${user}`)
-        message.say(`${user}`)
-        message.say(`${user}`)
-        message.say(`${user}`)
-        message.say(`${user}`)
+module.exports = {
+    name: 'summon',
+    description: '*Holy Music stops*',
+    execute(message) {
+        const user = message.mentions.users.first();
+        if (user == undefined) return message.reply(`you didn't provide a valid user.`)
+        message.channel.send(`Summoning ${user}`)
+        message.channel.send(`${user}`)
+        message.channel.send(`${user}`)
+        message.channel.send(`${user}`)
+        message.channel.send(`${user}`)
     }
 }

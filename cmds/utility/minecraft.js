@@ -1,37 +1,16 @@
 const MojangAPI = require("mojang-api");
-module.exports = class MinecraftCommand extends Commando.Command {
-    constructor(client) {
-        super(client, {
-            name: 'minecraft',
-            aliases: ['mc'],
-            group: 'fun',
-            memberName: 'minecraft',
-            description: 'Connect to the Minecraft API and display information.',
-            args: [
-                {
-                    key: 'query',
-                    prompt: 'What group would you like to search into? Options: profile, server, history',
-                    type: 'string'
-                },
-                {
-                    key: 'query2',
-                    prompt: 'What is the username/server ip that you would like to search for?',
-                    type: 'string'
-                },
-
-            ]
-        });
-    }
-
-
-    async run(message, { query, query2 }) {
-        query = query.toLowerCase()
-        query2 = query2.toLowerCase()
-        //const args = query.split(" ");
-        //args.shift();
+const Discord = require('discord.js');
+module.exports = {
+    name: 'minecraft',
+    subcommands: 'pro/profile, server/srv, history/his',
+    aliases: ['mc'],
+    description: 'Connect to the Minecraft API and display information.',
+    async execute(message, args) {
+        if (!args) return message.reply(`usage: <profile/server/history> <profile name/server ip/ profile name>. Check -help minecraft for more info.`)
+        args = args.split(" ")
         let str;
-        if (query === "profile" || query === "pro") {
-            if (query2) str = query2;
+        if (args[0] === "profile" || args[0] === "pro") {
+            if (args[1]) str = args[1];
             if (str.length <= 16) MojangAPI.nameToUuid(str, function (err, res) {
                 if (err) return message.reply("there was an error trying to convert the username into UUID!");
                 else if (!res[0]) return message.channel.send("No player named **" + str + "** were found")
@@ -73,8 +52,8 @@ module.exports = class MinecraftCommand extends Commando.Command {
                         message.channel.send(Embed);
                     }
                 });
-        } else if (query === "server" || query === "srv") {
-            const url = `https://api.mcsrvstat.us/2/${query2}`;
+        } else if (args[0] === "server" || args[0] === "srv") {
+            const url = `https://api.mcsrvstat.us/2/${args[1]}`;
             const res = await fetch(url);
             if (!res.ok) throw new Error("Received HTTP Status Code " + res.status);
             const body = await res.json();
@@ -87,7 +66,7 @@ module.exports = class MinecraftCommand extends Commando.Command {
                 const desc = body.motd.clean.join("\n");
                 const spaceRemoved = desc.replace(/ +(?= )/g, '');
                 const Embed = new Discord.MessageEmbed()
-                    .setTitle(query2)
+                    .setTitle(args[1])
                     .setColor('#000000')
                     .addField("IP", "`" + ip + "`", true)
                     .addField("Port", "`" + port + "`", true)
@@ -99,12 +78,12 @@ module.exports = class MinecraftCommand extends Commando.Command {
                     .setFooter("Powered by Mojang Api", message.client.user.displayAvatarURL());
                 return message.channel.send(Embed);
             } else {
-                return message.channel.send("The server - **" + query2 + "** - is offline/under maintenance.")
+                return message.channel.send("The server - **" + args[1] + "** - is offline/under maintenance.")
             }
-        } else if (query === "history" || query === "his") {
-            MojangAPI.nameToUuid(args[1], function (err, res) {
+        } else if (args[0] === "history" || args[0] === "his") {
+            MojangAPI.nameToUuid(args[0], function (err, res) {
                 if (err) return message.reply("there was an error trying to convert the username into UUID!");
-                else if (!res[0]) return message.channel.send("No player named **" + query2 + "** were found");
+                else if (!res[0]) return message.channel.send("No player named **" + args[1] + "** were found");
                 MojangAPI.nameHistory(res[0].id, function (err, result) {
                     if (err) return message.reply("there was an error trying to fetch the username history!");
                     else {
@@ -126,4 +105,4 @@ module.exports = class MinecraftCommand extends Commando.Command {
             });
         }
     }
-};
+}

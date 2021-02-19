@@ -1,4 +1,6 @@
-const axios = require('axios')
+const Discord = require("discord.js");
+const axios = require('axios');
+const { toTitleCase } = require('../../function.js')
 const exampleEmbed = (
     temp,
     maxTemp,
@@ -26,27 +28,11 @@ const exampleEmbed = (
         .setThumbnail(`http://openweathermap.org/img/w/${icon}.png`)
         .setFooter('Powered by OpenWeatherMap.org');
 
-module.exports = class WeatherCommand extends Commando.Command {
-    constructor(client) {
-        super(client, {
-            name: 'weather',
-            aliases: ['w'],
-            group: 'fun',
-            memberName: 'weather',
-            description: 'Returns the weather for a location',
-            guildOnly: true,
-            args: [
-                {
-                    key: 'location',
-                    prompt: 'What city do you want to get the weather for?',
-                    type: 'string'
-                },
-            ]
-        });
-    }
-    run(message, { location }) {
-
-        client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+module.exports = {
+    name: 'weather',
+    aliases: ['w'],
+    description: 'Returns the weather for a location',
+    execute(message, location) {
         axios
             .get(
                 `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=04222de0b070f0e94c8874434d22d029`
@@ -61,10 +47,10 @@ module.exports = class WeatherCommand extends Commando.Command {
                 let author = message.author.username
                 let profile = message.author.displayAvatarURL
                 let icon = apiData.data.weather[0].icon
-                let cityName = location
+                let cityName = toTitleCase(location)
                 let country = apiData.data.sys.country
                 let pressure = apiData.data.main.pressure;
-                let cloudness = apiData.data.weather[0].description;
+                let cloudness = toTitleCase(apiData.data.weather[0].description);
                 message.channel.send(exampleEmbed(currentTemp, maxTemp, minTemp, pressure, humidity, wind, cloudness, icon, author, profile, cityName, country));
             }).catch(err => {
                 //console.log(err)

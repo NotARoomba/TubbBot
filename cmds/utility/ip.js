@@ -1,22 +1,9 @@
-module.exports = class IpCommand extends Commando.Command {
-    constructor(client) {
-        super(client, {
-            name: 'ip',
-            group: 'util',
-            memberName: 'ip',
-            description: 'Responds with information on an ip.',
-            args: [
-                {
-                    key: 'ip',
-                    prompt: 'What country would you like to search for?',
-                    type: 'string',
-                }
-            ]
-        });
-    }
-
-    async run(message, { ip }) {
-        client.logger.info(`Command: ${this.name}, User: ${message.author.tag}`)
+const Discord = require('discord.js');
+const axios = require('axios')
+module.exports = {
+    name: 'ip',
+    description: 'Responds with information on an ip.',
+    async execute(message, ip) {
         try {
             await axios
                 .get(`http://api.ipstack.com/${ip}?access_key=${process.env.IP_STACK}&output=json`)
