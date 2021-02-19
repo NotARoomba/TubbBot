@@ -7,7 +7,7 @@ module.exports = {
     description: 'Connect to the Minecraft API and display information.',
     async execute(message, args) {
         if (!args) return message.reply(`usage: <profile/server/history> <profile name/server ip/ profile name>. Check -help minecraft for more info.`)
-        args = args.split(" ")
+        args = args.split(" ").toLowerCase()
         let str;
         if (args[0] === "profile" || args[0] === "pro") {
             if (args[1]) str = args[1];

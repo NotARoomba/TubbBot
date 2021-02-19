@@ -27,6 +27,7 @@
         "node-superfetch": "^0.1.11",
         "nodemon": "^2.0.7",
         "reddit-wrapper-v2": "^1.1.6",
-        "sequelize": "^6.5.0"
+        "sequelize": "^6.5.0",
+        "ytdl-core": "^4.5.0"
     }
 }
