@@ -1,11 +1,11 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const { Player } = require("discord-player");
-const player = new Player(client, {
-    leaveOnEndCooldown: 90000, // wait for 5 seconds
-    leaveOnEnd: true
-});
-client.player = player;
+// const { Player } = require("discord-player");
+// const player = new Player(client, {
+//     leaveOnEndCooldown: 90000,
+//     leaveOnEnd: true
+// });
+// client.player = player;
 require('dotenv').config();
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize(`mysql://${process.env.DBUSER}:${process.env.DBPASS}@freedb.tech:3306/${process.env.DBNAME}`, {
@@ -19,6 +19,17 @@ const Prefix = sequelize.define('prefix', {
     prefix: Sequelize.STRING
 })
 Prefix.sync();
+let musicData = {
+    queue: [],
+    volume: 1,
+    isPlaying: false,
+    nowPlaying: null,
+    loopSong: false,
+    loopQueue: false,
+    songDispatcher: null,
+    connection: null,
+}
+client.musicData = musicData;
 client.on('ready', async () => {
     try {
         await sequelize.authenticate();

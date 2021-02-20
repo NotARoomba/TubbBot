@@ -34,13 +34,18 @@ module.exports = {
     },
     async addYTURL(message, args) {
         const video = await (await ytdl.getBasicInfo(args)).videoDetails
-        //console.log(video)
-        const time = this.formatSeconds(video.lengthSeconds)
-        console.log(time)
         song = {
             title: video.title,
-            length: time
+            lengthFormatted: module.exports.formatSeconds(video.lengthSeconds),
+            lengthSeconds: video.lengthSeconds,
+            author: video.author.name,
+            thumbnail: video.thumbnails[0].url,
+            url: video.video_url,
+            type: 0,
+            isLive: video.isLiveContent && video.isLive ? true : false,
+            memberDisplayName: message.member.user.username,
+            memberAvatar: message.member.user.avatarURL('webp', false, 16)
         }
-
+        return song
     },
 }

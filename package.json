@@ -16,7 +16,6 @@
         "@vitalets/google-translate-api": "^5.0.0",
         "axios": "^0.21.1",
         "discord-paginationembed": "^2.1.0",
-        "discord-player": "^3.2.1",
         "discord.js": "^12.5.1",
         "dotenv": "^8.2.0",
         "ffmpeg-static": "^4.2.7",
