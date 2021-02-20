@@ -4,7 +4,7 @@ module.exports = {
     aliases: ['np'],
     description: 'Display the currently playing song!',
     async execute(message, args, client) {
-        let track = client.player.nowPlaying(message)
+        let track = client.musicData.nowPlaying
         const embed = new Discord.MessageEmbed()
             .setColor('#AEA200')
             .setTitle(`:notes: ${track.title}`)

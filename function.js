@@ -32,7 +32,7 @@ module.exports = {
         const formatted = new Date(time * 1000).toISOString().substr(11, 8)
         return formatted
     },
-    async addYTURL(message, args) {
+    async addYTURL(message, args, voiceChannel) {
         const video = await (await ytdl.getBasicInfo(args)).videoDetails
         song = {
             title: video.title,
@@ -43,6 +43,7 @@ module.exports = {
             url: video.video_url,
             type: 0,
             isLive: video.isLiveContent && video.isLive ? true : false,
+            voiceChannel: voiceChannel,
             memberDisplayName: message.member.user.username,
             memberAvatar: message.member.user.avatarURL('webp', false, 16)
         }
