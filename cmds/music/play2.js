@@ -25,9 +25,7 @@ module.exports = {
             else if (message.attachments.size > 0) result = await addAttachment(message, voiceChannel);
             else result = await search(message, args, voiceChannel);
             client.musicData.queue.push(result)
-            if (typeof client.musicData.songDispatcher == 'undefined' || client.musicData.songDispatcher == null) {
-                module.exports.play(message, client, voiceChannel)
-            }
+            module.exports.play(message, client, voiceChannel)
         } catch (err) {
             console.log(err)
         }
@@ -35,6 +33,7 @@ module.exports = {
     async play(message, client, voiceChannel) {
         const musicData = client.musicData
         const queue = musicData.queue
+        const old = musicData.old
         const Volume = sequelize.define('volume', {
             guild: Sequelize.STRING,
             volume: Sequelize.BIGINT
@@ -70,7 +69,7 @@ module.exports = {
                     musicData.songDispatcher = dispatcher
                     dispatcher.setVolume(musicData.volume);
                     musicData.nowPlaying = queue[0];
-                    queue.shift()
+                    old.push(queue.shift())
                     return;
                 })
                     .on("finish", () => {
