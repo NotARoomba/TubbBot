@@ -4,6 +4,6 @@ module.exports = {
     description: 'Play back the previous song!',
     async execute(message, args, client) {
         client.player.back(message)
-        message.react("👌");
+        message.react("⏮️");
     }
 }
