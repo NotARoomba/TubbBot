@@ -6,7 +6,7 @@ module.exports = {
     async execute(message, args, client) {
         let track = client.player.nowPlaying(message)
         const embed = new Discord.MessageEmbed()
-            .setColor('#AEA200')
+            .setColor('#FFED00')
             .setTitle(`:notes: ${track.title}`)
             .setThumbnail(track.thumbnail)
             .setURL(track.url)
