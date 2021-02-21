@@ -12,7 +12,7 @@ const Sequelize = require('sequelize');
 const sequelize = new Sequelize(`mysql://${process.env.DBUSER}:${process.env.DBPASS}@freedb.tech:3306/${process.env.DBNAME}`, {
     logging: false
 })
-var fs = require('fs');
+var read = require('fs-readdir-recursive')
 let cmdarr = new Discord.Collection()
 let aliasesarr = new Discord.Collection()
 const Prefix = sequelize.define('prefix', {
@@ -40,20 +40,19 @@ client.on('ready', async () => {
         client.user.setActivity(`-help in ${client.guilds.cache.size} Servers`, { type: 'WATCHING' })
     }, 60000);
     console.log('Done!')
-    var folders = fs.readdirSync('./cmds');
-    folders.forEach(folder => {
-        var categories = fs.readdirSync(`./cmds/${folder}`);
-        categories.forEach(cmds => {
-            cmd = cmds.replace('.js', '')
-            cmdpath = require(`./cmds/${folder}/${cmd}.js`)
-            if (cmdpath.aliases !== undefined) {
-                for (const alias of cmdpath.aliases) {
-                    aliasesarr.set(alias, `./cmds/${folder}/${cmd}.js`)
-                }
-            }
-            cmdarr.set(cmd, `./cmds/${folder}/${cmd}.js`);
-        });
+    let cmddirs = read('./cmds');
+    cmddirs.forEach(e => {
+        let cmd = e.replace(`\\`, '/')
+        console.log(require(`../${cmd}`))
     });
+    cmd = cmdpath.split('\\').pop().replace('.js', '')
+    cmdpath = require(`./cmds/${folder}/${cmd}.js`)
+    if (cmdpath.aliases !== undefined) {
+        for (const alias of cmdpath.aliases) {
+            aliasesarr.set(alias, `./cmds/${folder}/${cmd}.js`)
+        }
+    }
+    cmdarr.set(cmd, `./cmds/${folder}/${cmd}.js`);
 });
 client.on('message', async (message) => {
     if (message.author.bot) return;
