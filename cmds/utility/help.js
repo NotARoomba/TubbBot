@@ -8,9 +8,9 @@ module.exports = {
     description: `Lists all of Tubb's commands!`,
     async execute(message, args) {
         if (!args) {
-            var folders = fs.readdirSync('../../cmds');
+            var folders = fs.readdirSync('./');
             folders.forEach(folder => {
-                var categories = fs.readdirSync(`../../cmds/${folder}`);
+                var categories = fs.readdirSync(`./cmds/${folder}`);
                 categories.forEach(cmds => {
                     cmd = cmds.replace('.js', '')
                     cmdpath = require(`./cmds/${folder}/${cmd}.js`)
@@ -26,14 +26,17 @@ module.exports = {
                     }
                 });
             });
+            let totalarr = cmdarr.concat(descarr)
             const embed = new Pagination.FieldsEmbed()
-                .setArray(cmdarr, descarr)
+                .setArray(totalarr)
                 .setAuthorizedUsers([message.author.id])
                 .setChannel(message.channel)
                 .setElementsPerPage(10)
-                .formatField('# - Song', function (e) {
-                    `**${cmdarr[(e) + 1]}**:  ${e.title}`;
+                .formatField('Name - Description', function (e) {
+                    `**${totalarr[e + 1]}**:  ${totalarr[e + cmdarr.length + 1]}`;
                 });
+            embed.embed.setColor('#dbc300').setTitle('Music Queue');
+            embed.build();
         } else if (args) {
 
         }
