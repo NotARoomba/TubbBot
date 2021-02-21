@@ -1,8 +1,18 @@
+const Discord = require('discord.js');
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize(`mysql://${process.env.DBUSER}:${process.env.DBPASS}@freedb.tech:3306/${process.env.DBNAME}`, {
+    logging: false
+})
 module.exports = {
     name: 'filters',
     aliases: ['filter'],
     description: 'Adds a filter to the current song!',
     async execute(message, args, client) {
+        const Prefix = sequelize.define('prefix', {
+            guild: Sequelize.STRING,
+            prefix: Sequelize.STRING
+        })
+        const prefix = await Prefix.findOne({ where: { guild: message.guild.id } })
         const filters = [
             "bassboost",
             "8D",
@@ -34,7 +44,6 @@ module.exports = {
             "fadein",
         ];
         let varforfilter; let choice;
-        //get user input
         switch (args) {
             case "bassboost":
                 varforfilter = 0;
@@ -121,43 +130,42 @@ module.exports = {
                 varforfilter = 27;
                 break;
             default:
-                //fires if not valid input
                 varforfilter = 404;
-                message.channel.send(new MessageEmbed()
+                const embed = new Discord.MessageEmbed()
                     .setColor("#c219d8")
                     .setTitle("Not a valid Filter, use one of those:")
                     .setDescription(`
-                    \`bassboost\`
-                    \`8D\`
-                    \`vaporwave\`
-                    \`nightcore\`
-                    \`phaser\`
-                    \`tremolo\`
-                    \`vibrato\`
-                    \`reverse\`
-                    \`treble\`
-                    \`normalizer\`
-                    \`surrounding\`
-                    \`pulsator\`
-                    \`subboost\`
-                    \`karaoke\`
-                    \`flanger\`
-                    \`gate\`
-                    \`haas\`
-                    \`mcompand\`
-                    \`mono\`
-                    \`mstlr\`
-                    \`mstrr\`
-                    \`compressor\`
-                    \`expander\`
-                    \`softlimiter\`
-                    \`chorus\`
-                    \`chorus2d\`
-                    \`chorus3d\`
-                    \`fadein\`
-                    \`clear\`   ---  removes all filters`)
-                    .setFooter(`Example: ${PREFIX}filter bassboost`)
-                )
+                \`bassboost\`
+                \`8D\`
+                \`vaporwave\`
+                \`nightcore\`
+                \`phaser\`
+                \`tremolo\`
+                \`vibrato\`
+                \`reverse\`
+                \`treble\`
+                \`normalizer\`
+                \`surrounding\`
+                \`pulsator\`
+                \`subboost\`
+                \`karaoke\`
+                \`flanger\`
+                \`gate\`
+                \`haas\`
+                \`mcompand\`
+                \`mono\`
+                \`mstlr\`
+                \`mstrr\`
+                \`compressor\`
+                \`expander\`
+                \`softlimiter\`
+                \`chorus\`
+                \`chorus2d\`
+                \`chorus3d\`
+                \`fadein\`
+                \`clear\`   ---  removes all filters`)
+                    .setFooter(`Example: ${prefix.prefix}filter bassboost`)
+                message.channel.send(embed)
                 break;
         }
     }

@@ -12,6 +12,7 @@ module.exports = {
         })
         Prefix.sync();
         const prefix = await Prefix.findOne({ where: { guild: message.guild.id } });
+        if (prefix == `` || `` || ````) return message.reply('that is not a valid prefix.')
         if (prefix) {
             await Prefix.update({ prefix: args }, { where: { guild: message.guild.id } });
             message.channel.send(`Prefix updated to \`${args}\``)

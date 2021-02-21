@@ -19,17 +19,6 @@ const Prefix = sequelize.define('prefix', {
     prefix: Sequelize.STRING
 })
 Prefix.sync();
-let musicData = {
-    queue: [],
-    volume: 1,
-    isPlaying: false,
-    nowPlaying: null,
-    loopSong: false,
-    loopQueue: false,
-    songDispatcher: null,
-    connection: null,
-}
-client.musicData = musicData;
 client.on('ready', async () => {
     try {
         await sequelize.authenticate();
@@ -38,8 +27,8 @@ client.on('ready', async () => {
         console.error('Unable to connect to the database:', error);
     }
     client.guilds.cache.forEach(async (guild) => {
-        const prefix = await Prefix.findOne({ where: { guild: guild.id } });
-        if (prefix == null || undefined) {
+        const testprefix = await Prefix.findOne({ where: { guild: guild.id } });
+        if (testprefix == null || undefined) {
             await Prefix.create({
                 guild: guild.id,
                 prefix: process.env.PREFIX,
