@@ -6,13 +6,13 @@ module.exports = {
     name: 'prefix',
     description: 'Changes the prefix for your server.',
     async execute(message, args) {
+        if (args.length === 0 || args === "") return message.reply('that is not a valid prefix.')
         const Prefix = sequelize.define('prefix', {
             guild: Sequelize.STRING,
             prefix: Sequelize.STRING
         })
         Prefix.sync();
         const prefix = await Prefix.findOne({ where: { guild: message.guild.id } });
-        if (prefix == `` || `` || ````) return message.reply('that is not a valid prefix.')
         if (prefix) {
             await Prefix.update({ prefix: args }, { where: { guild: message.guild.id } });
             message.channel.send(`Prefix updated to \`${args}\``)
