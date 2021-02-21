@@ -3,7 +3,8 @@ const client = new Discord.Client();
 const { Player } = require("discord-player");
 const player = new Player(client, {
     leaveOnEndCooldown: 90000,
-    leaveOnEnd: true
+    leaveOnEnd: true,
+    enableLive: true,
 });
 client.player = player;
 require('dotenv').config();

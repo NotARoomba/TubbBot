@@ -3,6 +3,7 @@ const Sequelize = require('sequelize');
 const sequelize = new Sequelize(`mysql://${process.env.DBUSER}:${process.env.DBPASS}@freedb.tech:3306/${process.env.DBNAME}`, {
     logging: false
 })
+const filters = require('discord-player').Player.AudioFilters
 module.exports = {
     name: 'filters',
     aliases: ['filter'],
@@ -13,124 +14,125 @@ module.exports = {
             prefix: Sequelize.STRING
         })
         const prefix = await Prefix.findOne({ where: { guild: message.guild.id } })
-        const filters = [
-            "bassboost",
-            "8D",
-            "vaporwave",
-            "nightcore",
-            "phaser",
-            "tremolo",
-            "vibrato",
-            "reverse",
-            "treble",
-            "normalizer",
-            "surrounding",
-            "pulsator",
-            "subboost",
-            "karaoke",
-            "flanger",
-            "gate",
-            "haas",
-            "mcompand",
-            "mono",
-            "mstlr",
-            "mstrr",
-            "compressor",
-            "expander",
-            "softlimiter",
-            "chorus",
-            "chorus2d",
-            "chorus3d",
-            "fadein",
-        ];
-        let varforfilter; let choice;
         switch (args) {
             case "bassboost":
-                varforfilter = 0;
+                choice = { bassboost: true }
                 break;
             case "8D":
-                varforfilter = 1;
+                choice = { '8D': true }
                 break;
             case "vaporwave":
-                varforfilter = 2;
+                choice = { vaporwave: true }
                 break;
             case "nightcore":
-                varforfilter = 3;
+                choice = { nightcore: true }
                 break;
             case "phaser":
-                varforfilter = 4;
+                choice = { phaser: true }
                 break;
             case "tremolo":
-                varforfilter = 5;
+                choice = { tremolo: true }
                 break;
             case "vibrato":
-                varforfilter = 6;
+                choice = { vibrato: true }
                 break;
             case "reverse":
-                varforfilter = 7;
+                choice = { reverse: true }
                 break;
             case "treble":
-                varforfilter = 8;
+                choice = { treble: true }
                 break;
             case "normalizer":
-                varforfilter = 9;
+                choice = { normalizer: true }
                 break;
             case "surrounding":
-                varforfilter = 10;
+                choice = { surrounding: true }
                 break;
             case "pulsator":
-                varforfilter = 11;
+                choice = { pulsator: true }
                 break;
             case "subboost":
-                varforfilter = 12;
+                choice = { subboost: true }
                 break;
             case "karaoke":
-                varforfilter = 13;
+                choice = { karaoke: true }
                 break;
             case "flanger":
-                varforfilter = 14;
+                choice = { flanger: true }
                 break;
             case "gate":
-                varforfilter = 15;
+                choice = { gate: true }
                 break;
             case "haas":
-                varforfilter = 16;
+                choice = { haas: true }
                 break;
             case "mcompand":
-                varforfilter = 17;
+                choice = { mcompand: true }
                 break;
             case "mono":
-                varforfilter = 18;
+                choice = { mono: true }
                 break;
             case "mstlr":
-                varforfilter = 19;
+                choice = { mstlr: true }
                 break;
             case "mstrr":
-                varforfilter = 20;
+                choice = { mstrr: true }
                 break;
             case "compressor":
-                varforfilter = 21;
+                choice = { compressor: true }
                 break;
             case "expander":
-                varforfilter = 22;
+                choice = { expander: true }
                 break;
             case "softlimiter":
-                varforfilter = 23;
+                choice = { softlimiter: true }
                 break;
             case "chorus":
-                varforfilter = 24;
+                choice = { chorus: true }
                 break;
             case "chorus2d":
-                varforfilter = 25;
+                choice = { chorus2d: true }
                 break;
             case "chorus3d":
-                varforfilter = 26;
+                choice = { chorus3d: true }
                 break;
             case "fadein":
-                varforfilter = 27;
+                choice = { fadein: true }
+                break;
+            case "clear":
+                choice = {
+                    bassboost: false,
+                    '8D': false,
+                    vaporwave: false,
+                    nightcore: false,
+                    phaser: false,
+                    tremolo: false,
+                    vibrato: false,
+                    reverse: false,
+                    treble: false,
+                    normalizer: false,
+                    surrounding: false,
+                    pulsator: false,
+                    subboost: false,
+                    karaoke: false,
+                    flanger: false,
+                    gate: false,
+                    haas: false,
+                    mcompand: false,
+                    mono: false,
+                    mstlr: false,
+                    mstrr: false,
+                    compressor: false,
+                    expander: false,
+                    softlimiter: false,
+                    chorus: false,
+                    chorus2d: false,
+                    chorus3d: false,
+                    fadein: false
+                }
                 break;
             default:
-                varforfilter = 404;
+                choice = 404;
                 const embed = new Discord.MessageEmbed()
                     .setColor("#c219d8")
                     .setTitle("Not a valid Filter, use one of those:")
@@ -168,5 +170,9 @@ module.exports = {
                 message.channel.send(embed)
                 break;
         }
+        if (choice === 404) return;
+        try {
+            client.player.setFilters(message, choice);
+        } catch (err) { }
     }
 }
