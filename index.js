@@ -28,11 +28,12 @@ let cmdarr = new Discord.Collection()
 let aliasesarr = new Discord.Collection()
 client.pool = pool
 client.on('ready', async () => {
-    const test = await pool.query(`SELECT * FROM prefixes WHERE guild = 783489298246139965;`)
-    if (!test) {
-        throw console.error('Unable to connect to the database:', err);
+    try {
+        await pool.query(`SELECT * FROM prefixes WHERE guild = 783489298246139965;`)
+        console.log('Connection has been established successfully.');
+    } catch (err) {
+        throw console.error('Unable to connect to the database:');
     }
-    console.log('Connection has been established successfully.');
     setInterval(() => {
         client.user.setActivity(`-help in ${client.guilds.cache.size} Servers`, { type: 'WATCHING' })
     }, 60000);
@@ -65,7 +66,7 @@ client.on('message', async (message) => {
 })
 
 client.on('guildCreate', async (guild) => {
-    await pool.query(`INSERT INTO prefixes(guild, prefix) VALUES ('${guild.id}','!')`)
+    await pool.query(`INSERT INTO prefixes (guild, prefix) VALUES ('${guild.id}','-')`)
     const channel = guild.channels.cache.find(channel => channel.type === 'text' && channel.permissionsFor(guild.me).has('SEND_MESSAGES'))
     const invite = {
         title: `Thank you for inviting me to \`\`${guild.name}\`\`!`,
