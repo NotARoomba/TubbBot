@@ -168,9 +168,7 @@ module.exports = {
             if (choice === 404) return;
             try {
                 client.player.setFilters(message, choice);
-                if (!client.player.on('error')) {
-                    message.channel.send(`Succesfully applied the filter: ${args}`)
-                }
+                message.channel.send(`Succesfully applied the filter: ${args}`)
             } catch (err) { }
         });
     }
