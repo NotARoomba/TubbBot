@@ -15,11 +15,14 @@ module.exports = {
                 .setColor('#dbc300')
                 .addFields([
                     {
-                        name: 'Music Commands', value: `${prefix[0][0].prefix}help music`
+                        name: 'Music Commands', value: `${prefix[0][0].prefix}help Music`
                     },
                     {
-                        name: 'Utility Commands', value: `${prefix[0][0].prefix}help utility`
-                    }
+                        name: 'Utility Commands', value: `${prefix[0][0].prefix}help Utility`
+                    },
+                    {
+                        name: 'Information on a Command', value: `${prefix[0][0].prefix}help [command]`
+                    },
                 ])
             message.channel.send(embed)
         }
@@ -29,26 +32,38 @@ module.exports = {
             let cmd = e.replace(`\\`, '/')
             let cmdpath = require(`../${cmd}`)
             if (cmdpath.group == 'music') {
-                music.push({ name: cmdpath.name, description: cmdpath.description })
+                music.push({ name: cmdpath.name, description: cmdpath.description, aliases: cmdpath.aliases })
             } else if (cmdpath.group == 'utility') {
-                utility.push({ name: cmdpath.name, description: cmdpath.description })
+                utility.push({ name: cmdpath.name, description: cmdpath.description, aliases: cmdpath.aliases })
             }
-        });
-        if (args == 'music') {
+        }); 
+        let total = music.concat(utility)
+        total.forEach(cmd => {
+                if (args == cmd.name) {
+const embed = new Discord.MessageEmbed()
+.setTitle(cmd.name)
+.setDescription(cmd.description)
+.addFields([
+    {
+        name: 'Usage', value: cmd.usage
+    }
+])
+return message.channel.send(embed)
+                } 
+            })
+        if (args == 'Music') {
             try {
                 module.exports.defaultEmbed(message, music, 'Music', client)
             } catch (err) {
                 module.exports.defaultEmbed(message, music, 'Music', client)
             }
-        } else if (args == 'utility') {
+        } else if (args == 'Utility') {
             try {
                 module.exports.defaultEmbed(message, utility, 'Utility', client)
             } catch (err) {
                 module.exports.defaultEmbed(message, utility, 'Utility', client)
             }
         }
-
-
     },
     defaultEmbed(message, array, name, client) {
         const embed = new Pagination.FieldsEmbed()
@@ -60,7 +75,7 @@ module.exports = {
                 return `**${e.name}**:  ${e.description}`;
             })
             .setPage(1)
-            .setPageIndicator('footer')
+            .setPageIndicator('footer', (page, pages) => `Page ${page} of ${pages}`)
         embed.embed.setColor('#dbc300').setTitle(`${name} Commands`).setFooter('', `${client.user.avatarURL('webp', 16)}`);;
         return embed.build();
     }
