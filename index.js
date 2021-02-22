@@ -12,6 +12,7 @@ const Sequelize = require('sequelize');
 const sequelize = new Sequelize(`mysql://${process.env.DBUSER}:${process.env.DBPASS}@freedb.tech:3306/${process.env.DBNAME}`, {
     logging: false
 })
+const mysql = require("mysql2");
 var read = require('fs-readdir-recursive')
 let cmdarr = new Discord.Collection()
 let aliasesarr = new Discord.Collection()
@@ -21,21 +22,26 @@ const Prefix = sequelize.define('prefix', {
 })
 Prefix.sync();
 client.on('ready', async () => {
+    var pool = mysql.createPool({
+            connectTimeout: 60 * 60 * 1000,
+            //acquireTimeout: 60 * 60 * 1000,
+            //timeout: 60 * 60 * 1000,
+            connectionLimit: 1000,
+            host: process.env.DBHOST,
+            user: process.env.DBUSER,
+            password: process.env.DBPASS,
+            database: process.env.DBNAME,
+            supportBigNumbers: true,
+            charset: "utf8mb4",
+            waitForConnections: true,
+            queueLimit: 0
+        }).promise();
     try {
         await sequelize.authenticate();
         console.log('Connection has been established successfully.');
     } catch (error) {
         console.error('Unable to connect to the database:', error);
     }
-    client.guilds.cache.forEach(async (guild) => {
-        const testprefix = await Prefix.findOne({ where: { guild: guild.id } });
-        if (testprefix == null || undefined) {
-            await Prefix.create({
-                guild: guild.id,
-                prefix: process.env.PREFIX,
-            });
-        }
-    });
     setInterval(() => {
         client.user.setActivity(`-help in ${client.guilds.cache.size} Servers`, { type: 'WATCHING' })
     }, 60000);
@@ -43,7 +49,7 @@ client.on('ready', async () => {
     let cmddirs = read('./cmds');
     cmddirs.forEach(e => {
         let cmd = e.replace(`\\`, '/')
-        console.log(require(`../${cmd}`))
+        console.log(require(`./${cmd}`))
     });
     cmd = cmdpath.split('\\').pop().replace('.js', '')
     cmdpath = require(`./cmds/${folder}/${cmd}.js`)
