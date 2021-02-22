@@ -3,6 +3,7 @@ const request = require('node-superfetch');
 module.exports = {
     name: 'todayinhistory',
     group: 'utility',
+    usage: `todayinhistory (month) (day)`,
     aliases: ['tih'],
     description: 'Gives info about what important event happend today in hisotry',
     async execute(message, args) {

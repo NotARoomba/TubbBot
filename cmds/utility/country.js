@@ -4,6 +4,7 @@ const request = require('node-superfetch');
 module.exports = {
     name: "country",
     group: 'utility',
+    usage: `country (country)`,
     description: 'Responds with information on a country.',
     async execute(message, query) {
         try {

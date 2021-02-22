@@ -1,6 +1,7 @@
 module.exports = {
     name: 'summon',
     group: 'utility',
+    usage: `summon (user)`,
     description: '*Holy Music stops*',
     execute(message) {
         const user = message.mentions.users.first();

@@ -51,7 +51,7 @@ client.on('ready', async () => {
 });
 client.on('message', async (message) => {
     if (message.author.bot) return;
-    const guildPrefix = await await pool.query(`SELECT * FROM prefixes WHERE guild = ${message.guild.id};`)
+    const guildPrefix = await pool.query(`SELECT * FROM prefixes WHERE guild = ${message.guild.id};`)
     let prefix = guildPrefix[0][0].prefix
     if (message.content.startsWith(prefix)) {
         let content = message.content.slice(prefix.length).split(" ");
@@ -134,8 +134,8 @@ client.player.on('channelEmpty', (message) => {
 client.player.on('botDisconnect', (message) => {
     message.channel.send(`:zzz: Left channel due to inactivity.`)
 })
-client.player.on('error', (error, message) => {
-    message.reply(`An error occured: ${error}`)
+client.player.on('error', (err, message) => {
+    err == 'NotPlaying' ? message.reply(`there nothing playing.`) : err == 'UnableToJoin' ? message.reply(`I couldn't joine the voice channel, check my permissions.`) : err == 'VideoUnavailable' ? message.reply(`the video you are trying to play is unavailable.`) : err == 'NotConnected' ? message.reply(`I am not connected to a voice channel, check my permissions.`) : message.reply(`An error occured`);
 })
 
 client.login(process.env.TOKEN);

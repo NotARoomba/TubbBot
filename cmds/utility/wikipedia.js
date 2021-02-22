@@ -4,6 +4,7 @@ const { shorten } = require('../../function.js');
 module.exports = {
     name: 'wikipedia',
     group: 'utility',
+    usage: `wikipedia (query)`,
     aliases: ['wiki'],
     description: 'Searches Wikipedia for your query.',
     async execute(message, query) {

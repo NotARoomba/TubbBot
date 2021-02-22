@@ -1,7 +1,8 @@
 module.exports = {
     name: 'loop',
     group: 'music',
-    aliases: ['l'],
+    usage: 'loop',
+    aliases: ['l', 'repeat'],
     description: 'Toggles song loop!',
     async execute(message, args, client) {
         let queue = client.player.getQueue(message)

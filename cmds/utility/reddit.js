@@ -15,6 +15,7 @@ let redditConn = new RedditAPI({
 module.exports = {
     name: 'reddit',
     group: 'utility',
+    usage: `reddit (query)`,
     description: 'Fetches a meme from a subreddit',
     subcommands: ['hot', 'top', 'new'],
     aliases: ['meme'],

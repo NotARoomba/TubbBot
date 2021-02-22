@@ -1,4 +1,5 @@
 const ytdl = require('ytdl-core')
+const Pagination = require('discord-paginationembed');
 module.exports = {
     list(arr, conj = 'and') {
         const len = arr.length;
@@ -49,4 +50,27 @@ module.exports = {
         }
         return song
     },
+    defaultEmbed(message, array, name, client) {
+        const embed = new Pagination.FieldsEmbed()
+            .setArray(array)
+            .setAuthorizedUsers([message.author.id])
+            .setChannel(message.channel)
+            .setElementsPerPage(10)
+            .formatField('Name - Description', function (e) {
+                return `**${e.name}**:  ${e.description}`;
+            })
+            .setPageIndicator('footer', (page, pages) => `Page ${page} of ${pages}`)
+        embed.embed.setColor('#dbc300').setTitle(`${name} Commands`).setFooter('', `${client.user.avatarURL('webp', 16)}`);;
+        return embed.build();
+    },
+    search(nameKey, myArray) {
+
+        for (var i = 0; i < myArray.length; i++) {
+            try {
+                if (myArray[i].name === nameKey || myArray[i].aliases[0] === nameKey || myArray[i].aliases[1] === nameKey || myArray[i].aliases[2] === nameKey || myArray[i].aliases[3] === nameKey) {
+                    return myArray[i];
+                }
+            } catch (err) { }
+        }
+    }
 }

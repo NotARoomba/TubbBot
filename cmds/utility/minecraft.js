@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 module.exports = {
     name: 'minecraft',
     group: 'utility',
+    usage: `minecraft (profile, server, or history) (username, server ip, or profile name)`,
     subcommands: 'pro/profile, server/srv, history/his',
     aliases: ['mc'],
     description: 'Connect to the Minecraft API and display information.',

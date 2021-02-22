@@ -3,6 +3,7 @@ const axios = require('axios')
 module.exports = {
     name: 'ip',
     group: 'utility',
+    usage: `ip (ip)`,
     description: 'Responds with information on an ip.',
     async execute(message, ip) {
         try {

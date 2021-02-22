@@ -31,6 +31,7 @@ const exampleEmbed = (
 module.exports = {
     name: 'weather',
     group: 'utility',
+    usage: `weather (query)`,
     aliases: ['w'],
     description: 'Returns the weather for a location',
     execute(message, location) {

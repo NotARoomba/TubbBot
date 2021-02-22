@@ -3,6 +3,7 @@ const request = require('node-superfetch');
 module.exports = {
     name: 'dictionary',
     group: 'utility',
+    usage: `dictionary (word)`,
     aliases: ['d', 'word'],
     description: 'Responds with information on a word.',
     async execute(message, word) {

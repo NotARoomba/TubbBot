@@ -1,15 +1,17 @@
 const Discord = require('discord.js');
 var read = require('fs-readdir-recursive')
-const Pagination = require('discord-paginationembed');
+const { defaultEmbed, search } = require('../../function.js')
 let utility = []
 let music = []
+let embed;
 module.exports = {
     name: 'help',
     group: 'utility',
+    usage: `help (group or command)`,
     description: `Lists Tubb's commands!`,
-    async execute(message, arg, client) {
+    async execute(message, args, client) {
         const prefix = await client.pool.query(`SELECT * FROM prefixes WHERE guild = ${message.guild.id}`)
-        if (!arg) {
+        if (!args) {
             const embed = new Discord.MessageEmbed()
                 .setTitle(`Please Specify`)
                 .setColor('#dbc300')
@@ -26,57 +28,47 @@ module.exports = {
                 ])
             message.channel.send(embed)
         }
-        args = arg.toLowerCase()
         let cmdarr = read('./cmds')
         cmdarr.forEach(e => {
             let cmd = e.replace(`\\`, '/')
             let cmdpath = require(`../${cmd}`)
             if (cmdpath.group == 'music') {
-                music.push({ name: cmdpath.name, description: cmdpath.description, aliases: cmdpath.aliases })
+                music.push({ name: cmdpath.name, description: cmdpath.description, aliases: cmdpath.aliases, usage: cmdpath.usage })
             } else if (cmdpath.group == 'utility') {
-                utility.push({ name: cmdpath.name, description: cmdpath.description, aliases: cmdpath.aliases })
+                utility.push({ name: cmdpath.name, description: cmdpath.description, aliases: cmdpath.aliases, usage: cmdpath.usage })
             }
-        }); 
+        });
         let total = music.concat(utility)
-        total.forEach(cmd => {
-                if (args == cmd.name) {
-const embed = new Discord.MessageEmbed()
-.setTitle(cmd.name)
-.setDescription(cmd.description)
-.addFields([
-    {
-        name: 'Usage', value: cmd.usage
-    }
-])
-return message.channel.send(embed)
-                } 
-            })
         if (args == 'Music') {
             try {
-                module.exports.defaultEmbed(message, music, 'Music', client)
+                defaultEmbed(message, music, 'Music', client)
             } catch (err) {
-                module.exports.defaultEmbed(message, music, 'Music', client)
+                defaultEmbed(message, music, 'Music', client)
             }
         } else if (args == 'Utility') {
             try {
-                module.exports.defaultEmbed(message, utility, 'Utility', client)
+                defaultEmbed(message, utility, 'Utility', client)
             } catch (err) {
-                module.exports.defaultEmbed(message, utility, 'Utility', client)
+                defaultEmbed(message, utility, 'Utility', client)
             }
+        } else {
+            const prefix = await client.pool.query(`SELECT * FROM prefixes WHERE guild = ${message.guild.id};`)
+            arg = args.toLowerCase()
+            const cmd = search(arg, total)
+            if (cmd) {
+                embed = new Discord.MessageEmbed()
+                    .setTitle(cmd.name)
+                    .setDescription(cmd.description)
+                    .addFields([
+                        {
+                            name: 'Usage', value: `${prefix[0][0].prefix}${cmd.usage}`
+                        },
+                        {
+                            name: 'Aliases', value: `${cmd.aliases}`
+                        }
+                    ])
+            } else return message.reply('that is not a valid command name.')
+            return message.channel.send(embed)
         }
-    },
-    defaultEmbed(message, array, name, client) {
-        const embed = new Pagination.FieldsEmbed()
-            .setArray(array)
-            .setAuthorizedUsers([message.author.id])
-            .setChannel(message.channel)
-            .setElementsPerPage(10)
-            .formatField('Name - Description', function (e) {
-                return `**${e.name}**:  ${e.description}`;
-            })
-            .setPage(1)
-            .setPageIndicator('footer', (page, pages) => `Page ${page} of ${pages}`)
-        embed.embed.setColor('#dbc300').setTitle(`${name} Commands`).setFooter('', `${client.user.avatarURL('webp', 16)}`);;
-        return embed.build();
     }
 }

@@ -3,6 +3,7 @@ const fetch = require('node-fetch');
 module.exports = {
     name: 'urban',
     group: 'utility',
+    usage: `weather (query)`,
     aliases: ['ud', 'urbandictionary'],
     description: 'Get definitions from urban dictonary.',
     execute(message, text) {

@@ -2,6 +2,7 @@ const Pagination = require('discord-paginationembed');
 module.exports = {
     name: 'queue',
     group: 'music',
+    usage: 'queue',
     aliases: ['song-list', 'next-songs', 'q'],
     description: 'Display the song queue!',
     async execute(message, args, client) {

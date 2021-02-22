@@ -1,6 +1,7 @@
 module.exports = {
     name: 'seek',
     group: 'music',
+    usage: 'seek (time in seconds)',
     description: 'Go to a time in the song!',
     async execute(message, args, client) {
         let track = client.player.nowPlaying(message)

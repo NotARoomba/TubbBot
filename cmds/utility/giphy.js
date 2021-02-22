@@ -2,6 +2,7 @@ const request = require('node-superfetch');
 module.exports = {
     name: 'giphy',
     group: 'utility',
+    usage: `giphy (query)`,
     aliases: ['gif'],
     description: 'Searches Giphy for your query.',
     async execute(message, query) {

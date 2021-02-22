@@ -1,8 +1,8 @@
 const Discord = require('discord.js');
-
 module.exports = {
     name: 'prefix',
     group: 'utility',
+    usage: `prefix (prefix)`,
     description: 'Changes the prefix for your server.',
     async execute(message, args, client) {
         if (args.length === 0 || args === "") return message.reply('that is not a valid prefix.')
