@@ -1,6 +1,6 @@
 {
     "name": "tubbbot",
-    "version": "3.0.0",
+    "version": "4.0.0",
     "description": "The Utillity Bot",
     "main": "index.js",
     "scripts": {
@@ -21,6 +21,7 @@
         "dotenv": "^8.2.0",
         "ffmpeg-static": "^4.2.7",
         "fs-readdir-recursive": "^1.1.0",
+        "genius-lyrics-api": "^3.0.6",
         "mojang-api": "0.0.2",
         "mysql2": "^2.2.5",
         "node-opus": "^0.3.3",
