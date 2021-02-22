@@ -8,40 +8,31 @@ const player = new Player(client, {
 });
 client.player = player;
 require('dotenv').config();
-const Sequelize = require('sequelize');
-const sequelize = new Sequelize(`mysql://${process.env.DBUSER}:${process.env.DBPASS}@freedb.tech:3306/${process.env.DBNAME}`, {
-    logging: false
-})
 const mysql = require("mysql2");
+var pool = mysql.createPool({
+    connectTimeout: 60 * 60 * 1000,
+    //acquireTimeout: 60 * 60 * 1000,
+    //timeout: 60 * 60 * 1000,
+    connectionLimit: 1000,
+    host: process.env.DBHOST,
+    user: process.env.DBUSER,
+    password: process.env.DBPASS,
+    database: process.env.DBNAME,
+    supportBigNumbers: true,
+    charset: "utf8mb4",
+    waitForConnections: true,
+    queueLimit: 0
+}).promise();
 var read = require('fs-readdir-recursive')
 let cmdarr = new Discord.Collection()
 let aliasesarr = new Discord.Collection()
-const Prefix = sequelize.define('prefix', {
-    guild: Sequelize.STRING,
-    prefix: Sequelize.STRING
-})
-Prefix.sync();
+client.pool = pool
 client.on('ready', async () => {
-    var pool = mysql.createPool({
-            connectTimeout: 60 * 60 * 1000,
-            //acquireTimeout: 60 * 60 * 1000,
-            //timeout: 60 * 60 * 1000,
-            connectionLimit: 1000,
-            host: process.env.DBHOST,
-            user: process.env.DBUSER,
-            password: process.env.DBPASS,
-            database: process.env.DBNAME,
-            supportBigNumbers: true,
-            charset: "utf8mb4",
-            waitForConnections: true,
-            queueLimit: 0
-        }).promise();
-    try {
-        await sequelize.authenticate();
-        console.log('Connection has been established successfully.');
-    } catch (error) {
-        console.error('Unable to connect to the database:', error);
+    const test = await pool.query(`SELECT * FROM prefixes WHERE guild = 783489298246139965;`)
+    if (!test) {
+        throw console.error('Unable to connect to the database:', err);
     }
+    console.log('Connection has been established successfully.');
     setInterval(() => {
         client.user.setActivity(`-help in ${client.guilds.cache.size} Servers`, { type: 'WATCHING' })
     }, 60000);
@@ -49,21 +40,19 @@ client.on('ready', async () => {
     let cmddirs = read('./cmds');
     cmddirs.forEach(e => {
         let cmd = e.replace(`\\`, '/')
-        console.log(require(`./${cmd}`))
-    });
-    cmd = cmdpath.split('\\').pop().replace('.js', '')
-    cmdpath = require(`./cmds/${folder}/${cmd}.js`)
-    if (cmdpath.aliases !== undefined) {
-        for (const alias of cmdpath.aliases) {
-            aliasesarr.set(alias, `./cmds/${folder}/${cmd}.js`)
+        let cmdpath = require(`./cmds/${cmd}`)
+        if (cmdpath.aliases !== undefined) {
+            for (const alias of cmdpath.aliases) {
+                aliasesarr.set(alias, `./cmds/${cmd}`)
+            }
         }
-    }
-    cmdarr.set(cmd, `./cmds/${folder}/${cmd}.js`);
+        cmdarr.set(cmdpath.name, `./cmds/${cmd}`);
+    });
 });
 client.on('message', async (message) => {
     if (message.author.bot) return;
-    const guildPrefix = await Prefix.findOne({ where: { guild: message.guild.id } });
-    let prefix = guildPrefix.prefix
+    const guildPrefix = await await pool.query(`SELECT * FROM prefixes WHERE guild = ${message.guild.id};`)
+    let prefix = guildPrefix[0][0].prefix
     if (message.content.startsWith(prefix)) {
         let content = message.content.slice(prefix.length).split(" ");
         if (cmdarr.get(content[0]) || aliasesarr.get(content[0])) {
@@ -76,10 +65,7 @@ client.on('message', async (message) => {
 })
 
 client.on('guildCreate', async (guild) => {
-    await Prefix.create({
-        guild: guild.id,
-        prefix: process.env.PREFIX,
-    });
+    await pool.query(`INSERT INTO prefixes(guild, prefix) VALUES ('${guild.id}','!')`)
     const channel = guild.channels.cache.find(channel => channel.type === 'text' && channel.permissionsFor(guild.me).has('SEND_MESSAGES'))
     const invite = {
         title: `Thank you for inviting me to \`\`${guild.name}\`\`!`,

@@ -1,6 +1,8 @@
 const Discord = require('discord.js');
-const Pagination = require('discord-paginationembed');
 var read = require('fs-readdir-recursive')
+const Pagination = require('discord-paginationembed');
+let cmdname = []
+let cmddesc = []
 module.exports = {
     name: 'help',
     description: `Lists all of Tubb's commands!`,
@@ -9,7 +11,14 @@ module.exports = {
             let cmdarr = read('./cmds')
             cmdarr.forEach(e => {
                 let cmd = e.replace(`\\`, '/')
-                console.log(require(`../${cmd}`))
+                let cmdpath = require(`../${cmd}`)
+                for (const desc of cmdpath.description) {
+                    cmddesc.push(desc)
+                }
+                for (const name of cmdpath.name) {
+                    cmdname.push(name)
+                }
+
             });
         } else if (args) {
 
