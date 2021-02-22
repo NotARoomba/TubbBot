@@ -6,6 +6,7 @@ const sequelize = new Sequelize(`mysql://${process.env.DBUSER}:${process.env.DBP
 const filters = require('discord-player').Player.AudioFilters
 module.exports = {
     name: 'filters',
+    group: 'music',
     aliases: ['filter'],
     description: 'Adds a filter to the current song!',
     async execute(message, args, client) {

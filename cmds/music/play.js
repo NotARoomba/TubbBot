@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 module.exports = {
     name: 'play',
+    group: 'music',
     aliases: ['p'],
     description: 'Plays music!',
     async execute(message, args, client) {

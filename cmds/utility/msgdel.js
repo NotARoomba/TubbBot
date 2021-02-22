@@ -1,5 +1,6 @@
 module.exports = {
     name: 'messagedel',
+    group: 'utility',
     aliases: ['msgdel'],
     description: 'Mass (message) Genocide',
     async execute(message, count) {

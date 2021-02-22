@@ -1,5 +1,6 @@
 module.exports = {
     name: 'loopqueue',
+    group: 'music',
     aliases: ['lq'],
     description: 'Toggles queue loop!',
     async execute(message, args, client) {

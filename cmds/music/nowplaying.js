@@ -1,6 +1,7 @@
 const Discord = require('discord.js')
 module.exports = {
     name: 'nowplaying',
+    group: 'music',
     aliases: ['np'],
     description: 'Display the currently playing song!',
     async execute(message, args, client) {

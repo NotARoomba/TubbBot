@@ -1,5 +1,6 @@
 module.exports = {
     name: 'loop',
+    group: 'music',
     aliases: ['l'],
     description: 'Toggles song loop!',
     async execute(message, args, client) {

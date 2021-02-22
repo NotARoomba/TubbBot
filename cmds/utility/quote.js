@@ -1,6 +1,7 @@
 const { quotes } = require('../../assets/quotes.json')
 module.exports = {
     name: 'quote',
+    group: 'utility',
     description: 'Gets a quote form someone.',
     execute(message) {
         const { channel } = message

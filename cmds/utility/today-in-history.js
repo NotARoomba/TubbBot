@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const request = require('node-superfetch');
 module.exports = {
     name: 'todayinhistory',
+    group: 'utility',
     aliases: ['tih'],
     description: 'Gives info about what important event happend today in hisotry',
     async execute(message, args) {

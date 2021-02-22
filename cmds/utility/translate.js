@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const translate = require('@vitalets/google-translate-api');
 module.exports = {
     name: 'translate',
+    group: 'utility',
     description: 'Translates text to a specific language.',
     async execute(message, args) {
         if (!args) return message.reply(`usage: <language code to translate to> <text to translate>. Check -help translate for more info. Language Codes -> (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)`)

@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 module.exports = {
     name: 'search',
+    group: 'music',
     description: 'Search Youtube for a song!',
     async execute(message, args, client) {
         client.player.search(args).then((response) => {

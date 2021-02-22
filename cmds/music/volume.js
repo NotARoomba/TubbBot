@@ -1,5 +1,6 @@
 module.exports = {
     name: 'volume',
+    group: 'music',
     aliases: ['v', 'vol'],
     description: 'Adjust song volume!',
     async execute(message, args, client) {

@@ -2,6 +2,7 @@ const MojangAPI = require("mojang-api");
 const Discord = require('discord.js');
 module.exports = {
     name: 'minecraft',
+    group: 'utility',
     subcommands: 'pro/profile, server/srv, history/his',
     aliases: ['mc'],
     description: 'Connect to the Minecraft API and display information.',

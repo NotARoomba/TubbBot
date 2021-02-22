@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 module.exports = {
     name: 'ping',
+    group: 'utility',
     description: 'Find your ping to me!',
     execute(message) {
         const waitEmbed = new Discord.MessageEmbed()

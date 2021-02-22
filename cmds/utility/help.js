@@ -1,27 +1,66 @@
 const Discord = require('discord.js');
 var read = require('fs-readdir-recursive')
 const Pagination = require('discord-paginationembed');
-let cmdname = []
-let cmddesc = []
+let utility = []
+let music = []
 module.exports = {
     name: 'help',
-    description: `Lists all of Tubb's commands!`,
-    async execute(message, args) {
-        if (!args) {
-            let cmdarr = read('./cmds')
-            cmdarr.forEach(e => {
-                let cmd = e.replace(`\\`, '/')
-                let cmdpath = require(`../${cmd}`)
-                for (const desc of cmdpath.description) {
-                    cmddesc.push(desc)
-                }
-                for (const name of cmdpath.name) {
-                    cmdname.push(name)
-                }
-
-            });
-        } else if (args) {
-
+    group: 'utility',
+    description: `Lists Tubb's commands!`,
+    async execute(message, arg, client) {
+        const prefix = await client.pool.query(`SELECT * FROM prefixes WHERE guild = ${message.guild.id}`)
+        if (!arg) {
+            const embed = new Discord.MessageEmbed()
+                .setTitle(`Please Specify`)
+                .setColor('#dbc300')
+                .addFields([
+                    {
+                        name: 'Music Commands', value: `${prefix[0][0].prefix}help music`
+                    },
+                    {
+                        name: 'Utility Commands', value: `${prefix[0][0].prefix}help utility`
+                    }
+                ])
+            message.channel.send(embed)
         }
+        args = arg.toLowerCase()
+        let cmdarr = read('./cmds')
+        cmdarr.forEach(e => {
+            let cmd = e.replace(`\\`, '/')
+            let cmdpath = require(`../${cmd}`)
+            if (cmdpath.group == 'music') {
+                music.push({ name: cmdpath.name, description: cmdpath.description })
+            } else if (cmdpath.group == 'utility') {
+                utility.push({ name: cmdpath.name, description: cmdpath.description })
+            }
+        });
+        if (args == 'music') {
+            try {
+                module.exports.defaultEmbed(message, music, 'Music', client)
+            } catch (err) {
+                module.exports.defaultEmbed(message, music, 'Music', client)
+            }
+        } else if (args == 'utility') {
+            try {
+                module.exports.defaultEmbed(message, utility, 'Utility', client)
+            } catch (err) {
+                module.exports.defaultEmbed(message, utility, 'Utility', client)
+            }
+        }
+
+
+    },
+    defaultEmbed(message, array, name, client) {
+        const embed = new Pagination.FieldsEmbed()
+            .setArray(array)
+            .setAuthorizedUsers([message.author.id])
+            .setChannel(message.channel)
+            .setElementsPerPage(10)
+            .formatField('Name - Description', function (e) {
+                return `**${e.name}**:  ${e.description}`;
+            })
+            .setPageIndicator('footer', `${client.user.avatar_url}`)
+        embed.embed.setColor('#dbc300').setTitle(`${name} Commands`);
+        return embed.build();
     }
 }

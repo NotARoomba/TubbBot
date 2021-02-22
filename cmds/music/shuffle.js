@@ -1,6 +1,7 @@
 const Pagination = require('discord-paginationembed');
 module.exports = {
     name: 'shuffle',
+    group: 'music',
     description: 'Shuffle the music queue!',
     async execute(message, args, client) {
         client.player.shuffle(message)

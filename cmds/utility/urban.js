@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const fetch = require('node-fetch');
 module.exports = {
     name: 'urban',
+    group: 'utility',
     aliases: ['ud', 'urbandictionary'],
     description: 'Get definitions from urban dictonary.',
     execute(message, text) {

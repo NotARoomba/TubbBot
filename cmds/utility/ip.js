@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const axios = require('axios')
 module.exports = {
     name: 'ip',
+    group: 'utility',
     description: 'Responds with information on an ip.',
     async execute(message, ip) {
         try {

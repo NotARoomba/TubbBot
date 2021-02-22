@@ -3,6 +3,7 @@ const { formatNumber } = require('../../function.js');
 const request = require('node-superfetch');
 module.exports = {
     name: "country",
+    group: 'utility',
     description: 'Responds with information on a country.',
     async execute(message, query) {
         try {

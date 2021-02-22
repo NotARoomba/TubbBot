@@ -3,6 +3,7 @@ const request = require('node-superfetch');
 const { shorten } = require('../../function.js');
 module.exports = {
     name: 'wikipedia',
+    group: 'utility',
     aliases: ['wiki'],
     description: 'Searches Wikipedia for your query.',
     async execute(message, query) {
