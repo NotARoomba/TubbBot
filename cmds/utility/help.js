@@ -26,7 +26,7 @@ module.exports = {
                         name: 'Information on a Command', value: `${prefix[0][0].prefix}help [command]`
                     },
                 ])
-            message.channel.send(embed)
+            return message.channel.send(embed)
         }
         let cmdarr = read('./cmds')
         cmdarr.forEach(e => {
