@@ -59,8 +59,9 @@ module.exports = {
             .formatField('Name - Description', function (e) {
                 return `**${e.name}**:  ${e.description}`;
             })
-            .setPageIndicator('footer', `${client.user.avatar_url}`)
-        embed.embed.setColor('#dbc300').setTitle(`${name} Commands`);
+            .setPage(1)
+            .setPageIndicator('footer')
+        embed.embed.setColor('#dbc300').setTitle(`${name} Commands`).setFooter('', `${client.user.avatarURL('webp', 16)}`);;
         return embed.build();
     }
 }
