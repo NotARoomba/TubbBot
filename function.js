@@ -72,5 +72,16 @@ module.exports = {
                 }
             } catch (err) { }
         }
+    },
+    async updateQueue(message, client) {
+        const queue = client.player.queues.get(message.guild.id)
+        if (!queue) return
+        console.log(queue)
+        const sql = await client.pool.query(`SELECT * FROM musics WHERE guild = ${message.guild.id}`);
+        if (sql) {
+            await client.pool.query(`UPDATE musics SET queue = '${JSON.parse(escape(queue))}' WHERE guild = ${message.guild.id}`);
+        } else {
+            await client.pool.query(`INSERT INTO musics (guild, queue) VALUES ('${message.guild.id}','${JSON.parse(escape(queue))}')`)
+        }
     }
 }
