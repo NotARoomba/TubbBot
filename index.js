@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const { Structures } = require('discord.js')
 const client = new Discord.Client();
 const { Player } = require("discord-player");
 const player = new Player(client, {
@@ -24,30 +23,25 @@ var pool = mysql.createPool({
     waitForConnections: true,
     queueLimit: 0
 }).promise();
-Structures.extend('Guild', function (Guild) {
-    class MusicGuild extends Guild {
-        constructor(client, data) {
-            super(client, data);
-            this.musicData = {
-                queue: [],
-                previous: [],
-                volume: 1,
-                isPlaying: false,
-                nowPlaying: null,
-                loopSong: false,
-                loopQueue: false,
-                songDispatcher: null,
-                connection: null,
-            };
-        }
-    }
-    return MusicGuild;
-});
 var read = require('fs-readdir-recursive');
 let cmdarr = new Discord.Collection()
 let aliasesarr = new Discord.Collection()
 client.pool = pool
 client.on('ready', async () => {
+    client.guilds.cache.forEach(guild => {
+        guild.musicData = {
+            queue: [],
+            previous: [],
+            filters: [],
+            volume: 1,
+            isPlaying: false,
+            nowPlaying: null,
+            loopSong: false,
+            loopQueue: false,
+            songDispatcher: null,
+            connection: null,
+        }
+    });
     try {
         await pool.query(`SELECT * FROM prefixes WHERE guild = 783489298246139965;`)
         console.log('Connection has been established successfully.');
@@ -124,6 +118,16 @@ client.on('guildCreate', async (guild) => {
     }
     channel.send({ embed: invite })
 })
+client.on('voiceStateUpdate', async (___, newState) => {
+    if (newState.member.user.bot && !newState.channelID && newState.guild.musicData.songDispatcher && newState.member.user.id == client.user.id) {
+        newState.guild.musicData.queue.length = 0;
+        newState.guild.musicData.songDispatcher.end();
+        return;
+    }
+    if (newState.member.user.bot && newState.channelID && newState.member.user.id == client.user.id && !newState.selfDeaf) {
+        newState.setSelfDeaf(true);
+    }
+});
 client.player.on('trackStart', (message, track) => {
     const embed = new Discord.MessageEmbed()
         .setColor('#FFED00')

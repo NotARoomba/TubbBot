@@ -1,10 +1,11 @@
+const { isValidCommander } = require('../../function.js')
 module.exports = {
     name: 'loopqueue',
     group: 'music',
     usage: 'loopqueue',
     aliases: ['lq'],
     description: 'Toggles queue loop!',
-    async execute(message, args) {
+    async execute(message) {
         if (isValidCommander(message) !== true) return
         else if (message.guild.musicData.queue.length == 0) {
             message.say(`I can't loop over an empty queue!`);

@@ -7,6 +7,7 @@ module.exports = {
     aliases: ['p2'],
     description: 'Plays music!',
     async execute(message, args) {
+        const musicData = message.guild.musicData
         const voiceChannel = message.member.voice.channel;
         if (!voiceChannel) {
             message.reply('please join a voice channel and try again!');
@@ -23,16 +24,16 @@ module.exports = {
             else if (message.attachments.size > 0) result.push(await addAttachment(message, voiceChannel));
             else result.push(await search(message, args, voiceChannel));
             result.forEach(track => {
-                message.guild.musicData.queue.push(track)
+                musicData.queue.push(track)
             });
             const addembed = new Discord.MessageEmbed()
                 .setColor('#FFED00')
                 .setTitle(`:musical_note: ${result[0].title}`)
-                .setDescription(`Has been added to queue.\nThis song is #${message.guild.musicData.queue.length} in queue`)
+                .setDescription(`Has been added to queue.\nThis song is #${musicData.queue.length} in queue`)
                 .setThumbnail(result[0].thumbnail)
                 .setURL(result[0].url)
-            if (result.length > 1) addembed.setTitle(`:musical_note: ${result.length} tracks were added.`).setThumbnail(result[0].thumbnail).setDescription(`Has been added to queue.\nThese songs are #${message.guild.musicData.queue.length} in queue`);
-            if (typeof message.guild.musicData.songDispatcher == 'undefined' || message.guild.musicData.songDispatcher == null) {
+            if (result.length > 1) addembed.setTitle(`:musical_note: ${result.length} tracks were added.`).setThumbnail(result[0].thumbnail).setDescription(`Has been added to queue.\nThese songs are #${musicData.queue.length} in queue`);
+            if (typeof musicData.songDispatcher == 'undefined' || musicData.songDispatcher == null) {
                 module.exports.play(message, voiceChannel)
             } else message.channel.send(addembed)
         } catch (err) {
@@ -40,61 +41,77 @@ module.exports = {
         }
     },
     async play(message, voiceChannel) {
+        console.log('yess');
+        const musicData = message.guild.musicData
         const npembed = new Discord.MessageEmbed()
             .setColor('#FFED00')
-            .setTitle(`:notes: Now Playing: ${message.guild.musicData.queue[0].title}`)
-            .setDescription(`:stopwatch: Duration: ${message.guild.musicData.queue[0].lengthFormatted}`)
-            .setThumbnail(message.guild.musicData.queue[0].thumbnail)
-            .setURL(message.guild.musicData.queue[0].url)
-            .setFooter(`Requested by ${message.guild.musicData.queue[0].memberDisplayName}!`, message.guild.musicData.queue[0].memberAvatar)
-        if (message.guild.musicData.queue[0].isLive) npembed.setDescription(':stopwatch: Duration: 🔴 Live')
-        if (message.guild.musicData.queue[0].type == 0) {
-            const stream = ytdl(message.guild.musicData.queue[0].url, {
+            .setTitle(`:notes: Now Playing: ${musicData.queue[0].title}`)
+            .setDescription(`:stopwatch: Duration: ${musicData.queue[0].lengthFormatted}`)
+            .setThumbnail(musicData.queue[0].thumbnail)
+            .setURL(musicData.queue[0].url)
+            .setFooter(`Requested by ${musicData.queue[0].memberDisplayName}!`, musicData.queue[0].memberAvatar)
+        if (musicData.queue[0].isLive) npembed.setDescription(':red_circle: Live Stream')
+        musicData.queue[0].seek !== 0 ? seek = musicData.queue[0].seek : seek = 0
+        const encoderArgsFilters = []
+        musicData.filters.forEach(filter => {
+            if (filter[Object.keys(filter)[0]] !== '') {
+                encoderArgsFilters.push(filter[Object.keys(filter)[0]])
+            }
+        });
+        let encoderArgs
+        if (encoderArgsFilters.length < 1) {
+            encoderArgs = []
+        } else {
+            encoderArgs = ['-af', encoderArgsFilters.join(',')]
+        }
+        console.log(musicData.queue[0])
+        if (musicData.queue[0].type == 0) {
+            const stream = ytdl(musicData.queue[0].url, {
                 filter: "audio",
                 dlChunkSize: 0,
                 quality: 'highestaudio',
                 highWaterMark: 1 << 25,
                 opusEncoded: true,
+                seek: seek,
+                encoderArgs: encoderArgs,
                 requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE } },
-                encoderArgs: ['-af', 'dynaudnorm=f=200']
             })
             try {
                 voiceChannel.join().then(async (connection) => {
-                    await connection.voice.setSelfDeaf(true);
-                    await connection.voice.setDeaf(true);
-                    message.guild.musicData.connection = connection
+                    musicData.connection = connection
                     const dispatcher = connection.play(stream, {
                         type: 'opus',
                     })
-                    message.guild.musicData.isPlaying = true;
-                    message.channel.send(npembed)
-                    message.guild.musicData.songDispatcher = dispatcher
-                    dispatcher.setVolume(message.guild.musicData.volume);
-                    message.guild.musicData.nowPlaying = message.guild.musicData.queue[0];
-                    message.guild.musicData.previous.push(message.guild.musicData.queue.shift())
-                    module.exports.musicHandler(message, message.guild, voiceChannel)
+                    musicData.isPlaying = true;
+                    musicData.songDispatcher = dispatcher
+                    dispatcher.setVolume(musicData.volume);
+                    musicData.nowPlaying = musicData.queue[0];
+                    musicData.queue.shift()
+                    module.exports.musicHandler(message, message.guild.musicData.voiceChannel, npembed)
                 })
             } catch (err) { }
         }
     },
-    musicHandler(message, voiceChannel) {
-        const dispatcher = message.guild.musicData.songDispatcher
-        dispatcher.on("finish", () => {
-            if (message.guild.musicData.loopSong) {
-                queue.unshift(message.guild.musicData.nowPlaying);
-            } else if (message.guild.musicData.loopQueue) {
-                queue.push(message.guild.musicData.nowPlaying);
+    musicHandler(message, voiceChannel, npembed) {
+        const musicData = message.guild.musicData
+        const dispatcher = musicData.songDispatcher
+        dispatcher.on('finish', () => {
+            if (musicData.loopSong) {
+                queue.unshift(musicData.nowPlaying);
+            } else if (musicData.loopQueue) {
+                queue.push(musicData.nowPlaying);
             }
-            if (message.guild.musicData.queue.length >= 1) {
-                module.exports.play(message, message.guild, voiceChannel);
+            if (musicData.queue.length >= 1) {
+                module.exports.play(message, voiceChannel);
                 return;
             } else {
-                message.guild.musicData.isPlaying = false;
-                message.guild.musicData.nowPlaying = null;
-                message.guild.musicData.songDispatcher = null;
+                console.log('bye')
+                musicData.isPlaying = false;
+                musicData.nowPlaying = null;
+                musicData.songDispatcher = null;
                 if (message.guild.me.voice.channel) {
                     setTimeout(function onTimeOut() {
-                        if (message.guild.musicData.isPlaying == false && message.guild.me.voice.channel) {
+                        if (musicData.isPlaying == false && message.guild.me.voice.channel) {
                             message.guild.me.voice.channel.leave();
                             message.channel.send(':zzz: Left channel due to inactivity.');
                         }
@@ -102,19 +119,22 @@ module.exports = {
                 }
             }
         })
+        dispatcher.on('start', () => {
+            message.channel.send(npembed)
+        })
         dispatcher.on('error', function (e) {
-            message.say('Cannot play song!');
+            message.channel.send('Cannot play song!');
             console.log(e);
             if (queue.length > 1) {
                 queue.shift();
                 module.exports.play(message, voiceChannel);
                 return;
             }
-            message.guild.musicData.queue.length = 0;
-            message.guild.musicData.isPlaying = false;
-            message.guild.musicData.nowPlaying = null;
-            message.guild.musicData.loopSong = false;
-            message.guild.musicData.songDispatcher = null;
+            musicData.queue.length = 0;
+            musicData.isPlaying = false;
+            musicData.nowPlaying = null;
+            musicData.loopSong = false;
+            musicData.songDispatcher = null;
             message.guild.me.voice.channel.leave();
             return;
         });

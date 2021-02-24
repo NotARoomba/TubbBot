@@ -6,7 +6,7 @@ module.exports = {
     usage: 'skip',
     aliases: ['s'],
     description: 'Skip the current playing song!',
-    async execute(message, args) {
+    async execute(message) {
         if (isValidCommander(message) !== true) return
         message.guild.musicData.loopSong = false;
         message.guild.musicData.songDispatcher.end();

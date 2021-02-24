@@ -5,7 +5,7 @@ module.exports = {
     usage: 'queue',
     aliases: ['song-list', 'next-songs', 'q'],
     description: 'Display the song queue!',
-    async execute(message, args) {
+    async execute(message) {
         try {
             const queueClone = message.guild.musicData.queue;
             const queueEmbed = new Pagination.FieldsEmbed()

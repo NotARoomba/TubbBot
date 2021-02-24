@@ -43,6 +43,7 @@ module.exports = {
             thumbnail: video.thumbnails[0].url,
             url: video.video_url,
             type: 0,
+            seek: 0,
             isLive: video.isLiveContent && video.isLive ? true : false,
             voiceChannel: voiceChannel,
             memberDisplayName: message.member.user.username,
@@ -119,5 +120,22 @@ module.exports = {
             const endTimecode = message.guild.musicData.nowPlaying.lengthFormatted
             return `${currentTimecode} ┃ 🔘▬▬▬▬▬▬▬▬▬▬▬▬▬▬ ┃ ${endTimecode}`
         }
+    },
+    arrayMove(arr, old_index, new_index) {
+        // https://stackoverflow.com/a/5306832/9421002
+        while (old_index < 0) {
+            old_index += arr.length;
+        }
+        while (new_index < 0) {
+            new_index += arr.length;
+        }
+        if (new_index >= arr.length) {
+            var k = new_index - arr.length + 1;
+            while (k--) {
+                arr.push(undefined);
+            }
+        }
+        arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+        return arr;
     }
 }
