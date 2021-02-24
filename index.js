@@ -40,6 +40,7 @@ client.on('ready', async () => {
             loopQueue: false,
             songDispatcher: null,
             connection: null,
+            voiceChannel: null,
         }
     });
     try {

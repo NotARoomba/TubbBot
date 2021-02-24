@@ -9,6 +9,7 @@ module.exports = {
     async execute(message, args) {
         const musicData = message.guild.musicData
         const voiceChannel = message.member.voice.channel;
+        musicData.voiceChannel = voiceChannel
         if (!voiceChannel) {
             message.reply('please join a voice channel and try again!');
             return;
@@ -41,7 +42,6 @@ module.exports = {
         }
     },
     async play(message, voiceChannel) {
-        console.log('yess');
         const musicData = message.guild.musicData
         const npembed = new Discord.MessageEmbed()
             .setColor('#FFED00')
@@ -77,9 +77,9 @@ module.exports = {
                 requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE } },
             })
             try {
-                voiceChannel.join().then(async (connection) => {
+                await voiceChannel.join().then(async (connection) => {
                     musicData.connection = connection
-                    const dispatcher = connection.play(stream, {
+                    const dispatcher = await connection.play(stream, {
                         type: 'opus',
                     })
                     musicData.isPlaying = true;
@@ -87,7 +87,7 @@ module.exports = {
                     dispatcher.setVolume(musicData.volume);
                     musicData.nowPlaying = musicData.queue[0];
                     musicData.queue.shift()
-                    module.exports.musicHandler(message, message.guild.musicData.voiceChannel, npembed)
+                    module.exports.musicHandler(message, voiceChannel, npembed)
                 })
             } catch (err) { }
         }
@@ -105,7 +105,6 @@ module.exports = {
                 module.exports.play(message, voiceChannel);
                 return;
             } else {
-                console.log('bye')
                 musicData.isPlaying = false;
                 musicData.nowPlaying = null;
                 musicData.songDispatcher = null;
