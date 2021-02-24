@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const { Structures } = require('discord.js')
 const client = new Discord.Client();
 const { Player } = require("discord-player");
 const player = new Player(client, {
@@ -23,18 +24,25 @@ var pool = mysql.createPool({
     waitForConnections: true,
     queueLimit: 0
 }).promise();
-let musicData = {
-    queue: [],
-    previous: [],
-    volume: 1,
-    isPlaying: false,
-    nowPlaying: null,
-    loopSong: false,
-    loopQueue: false,
-    songDispatcher: null,
-    connection: null,
-}
-client.musicData = musicData;
+Structures.extend('Guild', function (Guild) {
+    class MusicGuild extends Guild {
+        constructor(client, data) {
+            super(client, data);
+            this.musicData = {
+                queue: [],
+                previous: [],
+                volume: 1,
+                isPlaying: false,
+                nowPlaying: null,
+                loopSong: false,
+                loopQueue: false,
+                songDispatcher: null,
+                connection: null,
+            };
+        }
+    }
+    return MusicGuild;
+});
 var read = require('fs-readdir-recursive');
 let cmdarr = new Discord.Collection()
 let aliasesarr = new Discord.Collection()

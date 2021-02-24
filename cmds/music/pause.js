@@ -4,7 +4,8 @@ module.exports = {
     usage: 'pause',
     description: 'Pause the current playing song!',
     async execute(message, args, client) {
-        client.player.pause(message)
+        if (isValidCommander(message, client) !== true) return
+        message.guild.musicData.songDispatcher.pause();
         message.react("⏸️")
     }
 }

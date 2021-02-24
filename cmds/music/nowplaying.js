@@ -1,18 +1,19 @@
 const Discord = require('discord.js')
+const { createProgressBar } = require('../../function.js')
 module.exports = {
     name: 'nowplaying',
     group: 'music',
     usage: 'nowplaying',
     aliases: ['np'],
     description: 'Display the currently playing song!',
-    async execute(message, args, client) {
-        let track = client.player.nowPlaying(message)
+    async execute(message, args) {
+        let track = message.guild.musicData.nowPlaying
         const embed = new Discord.MessageEmbed()
             .setColor('#FFED00')
             .setTitle(`:notes: ${track.title}`)
             .setThumbnail(track.thumbnail)
             .setURL(track.url)
-            .setDescription(`${client.player.createProgressBar(message, { timecodes: true })}`);
+            .setDescription(`${createProgressBar(message)}`);
         message.channel.send(embed);
     }
 }

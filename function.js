@@ -29,7 +29,7 @@ module.exports = {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         });
     },
-    formatSeconds(time) {
+    buildTimecode(time) {
         const formatted = new Date(time * 1000).toISOString().substr(11, 8)
         return formatted
     },
@@ -37,7 +37,7 @@ module.exports = {
         const video = await (await ytdl.getBasicInfo(args)).videoDetails
         song = {
             title: video.title,
-            lengthFormatted: module.exports.formatSeconds(video.lengthSeconds),
+            lengthFormatted: module.exports.buildTimecode(video.lengthSeconds),
             lengthSeconds: video.lengthSeconds,
             author: video.author.name,
             thumbnail: video.thumbnails[0].url,
@@ -88,5 +88,36 @@ module.exports = {
         const queue = await client.pool.query(`SELECT queue FROM musics WHERE guild = ${message.guild.id}`)
         console.log(queue[0])
         return await parse(queue[0][0].queue);
+    },
+    isValidCommander(message) {
+        const voiceChannel = message.member.voice.channel;
+        if (!voiceChannel) {
+            message.reply('Please join a voice channel and try again!');
+            return false
+        } else if (voiceChannel.id !== message.guild.me.voice.channel.id) {
+            message.reply(`You must be in the same voice channel as the bot's in order to use that!`);
+            return false
+        } else if (typeof message.guild.musicData.songDispatcher == 'undefined' || message.guild.musicData.songDispatcher == null) {
+            message.reply('There is no song playing right now!');
+            return false
+        }
+        return true
+    },
+    createProgressBar(message) {
+        const totalTime = message.guild.musicData.nowPlaying.lengthSeconds * 1000
+        const currentStreamTime = message.guild.musicData.songDispatcher.streamTime
+        const index = Math.round((currentStreamTime / totalTime) * 15)
+
+        if ((index >= 1) && (index <= 15)) {
+            const bar = '▬▬▬▬▬▬▬▬▬▬▬▬▬▬'.split('')
+            bar.splice(index, 0, '🔘')
+            const currentTimecode = module.exports.buildTimecode(Math.round(currentStreamTime / 1000))
+            const endTimecode = message.guild.musicData.nowPlaying.lengthFormatted
+            return `${currentTimecode} ┃ ${bar.join('')} ┃ ${endTimecode}`
+        } else {
+            const currentTimecode = module.exports.buildTimecode(Math.round(currentStreamTime / 1000))
+            const endTimecode = message.guild.musicData.nowPlaying.lengthFormatted
+            return `${currentTimecode} ┃ 🔘▬▬▬▬▬▬▬▬▬▬▬▬▬▬ ┃ ${endTimecode}`
+        }
     }
 }

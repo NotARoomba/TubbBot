@@ -6,10 +6,10 @@ module.exports = {
     usage: 'lyrics (optional: song name)',
     aliases: ['ly'],
     description: 'Get the lyrics for the currently playing song or query!',
-    async execute(message, songName, client) {
-        if (!client.player.isPlaying(message) && songName == '') return message.reply(`please play a song or input your search query.`)
-        if (songName == '' && client.player.isPlaying(message)) {
-            const track = client.player.nowPlaying(message)
+    async execute(message, songName) {
+        if (!message.guild.musicData.isPlaying && songName == '') return message.reply(`please play a song or input your search query.`)
+        if (songName == '' && message.guild.musicData.isPlaying) {
+            const track = message.guild.musicData.nowPlaying
             songName = track.title
         }
         songName = songName.replace(/ *\([^)]*\) */g, '');
@@ -26,8 +26,9 @@ module.exports = {
                 message.channel.send('Lyrics are too long to be returned in a message embed!');
                 return;
             }
-            if (lyrics.length < 2048) {
+            if (lyrics.length < 2048 - songName.length) {
                 const lyricsEmbed = new MessageEmbed()
+                    .setTitle(songName)
                     .setColor('#dbc300')
                     .setDescription(lyrics.trim())
                     .setFooter('Provided by genius.com');
@@ -35,8 +36,9 @@ module.exports = {
             } else {
                 // 2048 < lyrics.length < 4096
                 const firstLyricsEmbed = new MessageEmbed()
+                    .setTitle(songName)
                     .setColor('#dbc300')
-                    .setDescription(lyrics.slice(0, 2048))
+                    .setDescription(lyrics.slice(0, 2048 - songName.length))
                     .setFooter('Provided by genius.com');
                 const secondLyricsEmbed = new MessageEmbed()
                     .setColor('#dbc300')

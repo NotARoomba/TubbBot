@@ -5,11 +5,9 @@ module.exports = {
     usage: 'queue',
     aliases: ['song-list', 'next-songs', 'q'],
     description: 'Display the song queue!',
-    async execute(message, args, client) {
+    async execute(message, args) {
         try {
-            let queue = client.player.getQueue(message)
-            queue = queue.tracks
-            const queueClone = queue;
+            const queueClone = message.guild.musicData.queue;
             const queueEmbed = new Pagination.FieldsEmbed()
                 .setArray(queueClone)
                 .setAuthorizedUsers([message.author.id])
