@@ -7,7 +7,7 @@ module.exports = {
     async execute(message, args, client) {
         client.player.search(args).then((response) => {
             if (response.length < 5 || !response) {
-                return message.say(`I had some trouble finding what you were looking for, please try again or be more specific.`);
+                return message.channel.send(`I had some trouble finding what you were looking for, please try again or be more specific.`);
             }
             const vidNameArr = [];
             for (let i = 0; i < response.length; i++) {
