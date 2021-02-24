@@ -76,12 +76,17 @@ module.exports = {
     async updateQueue(message, client) {
         const queue = client.player.queues.get(message.guild.id)
         if (!queue) return
-        console.log(queue)
+        console.log(queue.tracks.player)
         const sql = await client.pool.query(`SELECT * FROM musics WHERE guild = ${message.guild.id}`);
-        if (sql) {
-            await client.pool.query(`UPDATE musics SET queue = '${JSON.parse(escape(queue))}' WHERE guild = ${message.guild.id}`);
+        if (sql[0][1] === undefined) {
+            await client.pool.query(`UPDATE musics SET queue = '${stringify(queue.tracks)}' WHERE guild = ${message.guild.id}`);
         } else {
-            await client.pool.query(`INSERT INTO musics (guild, queue) VALUES ('${message.guild.id}','${JSON.parse(escape(queue))}')`)
+            await client.pool.query(`INSERT INTO musics (guild, queue) VALUES ('${message.guild.id}','${stringify(queue.tracks)}')`)
         }
+    },
+    async getQueue(message, client) {
+        const queue = await client.pool.query(`SELECT queue FROM musics WHERE guild = ${message.guild.id}`)
+        console.log(queue[0])
+        return await parse(queue[0][0].queue);
     }
 }

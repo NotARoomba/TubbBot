@@ -8,7 +8,7 @@ module.exports = {
     async execute(message, args, client) {
         const voiceChannel = message.member.voice.channel;
         if (!voiceChannel) {
-            message.say('Please join a voice channel and try again!');
+            message.reply('Please join a voice channel and try again!');
             return;
         }
         client.player.play(message, args, true);

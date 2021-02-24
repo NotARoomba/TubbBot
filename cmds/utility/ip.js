@@ -30,7 +30,7 @@ module.exports = {
                     console.log(error);
                 })
         } catch (err) {
-            if (err.status === 404) return message.say('Could not find any results.');
+            if (err.status === 404) return message.channel.send('Could not find any results.');
             return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
         }
     }

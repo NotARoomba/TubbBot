@@ -24,7 +24,7 @@ module.exports = {
                     formatversion: 2
                 });
             const data = body.query.pages[0];
-            if (data.missing) return message.say('Could not find any results.');
+            if (data.missing) return message.channel.send('Could not find any results.');
             const embed = new Discord.MessageEmbed()
                 .setColor('#484848')
                 .setTitle(data.title)

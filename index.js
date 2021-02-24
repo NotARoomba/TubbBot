@@ -23,7 +23,7 @@ var pool = mysql.createPool({
     waitForConnections: true,
     queueLimit: 0
 }).promise();
-var read = require('fs-readdir-recursive')
+var read = require('fs-readdir-recursive');
 let cmdarr = new Discord.Collection()
 let aliasesarr = new Discord.Collection()
 client.pool = pool
@@ -136,7 +136,7 @@ client.player.on('botDisconnect', (message) => {
     message.channel.send(`:zzz: Left channel due to inactivity.`)
 })
 client.player.on('error', (err, message) => {
-    err == 'NotPlaying' ? message.reply(`there nothing playing.`) : err == 'UnableToJoin' ? message.reply(`I couldn't joine the voice channel, check my permissions.`) : err == 'VideoUnavailable' ? message.reply(`the video you are trying to play is unavailable.`) : err == 'NotConnected' ? message.reply(`I am not connected to a voice channel, check my permissions.`) : message.reply(`An error occured`);
+    err == 'NotPlaying' ? message.reply(`there is nothing playing.`) : err == 'UnableToJoin' ? message.reply(`I couldn't join the voice channel, check my permissions.`) : err == 'VideoUnavailable' ? message.reply(`the video you are trying to play is unavailable.`) : err == 'NotConnected' ? message.reply(`I am not connected to a voice channel, check my permissions.`) : message.reply(`An error occured`);
 })
 
 client.login(process.env.TOKEN);
