@@ -23,6 +23,18 @@ var pool = mysql.createPool({
     waitForConnections: true,
     queueLimit: 0
 }).promise();
+let musicData = {
+    queue: [],
+    previous: [],
+    volume: 1,
+    isPlaying: false,
+    nowPlaying: null,
+    loopSong: false,
+    loopQueue: false,
+    songDispatcher: null,
+    connection: null,
+}
+client.musicData = musicData;
 var read = require('fs-readdir-recursive');
 let cmdarr = new Discord.Collection()
 let aliasesarr = new Discord.Collection()
