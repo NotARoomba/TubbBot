@@ -64,7 +64,6 @@ module.exports = {
         } else {
             encoderArgs = ['-af', encoderArgsFilters.join(',')]
         }
-        console.log(musicData.queue[0])
         if (musicData.queue[0].type == 0) {
             const stream = ytdl(musicData.queue[0].url, {
                 filter: "audio",
