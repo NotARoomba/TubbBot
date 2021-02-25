@@ -15,6 +15,8 @@ var spotifyApi = new SpotifyWebApi({
 const mm = require("music-metadata");
 const Pagination = require('discord-paginationembed');
 const imgurUploader = require('imgur-uploader');
+const rp = require("request-promise-native");
+const cheerio = require("cheerio");
 module.exports = {
     list(arr, conj = 'and') {
         const len = arr.length;
@@ -365,11 +367,11 @@ module.exports = {
                 var metadata = await mm.parseStream(stream, {}, { duration: true });
             } catch (err) {
                 message.channel.send("The audio format is not supported!");
-                return { error: true };
+                return
             }
             if (!metadata) {
                 message.channel.send("An error occured while parsing the audio file into stream! Maybe it is not link to the file?");
-                return { error: true };
+                return
             }
             let imagedata = 0;
             if (metadata.common.picture[0] !== undefined) {
@@ -395,6 +397,55 @@ module.exports = {
                 memberAvatar: message.member.user.avatarURL('webp', false, 16)
             });
         }
+        return results
+    },
+    async addGDURL(message, query, voiceChannel) {
+        const results = []
+        const formats = [/https:\/\/drive\.google\.com\/file\/d\/(?<id>.*?)\/(?:edit|view)\?usp=sharing/, /https:\/\/drive\.google\.com\/open\?id=(?<id>.*?)$/];
+        const alphanumeric = /^[a-zA-Z0-9\-_]+$/;
+        let id;
+        formats.forEach((regex) => {
+            const matches = query.match(regex)
+            if (matches && matches.groups && matches.groups.id) id = matches.groups.id
+        });
+        if (!id) {
+            if (alphanumeric.test(query)) id = query;
+            else {
+                message.channel.send(`The link/keywords you provided is invalid! Usage: \`${message.prefix}${this.name} ${this.usage}\``);
+                return
+            }
+        }
+        var link = "https://drive.google.com/uc?export=download&id=" + id;
+        var stream = await fetch(link).then(res => res.body);
+        var title = "No Title";
+        try {
+            var metadata = await mm.parseStream(stream, {}, { duration: true });
+            var html = await rp(query);
+            var $ = cheerio.load(html);
+            title = $("title").text().split(" - ").slice(0, -1).join(" - ").split(".").slice(0, -1).join(".");
+        } catch (err) {
+            message.reply("there was an error trying to parse your link!");
+            return console.log(err)
+        }
+        if (!metadata) {
+            message.channel.send("An error occured while parsing the audio file into stream! Maybe it is not link to the file?");
+            return
+        }
+        const length = Math.round(metadata.format.duration);
+        const songLength = moment.duration(length, "seconds").format();
+        results.push({
+            title: title,
+            url: link,
+            thumbnail: "https://drive-thirdparty.googleusercontent.com/256/type/audio/mpeg",
+            isLive: false,
+            lengthFormatted: songLength,
+            lengthSeconds: length,
+            seek: 0,
+            type: 2,
+            voiceChannel: voiceChannel,
+            memberDisplayName: message.member.user.username,
+            memberAvatar: message.member.user.avatarURL('webp', false, 16)
+        });
         return results
     },
     isGoodMusicVideoContent(videoSearchResultItem) {
