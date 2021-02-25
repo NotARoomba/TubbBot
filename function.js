@@ -356,6 +356,47 @@ module.exports = {
         });
         return results
     },
+    async addAttachment(message, voiceChannel) {
+        const files = message.attachments;
+        const results = []
+        for (const file of files.values()) {
+            const stream = await fetch(file.url).then(res => res.body);
+            try {
+                var metadata = await mm.parseStream(stream, {}, { duration: true });
+            } catch (err) {
+                message.channel.send("The audio format is not supported!");
+                return { error: true };
+            }
+            if (!metadata) {
+                message.channel.send("An error occured while parsing the audio file into stream! Maybe it is not link to the file?");
+                return { error: true };
+            }
+            let imagedata = 0;
+            if (metadata.common.picture[0] !== undefined) {
+                imagedata = await imgurUploader(metadata.common.picture[0].data, { title: 'music-metadata' })
+            }
+            let title = 0
+            if (metadata.common.title == undefined) {
+                title = query.split("/").slice(-1)[0].split(".").slice(0, -1).join(".").replace(/_/g, " ");
+            }
+            const length = Math.round(metadata.format.duration);
+            const songLength = moment.duration(length, "seconds").format();
+            results.push({
+                title: (title == 0) ? metadata.common.title : (file.name ? file.name.split(".").slice(0, -1).join(".") : file.url.split("/").slice(-1)[0].split(".").slice(0, -1).join(".")).replace(/_/g, " "),
+                url: file.url,
+                thumbnail: (imagedata !== 0) ? imagedata.link : "https://www.flaticon.com/svg/static/icons/svg/2305/2305904.svg",
+                isLive: false,
+                lengthFormatted: songLength,
+                lengthSeconds: length,
+                seek: 0,
+                type: 2,
+                voiceChannel: voiceChannel,
+                memberDisplayName: message.member.user.username,
+                memberAvatar: message.member.user.avatarURL('webp', false, 16)
+            });
+        }
+        return results
+    },
     isGoodMusicVideoContent(videoSearchResultItem) {
         const contains = (string, content) => !!~(string || "").indexOf(content);
         return (contains(videoSearchResultItem.author ? videoSearchResultItem.author.name : undefined, "VEVO") || contains(videoSearchResultItem.author ? videoSearchResultItem.author.name.toLowerCase() : undefined, "official") || contains(videoSearchResultItem.title.toLowerCase(), "official") || !contains(videoSearchResultItem.title.toLowerCase(), "extended"));
