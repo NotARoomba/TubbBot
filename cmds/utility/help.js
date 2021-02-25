@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 var read = require('fs-readdir-recursive')
-const { defaultEmbed, search } = require('../../function.js')
+const { defaultEmbed, searchArray } = require('../../function.js')
 let utility = []
 let music = []
 let embed;
@@ -54,7 +54,7 @@ module.exports = {
         } else {
             const prefix = await client.pool.query(`SELECT * FROM prefixes WHERE guild = ${message.guild.id};`)
             arg = args.toLowerCase()
-            const cmd = search(arg, total)
+            const cmd = searchArray(arg, total)
             if (cmd) {
                 embed = new Discord.MessageEmbed()
                     .setTitle(cmd.name)

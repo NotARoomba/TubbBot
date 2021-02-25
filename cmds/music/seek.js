@@ -1,14 +1,18 @@
+const { play } = require('./play');
+const { isValidCommander } = require("../../function");
 module.exports = {
     name: 'seek',
     group: 'music',
     usage: 'seek (time in seconds)',
     description: 'Go to a time in the song!',
-    async execute(message, args, client) {
-        let track = client.player.nowPlaying(message)
-        if (isNaN(Number(args))) return message.reply(`that is not a number.`)
-        args = Number(args) * 1000
-        if (args < 0 || args > track.duration || args.includes('.')) return message.reply(`that is not a valid time.`);
-        client.player.seek(message, args);
-        message.react("👌");
+    async execute(message, args) {
+        if (isValidCommander(message) !== true) return
+        if (isNaN(parseInt(args))) return message.reply(`that is not a parseInt.`)
+        if (parseInt(args) < 0 || parseInt(args) > message.guild.musicData.nowPlaying.lengthSeconds) return message.reply(`that is not a valid time.`);
+        message.guild.musicData.songDispatcher.pause();
+        message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying)
+        message.guild.musicData.queue[0].seek = Math.round(parseInt(args))
+        await play(message, message.guild.musicData.queue[0].voiceChannel)
+        message.channel.send(`Forwarding **${message.guild.musicData.nowPlaying.title}** to \`\`${Math.round(parseInt(args))}\`\` seconds :fast_forward: `)
     }
 }

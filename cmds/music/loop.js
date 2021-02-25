@@ -1,18 +1,22 @@
+const { isValidCommander } = require('../../function.js')
 module.exports = {
     name: 'loop',
     group: 'music',
     usage: 'loop',
     aliases: ['l', 'repeat'],
     description: 'Toggles song loop!',
-    async execute(message, args, client) {
-        let queue = client.player.getQueue(message)
-        if (queue.repeatMode) {
-            client.player.setRepeatMode(message, false);
-            message.channel.send(`**${client.player.nowPlaying(message).title}** is no longer playing on repeat :repeat: `);
+    async execute(message) {
+        if (isValidCommander(message) !== true) return
+        if (message.guild.musicData.loopQueue) {
+            message.reply('Turn off the **loopqueue** command before using the **loop** command');
+            return;
+        } else if (message.guild.musicData.loopSong) {
+            message.guild.musicData.loopSong = false;
+            message.channel.send(`**${message.guild.musicData.nowPlaying.title}** is no longer playing on repeat :repeat: `);
         }
         else {
-            client.player.setRepeatMode(message, true);
-            message.channel.send(`**${client.player.nowPlaying(message).title}** is now playing on repeat :repeat: `);
+            message.guild.musicData.loopSong = true;
+            message.channel.send(`**${message.guild.musicData.nowPlaying.title}** is now playing on repeat :repeat: `);
         }
     }
 }

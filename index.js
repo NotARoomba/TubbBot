@@ -1,12 +1,5 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const { Player } = require("discord-player");
-const player = new Player(client, {
-    leaveOnEndCooldown: 90000,
-    leaveOnEnd: true,
-    enableLive: true,
-});
-client.player = player;
 require('dotenv').config();
 const mysql = require("mysql2");
 var pool = mysql.createPool({
@@ -28,6 +21,21 @@ let cmdarr = new Discord.Collection()
 let aliasesarr = new Discord.Collection()
 client.pool = pool
 client.on('ready', async () => {
+    client.guilds.cache.forEach(guild => {
+        guild.musicData = {
+            queue: [],
+            previous: [],
+            filters: [],
+            volume: 1,
+            isPlaying: false,
+            nowPlaying: null,
+            loopSong: false,
+            loopQueue: false,
+            songDispatcher: null,
+            connection: null,
+            voiceChannel: null,
+        }
+    });
     try {
         await pool.query(`SELECT * FROM prefixes WHERE guild = 783489298246139965;`)
         console.log('Connection has been established successfully.');
@@ -104,39 +112,15 @@ client.on('guildCreate', async (guild) => {
     }
     channel.send({ embed: invite })
 })
-client.player.on('trackStart', (message, track) => {
-    const embed = new Discord.MessageEmbed()
-        .setColor('#FFED00')
-        .setTitle(`:notes: Now Playing: ${track.title}`)
-        .addField(':stopwatch: Duration:', track.duration)
-        .setThumbnail(track.thumbnail)
-        .setURL(track.url)
-        .setFooter(`Requested by ${track.requestedBy.username}#${track.requestedBy.discriminator}!`, `https://cdn.discordapp.com/avatars/${track.requestedBy.id}/${track.requestedBy.avatar}.png`)
-    message.channel.send(embed)
-})
-client.player.on('noResults', (message, query) => {
-    message.reply(`I couldn't find any results for \`${query}\``)
-})
-client.player.on('trackAdd', (message, queue, track) => {
-    const embed = new Discord.MessageEmbed()
-        .setColor('#FFED00')
-        .setTitle(`:musical_note: ${track.title}`)
-        .addField(
-            `Has been added to queue. `,
-            `This song is #${queue.tracks.length} in queue`
-        )
-        .setThumbnail(track.thumbnail)
-        .setURL(track.url)
-    message.channel.send(embed)
-})
-client.player.on('channelEmpty', (message) => {
-    message.channel.send(`:zzz: Left channel due to inactivity.`)
-})
-client.player.on('botDisconnect', (message) => {
-    message.channel.send(`:zzz: Left channel due to inactivity.`)
-})
-client.player.on('error', (err, message) => {
-    err == 'NotPlaying' ? message.reply(`there is nothing playing.`) : err == 'UnableToJoin' ? message.reply(`I couldn't join the voice channel, check my permissions.`) : err == 'VideoUnavailable' ? message.reply(`the video you are trying to play is unavailable.`) : err == 'NotConnected' ? message.reply(`I am not connected to a voice channel, check my permissions.`) : message.reply(`An error occured`);
-})
+client.on('voiceStateUpdate', async (___, newState) => {
+    if (newState.member.user.bot && !newState.channelID && newState.guild.musicData.songDispatcher && newState.member.user.id == client.user.id) {
+        newState.guild.musicData.queue.length = 0;
+        newState.guild.musicData.songDispatcher.end();
+        return;
+    }
+    if (newState.member.user.bot && newState.channelID && newState.member.user.id == client.user.id && !newState.selfDeaf) {
+        newState.setSelfDeaf(true);
+    }
+});
 
 client.login(process.env.TOKEN);
