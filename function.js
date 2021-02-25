@@ -1,5 +1,5 @@
 const ytsr = require("ytsr");
-const ytsr2 = require("youtube-sr");
+const ytsr2 = require("youtube-sr").default;
 const ytpl = require("ytpl");
 const ytdl = require("ytdl-core");
 const moment = require("moment");
@@ -446,6 +446,32 @@ module.exports = {
             memberDisplayName: message.member.user.username,
             memberAvatar: message.member.user.avatarURL('webp', false, 16)
         });
+        return results
+    },
+    async search(message, query, voiceChannel) {
+        const results = []
+        const videos = await ytsr2.search(query, { limit: 1 }).catch(async function () {
+            await message.reply('there was a problem searching the video you requested!');
+            return;
+        });
+        if (videos.length < 1 || !videos) {
+            message.reply(`I had some trouble finding what you were looking for, please try again or be more specific.`);
+            return;
+        }
+        const length = Math.round(videos[0].duration / 1000);
+        results.push({
+            title: videos[0].title,
+            url: `https://www.youtube.com/watch?v=${videos[0].id}`,
+            thumbnail: videos[0].thumbnail.url,
+            isLive: videos[0].live,
+            lengthFormatted: videos[0].durationFormatted,
+            lengthSeconds: length,
+            seek: 0,
+            type: 0,
+            voiceChannel: voiceChannel,
+            memberDisplayName: message.member.user.username,
+            memberAvatar: message.member.user.avatarURL('webp', false, 16)
+        })
         return results
     },
     isGoodMusicVideoContent(videoSearchResultItem) {
