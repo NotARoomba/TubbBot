@@ -12,7 +12,9 @@ var spotifyApi = new SpotifyWebApi({
     clientId: process.env.SPOTIFY_CLIENT_ID,
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
 });
+const mm = require("music-metadata");
 const Pagination = require('discord-paginationembed');
+const imgurUploader = require('imgur-uploader');
 module.exports = {
     list(arr, conj = 'and') {
         const len = arr.length;
@@ -281,7 +283,6 @@ module.exports = {
                     results.push({
                         title: track.title,
                         url: track.url,
-                        stream: track.trackURL,
                         thumbnail: track.thumbnail,
                         isLive: false,
                         lengthFormatted: songLength,
@@ -315,6 +316,58 @@ module.exports = {
                 return results
             }
         }
+    },
+    async addURL(message, query, voiceChannel) {
+        const results = []
+        try {
+            var stream = await fetch(query).then(res => res.body);
+            var metadata = await mm.parseStream(stream, {}, { duration: true });
+            if (metadata.trackInfo && metadata.trackInfo[0] && metadata.trackInfo[0].title) title = metadata.trackInfo[0].title;
+        } catch (err) {
+            message.channel.send("The audio format is not supported.");
+            return
+        }
+        if (!metadata || !stream) {
+            message.reply("there was an error while parsing the audio file into stream, maybe it is not link to the file?");
+            return
+        }
+        let imagedata = 0;
+        if (metadata.common.picture !== undefined) {
+            imagedata = await imgurUploader(metadata.common.picture.data, { title: 'music-metadata' })
+        }
+        let title = 0
+        if (metadata.common.title == undefined) {
+            title = query.split("/").slice(-1)[0].split(".").slice(0, -1).join(".").replace(/_/g, " ");
+        }
+        const length = Math.round(metadata.format.duration);
+        const songLength = moment.duration(length, "seconds").format();
+        results.push({
+            title: (title == 0) ? metadata.common.title : title,
+            url: query,
+            thumbnail: (imagedata !== 0) ? imagedata.link : "https://www.flaticon.com/svg/static/icons/svg/2305/2305904.svg",
+            isLive: false,
+            lengthFormatted: songLength,
+            lengthSeconds: length,
+            seek: 0,
+            type: 2,
+            voiceChannel: voiceChannel,
+            memberDisplayName: message.member.user.username,
+            memberAvatar: message.member.user.avatarURL('webp', false, 16)
+        });
+        return results
+    },
+    dataURLtoFile(dataurl, filename) {
+        var arr = dataurl.split(","),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+
+        return new File([u8arr], filename, { type: mime });
     },
     isGoodMusicVideoContent(videoSearchResultItem) {
         const contains = (string, content) => !!~(string || "").indexOf(content);

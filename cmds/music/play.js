@@ -1,4 +1,4 @@
-const { validYTURL, validSPURL, validGDURL, validGDFolderURL, validYTPlaylistURL, validSCURL, addYTURL, addYTPlaylist, addSPURL, addSCURL, addGDFolderURL, addGDURL, addAttachment, search } = require("../../function.js");
+const { validYTURL, validSPURL, validGDURL, validGDFolderURL, validYTPlaylistURL, validSCURL, validURL, addYTURL, addYTPlaylist, addSPURL, addSCURL, addGDFolderURL, addGDURL, addAttachment, addURL, search } = require("../../function.js");
 const ytdl = require('discord-ytdl-core');
 const scdl = require('soundcloud-downloader').default
 var cookie = { cookie: process.env.COOKIE, id: 0 };
@@ -23,8 +23,10 @@ module.exports = {
             else if (validSCURL(args)) result = await addSCURL(message, args, voiceChannel);
             else if (validGDFolderURL(args)) result = await addGDFolderURL(message, args, voiceChannel);
             else if (validGDURL(args)) result = addGDURL(message, args, voiceChannel);
+            else if (validURL(args)) result = await addURL(message, args, voiceChannel);
             else if (message.attachments.size > 0) result = await addAttachment(message, voiceChannel);
             else result = await search(message, args, voiceChannel);
+            console.log(result)
             result.forEach(track => {
                 musicData.queue.push(track)
             });
@@ -107,7 +109,27 @@ module.exports = {
             try {
                 await voiceChannel.join().then(async (connection) => {
                     musicData.connection = connection
-
+                    const dispatcher = await connection.play(stream, {
+                        type: 'opus'
+                    })
+                    musicData.isPlaying = true;
+                    musicData.songDispatcher = dispatcher
+                    dispatcher.setVolume(musicData.volume);
+                    musicData.nowPlaying = musicData.queue[0];
+                    let ended = await musicData.queue.shift()
+                    musicData.previous.push(ended)
+                    module.exports.musicHandler(message, voiceChannel)
+                })
+            } catch (err) { }
+        } else if (musicData.queue[0].type == 2) {
+            const stream = ytdl.arbitraryStream(musicData.queue[0].url, {
+                opusEncoded: true,
+                seek: seek,
+                encoderArgs: encoderArgs,
+            })
+            try {
+                await voiceChannel.join().then(async (connection) => {
+                    musicData.connection = connection
                     const dispatcher = await connection.play(stream, {
                         type: 'opus'
                     })
