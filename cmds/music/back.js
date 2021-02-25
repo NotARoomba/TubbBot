@@ -1,3 +1,4 @@
+const { play } = require('./play');
 module.exports = {
     name: 'back',
     group: 'music',
@@ -7,8 +8,8 @@ module.exports = {
     async execute(message) {
         message.guild.musicData.songDispatcher.pause();
         message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying)
-        message.guild.musicData.queue.unshift(message.guild.musicData.previousTracks[message.guild.musicData.previousTracks.length - 1])
-        await play(message, message.guild.musicData.queue[0].voiceChannel)
+        message.guild.musicData.queue.unshift(message.guild.musicData.previous[message.guild.musicData.previous.length - 1])
+        await play(message, message.guild.musicData.voiceChannel)
         message.react("⏮️");
     }
 }

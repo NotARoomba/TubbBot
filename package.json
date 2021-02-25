@@ -31,6 +31,7 @@
         "opusscript": "0.0.7",
         "reddit-wrapper-v2": "^1.1.6",
         "simple-youtube-api": "^5.2.1",
-        "ytdl-core": "^4.5.0"
+        "ytdl-core": "^4.5.0",
+        "ytpl": "^2.0.5"
     }
 }

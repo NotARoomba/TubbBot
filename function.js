@@ -1,4 +1,5 @@
 const ytdl = require('ytdl-core')
+const ytpl = require("ytpl");
 const Pagination = require('discord-paginationembed');
 module.exports = {
     list(arr, conj = 'and') {
@@ -35,21 +36,51 @@ module.exports = {
     },
     async addYTURL(message, args, voiceChannel) {
         const video = await (await ytdl.getBasicInfo(args)).videoDetails
-        song = {
+        const result = []
+        result.push({
             title: video.title,
+            url: video.video_url,
+            thumbnail: video.thumbnails[0].url,
+            isLive: video.isLiveContent && video.isLive ? true : false,
             lengthFormatted: module.exports.buildTimecode(video.lengthSeconds),
             lengthSeconds: video.lengthSeconds,
-            author: video.author.name,
-            thumbnail: video.thumbnails[0].url,
-            url: video.video_url,
             type: 0,
             seek: 0,
-            isLive: video.isLiveContent && video.isLive ? true : false,
             voiceChannel: voiceChannel,
             memberDisplayName: message.member.user.username,
             memberAvatar: message.member.user.avatarURL('webp', false, 16)
+        })
+        return result
+    },
+    async addYTPlaylist(message, query, voiceChannel) {
+        try {
+            var playlistInfo = await ytpl(query, { limit: Infinity });
+        } catch (err) {
+            if (err.message === "This playlist is private.") message.channel.send("The playlist is private.");
+            else {
+                console.log(err);
+                message.reply("there was an error trying to fetch your playlist.");
+            }
+            return
         }
-        return song
+        const result = []
+        const videos = playlistInfo.items;
+        for (const video of videos) {
+            result.push({
+                title: video.title,
+                url: video.shortUrl,
+                thumbnail: video.bestThumbnail.url,
+                isLive: video.isLive,
+                lengthFormatted: module.exports.buildTimecode(video.durationSec),
+                lengthSeconds: video.durationSec,
+                seek: 0,
+                type: 0,
+                voiceChannel: voiceChannel,
+                memberDisplayName: message.member.user.username,
+                memberAvatar: message.member.user.avatarURL('webp', false, 16)
+            })
+        }
+        return result
     },
     defaultEmbed(message, array, name, client) {
         const embed = new Pagination.FieldsEmbed()
@@ -64,8 +95,7 @@ module.exports = {
         embed.embed.setColor('#dbc300').setTitle(`${name} Commands`).setFooter('', `${client.user.avatarURL('webp', 16)}`);;
         return embed.build();
     },
-    search(nameKey, myArray) {
-
+    searchArray(nameKey, myArray) {
         for (var i = 0; i < myArray.length; i++) {
             try {
                 if (myArray[i].name === nameKey || myArray[i].aliases[0] === nameKey || myArray[i].aliases[1] === nameKey || myArray[i].aliases[2] === nameKey || myArray[i].aliases[3] === nameKey) {
@@ -106,7 +136,7 @@ module.exports = {
     },
     createProgressBar(message) {
         const totalTime = message.guild.musicData.nowPlaying.lengthSeconds * 1000
-        const currentStreamTime = message.guild.musicData.songDispatcher.streamTime
+        const currentStreamTime = message.guild.musicData.songDispatcher.streamTime + (message.guild.musicData.nowPlaying.seek * 1000)
         const index = Math.round((currentStreamTime / totalTime) * 15)
 
         if ((index >= 1) && (index <= 15)) {
