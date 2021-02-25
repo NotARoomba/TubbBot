@@ -25,6 +25,7 @@ module.exports = {
             else if (message.attachments.size > 0) result = await addAttachment(message, voiceChannel);
             else result = await search(message, args, voiceChannel);
             result.forEach(track => {
+                console.log(track.lengthFormatted, track.lengthSeconds)
                 musicData.queue.push(track)
             });
             const addembed = new Discord.MessageEmbed()

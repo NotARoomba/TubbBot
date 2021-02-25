@@ -16,7 +16,6 @@
         "@vitalets/google-translate-api": "^5.0.0",
         "axios": "^0.21.1",
         "discord-paginationembed": "^2.1.0",
-        "discord-player": "^3.3.2",
         "discord-ytdl-core": "^5.0.0",
         "discord.js": "^12.5.1",
         "dotenv": "^8.2.0",
@@ -31,6 +30,8 @@
         "opusscript": "0.0.7",
         "reddit-wrapper-v2": "^1.1.6",
         "simple-youtube-api": "^5.2.1",
+        "spotify-web-api-node": "^5.0.2",
+        "youtube-sr": "^4.0.1",
         "ytdl-core": "^4.5.0",
         "ytpl": "^2.0.5"
     }

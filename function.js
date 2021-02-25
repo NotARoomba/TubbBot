@@ -1,5 +1,11 @@
 const ytdl = require('ytdl-core')
 const ytpl = require("ytpl");
+const ytsr2 = require("youtube-sr");
+var SpotifyWebApi = require("spotify-web-api-node");
+var spotifyApi = new SpotifyWebApi({
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+});
 const Pagination = require('discord-paginationembed');
 module.exports = {
     list(arr, conj = 'and') {
@@ -82,6 +88,186 @@ module.exports = {
         }
         return result
     },
+    async addSPURL(message, query, voiceChannel) {
+        const d = await spotifyApi.clientCredentialsGrant();
+        spotifyApi.setAccessToken(d.body.access_token);
+        spotifyApi.setRefreshToken(process.env.SPOTIFY_REFRESH);
+        const refreshed = await spotifyApi.refreshAccessToken().catch(console.log);
+        console.log("Refreshed Spotify Access Token");
+        await spotifyApi.setAccessToken(refreshed.body.access_token);
+        var url_array = query.replace("https://", "").split("/");
+        var musicID = url_array[2].split("?")[0];
+        var highlight = false;
+        if (url_array[2].split("?")[1]) highlight = url_array[2].split("?")[1].split("=")[0] === "highlight";
+        if (highlight) musicID = url_array[2].split("?")[1].split("=")[1].split(":")[2];
+        var type = url_array[1];
+        switch (type) {
+            case "playlist":
+                var musics = await spotifyApi.getPlaylist(musicID, { limit: 50 });
+                var tracks = musics.body.tracks.items;
+                const results = []
+                async function checkAll() {
+                    if (musics.body.tracks.next) {
+                        var offset = musics.body.tracks.offset + 50;
+                        musics = await spotifyApi.getPlaylist(musicID, { limit: 50, offset: offset });
+                        tracks = tracks.concat(musics.body.tracks.items);
+                        return await checkAll();
+                    }
+                }
+                await checkAll();
+                for (var i = 0; i < tracks.length; i++) {
+                    var returned = [];
+                    try {
+                        const searched = await ytsr(`${tracks[i].track.artists[0].name} - ${tracks[i].track.name}`, { limit: 20 });
+                        returned = searched.items.filter(x => x.type === "video" && x.duration.split(":").length < 3);
+                    } catch (err) {
+                        console.log(err)
+                        try {
+                            const searched = await ytsr2.search(`${tracks[i].track.artists[0].name} - ${tracks[i].track.name}`, { limit: 20 });
+                            returned = searched.map(x => {
+                                return { live: false, duration: x.durationFormatted, link: `https://www.youtube.com/watch?v=${x.id}` };
+                            });
+                        } catch (err) {
+                            console.log(err)
+                            return
+                        }
+                    }
+                    var o = 0;
+                    for (var s = 0; s < returned.length; s++) {
+                        if (module.exports.isGoodMusicVideoContent(returned[s])) {
+                            o = s;
+                            s = returned.length - 1;
+                        }
+                        if (s + 1 == returned.length) {
+                            const songLength = !returned[o].live ? returned[o].duration : "∞";
+                            results.push({
+                                title: tracks[i].track.name,
+                                url: returned[o].url,
+                                thumbnail: tracks[i].track.album.images[0].url,
+                                isLive: returned[o].live,
+                                lengthFormatted: songLength,
+                                lengthSeconds: length,
+                                seek: 0,
+                                type: 1,
+                                voiceChannel: voiceChannel,
+                                memberDisplayName: message.member.user.username,
+                                memberAvatar: message.member.user.avatarURL('webp', false, 16)
+                            });
+                        }
+                    }
+                }
+                return results
+            case "album":
+                const results = []
+                var tracks;
+                var image;
+                if (!highlight) {
+                    const album = await spotifyApi.getAlbums([musicID]);
+                    image = album.body.albums[0].images[0].url;
+                    let data = await spotifyApi.getAlbumTracks(musicID, { limit: 50 });
+                    tracks = data.body.items;
+                    async function checkAll() {
+                        if (!data.body.next) return;
+                        var offset = data.body.offset + 50;
+                        data = await spotifyApi.getAlbumTracks(musicID, { limit: 50, offset: offset });
+                        tracks = tracks.concat(data.body.items);
+                        return await checkAll();
+                    }
+                    await checkAll();
+                } else {
+                    const data = await spotifyApi.getTracks([musicID]);
+                    tracks = data.body.tracks;
+                }
+                for (var i = 0; i < tracks.length; i++) {
+                    var returned = [];
+                    try {
+                        const searched = await ytsr(`${tracks[i].artists[0].name} - ${tracks[i].name}`, { limit: 20 });
+                        returned = searched.items.filter(x => x.type === "video" && x.duration.split(":").length < 3);
+                    } catch (err) {
+                        console.log(err)
+                        try {
+                            const searched = await ytsr2.search(`${tracks[i].artists[0].name} - ${tracks[i].name}`, { limit: 20 });
+                            returned = searched.map(x => {
+                                return { live: false, duration: x.durationFormatted, link: `https://www.youtube.com/watch?v=${x.id}` };
+                            });
+                        } catch (err) {
+                            console.log(err)
+                            return { error: true };
+                        }
+                    }
+                    var o = 0;
+                    for (var s = 0; s < returned.length; s++) {
+                        if (module.exports.isGoodMusicVideoContent(returned[s])) {
+                            o = s;
+                            s = returned.length - 1;
+                        }
+                        if (s + 1 == returned.length) {
+                            const songLength = !returned[o].live ? returned[o].duration : "∞";
+                            results.push({
+                                title: tracks[i].name,
+                                url: returned[o].url,
+                                thumbnail: highlight ? tracks[i].album.images[o].url : image,
+                                isLive: returned[o].live,
+                                seek: 0,
+                                type: 1,
+                                lengthFormatted: songLength,
+                                lengthSeconds: length,
+                                voiceChannel: voiceChannel,
+                                memberDisplayName: message.member.user.username,
+                                memberAvatar: message.member.user.avatarURL('webp', false, 16)
+                            });
+                        }
+                    }
+                }
+                return results;
+            case "track":
+                var tracks = await (await spotifyApi.getTracks([musicID])).body.tracks;
+                for (var i = 0; i < tracks.length; i++) {
+                    var returned;
+                    try {
+                        const searched = await ytsr(`${tracks[i].artists[0].name} - ${tracks[i].name}`, { limit: 20 });
+                        returned = searched.items.filter(x => x.type === "video" && x.duration.split(":").length < 3);
+                    } catch (err) {
+                        console.log(err)
+                        try {
+                            const searched = await ytsr2.search(tracks[i].artists[0].name + " - " + tracks[i].name, { limit: 20 });
+                            returned = searched.map(x => { return { live: false, duration: x.durationFormatted, link: `https://www.youtube.com/watch?v=${x.id}` }; });
+                        } catch (err) {
+                            console.log(err)
+                            return { error: true };
+                        }
+                    }
+                    var o = 0;
+                    for (var s = 0; s < returned.length; s++) {
+                        if (module.exports.isGoodMusicVideoContent(returned[s])) {
+                            o = s;
+                            s = returned.length - 1;
+                        }
+                        if (s + 1 == returned.length) {
+                            const songLength = !returned[o].live ? returned[o].duration : "∞";
+                            results.push({
+                                title: tracks[i].name,
+                                url: returned[o].url,
+                                thumbnail: tracks[i].album.images[o].url,
+                                isLive: returned[o].live,
+                                seek: 0,
+                                type: 1,
+                                lengthFormatted: songLength,
+                                lengthSeconds: length,
+                                voiceChannel: voiceChannel,
+                                memberDisplayName: message.member.user.username,
+                                memberAvatar: message.member.user.avatarURL('webp', false, 16)
+                            });
+                        }
+                    }
+                    return results
+                }
+        }
+    },
+    isGoodMusicVideoContent(videoSearchResultItem) {
+        const contains = (string, content) => !!~(string || "").indexOf(content);
+        return (contains(videoSearchResultItem.author ? videoSearchResultItem.author.name : undefined, "VEVO") || contains(videoSearchResultItem.author ? videoSearchResultItem.author.name.toLowerCase() : undefined, "official") || contains(videoSearchResultItem.title.toLowerCase(), "official") || !contains(videoSearchResultItem.title.toLowerCase(), "extended"));
+    },
     defaultEmbed(message, array, name, client) {
         const embed = new Pagination.FieldsEmbed()
             .setArray(array)
@@ -152,7 +338,6 @@ module.exports = {
         }
     },
     arrayMove(arr, old_index, new_index) {
-        // https://stackoverflow.com/a/5306832/9421002
         while (old_index < 0) {
             old_index += arr.length;
         }
