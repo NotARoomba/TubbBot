@@ -26,7 +26,6 @@ module.exports = {
             else if (validURL(args)) result = await addURL(message, args, voiceChannel);
             else if (message.attachments.size > 0) result = await addAttachment(message, voiceChannel);
             else result = await search(message, args, voiceChannel);
-            console.log(result)
             result.forEach(track => {
                 musicData.queue.push(track)
             });

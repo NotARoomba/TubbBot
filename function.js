@@ -332,8 +332,8 @@ module.exports = {
             return
         }
         let imagedata = 0;
-        if (metadata.common.picture !== undefined) {
-            imagedata = await imgurUploader(metadata.common.picture.data, { title: 'music-metadata' })
+        if (metadata.common.picture[0] !== undefined) {
+            imagedata = await imgurUploader(metadata.common.picture[0].data, { title: 'music-metadata' })
         }
         let title = 0
         if (metadata.common.title == undefined) {
@@ -344,7 +344,7 @@ module.exports = {
         results.push({
             title: (title == 0) ? metadata.common.title : title,
             url: query,
-            thumbnail: (imagedata !== 0) ? imagedata.link : "https://www.flaticon.com/svg/static/icons/svg/2305/2305904.svg",
+            thumbnail: (imagedata !== 0) ? imagedata.link : 'https://cdn3.iconfinder.com/data/icons/symbol-color-documents-1/32/file_music-link-512.png',
             isLive: false,
             lengthFormatted: songLength,
             lengthSeconds: length,
@@ -355,19 +355,6 @@ module.exports = {
             memberAvatar: message.member.user.avatarURL('webp', false, 16)
         });
         return results
-    },
-    dataURLtoFile(dataurl, filename) {
-        var arr = dataurl.split(","),
-            mime = arr[0].match(/:(.*?);/)[1],
-            bstr = atob(arr[1]),
-            n = bstr.length,
-            u8arr = new Uint8Array(n);
-
-        while (n--) {
-            u8arr[n] = bstr.charCodeAt(n);
-        }
-
-        return new File([u8arr], filename, { type: mime });
     },
     isGoodMusicVideoContent(videoSearchResultItem) {
         const contains = (string, content) => !!~(string || "").indexOf(content);
