@@ -1,10 +1,12 @@
 const { play } = require('./play');
+const { isValidCommander } = require("../../function");
 module.exports = {
     name: 'seek',
     group: 'music',
     usage: 'seek (time in seconds)',
     description: 'Go to a time in the song!',
     async execute(message, args) {
+        if (isValidCommander(message) !== true) return
         if (isNaN(parseInt(args))) return message.reply(`that is not a parseInt.`)
         if (parseInt(args) < 0 || parseInt(args) > message.guild.musicData.nowPlaying.lengthSeconds) return message.reply(`that is not a valid time.`);
         message.guild.musicData.songDispatcher.pause();

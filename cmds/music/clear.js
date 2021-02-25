@@ -6,6 +6,7 @@ module.exports = {
     aliases: ['clearqueue', 'skipall'],
     description: 'Clears the queue!',
     async execute(message) {
+        if (isValidCommander(message) !== true) return
         if (!message.guild.musicData.queue[0]) return message.reply('there are no songs in queue!');
         message.guild.musicData.queue.length = 0; // clear queue
         message.guild.musicData.loopSong = false;

@@ -8,7 +8,7 @@ module.exports = {
     async execute(message) {
         message.guild.musicData.songDispatcher.pause();
         message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying)
-        message.guild.musicData.queue.unshift(message.guild.musicData.previous[message.guild.musicData.previous.length - 1])
+        message.guild.musicData.queue.unshift(message.guild.musicData.previous[message.guild.musicData.previous.length - 2])
         await play(message, message.guild.musicData.voiceChannel)
         message.react("⏮️");
     }

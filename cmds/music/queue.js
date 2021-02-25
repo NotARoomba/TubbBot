@@ -16,7 +16,6 @@ module.exports = {
                 .formatField('# - Song', function (e) {
                     return `**${queueClone.indexOf(e) + 1}**:  ${e.title}`;
                 });
-
             queueEmbed.embed.setColor('#dbc300').setTitle('Music Queue');
             queueEmbed.build();
         } catch (err) {

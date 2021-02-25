@@ -1,10 +1,12 @@
 const Pagination = require('discord-paginationembed');
+const { isValidCommander } = require("../../function");
 module.exports = {
     name: 'shuffle',
     group: 'music',
     usage: 'shuffle',
     description: 'Shuffle the music queue!',
     async execute(message) {
+        if (isValidCommander(message) !== true) return
         shuffleQueue(message.guild.musicData.queue);
         let queue = message.guild.musicData.queue
         const queueClone = queue;

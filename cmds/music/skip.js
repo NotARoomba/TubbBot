@@ -1,5 +1,4 @@
 const { isValidCommander } = require("../../function");
-const { play } = require('./play');
 module.exports = {
     name: 'skip',
     group: 'music',
@@ -10,7 +9,6 @@ module.exports = {
         if (isValidCommander(message) !== true) return
         message.guild.musicData.loopSong = false;
         message.guild.musicData.songDispatcher.end();
-        //await play(message, message.guild.musicData.voiceChannel)
         message.react("👌");
     }
 }
