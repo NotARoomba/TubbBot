@@ -7,7 +7,7 @@ module.exports = {
     usage: 'filters (filter)',
     aliases: ['filter'],
     description: 'Adds a filter to the current song!',
-    async execute(message, args) {
+    async execute(message, args, client) {
         if (isValidCommander(message) !== true) return
         const prefix = await client.pool.query(`SELECT * FROM prefixes WHERE guild = ${message.guild.id};`)
         switch (args) {

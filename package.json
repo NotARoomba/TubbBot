@@ -33,6 +33,7 @@
         "opusscript": "0.0.7",
         "reddit-wrapper-v2": "^1.1.6",
         "simple-youtube-api": "^5.2.1",
+        "soundcloud-downloader": "^0.2.4",
         "soundcloud-scraper": "^4.0.3",
         "spotify-web-api-node": "^5.0.2",
         "youtube-sr": "^4.0.1",

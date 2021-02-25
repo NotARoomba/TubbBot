@@ -1,5 +1,6 @@
 const { validYTURL, validSPURL, validGDURL, validGDFolderURL, validYTPlaylistURL, validSCURL, addYTURL, addYTPlaylist, addSPURL, addSCURL, addGDFolderURL, addGDURL, addAttachment, search } = require("../../function.js");
 const ytdl = require('discord-ytdl-core');
+const scdl = require('soundcloud-downloader').default
 var cookie = { cookie: process.env.COOKIE, id: 0 };
 const Discord = require('discord.js');
 module.exports = {
@@ -24,7 +25,6 @@ module.exports = {
             else if (validGDURL(args)) result = addGDURL(message, args, voiceChannel);
             else if (message.attachments.size > 0) result = await addAttachment(message, voiceChannel);
             else result = await search(message, args, voiceChannel);
-            console.log(result)
             result.forEach(track => {
                 musicData.queue.push(track)
             });
@@ -57,7 +57,8 @@ module.exports = {
             .setURL(musicData.queue[0].url)
             .setFooter(`Requested by ${musicData.queue[0].memberDisplayName}!`, musicData.queue[0].memberAvatar)
         if (musicData.queue[0].isLive == true) npembed.fields = [], npembed.addFields([{ name: `:stopwatch: Duration:`, value: ':red_circle: Live Stream' }])
-        musicData.queue[0].seek !== 0 ? seek = musicData.queue[0].seek : seek = 0, message.channel.send(npembed)
+        let seek = 0
+        musicData.queue[0].seek !== 0 ? seek = musicData.queue[0].seek : message.channel.send(npembed)
         const encoderArgsFilters = []
         musicData.filters.forEach(filter => {
             if (filter[Object.keys(filter)[0]] !== '') {
@@ -96,8 +97,9 @@ module.exports = {
                     module.exports.musicHandler(message, voiceChannel)
                 })
             } catch (err) { }
-        } else {
-            const stream = ytdl.arbitraryStream(musicData.queue[0].url, {
+        } else if (musicData.queue[0].type == 1) {
+            const data = await scdl.download(musicData.queue[0].url)
+            const stream = ytdl.arbitraryStream(data, {
                 opusEncoded: true,
                 seek: seek,
                 encoderArgs: encoderArgs,
@@ -105,8 +107,9 @@ module.exports = {
             try {
                 await voiceChannel.join().then(async (connection) => {
                     musicData.connection = connection
+
                     const dispatcher = await connection.play(stream, {
-                        type: 'opus',
+                        type: 'opus'
                     })
                     musicData.isPlaying = true;
                     musicData.songDispatcher = dispatcher

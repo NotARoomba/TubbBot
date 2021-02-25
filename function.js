@@ -274,19 +274,20 @@ module.exports = {
             await sc.getSongInfo(query)
         } catch (err) {
             if (err) {
-                const data = sc.getPlaylist(query)
+                const data = await sc.getPlaylist(query)
                 for (const track of data.tracks) {
                     const length = Math.round(track.duration / 1000);
                     const songLength = moment.duration(length, "seconds").format();
                     results.push({
                         title: track.title,
-                        url: track.permalink_url,
-                        thumbnail: track.artwork_url,
+                        url: track.url,
+                        stream: track.trackURL,
+                        thumbnail: track.thumbnail,
                         isLive: false,
-                        seek: 0,
-                        type: 1,
                         lengthFormatted: songLength,
                         lengthSeconds: length,
+                        seek: 0,
+                        type: 1,
                         voiceChannel: voiceChannel,
                         memberDisplayName: message.member.user.username,
                         memberAvatar: message.member.user.avatarURL('webp', false, 16)
