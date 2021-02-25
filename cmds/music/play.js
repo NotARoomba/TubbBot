@@ -24,8 +24,8 @@ module.exports = {
             else if (validGDURL(args)) result = addGDURL(message, args, voiceChannel);
             else if (message.attachments.size > 0) result = await addAttachment(message, voiceChannel);
             else result = await search(message, args, voiceChannel);
+            console.log(result)
             result.forEach(track => {
-                console.log(track.lengthFormatted, track.lengthSeconds)
                 musicData.queue.push(track)
             });
             const addembed = new Discord.MessageEmbed()
@@ -47,11 +47,16 @@ module.exports = {
         const npembed = new Discord.MessageEmbed()
             .setColor('#FFED00')
             .setTitle(`:notes: Now Playing: ${musicData.queue[0].title}`)
-            .setDescription(`:stopwatch: Duration: ${musicData.queue[0].lengthFormatted}`)
+            .addFields([
+                {
+                    name: `:stopwatch: Duration:`,
+                    value: musicData.queue[0].lengthFormatted
+                }
+            ])
             .setThumbnail(musicData.queue[0].thumbnail)
             .setURL(musicData.queue[0].url)
             .setFooter(`Requested by ${musicData.queue[0].memberDisplayName}!`, musicData.queue[0].memberAvatar)
-        if (musicData.queue[0].isLive) npembed.setDescription(':red_circle: Live Stream')
+        if (musicData.queue[0].isLive == true) npembed.fields = [], npembed.addFields([{ name: `:stopwatch: Duration:`, value: ':red_circle: Live Stream' }])
         musicData.queue[0].seek !== 0 ? seek = musicData.queue[0].seek : seek = 0, message.channel.send(npembed)
         const encoderArgsFilters = []
         musicData.filters.forEach(filter => {
@@ -91,6 +96,27 @@ module.exports = {
                     module.exports.musicHandler(message, voiceChannel)
                 })
             } catch (err) { }
+        } else {
+            const stream = ytdl.arbitraryStream(musicData.queue[0].url, {
+                opusEncoded: true,
+                seek: seek,
+                encoderArgs: encoderArgs,
+            })
+            try {
+                await voiceChannel.join().then(async (connection) => {
+                    musicData.connection = connection
+                    const dispatcher = await connection.play(stream, {
+                        type: 'opus',
+                    })
+                    musicData.isPlaying = true;
+                    musicData.songDispatcher = dispatcher
+                    dispatcher.setVolume(musicData.volume);
+                    musicData.nowPlaying = musicData.queue[0];
+                    let ended = await musicData.queue.shift()
+                    musicData.previous.push(ended)
+                    module.exports.musicHandler(message, voiceChannel)
+                })
+            } catch (err) { }
         }
     },
     musicHandler(message, voiceChannel) {
@@ -98,9 +124,9 @@ module.exports = {
         const dispatcher = musicData.songDispatcher
         dispatcher.on('finish', () => {
             if (musicData.loopSong) {
-                queue.unshift(musicData.nowPlaying);
+                musicData.queue.unshift(musicData.nowPlaying);
             } else if (musicData.loopQueue) {
-                queue.push(musicData.nowPlaying);
+                musicData.queue.push(musicData.nowPlaying);
             }
             if (musicData.queue.length >= 1) {
                 module.exports.play(message, voiceChannel);
@@ -122,8 +148,8 @@ module.exports = {
         dispatcher.on('error', function (e) {
             message.channel.send('Cannot play song!');
             console.log(e);
-            if (queue.length > 1) {
-                queue.shift();
+            if (musicData.queue.length > 1) {
+                musicData.queue.shift();
                 module.exports.play(message, voiceChannel);
                 return;
             }

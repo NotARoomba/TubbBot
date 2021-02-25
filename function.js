@@ -1,7 +1,13 @@
-const ytdl = require('ytdl-core')
-const ytpl = require("ytpl");
+const ytsr = require("ytsr");
 const ytsr2 = require("youtube-sr");
-var SpotifyWebApi = require("spotify-web-api-node");
+const ytpl = require("ytpl");
+const ytdl = require("ytdl-core");
+const moment = require("moment");
+require("moment-duration-format")(moment);
+const fetch = require("node-fetch")
+const SoundCloud = require("soundcloud-scraper");
+const sc = new SoundCloud.Client(process.env.SOUNDCLOUD);
+var SpotifyWebApi = require('spotify-web-api-node');
 var spotifyApi = new SpotifyWebApi({
     clientId: process.env.SPOTIFY_CLIENT_ID,
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
@@ -27,7 +33,7 @@ module.exports = {
     validURL: (str) => !!str.match(/^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+]*)*(\?.*)?(\#[-a-z\d_]*)?$/i),
     validYTURL: (str) => !!str.match(/^(https?:\/\/)?((w){3}.)?youtu(be|.be)?(.com)?\/.+/),
     validYTPlaylistURL: (str) => !!str.match(/^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(.com)?\/playlist\?list=\w+/),
-    validSPURL: (str) => !!str.match(/^(spotify:|https:\/\/[a-z]+\.spotify\.com\/)/),
+    validSPURL: (str) => !!str.match(/open.spotify.com\/.*/),
     validGDURL: (str) => !!str.match(/^(https?)?:\/\/drive\.google\.com\/(file\/d\/(?<id>.*?)\/(?:edit|view)\?usp=sharing|open\?id=(?<id1>.*?)$)/),
     validGDFolderURL: (str) => !!str.match(/^(https?)?:\/\/drive\.google\.com\/drive\/folders\/[\w\-]+(\?usp=sharing)?$/),
     validSCURL: (str) => !!str.match(/^https?:\/\/(soundcloud\.com|snd\.sc)\/(.+)?/),
@@ -35,10 +41,6 @@ module.exports = {
         return str.replace(/\w\S*/g, function (txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         });
-    },
-    buildTimecode(time) {
-        const formatted = new Date(time * 1000).toISOString().substr(11, 8)
-        return formatted
     },
     async addYTURL(message, args, voiceChannel) {
         const video = await (await ytdl.getBasicInfo(args)).videoDetails
@@ -48,7 +50,7 @@ module.exports = {
             url: video.video_url,
             thumbnail: video.thumbnails[0].url,
             isLive: video.isLiveContent && video.isLive ? true : false,
-            lengthFormatted: module.exports.buildTimecode(video.lengthSeconds),
+            lengthFormatted: moment.duration(video.lengthSeconds, "seconds").format(),
             lengthSeconds: video.lengthSeconds,
             type: 0,
             seek: 0,
@@ -77,7 +79,7 @@ module.exports = {
                 url: video.shortUrl,
                 thumbnail: video.bestThumbnail.url,
                 isLive: video.isLive,
-                lengthFormatted: module.exports.buildTimecode(video.durationSec),
+                lengthFormatted: moment.duration(video.durationSec, "seconds").format(),
                 lengthSeconds: video.durationSec,
                 seek: 0,
                 type: 0,
@@ -89,6 +91,7 @@ module.exports = {
         return result
     },
     async addSPURL(message, query, voiceChannel) {
+        const results = []
         const d = await spotifyApi.clientCredentialsGrant();
         spotifyApi.setAccessToken(d.body.access_token);
         spotifyApi.setRefreshToken(process.env.SPOTIFY_REFRESH);
@@ -101,11 +104,11 @@ module.exports = {
         if (url_array[2].split("?")[1]) highlight = url_array[2].split("?")[1].split("=")[0] === "highlight";
         if (highlight) musicID = url_array[2].split("?")[1].split("=")[1].split(":")[2];
         var type = url_array[1];
+        if (type === '') type = url_array[3]
         switch (type) {
             case "playlist":
                 var musics = await spotifyApi.getPlaylist(musicID, { limit: 50 });
                 var tracks = musics.body.tracks.items;
-                const results = []
                 async function checkAll() {
                     if (musics.body.tracks.next) {
                         var offset = musics.body.tracks.offset + 50;
@@ -146,9 +149,9 @@ module.exports = {
                                 thumbnail: tracks[i].track.album.images[0].url,
                                 isLive: returned[o].live,
                                 lengthFormatted: songLength,
-                                lengthSeconds: length,
+                                lengthSeconds: null,
                                 seek: 0,
-                                type: 1,
+                                type: 0,
                                 voiceChannel: voiceChannel,
                                 memberDisplayName: message.member.user.username,
                                 memberAvatar: message.member.user.avatarURL('webp', false, 16)
@@ -156,9 +159,8 @@ module.exports = {
                         }
                     }
                 }
-                return results
+                break;
             case "album":
-                const results = []
                 var tracks;
                 var image;
                 if (!highlight) {
@@ -192,7 +194,7 @@ module.exports = {
                             });
                         } catch (err) {
                             console.log(err)
-                            return { error: true };
+                            return
                         }
                     }
                     var o = 0;
@@ -208,10 +210,10 @@ module.exports = {
                                 url: returned[o].url,
                                 thumbnail: highlight ? tracks[i].album.images[o].url : image,
                                 isLive: returned[o].live,
-                                seek: 0,
-                                type: 1,
                                 lengthFormatted: songLength,
-                                lengthSeconds: length,
+                                lengthSeconds: null,
+                                seek: 0,
+                                type: 0,
                                 voiceChannel: voiceChannel,
                                 memberDisplayName: message.member.user.username,
                                 memberAvatar: message.member.user.avatarURL('webp', false, 16)
@@ -219,9 +221,9 @@ module.exports = {
                         }
                     }
                 }
-                return results;
+                break;
             case "track":
-                var tracks = await (await spotifyApi.getTracks([musicID])).body.tracks;
+                var tracks = (await spotifyApi.getTracks([musicID])).body.tracks;
                 for (var i = 0; i < tracks.length; i++) {
                     var returned;
                     try {
@@ -234,7 +236,7 @@ module.exports = {
                             returned = searched.map(x => { return { live: false, duration: x.durationFormatted, link: `https://www.youtube.com/watch?v=${x.id}` }; });
                         } catch (err) {
                             console.log(err)
-                            return { error: true };
+                            return
                         }
                     }
                     var o = 0;
@@ -250,18 +252,67 @@ module.exports = {
                                 url: returned[o].url,
                                 thumbnail: tracks[i].album.images[o].url,
                                 isLive: returned[o].live,
-                                seek: 0,
-                                type: 1,
                                 lengthFormatted: songLength,
-                                lengthSeconds: length,
+                                lengthSeconds: null,
+                                seek: 0,
+                                type: 0,
                                 voiceChannel: voiceChannel,
                                 memberDisplayName: message.member.user.username,
                                 memberAvatar: message.member.user.avatarURL('webp', false, 16)
                             });
                         }
+
                     }
-                    return results
                 }
+                break;
+        }
+        return results
+    },
+    async addSCURL(message, query, voiceChannel) {
+        const results = []
+        try {
+            await sc.getSongInfo(query)
+        } catch (err) {
+            if (err) {
+                const data = sc.getPlaylist(query)
+                for (const track of data.tracks) {
+                    const length = Math.round(track.duration / 1000);
+                    const songLength = moment.duration(length, "seconds").format();
+                    results.push({
+                        title: track.title,
+                        url: track.permalink_url,
+                        thumbnail: track.artwork_url,
+                        isLive: false,
+                        seek: 0,
+                        type: 1,
+                        lengthFormatted: songLength,
+                        lengthSeconds: length,
+                        voiceChannel: voiceChannel,
+                        memberDisplayName: message.member.user.username,
+                        memberAvatar: message.member.user.avatarURL('webp', false, 16)
+                    });
+
+                }
+                return results
+            } else {
+                const data = await sc.getSongInfo(query)
+                const length = Math.round(data.duration / 1000);
+                const songLength = moment.duration(length, "seconds").format();
+                results.push({
+                    title: data.title,
+                    url: data.url,
+                    thumbnail: data.thumbnail,
+                    isLive: false,
+                    lengthFormatted: songLength,
+                    lengthSeconds: length,
+                    seek: 0,
+                    type: 1,
+                    voiceChannel: voiceChannel,
+                    memberDisplayName: message.member.user.username,
+                    memberAvatar: message.member.user.avatarURL('webp', false, 16)
+                });
+                return results
+            }
         }
     },
     isGoodMusicVideoContent(videoSearchResultItem) {
@@ -328,11 +379,11 @@ module.exports = {
         if ((index >= 1) && (index <= 15)) {
             const bar = '▬▬▬▬▬▬▬▬▬▬▬▬▬▬'.split('')
             bar.splice(index, 0, '🔘')
-            const currentTimecode = module.exports.buildTimecode(Math.round(currentStreamTime / 1000))
+            const currentTimecode = moment.duration(currentStreamTime / 1000, "seconds").format()
             const endTimecode = message.guild.musicData.nowPlaying.lengthFormatted
             return `${currentTimecode} ┃ ${bar.join('')} ┃ ${endTimecode}`
         } else {
-            const currentTimecode = module.exports.buildTimecode(Math.round(currentStreamTime / 1000))
+            const currentTimecode = moment.duration(currentStreamTime / 1000, "seconds").format()
             const endTimecode = message.guild.musicData.nowPlaying.lengthFormatted
             return `${currentTimecode} ┃ 🔘▬▬▬▬▬▬▬▬▬▬▬▬▬▬ ┃ ${endTimecode}`
         }

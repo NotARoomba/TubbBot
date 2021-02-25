@@ -8,6 +8,7 @@ module.exports = {
     async execute(message) {
         try {
             const queueClone = message.guild.musicData.queue;
+            if (!queueClone) throw err
             const queueEmbed = new Pagination.FieldsEmbed()
                 .setArray(queueClone)
                 .setAuthorizedUsers([message.author.id])
