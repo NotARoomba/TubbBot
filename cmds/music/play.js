@@ -5,7 +5,7 @@ var cookie = { cookie: process.env.COOKIE, id: 0 };
 const Discord = require('discord.js');
 module.exports = {
     name: 'play',
-    aliases: ['p2'],
+    aliases: ['p'],
     description: 'Plays music!',
     async execute(message, args) {
         const musicData = message.guild.musicData
