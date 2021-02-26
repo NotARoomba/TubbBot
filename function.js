@@ -512,11 +512,11 @@ module.exports = {
     },
     async getQueue(message, client) {
         let [queue] = await client.pool.query(`SELECT queue FROM servers WHERE id = ${message.guild.id}`)
-        try {
+        if (queue[0].queue == null) {
+            return 404
+        } else {
             queue = await JSON.parse(unescape((queue[0].queue)))
             return queue
-        } catch (err) {
-            return 404
         }
     },
     isValidCommander(message) {
