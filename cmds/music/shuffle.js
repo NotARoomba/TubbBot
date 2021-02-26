@@ -1,11 +1,11 @@
 const Pagination = require('discord-paginationembed');
-const { isValidCommander } = require("../../function");
+const { isValidCommander, updateQueue } = require("../../function");
 module.exports = {
     name: 'shuffle',
     group: 'music',
     usage: 'shuffle',
     description: 'Shuffle the music queue!',
-    async execute(message) {
+    async execute(message, e, client) {
         if (isValidCommander(message) !== true) return
         shuffleQueue(message.guild.musicData.queue);
         let queue = message.guild.musicData.queue
@@ -23,5 +23,6 @@ module.exports = {
             .setColor('#dbc300')
             .setTitle(':twisted_rightwards_arrows: New Music Queue!');
         queueEmbed.build();
+        await updateQueue(message, client)
     }
 }

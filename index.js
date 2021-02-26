@@ -43,6 +43,8 @@ client.on('ready', async () => {
         throw console.error('Unable to connect to the database:');
     }
     client.guilds.cache.forEach(async (guild) => {
+        const prefix = await pool.query(`SELECT * FROM prefixes WHERE guild = ${guild.id};`)
+        if (prefix[0][0].guild == guild.id) return
         await pool.query(`INSERT INTO prefixes (guild, prefix) VALUES ('${guild.id}','-')`)
     });
     setInterval(() => {

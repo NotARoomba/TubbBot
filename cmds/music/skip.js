@@ -1,14 +1,15 @@
-const { isValidCommander } = require("../../function");
+const { isValidCommander, updateQueue } = require("../../function");
 module.exports = {
     name: 'skip',
     group: 'music',
     usage: 'skip',
     aliases: ['s'],
     description: 'Skip the current playing song!',
-    async execute(message) {
+    async execute(message, e, client) {
         if (isValidCommander(message) !== true) return
         message.guild.musicData.loopSong = false;
         message.guild.musicData.songDispatcher.end();
+        await updateQueue(message, client)
         message.react("👌");
     }
 }
