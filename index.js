@@ -44,8 +44,11 @@ client.on('ready', async () => {
     }
     client.guilds.cache.forEach(async (guild) => {
         const prefix = await pool.query(`SELECT * FROM prefixes WHERE guild = ${guild.id};`)
-        if (prefix[0][0].guild == guild.id) return
-        await pool.query(`INSERT INTO prefixes (guild, prefix) VALUES ('${guild.id}','-')`)
+        try {
+            let stuff = prefix[0][0].guild
+        } catch (err) {
+            await pool.query(`INSERT INTO prefixes (guild, prefix) VALUES ('${guild.id}','-')`)
+        }
     });
     setInterval(() => {
         client.user.setActivity(`-help in ${client.guilds.cache.size} Servers`, { type: 'WATCHING' })
