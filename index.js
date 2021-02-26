@@ -67,7 +67,11 @@ client.on('message', async (message) => {
     if (message.author.bot) return;
     const guildPrefix = await pool.query(`SELECT * FROM prefixes WHERE guild = ${message.guild.id};`)
     let prefix = process.env.PREFIX
-    if (guildPrefix) prefix = guildPrefix[0][0].prefix
+    try {
+        prefix = guildPrefix[0][0].prefix
+    } catch (err) {
+        prefix = process.env.PREFIX
+    }
     if (message.content.startsWith(prefix)) {
         let content = message.content.slice(prefix.length).split(" ");
         if (cmdarr.get(content[0]) || aliasesarr.get(content[0])) {
