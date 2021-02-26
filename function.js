@@ -503,15 +503,15 @@ module.exports = {
     async updateQueue(message, client) {
         const queue = message.guild.musicData.queue
         if (!queue) return
-        const [sql] = await client.pool.query(`SELECT queue FROM musics WHERE guild = ${message.guild.id}`);
+        const [sql] = await client.pool.query(`SELECT queue FROM servers WHERE id = ${message.guild.id}`);
         if (sql[0] == undefined) {
-            await client.pool.query(`INSERT INTO musics (guild, queue) VALUES ('${message.guild.id}','${escape(JSON.stringify(queue))}}')`)
+            await client.pool.query(`INSERT INTO servers (id, queue) VALUES ('${message.guild.id}','${escape(JSON.stringify(queue))}}')`)
         } else {
-            await client.pool.query(`UPDATE musics SET queue = '${escape(JSON.stringify(queue))}' WHERE guild = ${message.guild.id}`);
+            await client.pool.query(`UPDATE servers SET queue = '${escape(JSON.stringify(queue))}' WHERE id = ${message.guild.id}`);
         }
     },
     async getQueue(message, client) {
-        let [queue] = await client.pool.query(`SELECT queue FROM musics WHERE guild = ${message.guild.id}`)
+        let [queue] = await client.pool.query(`SELECT queue FROM servers WHERE id = ${message.guild.id}`)
         try {
             queue = await JSON.parse(unescape((queue[0].queue)))
             return queue
