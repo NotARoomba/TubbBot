@@ -85,7 +85,7 @@ client.on('message', async (message) => {
     if (value[0].value == 1) {
         const [userData] = await pool.query(`SELECT * FROM users WHERE id = ${message.author.id};`)
         if (userData[0].level == undefined) {
-            await pool.query(`INSERT INTO users (id) VALUES ('${message.author.id}')`)
+            await pool.query(`INSERT INTO users (id, guild) VALUES ('${message.author.id}', '${message.guild.id}')`)
         }
     } return
 })

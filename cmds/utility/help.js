@@ -10,20 +10,20 @@ module.exports = {
     usage: `help (group or command)`,
     description: `Lists Tubb's commands!`,
     async execute(message, args, client) {
-        const prefix = await client.pool.query(`SELECT * FROM prefixes WHERE guild = ${message.guild.id}`)
+        const [prefix] = await client.pool.query(`SELECT prefix FROM servers WHERE id = ${message.guild.id}`)
         if (!args) {
             const embed = new Discord.MessageEmbed()
                 .setTitle(`Please Specify`)
                 .setColor('#dbc300')
                 .addFields([
                     {
-                        name: 'Music Commands', value: `${prefix[0][0].prefix}help Music`
+                        name: 'Music Commands', value: `${prefix[0].prefix}help Music`
                     },
                     {
-                        name: 'Utility Commands', value: `${prefix[0][0].prefix}help Utility`
+                        name: 'Utility Commands', value: `${prefix[0].prefix}help Utility`
                     },
                     {
-                        name: 'Information on a Command', value: `${prefix[0][0].prefix}help [command]`
+                        name: 'Information on a Command', value: `${prefix[0].prefix}help [command]`
                     },
                 ])
             return message.channel.send(embed)
