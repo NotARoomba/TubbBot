@@ -52,16 +52,15 @@ module.exports = {
                 defaultEmbed(message, utility, 'Utility', client)
             }
         } else {
-            const prefix = await client.pool.query(`SELECT * FROM prefixes WHERE guild = ${message.guild.id};`)
-            arg = args.toLowerCase()
-            const cmd = searchArray(arg, total)
+            args = args.toLowerCase()
+            const cmd = searchArray(args, total)
             if (cmd) {
                 embed = new Discord.MessageEmbed()
                     .setTitle(cmd.name)
                     .setDescription(cmd.description)
                     .addFields([
                         {
-                            name: 'Usage', value: `${prefix[0][0].prefix}${cmd.usage}`
+                            name: 'Usage', value: `${prefix[0].prefix}${cmd.usage}`
                         },
                         {
                             name: 'Aliases', value: `${cmd.aliases}`
