@@ -501,14 +501,13 @@ module.exports = {
         }
     },
     async updateQueue(message, client) {
-        const queue = client.player.queues.get(message.guild.id)
+        const queue = message.guild.musicData.queue
         if (!queue) return
-        console.log(queue.tracks.player)
-        const sql = await client.pool.query(`SELECT * FROM musics WHERE guild = ${message.guild.id}`);
-        if (sql[0][1] === undefined) {
-            await client.pool.query(`UPDATE musics SET queue = '${stringify(queue.tracks)}' WHERE guild = ${message.guild.id}`);
+        const sql = await client.pool.query(`SELECT queue FROM musics WHERE guild = ${message.guild.id}`);
+        if (sql[0][1] == undefined) {
+            await client.pool.query(`INSERT INTO musics (guild, queue) VALUES ('${message.guild.id}','${queue}}')`)
         } else {
-            await client.pool.query(`INSERT INTO musics (guild, queue) VALUES ('${message.guild.id}','${stringify(queue.tracks)}')`)
+            await client.pool.query(`UPDATE musics SET queue = '${queue}' WHERE guild = ${message.guild.id}`);
         }
     },
     async getQueue(message, client) {

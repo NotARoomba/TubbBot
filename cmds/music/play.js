@@ -1,4 +1,4 @@
-const { validYTURL, validSPURL, validGDURL, validGDFolderURL, validYTPlaylistURL, validSCURL, validURL, addYTURL, addYTPlaylist, addSPURL, addSCURL, addGDURL, addAttachment, addURL, search } = require("../../function.js");
+const { validYTURL, validSPURL, validGDURL, updateQueue, getQueue, validYTPlaylistURL, validSCURL, validURL, addYTURL, addYTPlaylist, addSPURL, addSCURL, addGDURL, addAttachment, addURL, search } = require("../../function.js");
 const ytdl = require('discord-ytdl-core');
 const scdl = require('soundcloud-downloader').default
 var cookie = { cookie: process.env.COOKIE, id: 0 };
@@ -7,7 +7,7 @@ module.exports = {
     name: 'play',
     aliases: ['p'],
     description: 'Plays music!',
-    async execute(message, args) {
+    async execute(message, args, client) {
         const musicData = message.guild.musicData
         const voiceChannel = message.member.voice.channel;
         musicData.voiceChannel = voiceChannel
@@ -28,6 +28,7 @@ module.exports = {
             result.forEach(track => {
                 musicData.queue.push(track)
             });
+            //await updateQueue(message, client)
             const addembed = new Discord.MessageEmbed()
                 .setColor('#FFED00')
                 .setTitle(`:musical_note: ${result[0].title}`)
