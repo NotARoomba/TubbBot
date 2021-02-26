@@ -14,7 +14,7 @@ module.exports = {
                 .setAuthorizedUsers([message.author.id])
                 .setChannel(message.channel)
                 .setElementsPerPage(10)
-                .formatField('# - Song - Now Playing ⮯', function (e) {
+                .formatField('# - Song', function (e) {
                     return `**${queueClone.indexOf(e) + 1}**:  ${e.title}`;
                 });
             queueEmbed.embed.setColor('#dbc300').setTitle('Music Queue');
