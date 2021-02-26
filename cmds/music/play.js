@@ -15,12 +15,6 @@ module.exports = {
             message.reply('please join a voice channel and try again!');
             return;
         }
-        let sqlqueue = await getQueue(message, client)
-        if (sqlqueue !== 404) {
-            sqlqueue.forEach(track => {
-                musicData.queue.push(track)
-            });
-        }
         try {
             let result;
             if (validYTPlaylistURL(args)) result = await addYTPlaylist(message, args, voiceChannel);
@@ -34,6 +28,12 @@ module.exports = {
             result.forEach(track => {
                 musicData.queue.push(track)
             });
+            let sqlqueue = await getQueue(message, client)
+            if (sqlqueue !== 404) {
+                sqlqueue.forEach(track => {
+                    musicData.queue.push(track)
+                });
+            }
             await updateQueue(message, client)
             const addembed = new Discord.MessageEmbed()
                 .setColor('#FFED00')
@@ -87,7 +87,6 @@ module.exports = {
                 opusEncoded: true,
                 seek: seek,
                 encoderArgs: encoderArgs,
-                //requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE } },
             })
             try {
                 await voiceChannel.join().then(async (connection) => {
