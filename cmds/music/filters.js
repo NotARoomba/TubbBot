@@ -9,7 +9,7 @@ module.exports = {
     description: 'Adds a filter to the current song!',
     async execute(message, args, client) {
         if (isValidCommander(message) !== true) return
-        const prefix = await client.pool.query(`SELECT * FROM prefixes WHERE guild = ${message.guild.id};`)
+        const [prefix] = await client.pool.query(`SELECT prefix FROM servers WHERE id = ${message.guild.id};`)
         switch (args) {
             case "bassboost":
                 choice = { bassboost: 'bass=g=20' }
@@ -133,7 +133,7 @@ module.exports = {
                 \`chorus3d\`
                 \`fadein\`
                 \`clear\`   ---  removes all filters`)
-                    .setFooter(`Example: ${prefix[0][0].prefix}filter bassboost`)
+                    .setFooter(`Example: ${prefix[0].prefix}filter bassboost`)
                 message.channel.send(embed)
                 break;
         }

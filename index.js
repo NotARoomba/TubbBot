@@ -37,17 +37,15 @@ client.on('ready', async () => {
         }
     });
     try {
-        await pool.query(`SELECT * FROM prefixes WHERE guild = 783489298246139965;`)
+        await pool.query(`SELECT * FROM servers`)
         console.log('Connection has been established successfully.');
     } catch (err) {
         throw console.error('Unable to connect to the database:');
     }
     client.guilds.cache.forEach(async (guild) => {
-        const prefix = await pool.query(`SELECT * FROM prefixes WHERE guild = ${guild.id};`)
-        try {
-            let stuff = prefix[0][0].guild
-        } catch (err) {
-            await pool.query(`INSERT INTO prefixes (guild, prefix) VALUES ('${guild.id}','-')`)
+        const [prefix] = await pool.query(`SELECT * FROM servers WHERE id = ${guild.id};`)
+        if (prefix[0].prefix == undefined) {
+            await pool.query(`INSERT INTO servers (id, prefix) VALUES ('${guild.id}','-')`)
         }
     });
     setInterval(() => {
@@ -68,10 +66,10 @@ client.on('ready', async () => {
 });
 client.on('message', async (message) => {
     if (message.author.bot) return;
-    const guildPrefix = await pool.query(`SELECT * FROM prefixes WHERE guild = ${message.guild.id};`)
+    const [guildPrefix] = await pool.query(`SELECT * FROM servers WHERE id = ${message.guild.id};`)
     let prefix = process.env.PREFIX
     try {
-        prefix = guildPrefix[0][0].prefix
+        prefix = guildPrefix[0].prefix
     } catch (err) {
         prefix = process.env.PREFIX
     }
@@ -83,11 +81,17 @@ client.on('message', async (message) => {
             execute(message, args, client)
         }
     }
-    return
+    const [value] = await pool.query(`SELECT leveling FROM servers WHERE id = ${message.guild.id};`)
+    if (value[0].value == 1) {
+        const [userData] = await pool.query(`SELECT * FROM users WHERE id = ${message.author.id};`)
+        if (userData[0].level == undefined) {
+            await pool.query(`INSERT INTO users (id, guild) VALUES ('${message.author.id}', '${message.guild.id}')`)
+        }
+    } return
 })
 
 client.on('guildCreate', async (guild) => {
-    await pool.query(`INSERT INTO prefixes (guild, prefix) VALUES ('${guild.id}','-')`)
+    await pool.query(`INSERT INTO servers (id, prefix) VALUES ('${guild.id}','-')`)
     const channel = guild.channels.cache.find(channel => channel.type === 'text' && channel.permissionsFor(guild.me).has('SEND_MESSAGES'))
     const invite = {
         title: `Thank you for inviting me to \`\`${guild.name}\`\`!`,
