@@ -1,4 +1,4 @@
-const { validYTURL, validSPURL, validGDURL, validGDFolderURL, validYTPlaylistURL, validSCURL, validURL, addYTURL, addYTPlaylist, addSPURL, addSCURL, addGDURL, addAttachment, addURL, search } = require("../../function.js");
+const { validYTURL, validSPURL, validGDURL, updateQueue, getQueue, validYTPlaylistURL, validSCURL, validURL, addYTURL, addYTPlaylist, addSPURL, addSCURL, addGDURL, addAttachment, addURL, search } = require("../../function.js");
 const ytdl = require('discord-ytdl-core');
 const scdl = require('soundcloud-downloader').default
 var cookie = { cookie: process.env.COOKIE, id: 0 };
@@ -7,7 +7,7 @@ module.exports = {
     name: 'play',
     aliases: ['p'],
     description: 'Plays music!',
-    async execute(message, args) {
+    async execute(message, args, client) {
         const musicData = message.guild.musicData
         const voiceChannel = message.member.voice.channel;
         musicData.voiceChannel = voiceChannel
@@ -15,6 +15,8 @@ module.exports = {
             message.reply('please join a voice channel and try again!');
             return;
         }
+        let sqlqueue = await getQueue(message, client)
+        if (sqlqueue !== 404) musicData.queue = sqlqueue
         try {
             let result;
             if (validYTPlaylistURL(args)) result = await addYTPlaylist(message, args, voiceChannel);
@@ -28,6 +30,7 @@ module.exports = {
             result.forEach(track => {
                 musicData.queue.push(track)
             });
+            await updateQueue(message, client)
             const addembed = new Discord.MessageEmbed()
                 .setColor('#FFED00')
                 .setTitle(`:musical_note: ${result[0].title}`)
@@ -80,7 +83,7 @@ module.exports = {
                 opusEncoded: true,
                 seek: seek,
                 encoderArgs: encoderArgs,
-                requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE } },
+                //requestOptions: { headers: { cookie: cookie.cookie, 'x-youtube-identity-token': process.env.YOUTUBE } },
             })
             try {
                 await voiceChannel.join().then(async (connection) => {
@@ -137,6 +140,7 @@ module.exports = {
                     musicData.nowPlaying = musicData.queue[0];
                     let ended = await musicData.queue.shift()
                     musicData.previous.push(ended)
+                    await updateQueue(message, client)
                     module.exports.musicHandler(message, voiceChannel)
                 })
             } catch (err) { }
@@ -145,11 +149,13 @@ module.exports = {
     musicHandler(message, voiceChannel) {
         const musicData = message.guild.musicData
         const dispatcher = musicData.songDispatcher
-        dispatcher.on('finish', () => {
+        dispatcher.on('finish', async () => {
             if (musicData.loopSong) {
                 musicData.queue.unshift(musicData.nowPlaying);
+                await updateQueue(message, client)
             } else if (musicData.loopQueue) {
                 musicData.queue.push(musicData.nowPlaying);
+                await updateQueue(message, client)
             }
             if (musicData.queue.length >= 1) {
                 module.exports.play(message, voiceChannel);
@@ -168,11 +174,12 @@ module.exports = {
                 }
             }
         })
-        dispatcher.on('error', function (e) {
+        dispatcher.on('error', async function (e) {
             message.channel.send('Cannot play song!');
             console.log(e);
             if (musicData.queue.length > 1) {
                 musicData.queue.shift();
+                await updateQueue(message, client)
                 module.exports.play(message, voiceChannel);
                 return;
             }

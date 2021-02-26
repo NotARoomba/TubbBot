@@ -1,11 +1,11 @@
-const { isValidCommander, arrayMove } = require('../../function.js')
+const { isValidCommander, arrayMove, updateQueue } = require('../../function.js')
 module.exports = {
     name: 'move',
     group: 'music',
     usage: 'move',
     aliases: ['m'],
     description: 'Move Tubb to another voice channel!',
-    async execute(message, args) {
+    async execute(message, args, client) {
         if (isValidCommander(message) !== true) return
         args = args.split(" ")
         if (args[0] < 1 || args[0] > message.guild.musicData.queue.length || args[1] < 1 || args[1] > message.guild.musicData.queue.length || args[0] == args[1] || typeof parseInt(args[0]) !== 'number' || typeof parseInt(args[1]) !== 'number') {
@@ -16,9 +16,8 @@ module.exports = {
             return;
         }
         const songName = message.guild.musicData.queue[args[0] - 1].title;
-
         arrayMove(message.guild.musicData.queue, args[0] - 1, args[1] - 1);
-
+        await updateQueue(message, client)
         message.channel.send(`**${songName}** moved to position ${args[1]}`);
     }
 }

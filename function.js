@@ -501,20 +501,23 @@ module.exports = {
         }
     },
     async updateQueue(message, client) {
-        const queue = client.player.queues.get(message.guild.id)
+        const queue = message.guild.musicData.queue
         if (!queue) return
-        console.log(queue.tracks.player)
-        const sql = await client.pool.query(`SELECT * FROM musics WHERE guild = ${message.guild.id}`);
-        if (sql[0][1] === undefined) {
-            await client.pool.query(`UPDATE musics SET queue = '${stringify(queue.tracks)}' WHERE guild = ${message.guild.id}`);
+        const sql = await client.pool.query(`SELECT queue FROM musics WHERE guild = ${message.guild.id}`);
+        if (sql[0][0] == undefined) {
+            await client.pool.query(`INSERT INTO musics (guild, queue) VALUES ('${message.guild.id}','${escape(JSON.stringify(queue))}}')`)
         } else {
-            await client.pool.query(`INSERT INTO musics (guild, queue) VALUES ('${message.guild.id}','${stringify(queue.tracks)}')`)
+            await client.pool.query(`UPDATE musics SET queue = '${escape(JSON.stringify(queue))}' WHERE guild = ${message.guild.id}`);
         }
     },
     async getQueue(message, client) {
-        const queue = await client.pool.query(`SELECT queue FROM musics WHERE guild = ${message.guild.id}`)
-        console.log(queue[0])
-        return await parse(queue[0][0].queue);
+        let queue = await client.pool.query(`SELECT queue FROM musics WHERE guild = ${message.guild.id}`)
+        try {
+            queue = await JSON.parse(unescape((queue[0][0].queue)))
+            return queue
+        } catch (err) {
+            return 404
+        }
     },
     isValidCommander(message) {
         const voiceChannel = message.member.voice.channel;

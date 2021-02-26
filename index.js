@@ -42,6 +42,11 @@ client.on('ready', async () => {
     } catch (err) {
         throw console.error('Unable to connect to the database:');
     }
+    client.guilds.cache.forEach(async (guild) => {
+        const prefix = await pool.query(`SELECT * FROM prefixes WHERE guild = ${guild.id};`)
+        if (prefix[0][0].guild == guild.id) return
+        await pool.query(`INSERT INTO prefixes (guild, prefix) VALUES ('${guild.id}','-')`)
+    });
     setInterval(() => {
         client.user.setActivity(`-help in ${client.guilds.cache.size} Servers`, { type: 'WATCHING' })
     }, 60000);
@@ -61,7 +66,8 @@ client.on('ready', async () => {
 client.on('message', async (message) => {
     if (message.author.bot) return;
     const guildPrefix = await pool.query(`SELECT * FROM prefixes WHERE guild = ${message.guild.id};`)
-    let prefix = guildPrefix[0][0].prefix
+    let prefix = process.env.PREFIX
+    if (guildPrefix) prefix = guildPrefix[0][0].prefix
     if (message.content.startsWith(prefix)) {
         let content = message.content.slice(prefix.length).split(" ");
         if (cmdarr.get(content[0]) || aliasesarr.get(content[0])) {
