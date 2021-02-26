@@ -17,7 +17,7 @@ module.exports = {
         }
         let sqlqueue = await getQueue(message, client)
         if (sqlqueue !== 404) {
-            qlqueue.forEach(track => {
+            sqlqueue.forEach(track => {
                 musicData.queue.push(track)
             });
         }
