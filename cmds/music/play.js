@@ -16,7 +16,11 @@ module.exports = {
             return;
         }
         let sqlqueue = await getQueue(message, client)
-        if (sqlqueue !== 404) musicData.queue = sqlqueue
+        if (sqlqueue !== 404) {
+            qlqueue.forEach(track => {
+                musicData.queue.push(track)
+            });
+        }
         try {
             let result;
             if (validYTPlaylistURL(args)) result = await addYTPlaylist(message, args, voiceChannel);
