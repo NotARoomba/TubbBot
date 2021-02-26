@@ -123,7 +123,7 @@ module.exports = {
                     musicData.nowPlaying = musicData.queue[0];
                     let ended = await musicData.queue.shift()
                     musicData.previous.push(ended)
-                    module.exports.musicHandler(message, voiceChannel)
+                    module.exports.musicHandler(message, voiceChannel, client)
                 })
             } catch (err) { }
         } else if (musicData.queue[0].type == 2) {
@@ -145,12 +145,12 @@ module.exports = {
                     let ended = await musicData.queue.shift()
                     musicData.previous.push(ended)
                     await updateQueue(message, client)
-                    module.exports.musicHandler(message, voiceChannel)
+                    module.exports.musicHandler(message, voiceChannel, client)
                 })
             } catch (err) { }
         }
     },
-    musicHandler(message, voiceChannel) {
+    musicHandler(message, voiceChannel, client) {
         const musicData = message.guild.musicData
         const dispatcher = musicData.songDispatcher
         dispatcher.on('finish', async () => {
