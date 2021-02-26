@@ -1,5 +1,5 @@
 const Pagination = require('discord-paginationembed');
-const { isValidCommander, updateQueue } = require("../../function");
+const { isValidCommander, updateQueue, shuffleQueue } = require("../../function");
 module.exports = {
     name: 'shuffle',
     group: 'music',
