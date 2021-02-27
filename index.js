@@ -66,6 +66,12 @@ client.on('ready', async () => {
 });
 client.on('message', async (message) => {
     if (message.author.bot) return;
+    const [value] = await pool.query(`SELECT leveling FROM servers WHERE id = ${message.guild.id};`)
+    if (value[0].leveling == 1) {
+        try {
+
+        } catch (err) { }
+    }
     const [guildPrefix] = await pool.query(`SELECT * FROM servers WHERE id = ${message.guild.id};`)
     let prefix = process.env.PREFIX
     try {
@@ -81,13 +87,6 @@ client.on('message', async (message) => {
             execute(message, args, client)
         }
     }
-    const [value] = await pool.query(`SELECT leveling FROM servers WHERE id = ${message.guild.id};`)
-    if (value[0].value == 1) {
-        const [userData] = await pool.query(`SELECT * FROM users WHERE id = ${message.author.id};`)
-        if (userData[0].level == undefined) {
-            await pool.query(`INSERT INTO users (id, guild) VALUES ('${message.author.id}', '${message.guild.id}')`)
-        }
-    } return
 })
 
 client.on('guildCreate', async (guild) => {
