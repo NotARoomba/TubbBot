@@ -69,7 +69,7 @@ client.on('message', async (message) => {
     const [value] = await pool.query(`SELECT leveling FROM servers WHERE id = ${message.guild.id};`)
     if (value[0].leveling == 1) {
         try {
-            await pool.query(`INSERT INTO users (id, guild) VALUES ('${message.author.id}', '${message.guild.id}')`)
+
         } catch (err) { }
     }
     const [guildPrefix] = await pool.query(`SELECT * FROM servers WHERE id = ${message.guild.id};`)

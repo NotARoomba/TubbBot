@@ -578,5 +578,5 @@ module.exports = {
             case "false": case "no": case "0": case null: return false;
             default: return Boolean(string);
         }
-    }
+    },
 }
