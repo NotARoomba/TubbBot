@@ -7,7 +7,7 @@ module.exports = {
     async execute(message, args, client) {
         let author = message.author
         if (args !== '' || null || undefined && message.mentions.users.first() !== undefined) {
-            if (message.mentions.users.first().bot) return message.reply('that is not a user.')
+            if (message.mentions.users.first().bot == true) return message.reply('that is not a user.')
             author = message.mentions.users.first()
         }
         const [count] = await client.pool.query(`SELECT COUNT(*) FROM users WHERE id = ${author.id} AND guild = ${message.guild.id};`)
@@ -23,7 +23,7 @@ module.exports = {
         for (let i = 0; i < server.length; i++) everyone.push(server[i].id);
         var rank = everyone.indexOf(user[0].id) + 1;
         const embed = new Discord.MessageEmbed()
-            .setTitle(`Rank for ${author.username}#${author.discriminator} in \`${message.guild.name}\`!`)
+            .setTitle(`Rank of \`${author.username}#${author.discriminator}\` in \`${message.guild.name}\`!`)
             .setThumbnail(author.avatarURL())
             .setColor('#DC143C')
             .addFields({
