@@ -17,6 +17,7 @@ var pool = mysql.createPool({
     queueLimit: 0
 }).promise();
 var read = require('fs-readdir-recursive');
+const { leveling } = require('./function');
 let cmdarr = new Discord.Collection()
 let aliasesarr = new Discord.Collection()
 client.pool = pool
@@ -69,7 +70,7 @@ client.on('message', async (message) => {
     const [value] = await pool.query(`SELECT leveling FROM servers WHERE id = ${message.guild.id};`)
     if (value[0].leveling == 1) {
         try {
-
+            await leveling(message, client)
         } catch (err) { }
     }
     const [guildPrefix] = await pool.query(`SELECT * FROM servers WHERE id = ${message.guild.id};`)

@@ -579,4 +579,39 @@ module.exports = {
             default: return Boolean(string);
         }
     },
+    async leveling(message, client) {
+        const a = []
+        pool = client.pool
+        a.push({
+            author: message.author.id,
+            guild: message.guild.id,
+            exp: Math.round(message.content.length / 2)
+        })
+        setInterval(async function () {
+            let xp = 0;
+            a.forEach(async (msg) => {
+                if (msg.exp == 0 || msg.exp == undefined) return
+                try {
+                    const [usr2] = await pool.query(`SELECT exp FROM users WHERE id = ${msg.author} AND guild = ${msg.guild};`)
+                    xp = usr2[0].exp
+                } catch (err) {
+                    await pool.query(`INSERT INTO users (id, guild, exp) VALUES ('${msg.author}','${msg.guild}','${msg.exp}')`)
+                }
+                await pool.query(`UPDATE users SET exp = '${msg.exp + xp}' WHERE id = ${msg.author} AND guild = ${msg.guild}`)
+                xp = 0
+                a.shift()
+            });
+            const [usr1] = await pool.query(`SELECT * FROM users WHERE id = ${message.author.id} AND guild = ${message.guild.id};`)
+            let level = usr1[0].level;
+            let newxp = usr1[0].required;
+            while (usr1[0].exp >= newxp) {
+                newxp = newxp * 2
+                level = level + 1;
+            }
+            if (usr1[0].level !== level) message.reply(`you leveled up!`)
+            await pool.query(`UPDATE users SET level = '${level}', required = '${newxp}' WHERE id = ${message.author.id} AND guild = ${message.guild.id}`)
+            level = 0;
+            newxp = 0;
+        }, 5000);
+    }
 }
