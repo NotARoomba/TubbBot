@@ -10,7 +10,7 @@ module.exports = {
             if (message.mentions.users.first().bot) return message.reply('that is not a user.')
             author = message.mentions.users.first()
         }
-        const [count] = await client.pool.query(`SELECT COUNT(*) FROM users WHERE id = ${author} AND guild = ${message.guild.id};`)
+        const [count] = await client.pool.query(`SELECT COUNT(*) FROM users WHERE id = ${author.id} AND guild = ${message.guild.id};`)
         if (count[0][Object.keys(count[0])] == 0) return message.reply('leveling is off for your server, ask an admin to turn it on.')
         const [user] = await client.pool.query(`SELECT * FROM users WHERE id = ${author.id} AND guild = ${message.guild.id};`)
         const [server] = await client.pool.query(`SELECT * FROM users WHERE guild = ${message.guild.id} ORDER BY exp DESC`)
