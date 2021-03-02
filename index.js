@@ -18,8 +18,7 @@ var pool = mysql.createPool({
 }).promise();
 var read = require('fs-readdir-recursive');
 const { leveling } = require('./function');
-let cmdarr = new Discord.Collection()
-let aliasesarr = new Discord.Collection()
+let cmds = new Discord.Collection()
 client.pool = pool
 client.on('ready', async () => {
     client.guilds.cache.forEach(guild => {
@@ -57,12 +56,7 @@ client.on('ready', async () => {
     cmddirs.forEach(e => {
         let cmd = e.replace(`\\`, '/')
         let cmdpath = require(`./cmds/${cmd}`)
-        if (cmdpath.aliases !== undefined) {
-            for (const alias of cmdpath.aliases) {
-                aliasesarr.set(alias, `./cmds/${cmd}`)
-            }
-        }
-        cmdarr.set(cmdpath.name, `./cmds/${cmd}`);
+        cmds.set(cmdpath.name, cmdpath);
     });
 });
 client.on('message', async (message) => {
@@ -82,11 +76,20 @@ client.on('message', async (message) => {
     }
     if (message.content.startsWith(prefix)) {
         let content = message.content.slice(prefix.length).split(" ");
-        if (cmdarr.get(content[0]) || aliasesarr.get(content[0])) {
-            const { execute } = require(`${cmdarr.get(content[0]) || aliasesarr.get(content[0])}`)
-            const args = content.splice(1).join(" ");
-            execute(message, args, client)
+        const command = cmds.get(content[0]) || cmds.find(cmd => cmd.aliases && cmd.aliases.includes(content[0]));
+        if (!command) return;
+        if (command.permissions) {
+            let perms = []
+            command.permissions.forEach(permission => {
+                if (!message.member.hasPermission(permission)) {
+                    perms.push(permission)
+                }
+            });
+            if (perms.length >= 1) return message.reply(`You need the permission(s) \`${perms.join(', ')}\``)
         }
+        if (command.ownerOnly == true && message.author.id !== process.env.OWNER) return message.reply("You cant do that!")
+        const args = content.splice(1).join(" ");
+        command.execute(message, args, client)
     }
 })
 
