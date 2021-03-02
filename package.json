@@ -36,6 +36,7 @@
         "opusscript": "0.0.8",
         "reddit-wrapper-v2": "^1.1.6",
         "request-promise-native": "^1.0.9",
+        "rule34js": "^2.2.0",
         "simple-youtube-api": "^5.2.1",
         "soundcloud-downloader": "^0.2.4",
         "soundcloud-scraper": "^4.0.3",

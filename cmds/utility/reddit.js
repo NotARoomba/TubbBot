@@ -19,19 +19,20 @@ module.exports = {
     description: 'Fetches a meme from a subreddit',
     subcommands: ['hot', 'top', 'new'],
     aliases: ['meme'],
-    async execute(message, arg) {
-        arg = arg.split(" ")
+    async execute(message, args) {
+        if (typeof args !== 'object') args = args.split(" ")
         let subreddits = ["memes", "dankmemes", "meme"];
-        let chosen = arg[0] || subreddits[Math.floor(Math.random() * subreddits.length)];
-        let response = await redditConn.api.get(`/r/${chosen}/${arg[1] || 'hot'}`, { limit: 100 }).catch(console.error).then(async (response) =>
-            response = await redditConn.api.get(`/r/${chosen}/hot`, { limit: 100 })
+        let response;
+        if (args[1] == 'top') args[1] = `top/?t=all`
+        let chosen = args[0] || subreddits[Math.floor(Math.random() * subreddits.length)];
+        response = await redditConn.api.get(`/r/${chosen}/${args[1] !== 'undefined' ? args[1] : 'hot'}`, { limit: 100 }).catch(console.error).then(async (response) =>
+            response = await redditConn.api.get(`/r/${chosen}/${args[1] !== 'undefined' ? args[1] : 'hot'}`, { limit: 100 })
         )
-        //console.log(`/r/${chosen}/${arg[1] || 'hot'}`)
-        if (!response) return await module.exports.execute(message, arg);
-        if (response[1] === undefined) return await module.exports.execute(message, arg);
-        if (response[1].data === undefined || response[1].data.children[0] === undefined || response[1].data.children[0].data === undefined || response[1].data.children[0].data.url === undefined) return await module.exports.execute(message, arg);
+        if (!response) return await module.exports.execute(message, args);
+        if (response[1] === undefined) return await module.exports.execute(message, args);
+        if (response[1].data === undefined || response[1].data.children[0] === undefined || response[1].data.children[0].data === undefined || response[1].data.children[0].data.url === undefined) return await module.exports.execute(message, args);
         let data = response[1].data.children[Math.floor(Math.random() * response[1].data.children.length)].data;
-        if (!data || data.url === undefined || (!data.url.endsWith(".jpg") && !data.url.endsWith(".png") && !data.url.endsWith(".gif") && !validImgurURL(data.url))) return await module.exports.execute(message, arg);
+        if (!data || data.url === undefined || (!data.url.endsWith(".jpg") && !data.url.endsWith(".png") && !data.url.endsWith(".gif") && !validImgurURL(data.url))) return await module.exports.execute(message, args);
 
         const em = new Discord.MessageEmbed()
             .setTitle(`${data.title.substring(0, 256)}`)
