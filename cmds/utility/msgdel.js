@@ -3,6 +3,7 @@ module.exports = {
     group: 'utility',
     usage: `msgdel (optional: amount of messages)`,
     aliases: ['msgdel'],
+    permissions: ['MANAGE_MESSAGES'],
     description: 'Mass (message) Genocide',
     async execute(message, count) {
         try {
