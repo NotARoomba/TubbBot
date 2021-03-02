@@ -27,11 +27,11 @@ module.exports = {
             response = await redditConn.api.get(`/r/${chosen}/hot`, { limit: 100 })
         )
         //console.log(`/r/${chosen}/${arg[1] || 'hot'}`)
-        if (!response) await execute(message, arg);
-        if (response[1] === undefined) await execute(message, arg);
-        if (response[1].data === undefined || response[1].data.children[0] === undefined || response[1].data.children[0].data === undefined || response[1].data.children[0].data.url === undefined) await execute(message, arg);
+        if (!response) return await module.exports.execute(message, arg);
+        if (response[1] === undefined) return await module.exports.execute(message, arg);
+        if (response[1].data === undefined || response[1].data.children[0] === undefined || response[1].data.children[0].data === undefined || response[1].data.children[0].data.url === undefined) return await module.exports.execute(message, arg);
         let data = response[1].data.children[Math.floor(Math.random() * response[1].data.children.length)].data;
-        if (!data || data.url === undefined || (!data.url.endsWith(".jpg") && !data.url.endsWith(".png") && !data.url.endsWith(".gif") && !validImgurURL(data.url))) await execute(message, arg);
+        if (!data || data.url === undefined || (!data.url.endsWith(".jpg") && !data.url.endsWith(".png") && !data.url.endsWith(".gif") && !validImgurURL(data.url))) return await module.exports.execute(message, arg);
 
         const em = new Discord.MessageEmbed()
             .setTitle(`${data.title.substring(0, 256)}`)
