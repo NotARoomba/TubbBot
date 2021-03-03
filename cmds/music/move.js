@@ -1,9 +1,8 @@
 const { isValidCommander, arrayMove, updateQueue } = require('../../function.js')
 module.exports = {
-    name: 'move',
+    name: 'migrate',
     group: 'music',
-    usage: 'move',
-    aliases: ['m'],
+    usage: 'migrate',
     description: 'Move Tubb to another voice channel!',
     async execute(message, args, client) {
         if (isValidCommander(message) !== true) return

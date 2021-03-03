@@ -17,6 +17,11 @@ const Pagination = require('discord-paginationembed');
 const imgurUploader = require('imgur-uploader');
 const rp = require("request-promise-native");
 const cheerio = require("cheerio");
+var ChessImageGenerator = require('chess-image-generator');
+var imageGenerator = new ChessImageGenerator({
+    size: 1200,
+    style: 'cburnett'
+});
 module.exports = {
     list(arr, conj = 'and') {
         const len = arr.length;
@@ -639,4 +644,11 @@ module.exports = {
         const [a] = await client.pool.query(`SELECT * FROM chessData WHERE user = ${user}`)
         return a[0].rating
     },
+    async getBoardImage(fen) {
+        imageGenerator.loadFEN(`${fen}`)
+        await imageGenerator.generateBuffer().then(async (imageBuffer) => {
+            image = await imgurUploader(imageBuffer)
+        })
+        return image.link
+    }
 }

@@ -5,7 +5,7 @@ module.exports = {
     group: 'games',
     usage: 'chess (player)',
     aliases: ['challenge'],
-    description: 'Play chessa against someone!',
+    description: 'Play chess against someone!',
     async execute(message, args, client) {
         let accepted
         const user = message.mentions.users.first();
