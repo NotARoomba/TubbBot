@@ -7,6 +7,7 @@ module.exports = {
     async execute(message, args, client) {
         if (!await inGame(message, message.author, client)) return message.reply(`you are not in a game.`)
         try {
+            let accepted;
             await message.react('✅')
             await message.react('❌')
             const filter = (reaction, b) => {

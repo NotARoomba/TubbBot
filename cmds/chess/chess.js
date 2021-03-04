@@ -7,7 +7,7 @@ module.exports = {
     aliases: ['challenge'],
     description: 'Play chess against someone!',
     async execute(message, args, client) {
-        let accepted
+        let accepted;
         const user = message.mentions.users.first();
         if (user == undefined) return message.reply(`you didn't provide a valid user.`)
         if (user.bot) return message.reply('bots cannot be played against.');
