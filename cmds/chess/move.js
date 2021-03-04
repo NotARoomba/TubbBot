@@ -23,8 +23,8 @@ module.exports = {
             return message.channel.send(`http://www.jinchess.com/chessboard/?p=${encodeURI(b[0].fen)}&s=l&dsc=%23b58863&lsc=%23f0d9b5&ps=merida&cm=o`);
         }
         fen = chess.fen();
-        await client.pool.query(`UPDATE chessGames SET fen = '${fen}' WHERE guild = ${message.guild.id} AND p1 = ${message.author.id} or p2 = ${message.author.id} AND current = 1`)
-        fen = chess.fen();
+        pgn = chess.pgn();
+        await client.pool.query(`UPDATE chessGames SET fen = ${fen}, pgn = ${pgn} WHERE guild = ${message.guild.id} AND p1 = ${message.author.id} or p2 = ${message.author.id} AND current = 1`)
         const [b] = await client.pool.query(`SELECT * FROM chessGames WHERE guild = ${message.guild.id} AND p1 = ${message.author.id} or p2 = ${message.author.id} AND current = 1`)
         if (chess.in_draw() || chess.in_stalemate() || chess.in_threefold_repetition()) {
             message.channel.send('Draw!');
