@@ -1,5 +1,5 @@
 const { Chess } = require('chess.js');
-const { inGame, getBoardImage } = require('../../function');
+const { inGame } = require('../../function');
 module.exports = {
     name: 'board',
     group: 'games',
