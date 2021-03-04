@@ -1,6 +1,7 @@
 const ytsr = require("ytsr");
 const ytsr2 = require("youtube-sr").default;
 const ytpl = require("ytpl");
+const Discord = require('discord.js');
 const ytdl = require("ytdl-core");
 const moment = require("moment");
 require("moment-duration-format")(moment);
@@ -339,8 +340,8 @@ module.exports = {
             return
         }
         let imagedata = 0;
-        if (metadata.common.picture[0] !== undefined) {
-            imagedata = await imgurUploader(metadata.common.picture[0].data, { title: 'music-metadata' })
+        if (metadata.common.picture >= 1) {
+            imagedata = new Discord.MessageAttachment(metadata.common.picture[0].data)
         }
         let title = 0
         if (metadata.common.title == undefined) {
@@ -351,7 +352,7 @@ module.exports = {
         results.push({
             title: (title == 0) ? metadata.common.title : title,
             url: query,
-            thumbnail: (imagedata !== 0) ? imagedata.link : 'https://cdn3.iconfinder.com/data/icons/symbol-color-documents-1/32/file_music-link-512.png',
+            thumbnail: (imagedata !== 0) ? imagedata : 'https://cdn3.iconfinder.com/data/icons/symbol-color-documents-1/32/file_music-link-512.png',
             isLive: false,
             lengthFormatted: songLength,
             lengthSeconds: length,
@@ -379,8 +380,8 @@ module.exports = {
                 return
             }
             let imagedata = 0;
-            if (metadata.common.picture[0] !== undefined) {
-                imagedata = await imgurUploader(metadata.common.picture[0].data, { title: 'music-metadata' })
+            if (metadata.common.picture >= 1) {
+                imagedata = new Discord.MessageAttachment(metadata.common.picture[0].data)
             }
             let title = 0
             if (metadata.common.title == undefined) {
@@ -391,7 +392,7 @@ module.exports = {
             results.push({
                 title: (title == 0) ? metadata.common.title : (file.name ? file.name.split(".").slice(0, -1).join(".") : file.url.split("/").slice(-1)[0].split(".").slice(0, -1).join(".")).replace(/_/g, " "),
                 url: file.url,
-                thumbnail: (imagedata !== 0) ? imagedata.link : "https://www.flaticon.com/svg/static/icons/svg/2305/2305904.svg",
+                thumbnail: (imagedata !== 0) ? imagedata : "https://www.flaticon.com/svg/static/icons/svg/2305/2305904.svg",
                 isLive: false,
                 lengthFormatted: songLength,
                 lengthSeconds: length,
@@ -525,18 +526,20 @@ module.exports = {
         }
     },
     isValidCommander(message) {
-        const voiceChannel = message.member.voice.channel;
-        if (!voiceChannel) {
-            message.reply('Please join a voice channel and try again!');
-            return false
-        } else if (voiceChannel.id !== message.guild.me.voice.channel.id) {
-            message.reply(`You must be in the same voice channel as the bot's in order to use that!`);
-            return false
-        } else if (typeof message.guild.musicData.songDispatcher == 'undefined' || message.guild.musicData.songDispatcher == null) {
-            message.reply('There is no song playing right now!');
-            return false
-        }
-        return true
+        try {
+            const voiceChannel = message.member.voice.channel;
+            if (!voiceChannel) {
+                message.reply('Please join a voice channel and try again!');
+                return false
+            } else if (voiceChannel.id !== message.guild.me.voice.channel.id) {
+                message.reply(`You must be in the same voice channel as the bot's in order to use that!`);
+                return false
+            } else if (typeof message.guild.musicData.songDispatcher == 'undefined' || message.guild.musicData.songDispatcher == null) {
+                message.reply('There is no song playing right now!');
+                return false
+            }
+            return true
+        } catch (err) { }
     },
     createProgressBar(message) {
         const totalTime = message.guild.musicData.nowPlaying.lengthSeconds * 1000
@@ -646,10 +649,11 @@ module.exports = {
     },
     async getBoardImage(fen) {
         imageGenerator.loadFEN(`${fen}`)
+        let attachment;
         await imageGenerator.generateBuffer().then(async (imageBuffer) => {
-            image = await imgurUploader(imageBuffer)
+            attachment = new Discord.MessageAttachment(imageBuffer)
         })
-        return image.link
+        return attachment
     },
     async endChessGame(message, client, winner, looser, score, draw) {
         if (draw == true) {
@@ -657,9 +661,9 @@ module.exports = {
             await client.pool.query(`UPDATE chessData SET draws = draws + 1  WHERE user = ${looser}`)
         } else {
             await client.pool.query(`UPDATE chessGames SET winner = ${winner}, current = 0 WHERE guild = ${message.guild.id} AND p1 = ${message.author.id} or p2 = ${message.author.id} AND current = 1`)
-            winnerRating = await getRating(winner, client)
-            looserRating = await getRating(looser, client)
-            const takeAway = await eloDiffCalc(winnerRating, looserRating, score, client)
+            winnerRating = await module.exports.getRating(winner, client)
+            looserRating = await module.exports.getRating(looser, client)
+            const takeAway = await module.exports.eloDiffCalc(winnerRating, looserRating, score)
             await client.pool.query(`UPDATE chessData SET rating = rating + ${takeAway}, wins = wins + 1, totalGames = totalGames + 1 WHERE user = ${winner}`)
             await client.pool.query(`UPDATE chessData SET rating = rating - ${takeAway}, losses = losses + 1, totalGames = totalGames + 1  WHERE user = ${looser}`)
         }
