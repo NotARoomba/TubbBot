@@ -659,6 +659,7 @@ module.exports = {
         if (draw == true) {
             await client.pool.query(`UPDATE chessData SET draws = draws + 1 WHERE user = ${winner}`)
             await client.pool.query(`UPDATE chessData SET draws = draws + 1  WHERE user = ${looser}`)
+            await client.pool.query(`UPDATE chessGames SET winner = draw, current = 0 WHERE guild = ${message.guild.id} AND p1 = ${message.author.id} or p2 = ${message.author.id} AND current = 1`)
         } else {
             await client.pool.query(`UPDATE chessGames SET winner = ${winner}, current = 0 WHERE guild = ${message.guild.id} AND p1 = ${message.author.id} or p2 = ${message.author.id} AND current = 1`)
             winnerRating = await module.exports.getRating(winner, client)
