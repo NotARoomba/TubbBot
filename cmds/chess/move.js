@@ -22,16 +22,17 @@ module.exports = {
             message.channel.send('<@' + (chess.turn() === 'w' ? b[0].p1 : b[0].p2) + '>, it is your turn!');
             return message.channel.send(`http://www.jinchess.com/chessboard/?p=${encodeURI(b[0].fen)}&s=l&dsc=%23b58863&lsc=%23f0d9b5&ps=merida&cm=o`);
         }
-        const [b] = await client.pool.query(`SELECT * FROM chessGames WHERE guild = ${message.guild.id} AND p1 = ${message.author.id} or p2 = ${message.author.id} AND current = 1`)
         if (chess.in_draw() || chess.in_stalemate() || chess.in_threefold_repetition()) {
+            const [b] = await client.pool.query(`SELECT * FROM chessGames WHERE guild = ${message.guild.id} AND p1 = ${message.author.id} or p2 = ${message.author.id} AND current = 1`)
             message.channel.send('Draw!');
             message.channel.send(`http://www.jinchess.com/chessboard/?p=${encodeURI(b[0].fen)}&s=l&dsc=%23b58863&lsc=%23f0d9b5&ps=merida&cm=o`);
-            endChessGame(message, client, b[0].p1, b[0].p2, 1, true)
+            endChessGame(message, client, b[0].p1, b[0].p2, .5, true)
         }
         else {
-            message.channel.send(chess.turn() === 'w' ? `<@${b[0].p1}> (black) won!` : `<@${b[0].p2}> (white) won!`);
+            const [b] = await client.pool.query(`SELECT * FROM chessGames WHERE guild = ${message.guild.id} AND p1 = ${message.author.id} or p2 = ${message.author.id} AND current = 1`)
+            message.channel.send(chess.turn() === 'w' ? `<@${b[0].p2}> (black) won!` : `<@${b[0].p1}> (white) won!`);
             message.channel.send(`http://www.jinchess.com/chessboard/?p=${encodeURI(b[0].fen)}&s=l&dsc=%23b58863&lsc=%23f0d9b5&ps=merida&cm=o`);
-            endChessGame(message, client, chess.turn() === 'w' ? b[0].p1 : b[0].p2, chess.turn() === 'w' ? b[0].p2 : b[0].p1, 1, false)
+            endChessGame(message, client, chess.turn() === 'w' ? b[0].p2 : b[0].p1, chess.turn() === 'w' ? b[0].p1 : b[0].p2, 1, false)
         }
     }
 }
