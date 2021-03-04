@@ -635,7 +635,7 @@ module.exports = {
         if (a.length > 0) return true
         else return false
     },
-    async eloDiffCalc(win, loss, score, client, user) {
+    async eloDiffCalc(win, loss, score) {
         expectedScore = 1 / (1 + 10 ** ((loss - win) / 400))
         currentScore = win + 25 * (score - expectedScore)
         return Math.round(currentScore - win)
@@ -650,5 +650,18 @@ module.exports = {
             image = await imgurUploader(imageBuffer)
         })
         return image.link
+    },
+    async endChessGame(message, client, winner, looser, score, draw) {
+        if (draw == true) {
+            await client.pool.query(`UPDATE chessData SET draws = draws + 1 WHERE user = ${winner}`)
+            await client.pool.query(`UPDATE chessData SET draws = draws + 1  WHERE user = ${looser}`)
+        } else {
+            await client.pool.query(`UPDATE chessGames SET winner = ${winner}, current = 0 WHERE guild = ${message.guild.id} AND p1 = ${message.author.id} or p2 = ${message.author.id} AND current = 1`)
+            winnerRating = await getRating(winner, client)
+            looserRating = await getRating(looser, client)
+            const takeAway = await eloDiffCalc(winnerRating, looserRating, score, client)
+            await client.pool.query(`UPDATE chessData SET rating = rating + ${takeAway}, wins = wins + 1, totalGames = totalGames + 1 WHERE user = ${winner}`)
+            await client.pool.query(`UPDATE chessData SET rating = rating - ${takeAway}, losses = losses + 1, totalGames = totalGames + 1  WHERE user = ${looser}`)
+        }
     }
 }

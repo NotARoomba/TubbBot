@@ -1,6 +1,6 @@
 const { Chess } = require('chess.js');
 const Discord = require('discord.js');
-const { inGame, getRating, eloDiffCalc } = require('../../function');
+const { inGame, getRating, eloDiffCalc, endChessGame } = require('../../function');
 module.exports = {
     name: 'move',
     group: 'games',
@@ -26,26 +26,12 @@ module.exports = {
         if (chess.in_draw() || chess.in_stalemate() || chess.in_threefold_repetition()) {
             message.channel.send('Draw!');
             message.channel.send(`http://www.jinchess.com/chessboard/?p=${encodeURI(b[0].fen)}&s=l&dsc=%23b58863&lsc=%23f0d9b5&ps=merida&cm=o`);
+            endChessGame(message, client, b[0].p1, b[0].p2, 1, true)
         }
         else {
-            message.channel.send(chess.turn() === 'w' ? `<@${b[0].p1}> (white) won!` : `<@${b[0].p2}> (black) won!`);
+            message.channel.send(chess.turn() === 'w' ? `<@${b[0].p1}> (black) won!` : `<@${b[0].p2}> (white) won!`);
             message.channel.send(`http://www.jinchess.com/chessboard/?p=${encodeURI(b[0].fen)}&s=l&dsc=%23b58863&lsc=%23f0d9b5&ps=merida&cm=o`);
+            endChessGame(message, client, chess.turn() === 'w' ? b[0].p1 : b[0].p2, chess.turn() === 'w' ? b[0].p2 : b[0].p1, 1, false)
         }
-        const data = {};
-        if (b[0].p1 == message.author.id) {
-            await client.pool.query(`UPDATE chessGames SET winner = ${b[0].p2}, current = 0 WHERE guild = ${message.guild.id} AND p1 = ${message.author.id} or p2 = ${message.author.id} AND current = 1`)
-            data.winner = b[0].p2
-            data.looser = b[0].p1
-        }
-        else {
-            await client.pool.query(`UPDATE chessGames SET winner = ${b[0].p1}, current = 0 WHERE guild = ${message.guild.id} AND p1 = ${message.author.id} or p2 = ${message.author.id} AND current = 1`)
-            data.winner = b[0].p1
-            data.looser = b[0].p2
-        }
-        winnerRating = await getRating(data.winner, client)
-        looserRating = await getRating(data.looser, client)
-        const takeAway = await eloDiffCalc(winnerRating, looserRating, 1, client)
-        await client.pool.query(`UPDATE chessData SET rating = rating + ${takeAway}, wins = wins + 1, totalGames = totalGames + 1 WHERE user = ${data.winner}`)
-        await client.pool.query(`UPDATE chessData SET rating = rating - ${takeAway}, losses = losses + 1, totalGames = totalGames + 1  WHERE user = ${data.looser}`)
     }
 }
