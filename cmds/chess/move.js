@@ -28,12 +28,12 @@ module.exports = {
         if (chess.in_draw() || chess.in_stalemate() || chess.in_threefold_repetition()) {
             message.channel.send('Draw!');
             message.channel.send(`http://www.jinchess.com/chessboard/?p=${encodeURI(b[0].fen)}&s=l&dsc=%23b58863&lsc=%23f0d9b5&ps=merida&cm=o`);
-            endChessGame(message, client, b[0].p1, b[0].p2, .5, true)
+            await endChessGame(message, client, b[0].p1, b[0].p2, .5, true)
         }
         else {
             message.channel.send(chess.turn() === 'w' ? `<@${b[0].p2}> (black) won!` : `<@${b[0].p1}> (white) won!`);
             message.channel.send(`http://www.jinchess.com/chessboard/?p=${encodeURI(b[0].fen)}&s=l&dsc=%23b58863&lsc=%23f0d9b5&ps=merida&cm=o`);
-            endChessGame(message, client, chess.turn() === 'w' ? b[0].p2 : b[0].p1, chess.turn() === 'w' ? b[0].p1 : b[0].p2, 1, false)
+            await endChessGame(message, client, chess.turn() === 'w' ? b[0].p2 : b[0].p1, chess.turn() === 'w' ? b[0].p1 : b[0].p2, 1, false)
         }
     }
 }
