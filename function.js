@@ -17,6 +17,11 @@ const Pagination = require('discord-paginationembed');
 const imgurUploader = require('imgur-uploader');
 const rp = require("request-promise-native");
 const cheerio = require("cheerio");
+var ChessImageGenerator = require('chess-image-generator');
+var imageGenerator = new ChessImageGenerator({
+    size: 1200,
+    style: 'cburnett'
+});
 module.exports = {
     list(arr, conj = 'and') {
         const len = arr.length;
@@ -613,5 +618,37 @@ module.exports = {
             level = 0;
             newxp = 0;
         }, 1000);
+    },
+    async inGame(message, user, client) {
+        const [a] = await client.pool.query(`SELECT * FROM chessGames WHERE guild = ${message.guild.id} AND p1 = ${user.id} OR p2 = ${user.id}`)
+        let b = 0
+        if (a.length > 0) {
+            a.forEach(c => {
+                if (c.current == 1) b = 1
+            });
+        }
+        if (b == 1) return true
+        else return false
+    },
+    async hasData(user, client) {
+        const [a] = await client.pool.query(`SELECT * FROM chessData WHERE user = ${user.id}`)
+        if (a.length > 0) return true
+        else return false
+    },
+    async eloDiffCalc(win, loss, score, client, user) {
+        expectedScore = 1 / (1 + 10 ** ((loss - win) / 400))
+        currentScore = win + 25 * (score - expectedScore)
+        return Math.round(currentScore - win)
+    },
+    async getRating(user, client) {
+        const [a] = await client.pool.query(`SELECT * FROM chessData WHERE user = ${user}`)
+        return a[0].rating
+    },
+    async getBoardImage(fen) {
+        imageGenerator.loadFEN(`${fen}`)
+        await imageGenerator.generateBuffer().then(async (imageBuffer) => {
+            image = await imgurUploader(imageBuffer)
+        })
+        return image.link
     }
 }
