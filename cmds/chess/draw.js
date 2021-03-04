@@ -8,7 +8,7 @@ module.exports = {
         if (!await inGame(message, message.author, client)) return message.reply(`you are not in a game.`)
         try {
             const [a] = await client.pool.query(`SELECT * FROM chessGames WHERE guild = ${message.guild.id} AND p1 = ${message.author.id} or p2 = ${message.author.id} AND current = 1`)
-            let mesg = message.channel.send(`<@${a[0].p2}>, <@${a[0].p1}> is offering a draw, do you accept?`)
+            let mesg = await message.channel.send(`<@${a[0].p2}>, <@${a[0].p1}> is offering a draw, do you accept?`)
             await mesg.react('✅')
             await mesg.react('❌')
             const filter = (reaction, b) => {
