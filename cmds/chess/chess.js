@@ -37,7 +37,7 @@ module.exports = {
             const chess = new Chess()
             if (!await hasData(message.author, client)) await client.pool.query(`INSERT INTO chessData (user) VALUES ('${message.author.id}')`)
             if (!await hasData(user, client)) await client.pool.query(`INSERT INTO chessData (user) VALUES ('${user.id}')`)
-            await client.pool.query(`INSERT INTO chessGames (guild, p1, p2, fen, pgn) VALUES ('${message.guild.id}','${message.author.id}','${user.id}','${chess.fen()}','${chess.pgn()}')`)
+            await client.pool.query(`INSERT INTO chessGames (guild, p1, p2, fen) VALUES ('${message.guild.id}','${message.author.id}','${user.id}','${chess.fen()}'}')`)
         } catch (err) {
             console.log(err)
         }
