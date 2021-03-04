@@ -30,6 +30,9 @@ module.exports = {
                     accepted = false
                 }
             })
+            collector.on('end', collected => {
+                if (collected.size == 0) message.channel.send(`Looks like they declined...`)
+            });
             if (accepted == false) return
             const chess = new Chess()
             if (!await hasData(message.author, client)) await client.pool.query(`INSERT INTO chessData (user) VALUES ('${message.author.id}')`)
