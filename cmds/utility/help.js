@@ -26,14 +26,18 @@ module.exports = {
                     {
                         name: 'Chess Commands', value: `${prefix[0].prefix}help Chess`
                     },
-                    message.channel.nsfw ?
-                        {
-                            name: 'NSFW Commands (requires an NSFW channel)', value: `${prefix[0].prefix}help NSFW`
-                        } :
-                        {
-                            name: 'Information on a Command', value: `${prefix[0].prefix}help [command]`
-                        },
                 ])
+                .addFields(message.channel.nsfw ?
+                    [{
+                        name: 'NSFW Commands (requires an NSFW channel)', value: `${prefix[0].prefix}help NSFW`
+                    }, {
+                        name: 'Information on a Command', value: `${prefix[0].prefix}help [command]`
+                    }
+                    ] :
+                    {
+                        name: 'Information on a Command', value: `${prefix[0].prefix}help [command]`
+                    })
+
             return message.channel.send(embed)
         }
         let cmdarr = read('./cmds')
