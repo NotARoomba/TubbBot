@@ -2,7 +2,7 @@ const { Chess } = require('chess.js');
 const { inGame, hasData } = require('../../function');
 module.exports = {
     name: 'chess',
-    group: 'games',
+    group: 'chess',
     usage: 'chess (player)',
     aliases: ['challenge'],
     description: 'Play chess against someone!',

@@ -2,7 +2,7 @@ const { Chess } = require('chess.js');
 const { inGame } = require('../../function');
 module.exports = {
     name: 'board',
-    group: 'games',
+    group: 'chess',
     usage: 'board',
     aliases: ['b'],
     description: 'Gets the board of the current game!',

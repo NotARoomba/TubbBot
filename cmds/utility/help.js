@@ -3,6 +3,7 @@ var read = require('fs-readdir-recursive')
 const { defaultEmbed, searchArray } = require('../../function.js')
 let utility = []
 let music = []
+let chess = []
 let embed;
 module.exports = {
     name: 'help',
@@ -23,6 +24,9 @@ module.exports = {
                         name: 'Utility Commands', value: `${prefix[0].prefix}help Utility`
                     },
                     {
+                        name: 'Chess Commands', value: `${prefix[0].prefix}help Chess`
+                    },
+                    {
                         name: 'Information on a Command', value: `${prefix[0].prefix}help [command]`
                     },
                 ])
@@ -36,6 +40,8 @@ module.exports = {
                 music.push({ name: cmdpath.name, description: cmdpath.description, aliases: cmdpath.aliases, usage: cmdpath.usage })
             } else if (cmdpath.group == 'utility') {
                 utility.push({ name: cmdpath.name, description: cmdpath.description, aliases: cmdpath.aliases, usage: cmdpath.usage })
+            } else if (cmdpath.group == 'chess') {
+                chess.push({ name: cmdpath.name, description: cmdpath.description, aliases: cmdpath.aliases, usage: cmdpath.usage })
             }
         });
         let total = music.concat(utility)
@@ -50,6 +56,12 @@ module.exports = {
                 defaultEmbed(message, utility, 'Utility', client)
             } catch (err) {
                 defaultEmbed(message, utility, 'Utility', client)
+            }
+        } else if (args == 'Chess') {
+            try {
+                defaultEmbed(message, chess, 'Chess', client)
+            } catch (err) {
+                defaultEmbed(message, chess, 'Chess', client)
             }
         } else {
             args = args.toLowerCase()

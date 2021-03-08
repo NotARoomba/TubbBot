@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 const { inGame, getRating, eloDiffCalc, endChessGame } = require('../../function');
 module.exports = {
     name: 'move',
-    group: 'games',
+    group: 'chess',
     usage: 'move (move)',
     description: 'Move one of your pieces!',
     async execute(message, args, client) {

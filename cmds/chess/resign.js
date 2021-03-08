@@ -1,7 +1,7 @@
 const { inGame, endChessGame } = require('../../function');
 module.exports = {
     name: 'resign',
-    group: 'games',
+    group: 'chess',
     usage: 'resign',
     description: 'Resign youtr chess match!',
     async execute(message, args, client) {

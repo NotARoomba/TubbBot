@@ -1,7 +1,7 @@
 const { inGame, endChessGame } = require('../../function');
 module.exports = {
     name: 'draw',
-    group: 'games',
+    group: 'chess',
     usage: 'board',
     description: 'Offers a draw to the opposing player!',
     async execute(message, args, client) {
@@ -12,7 +12,7 @@ module.exports = {
             await mesg.react('✅')
             await mesg.react('❌')
             const filter = (reaction, b) => {
-                return ['✅', '❌'].includes(reaction.emoji.name) && b.id.includes(a[0].p2);
+                return ['✅', '❌'].includes(reaction.emoji.name) && b.id.includes(message.author.id == a[0].p1 ? a[0].p1 : a[0].p2);
             };
             const collector = await mesg.createReactionCollector(filter, { time: 30000 });
             collector.on('collect', async (reaction) => {
@@ -22,7 +22,7 @@ module.exports = {
                     message.channel.send(`http://www.jinchess.com/chessboard/?p=${encodeURI(b[0].fen)}&s=l&dsc=%23b58863&lsc=%23f0d9b5&ps=merida&cm=o`)
                     await endChessGame(message, client, b[0].p1, b[0].p2, .5, true)
                 } else if (reaction.emoji.name === '❌') {
-                    message.channel.send(`<@${a[0].p2}> has **declined** the draw, the game continues!`)
+                    message.channel.send(`<@${message.author.id == a[0].p1 ? a[0].p2 : a[0].p1}> has **declined** the draw, the game continues!`)
                 }
             })
             collector.on('end', collected => {
