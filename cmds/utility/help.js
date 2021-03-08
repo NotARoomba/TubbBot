@@ -1,10 +1,11 @@
 const Discord = require('discord.js');
 var read = require('fs-readdir-recursive')
-const { defaultEmbed, searchArray } = require('../../function.js')
+const { searchArray, defaultEmbed } = require('../../function.js')
+const Pagination = require('discord-paginationembed');
 let utility = []
 let music = []
 let chess = []
-let embed;
+let nsfw = []
 module.exports = {
     name: 'help',
     group: 'utility',
@@ -27,6 +28,9 @@ module.exports = {
                         name: 'Chess Commands', value: `${prefix[0].prefix}help Chess`
                     },
                     {
+                        name: 'NSFW Commands (requires an NSFW channel)', value: `${prefix[0].prefix}help NSFW`
+                    },
+                    {
                         name: 'Information on a Command', value: `${prefix[0].prefix}help [command]`
                     },
                 ])
@@ -42,32 +46,31 @@ module.exports = {
                 utility.push({ name: cmdpath.name, description: cmdpath.description, aliases: cmdpath.aliases, usage: cmdpath.usage })
             } else if (cmdpath.group == 'chess') {
                 chess.push({ name: cmdpath.name, description: cmdpath.description, aliases: cmdpath.aliases, usage: cmdpath.usage })
+            } else if (cmdpath.group == 'NSFW') {
+                nsfw.push({ name: cmdpath.name, description: cmdpath.description, aliases: cmdpath.aliases, usage: cmdpath.usage, NSFW: cmdpath.NSFW })
             }
         });
-        let total = music.concat(utility)
+        let total = music.concat(utility, chess, nsfw)
         if (args == 'Music') {
-            try {
-                defaultEmbed(message, music, 'Music', client)
-            } catch (err) {
-                defaultEmbed(message, music, 'Music', client)
-            }
+            defaultEmbed(message, music, 'Music', client)
+            music = []
         } else if (args == 'Utility') {
-            try {
-                defaultEmbed(message, utility, 'Utility', client)
-            } catch (err) {
-                defaultEmbed(message, utility, 'Utility', client)
-            }
+            defaultEmbed(message, utility, 'Utility', client)
+            utility = []
         } else if (args == 'Chess') {
-            try {
-                defaultEmbed(message, chess, 'Chess', client)
-            } catch (err) {
-                defaultEmbed(message, chess, 'Chess', client)
-            }
-        } else {
+            defaultEmbed(message, chess, 'Chess', client)
+            chess = []
+        } else if (args == 'NSFW') {
+            if (message.channel.nsfw !== true) return message.reply(`move it to an NSFW channel.`)
+            defaultEmbed(message, nsfw, 'NSFW', client)
+            nsfw = []
+        }
+        else {
             args = args.toLowerCase()
             const cmd = searchArray(args, total)
             if (cmd) {
-                embed = new Discord.MessageEmbed()
+                if (cmd.NSFW == true && message.channel.nsfw !== true) return message.reply(`move it to an NSFW channel.`)
+                var embed = new Discord.MessageEmbed()
                     .setTitle(cmd.name)
                     .setDescription(cmd.description)
                     .addFields([
@@ -76,6 +79,9 @@ module.exports = {
                         },
                         {
                             name: 'Aliases', value: `${cmd.aliases}`
+                        },
+                        {
+                            name: 'NSFW', value: `${cmd.NSFW == true ? true : false}`
                         }
                     ])
             } else return message.reply('that is not a valid command name.')

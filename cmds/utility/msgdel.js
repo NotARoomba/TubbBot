@@ -8,7 +8,7 @@ module.exports = {
     async execute(message, count) {
         try {
             const deleteCount = parseInt(count, 10);
-            await message.channel.bulkDelete(deleteCount || 100)
+            await message.channel.bulkDelete(deleteCount + 1 || 100)
         } catch (err) {
             if (err.code == 60003) return message.reply(`You need 2FA enabled on your account.`)
             console.log(err)

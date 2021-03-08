@@ -3,7 +3,7 @@ const { toTitleCase } = require("../../function.js");
 const posts = require("rule34js").posts
 module.exports = {
     name: 'rule34',
-    group: 'utility',
+    group: 'NSFW',
     usage: `rule34 (query)`,
     NSFW: true,
     description: 'Searches rule34 for your query',

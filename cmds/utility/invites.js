@@ -24,7 +24,7 @@ module.exports = {
             }
             const embed = new Discord.MessageEmbed()
                 .setTitle(`:incoming_envelope: Invites`)
-                .setDescription(`${user} has ${userInviteCount - fakeInviteCount} invites (${fakeInviteCount} fake).`)
+                .setDescription(`${user} has ${userInviteCount - fakeInviteCount} invites (${fakeInviteCount} fake, ${userInviteCount} total).`)
             message.channel.send(embed)
         })
     }

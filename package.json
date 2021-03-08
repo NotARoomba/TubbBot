@@ -26,6 +26,7 @@
         "ffmpeg-static": "^4.2.7",
         "fs-readdir-recursive": "^1.1.0",
         "genius-lyrics-api": "^3.0.6",
+        "hmfull": "^1.2.3",
         "imgur-uploader": "^4.2.1",
         "mojang-api": "0.0.2",
         "moment": "^2.29.1",
