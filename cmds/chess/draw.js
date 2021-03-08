@@ -12,7 +12,7 @@ module.exports = {
             await mesg.react('✅')
             await mesg.react('❌')
             const filter = (reaction, b) => {
-                return ['✅', '❌'].includes(reaction.emoji.name) && b.id.includes(message.author.id == a[0].p1 ? a[0].p1 : a[0].p2);
+                return ['✅', '❌'].includes(reaction.emoji.name) && b.id.includes(message.author.id == a[0].p1 ? a[0].p2 : a[0].p1);
             };
             const collector = await mesg.createReactionCollector(filter, { time: 30000 });
             collector.on('collect', async (reaction) => {
