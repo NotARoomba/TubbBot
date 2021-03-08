@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 var read = require('fs-readdir-recursive')
 const { searchArray, defaultEmbed } = require('../../function.js')
-const Pagination = require('discord-paginationembed');
 let utility = []
 let music = []
 let chess = []
@@ -27,12 +26,13 @@ module.exports = {
                     {
                         name: 'Chess Commands', value: `${prefix[0].prefix}help Chess`
                     },
-                    {
-                        name: 'NSFW Commands (requires an NSFW channel)', value: `${prefix[0].prefix}help NSFW`
-                    },
-                    {
-                        name: 'Information on a Command', value: `${prefix[0].prefix}help [command]`
-                    },
+                    message.channel.nsfw ?
+                        {
+                            name: 'NSFW Commands (requires an NSFW channel)', value: `${prefix[0].prefix}help NSFW`
+                        } :
+                        {
+                            name: 'Information on a Command', value: `${prefix[0].prefix}help [command]`
+                        },
                 ])
             return message.channel.send(embed)
         }
