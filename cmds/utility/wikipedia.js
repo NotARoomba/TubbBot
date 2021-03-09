@@ -8,7 +8,6 @@ module.exports = {
     aliases: ['wiki'],
     description: 'Searches Wikipedia for your query.',
     async execute(message, query) {
-
         try {
             const { body } = await request
                 .get('https://en.wikipedia.org/w/api.php')

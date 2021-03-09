@@ -74,6 +74,7 @@ client.on('message', async (message) => {
     } catch (err) {
         prefix = process.env.PREFIX
     }
+    if (message.mentions.has(client.user)) message.reply(`Well... this is awkward... your server's prefix is \`${prefix}\`...`)
     if (message.content.startsWith(prefix)) {
         let content = message.content.slice(prefix.length).split(" ");
         const command = cmds.get(content[0]) || cmds.find(cmd => cmd.aliases && cmd.aliases.includes(content[0]));
