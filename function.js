@@ -632,7 +632,7 @@ module.exports = {
             await pool.query(`UPDATE users SET level = '${level}', required = '${newxp}' WHERE id = ${message.author.id} AND guild = ${message.guild.id}`)
             level = 0;
             newxp = 0;
-        }, 1000);
+        }, 5000);
     },
     async inGame(message, user, client) {
         const [a] = await client.pool.query(`SELECT * FROM chessGames WHERE guild = ${message.guild.id} AND p1 = ${user.id} OR p2 = ${user.id}`)
