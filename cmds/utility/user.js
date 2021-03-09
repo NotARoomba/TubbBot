@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const { toLowerCase, toLocaleLowerCase } = require('ffmpeg-static');
 const { toTitleCase } = require('../../function');
 module.exports = {
     name: 'user',
