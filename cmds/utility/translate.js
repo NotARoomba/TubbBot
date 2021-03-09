@@ -15,8 +15,8 @@ module.exports = {
             const embed = new Discord.MessageEmbed()
                 .setColor(0x4285F4)
                 .setFooter('Powered by Google Translate', 'https://i.imgur.com/h3RoHyp.png')
-                .addField(`❯ From: ${translate.languages[from.language.iso]}`, from.text.value || args[1])
-                .addField(`❯ To: ${translate.languages[args[0]]}`, result);
+                .addField(`From: ${translate.languages[from.language.iso]}`, from.text.value || args[1])
+                .addField(`To: ${translate.languages[args[0]]}`, result);
             return message.reply(embed);
         } catch (err) {
             return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try a different language code as noted here: (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)`);

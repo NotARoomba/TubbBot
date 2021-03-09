@@ -484,7 +484,8 @@ module.exports = {
         const contains = (string, content) => !!~(string || "").indexOf(content);
         return (contains(videoSearchResultItem.author ? videoSearchResultItem.author.name : undefined, "VEVO") || contains(videoSearchResultItem.author ? videoSearchResultItem.author.name.toLowerCase() : undefined, "official") || contains(videoSearchResultItem.title.toLowerCase(), "official") || !contains(videoSearchResultItem.title.toLowerCase(), "extended"));
     },
-    defaultEmbed(message, array, name, client) {
+    defaultEmbed(message, array, name, client, tosearch) {
+        array = module.exports.searchForGroup(tosearch, array)
         const embed = new Pagination.FieldsEmbed()
             .setArray(array)
             .setAuthorizedUsers([message.author.id])
@@ -497,7 +498,7 @@ module.exports = {
         embed.embed.setColor('#dbc300').setTitle(`${name} Commands`).setFooter('', `${client.user.avatarURL('webp', 16)}`);;
         return embed.build();
     },
-    searchArray(nameKey, myArray) {
+    searchForCommand(nameKey, myArray) {
         for (var i = 0; i < myArray.length; i++) {
             try {
                 if (myArray[i].name === nameKey || myArray[i].aliases[0] === nameKey || myArray[i].aliases[1] === nameKey || myArray[i].aliases[2] === nameKey || myArray[i].aliases[3] === nameKey) {
@@ -505,6 +506,17 @@ module.exports = {
                 }
             } catch (err) { }
         }
+    },
+    searchForGroup(nameKey, myArray) {
+        const group = []
+        for (var i = 0; i < myArray.length; i++) {
+            try {
+                if (myArray[i].group === nameKey) {
+                    group.push(myArray[i])
+                }
+            } catch (err) { }
+        }
+        return group;
     },
     async updateQueue(message, client) {
         const queue = message.guild.musicData.queue
@@ -620,7 +632,7 @@ module.exports = {
             await pool.query(`UPDATE users SET level = '${level}', required = '${newxp}' WHERE id = ${message.author.id} AND guild = ${message.guild.id}`)
             level = 0;
             newxp = 0;
-        }, 1000);
+        }, 5000);
     },
     async inGame(message, user, client) {
         const [a] = await client.pool.query(`SELECT * FROM chessGames WHERE guild = ${message.guild.id} AND p1 = ${user.id} OR p2 = ${user.id}`)

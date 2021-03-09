@@ -1,6 +1,6 @@
 {
     "name": "tubbbot",
-    "version": "4.5.0",
+    "version": "4.5.1",
     "description": "The Utillity Bot",
     "main": "index.js",
     "scripts": {
@@ -13,7 +13,7 @@
     "license": "ISC",
     "dependencies": {
         "@discordjs/opus": "^0.4.0",
-        "@vitalets/google-translate-api": "^5.0.0",
+        "@vitalets/google-translate-api": "^5.1.0",
         "axios": "^0.21.1",
         "cheerio": "^1.0.0-rc.5",
         "chess-creator": "^1.0.1",

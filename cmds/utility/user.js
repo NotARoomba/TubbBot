@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const { toLowerCase, toLocaleLowerCase } = require('ffmpeg-static');
 const { toTitleCase } = require('../../function');
 module.exports = {
     name: 'user',
@@ -13,18 +12,15 @@ module.exports = {
             const embed = new Discord.MessageEmbed()
                 .setTitle(`Information on ${user.username}#${user.discriminator}`)
                 .setThumbnail(user.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 }))
-                .addFields([
-                    { name: `Created At`, value: `${user.createdAt}` },
-                    { name: `Bot`, value: `${user.bot}` },
-                    { name: `ID`, value: `${user.id}` },
-                    { name: `Avatar Url`, value: `${user.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 })}` },
-                ])
-                .addFields(user.presence.status == 'offline' ? [
-                    { name: `Activity`, value: `${toTitleCase(user.presence.status)}` },
-                ] : [{ name: `Activity`, value: `${toTitleCase(user.presence.status)}` },
-                { name: `Status`, value: `${user.presence.activities.length == 0 ? `Nothing` : (user.presence.activities[0].type == 'CUSTOM_STATUS' ? `${user.presence.activities[0].state}` : `${toTitleCase((user.presence.activities[0].type).toLowerCase())} **${user.presence.activities[0].name}**`)}` },
-                { name: `Device`, value: `${toTitleCase(Object.getOwnPropertyNames(user.presence.clientStatus)[0])}` }
-                ])
+                .addField(`Created At`, `${user.createdAt}`, true)
+                .addField(`Bot`, `${user.bot}`, true)
+                .addField(`ID`, `${user.id}`, true)
+                .addField(`Avatar Url`, `${user.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 })}`, true)
+            user.presence.status == 'offline' ?
+                embed.addField(`Activity`, `${toTitleCase(user.presence.status)}`, true)
+                : embed.addField(`Activity`, `${toTitleCase(user.presence.status)}`, true)
+                    .addField(`Status`, `${user.presence.activities.length == 0 ? `Nothing` : (user.presence.activities[0].type == 'CUSTOM_STATUS' ? `${user.presence.activities[0].state}` : `${toTitleCase((user.presence.activities[0].type).toLowerCase())} **${user.presence.activities[0].name}**`)}`, true)
+                    .addField(`Device`, `${toTitleCase(Object.getOwnPropertyNames(user.presence.clientStatus)[0])}`, true)
             message.channel.send(embed)
         } catch (err) {
             console.log(err)

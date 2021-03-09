@@ -33,15 +33,12 @@ module.exports = {
         if (response[1].data === undefined || response[1].data.children[0] === undefined || response[1].data.children[0].data === undefined || response[1].data.children[0].data.url === undefined) return await module.exports.execute(message, args);
         let data = response[1].data.children[Math.floor(Math.random() * response[1].data.children.length)].data;
         if (!data || data.url === undefined || (!data.url.endsWith(".jpg") && !data.url.endsWith(".png") && !data.url.endsWith(".gif") && !validImgurURL(data.url))) return await module.exports.execute(message, args);
-
         const em = new Discord.MessageEmbed()
             .setTitle(`${data.title.substring(0, 256)}`)
             .setURL(`https://reddit.com${data.permalink}`)
             .setImage(data.url)
             .setColor('#FF5700')
-            .setFooter(
-                `${data.ups} 👍 | ${data.downs} 👎 | ${data.num_comments} 🗨`
-            )
+            .setFooter(`${data.ups} 👍 | ${data.downs} 👎 | ${data.num_comments} 🗨`)
             .setTimestamp();
         message.channel.send(em);
     }

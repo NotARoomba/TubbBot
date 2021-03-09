@@ -23,9 +23,7 @@ module.exports = {
                 .setTitle(`On this day (${body.date})...`)
                 .setTimestamp()
                 .setDescription(`${event.year}: ${event.text}`)
-                .addField('❯ See More',
-                    event.links.map(link => `[${link.title}](${link.link.replace(/\)/g, '%29')})`).join(', '));
-
+                .addField('See More', event.links.map(link => `[${link.title}](${link.link.replace(/\)/g, '%29')})`).join(', '));
             return message.channel.send(embed);
         }
         catch (err) {
