@@ -13,15 +13,13 @@ module.exports = {
             const embed = new Discord.MessageEmbed()
                 .setTitle(`Please Specify`)
                 .setColor('#dbc300')
-                .addFields(
-                    { name: 'Music Commands', value: `${prefix[0].prefix}help Music` },
-                    { name: 'Utility Commands', value: `${prefix[0].prefix}help Utility` },
-                    { name: 'Chess Commands', value: `${prefix[0].prefix}help Chess` },
-                )
-                .addFields(message.channel.nsfw ?
-                    [{ name: 'NSFW Commands (requires an NSFW channel)', value: `${prefix[0].prefix}help NSFW` },
-                    { name: 'Information on a Command', value: `${prefix[0].prefix}help [command]` }
-                    ] : { name: 'Information on a Command', value: `${prefix[0].prefix}help [command]` })
+                .addField('Music Commands', `${prefix[0].prefix}help Music`)
+                .addField('Utility Commands', `${prefix[0].prefix}help Utility`)
+                .addField('Chess Commands', `${prefix[0].prefix}help Chess`)
+            message.channel.nsfw ?
+                embed.addField('NSFW Commands (requires an NSFW channel)', `${prefix[0].prefix}help NSFW`)
+                    .addField('Information on a Command', `${prefix[0].prefix}help [command]`)
+                : embed.addField('Information on a Command', `${prefix[0].prefix}help [command]`)
             return message.channel.send(embed)
         }
         let cmdarr = read('./cmds')
@@ -54,11 +52,9 @@ module.exports = {
                         .setTitle(cmd.name)
                         .setDescription(cmd.description)
                         .setColor('#dbc300')
-                        .addFields([
-                            { name: 'Usage', value: `${prefix[0].prefix}${cmd.usage}` },
-                            { name: 'Aliases', value: `${cmd.aliases}` },
-                            { name: 'NSFW', value: `${cmd.NSFW == true ? true : false}` }
-                        ])
+                        .addField('Usage', `${prefix[0].prefix}${cmd.usage}`)
+                        .addField('Aliases', `${cmd.aliases}`)
+                        .addField('NSFW', `${cmd.NSFW == true ? true : false}`)
                     message.channel.send(embed)
                 } else return message.reply('that is not a valid command name.')
                 break;

@@ -10,8 +10,7 @@ module.exports = {
         if (game[0].p1 == message.author.id) {
             await endChessGame(message, client, game[0].p2, game[0].p1, 1)
             return message.channel.send(`${message.author} has resigned, <@${game[0].p2}> has won the match.`)
-        }
-        else {
+        } else {
             await endChessGame(message, client, game[0].p1, game[0].p2, 1)
             return message.channel.send(`${message.author} has resigned, <@${game[0].p1}> has won the match.`)
         }
