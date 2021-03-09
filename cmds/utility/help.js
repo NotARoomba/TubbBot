@@ -13,11 +13,11 @@ module.exports = {
             const embed = new Discord.MessageEmbed()
                 .setTitle(`Please Specify`)
                 .setColor('#dbc300')
-                .addFields([
+                .addFields(
                     { name: 'Music Commands', value: `${prefix[0].prefix}help Music` },
                     { name: 'Utility Commands', value: `${prefix[0].prefix}help Utility` },
                     { name: 'Chess Commands', value: `${prefix[0].prefix}help Chess` },
-                ])
+                )
                 .addFields(message.channel.nsfw ?
                     [{ name: 'NSFW Commands (requires an NSFW channel)', value: `${prefix[0].prefix}help NSFW` },
                     { name: 'Information on a Command', value: `${prefix[0].prefix}help [command]` }

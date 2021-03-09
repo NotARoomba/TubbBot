@@ -26,22 +26,10 @@ module.exports = {
             .setTitle(`Rank of \`${author.username}#${author.discriminator}\` in \`${message.guild.name}\`!`)
             .setThumbnail(author.avatarURL())
             .setColor('#DC143C')
-            .addFields({
-                name: 'Level',
-                value: user[0].level,
-            },
-                {
-                    name: 'Total exp',
-                    value: user[0].exp,
-                },
-                {
-                    name: 'Exp needed',
-                    value: user[0].required,
-                },
-                {
-                    name: 'Rank',
-                    value: rank,
-                })
+            .addFields({ name: 'Level', value: user[0].level, },
+                { name: 'Total exp', value: user[0].exp, },
+                { name: 'Exp needed', value: user[0].required, },
+                { name: 'Rank', value: rank, })
             .setDescription(`Here's a line representing your level \n ${user[0].level} ${dashes.join("")} ${(user[0].level + 1)}`)
         message.channel.send(embed)
     }

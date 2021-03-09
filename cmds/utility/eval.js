@@ -11,7 +11,7 @@ module.exports = {
             message.channel.send(`\`\`\`${evaled}\`\`\``)
         }
         catch (err) {
-            console.log(err);
+            message.channel.send(`\`\`\`${err}\`\`\``);
         }
     }
 }

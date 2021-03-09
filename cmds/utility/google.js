@@ -6,7 +6,7 @@ module.exports = {
     usage: `google (query)`,
     aliases: ['g'],
     description: `Searches google for something!`,
-    async execute(message, args, client) {
+    async execute(message, args) {
         const colors = ['4285f4', 'ea4335', 'fbbc05', '34a853']
         googleIt({ 'query': args, 'no-display': true }).then(results => {
             for (let i = 0; i < 5; i++) {
