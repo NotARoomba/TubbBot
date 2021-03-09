@@ -8,7 +8,7 @@ module.exports = {
     description: `Searches google for something!`,
     async execute(message, args, client) {
         const colors = ['4285f4', 'ea4335', 'fbbc05', '34a853']
-        googleIt({ 'query': args }).then(results => {
+        googleIt({ 'query': args, 'no-display': true }).then(results => {
             for (let i = 0; i < 5; i++) {
                 const element = results[i];
                 const embed = new Discord.MessageEmbed()
