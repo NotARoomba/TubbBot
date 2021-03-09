@@ -19,12 +19,12 @@ module.exports = {
                         .setColor('#484848')
                         .setTitle(`Results for: ${data.ip}`)
                         .setThumbnail(`https://www.countryflags.io/${data.country_code}/flat/64.png`)
-                        .addField('Country', data.country_name)
-                        .addField('State', data.region_name)
-                        .addField('City', data.city)
-                        .addField('Zip Code', data.zip)
-                        .addField('Latitude', data.longitude)
-                        .addField('Longitude', data.latitude)
+                        .addField('Country', data.country_name, true)
+                        .addField('State', data.region_name, true)
+                        .addField('City', data.city, true)
+                        .addField('Zip Code', data.zip, true)
+                        .addField('Latitude', data.longitude, true)
+                        .addField('Longitude', data.latitude, true)
                     return message.embed(embed);
                 }, (error) => {
                     console.log(error);
