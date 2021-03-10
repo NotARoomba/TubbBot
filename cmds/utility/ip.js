@@ -25,7 +25,7 @@ module.exports = {
                         .addField('Zip Code', data.zip, true)
                         .addField('Latitude', data.longitude, true)
                         .addField('Longitude', data.latitude, true)
-                    return message.embed(embed);
+                    return message.channel.send(embed);
                 }, (error) => {
                     console.log(error);
                 })
