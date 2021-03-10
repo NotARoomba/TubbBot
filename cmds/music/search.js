@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const Youtube = require('simple-youtube-api')
-const youtube = new Youtube(process.env.YOUTUBE);
+const youtube = new Youtube(process.env.GOOGLE);
 module.exports = {
     name: 'search',
     group: 'music',
