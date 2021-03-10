@@ -23,8 +23,6 @@ module.exports = {
                 .setTitle(`${name}, ${partOfSpeech}`)
                 .setDescription(definition)
             message.reply(info)
-            //message.channel.send(`${name} \n ${partOfSpeech} \n ${definiton}`)
-
         } catch (err) {
             return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try again later!`);
         }
