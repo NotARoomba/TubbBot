@@ -1,5 +1,6 @@
 const MojangAPI = require("mojang-api");
 const Discord = require('discord.js');
+const fetch = require("node-fetch");
 module.exports = {
     name: 'minecraft',
     group: 'utility',
@@ -9,7 +10,8 @@ module.exports = {
     description: 'Connect to the Minecraft API and display information.',
     async execute(message, args) {
         if (!args) return message.reply(`usage: <profile/server/history> <profile name/server ip/ profile name>. Check -help minecraft for more info.`)
-        args = args.split(" ").toLowerCase()
+        args = args.split(" ")
+        args[0] = args[0].toLowerCase()
         let str;
         if (args[0] === "profile" || args[0] === "pro") {
             if (args[1]) str = args[1];
@@ -83,7 +85,7 @@ module.exports = {
                 return message.channel.send("The server - **" + args[1] + "** - is offline/under maintenance.")
             }
         } else if (args[0] === "history" || args[0] === "his") {
-            MojangAPI.nameToUuid(args[0], function (err, res) {
+            MojangAPI.nameToUuid(args[1], function (err, res) {
                 if (err) return message.reply("there was an error trying to convert the username into UUID!");
                 else if (!res[0]) return message.channel.send("No player named **" + args[1] + "** were found");
                 MojangAPI.nameHistory(res[0].id, function (err, result) {
