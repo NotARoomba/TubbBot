@@ -97,6 +97,19 @@ client.on('message', async (message) => {
 
 client.on('guildCreate', async (guild) => {
     await pool.query(`INSERT INTO servers (id, prefix) VALUES ('${guild.id}','-')`)
+    guild.musicData = {
+        queue: [],
+        previous: [],
+        filters: [],
+        volume: 1,
+        isPlaying: false,
+        nowPlaying: null,
+        loopSong: false,
+        loopQueue: false,
+        songDispatcher: null,
+        connection: null,
+        voiceChannel: null,
+    }
     const channel = guild.channels.cache.find(channel => channel.type === 'text' && channel.permissionsFor(guild.me).has('SEND_MESSAGES'))
     const invite = {
         title: `Thank you for inviting me to \`\`${guild.name}\`\`!`,
