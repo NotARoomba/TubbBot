@@ -10,11 +10,11 @@ module.exports = {
     async execute(message, args, client) {
         const musicData = message.guild.musicData
         const voiceChannel = message.member.voice.channel;
-        musicData.voiceChannel = voiceChannel
         if (!voiceChannel) {
             message.reply('please join a voice channel and try again!');
             return;
         }
+        musicData.voiceChannel = voiceChannel
         try {
             let result;
             if (validYTPlaylistURL(args)) result = await addYTPlaylist(message, args, voiceChannel);
