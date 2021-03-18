@@ -102,6 +102,8 @@ module.exports = {
     },
     async addSPURL(message, query, voiceChannel) {
         const results = []
+        let msg;
+        let f;
         const d = await spotifyApi.clientCredentialsGrant();
         spotifyApi.setAccessToken(d.body.access_token);
         spotifyApi.setRefreshToken(process.env.SPOTIFY_REFRESH);
@@ -128,7 +130,11 @@ module.exports = {
                     }
                 }
                 await checkAll();
+                f = 0;
+                msg = await message.channel.send(`Adding track ${f}/${tracks.length}`)
                 for (var i = 0; i < tracks.length; i++) {
+                    f++;
+                    msg.edit(`Adding track ${f}/${tracks.length}`)
                     var returned = [];
                     try {
                         const searched = await ytsr(`${tracks[i].track.artists[0].name} - ${tracks[i].track.name}`, { limit: 20 });
@@ -190,7 +196,11 @@ module.exports = {
                     const data = await spotifyApi.getTracks([musicID]);
                     tracks = data.body.tracks;
                 }
+                f = 0;
+                msg = await message.channel.send(`Adding track ${f}/${tracks.length}`)
                 for (var i = 0; i < tracks.length; i++) {
+                    f++;
+                    msg.edit(`Adding track ${f}/${tracks.length}`)
                     var returned = [];
                     try {
                         const searched = await ytsr(`${tracks[i].artists[0].name} - ${tracks[i].name}`, { limit: 20 });
@@ -276,6 +286,7 @@ module.exports = {
                 }
                 break;
         }
+        msg.delete()
         return results
     },
     async addSCURL(message, query, voiceChannel) {
