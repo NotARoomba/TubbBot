@@ -24,9 +24,9 @@ module.exports = {
         let subreddits = ["memes", "dankmemes", "meme"];
         let response;
         if (args[1] == 'top') args[1] = `top/?t=all`
-        let chosen = args[0] || subreddits[Math.floor(Math.random() * subreddits.length)];
-        response = await redditConn.api.get(`/r/${chosen}/${args[1] !== 'undefined' ? args[1] : 'hot'}`, { limit: 100 }).catch(console.error).then(async (response) =>
-            response = await redditConn.api.get(`/r/${chosen}/${args[1] !== 'undefined' ? args[1] : 'hot'}`, { limit: 100 })
+        let chosen = args[0].length == 0 ? subreddits[Math.floor(Math.random() * subreddits.length)] : args[0]
+        response = await redditConn.api.get(`/r/${chosen}/${args[1] == undefined ? 'hot' : args[1]}`, { limit: 100 }).catch(console.error).then(async (response) =>
+            response = await redditConn.api.get(`/r/${chosen}/${args[1] == undefined ? 'hot' : args[1]}`, { limit: 100 })
         )
         if (!response) return await module.exports.execute(message, args);
         if (response[1] === undefined) return await module.exports.execute(message, args);
