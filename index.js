@@ -40,7 +40,7 @@ client.on('ready', async () => {
         await pool.query(`SELECT * FROM servers`)
         console.log('Connection has been established successfully.');
     } catch (err) {
-			pool = null
+			client.pool = null
       console.log('Unable to connect to the database:');
     }
     client.guilds.cache.forEach(async (guild) => {
