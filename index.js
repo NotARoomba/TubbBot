@@ -63,7 +63,8 @@ client.on('ready', async () => {
 });
 client.on('message', async (message) => {
     if (message.author.bot) return;
-			if (pool) {
+		prefix = process.env.PREFIX
+		if (pool) {
 			const [value] = await pool.query(`SELECT leveling FROM servers WHERE id = ${message.guild.id};`)
 			if (value[0].leveling == 1) {
 					try {
