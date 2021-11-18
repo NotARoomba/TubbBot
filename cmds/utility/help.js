@@ -10,7 +10,7 @@ module.exports = {
 	description: `Lists Tubb's commands!`,
 	async execute(message, args, client) {
 		const prefix = [{prefix: process.env.PREFIX}]
-		if (pool) {
+		if (client.pool) {
 			const [prefix] = await client.pool.query(`SELECT prefix FROM servers WHERE id = ${message.guild.id}`)
 		}
 		if (!args) {
