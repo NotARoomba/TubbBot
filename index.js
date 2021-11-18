@@ -130,7 +130,7 @@ client.on('guildCreate', async (guild) => {
             },
             {
                 name: `My commands`,
-                value: `Run -help or -commands to show all of my commands!`,
+                value: `Run -help to show all of my commands!`,
                 inline: true,
             },
             {
