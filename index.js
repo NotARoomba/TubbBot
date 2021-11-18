@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 require('dotenv').config();
+//TODO: ADD MYSQL
 const mysql = require("mysql2");
 var pool = mysql.createPool({
     connectTimeout: 60 * 60 * 1000,
