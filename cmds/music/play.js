@@ -29,7 +29,7 @@ module.exports = {
                 musicData.queue.push(track)
             });
             let sqlqueue = await getQueue(message, client)
-            if (sqlqueue !== null || sqlqueue !== 404) {
+            if (!sqlqueue && sqlqueue !== 404) {
                 sqlqueue.forEach(track => {
                     musicData.queue.push(track)
                 });
