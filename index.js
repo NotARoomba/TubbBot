@@ -135,17 +135,17 @@ client.on('guildCreate', async (guild) => {
             },
             {
                 name: `Link to invite me to your server`,
-                value: `[Invite me!](https://discord.com/api/oauth2/authorize?client_id=750123677739122819&permissions=8&redirect_uri=https%3A%2F%2Fdiscordapp.com%2Foauth2%2Fauthorize%3F%26client_id%3D%5B750123677739122819%5D%26scope%3Dbot&scope=bot)`, // This is optional if you want over people to invite your bot to different servers!
+                value: `[Invite me!](https://discord.com/api/oauth2/authorize?client_id=750123677739122819&permissions=8&redirect_uri=https%3A%2F%2Fdiscordapp.com%2Foauth2%2Fauthorize%3F%26client_id%3D%5B750123677739122819%5D%26scope%3Dbot&scope=bot)`, 
                 inline: true,
             },
             {
                 name: `My server if you have any questions`,
-                value: `[Link](https://discord.com/invite/MZnHS95jx4)`, // This is optional if you want over people to invite your bot to different servers!
+                value: `[Link](https://discord.com/invite/MZnHS95jx4)`, 
                 inline: true,
             },
             {
-                name: `My Website`,
-                value: `[Link](https://tubb-bot.000webhostapp.com/)`, // This is optional if you want over people to invite your bot to different servers!
+                name: `My Code`,
+                value: `[Link](https://github.com/NotARoomba/TubbBot/)`,
                 inline: true,
             },
         ],
