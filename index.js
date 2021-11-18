@@ -62,20 +62,22 @@ client.on('ready', async () => {
     });
 });
 client.on('message', async (message) => {
-    if (message.author.bot || !pool) return;
-    const [value] = await pool.query(`SELECT leveling FROM servers WHERE id = ${message.guild.id};`)
-    if (value[0].leveling == 1) {
-        try {
-            await leveling(message, client)
-        } catch (err) { }
-    }
-    const [guildPrefix] = await pool.query(`SELECT * FROM servers WHERE id = ${message.guild.id};`)
-    let prefix = process.env.PREFIX
-    try {
-        prefix = guildPrefix[0].prefix
-    } catch (err) {
-        prefix = process.env.PREFIX
-    }
+    if (message.author.bot) return;
+			if (pool) {
+			const [value] = await pool.query(`SELECT leveling FROM servers WHERE id = ${message.guild.id};`)
+			if (value[0].leveling == 1) {
+					try {
+							await leveling(message, client)
+					} catch (err) { }
+			}
+			const [guildPrefix] = await pool.query(`SELECT * FROM servers WHERE id = ${message.guild.id};`)
+			let prefix = process.env.PREFIX
+			try {
+					prefix = guildPrefix[0].prefix
+			} catch (err) {
+					prefix = process.env.PREFIX
+			}
+		}
     if (message.mentions.has(client.user) && !message.content.includes(`@everyone`)) message.reply(`Well... this is awkward... your server's prefix is \`${prefix}\`...`)
     if (message.content.startsWith(prefix)) {
         let content = message.content.slice(prefix.length).split(" ");
