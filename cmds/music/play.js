@@ -28,13 +28,15 @@ module.exports = {
             result.forEach(track => {
                 musicData.queue.push(track)
             });
-            let sqlqueue = await getQueue(message, client)
-            if (!sqlqueue && sqlqueue !== 404) {
-                sqlqueue.forEach(track => {
-                    musicData.queue.push(track)
-                });
-            }
-            await updateQueue(message, client)
+						try {
+							let sqlqueue = await getQueue(message, client)
+							if (!sqlqueue && sqlqueue !== 404) {
+									sqlqueue.forEach(track => {
+											musicData.queue.push(track)
+									});
+							}
+							await updateQueue(message, client)
+						} catch {}
             const addembed = new Discord.MessageEmbed()
                 .setColor('#FFED00')
                 .setTitle(`:musical_note: ${result[0].title}`)
