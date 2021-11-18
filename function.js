@@ -530,6 +530,7 @@ module.exports = {
         return group;
     },
     async updateQueue(message, client) {
+				if (!pool) return;
         const queue = message.guild.musicData.queue
         if (!queue) return
         const [sql] = await client.pool.query(`SELECT queue FROM servers WHERE id = ${message.guild.id}`);
@@ -540,6 +541,7 @@ module.exports = {
         }
     },
     async getQueue(message, client) {
+				if (!pool) return null;
         let [queue] = await client.pool.query(`SELECT queue FROM servers WHERE id = ${message.guild.id}`)
         if (queue[0].queue == null) {
             return 404
@@ -611,6 +613,7 @@ module.exports = {
         }
     },
     async leveling(message, client) {
+				if (!pool) return;
         const a = []
         pool = client.pool
         a.push({

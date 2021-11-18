@@ -40,9 +40,11 @@ client.on('ready', async () => {
         await pool.query(`SELECT * FROM servers`)
         console.log('Connection has been established successfully.');
     } catch (err) {
-        throw console.error('Unable to connect to the database:');
+			pool = null
+      console.log('Unable to connect to the database:');
     }
     client.guilds.cache.forEach(async (guild) => {
+				if (!pool) return;
         const [prefix] = await pool.query(`SELECT * FROM servers WHERE id = ${guild.id};`)
         if (prefix[0].prefix == undefined) {
             await pool.query(`INSERT INTO servers (id, prefix) VALUES ('${guild.id}','-')`)
@@ -60,7 +62,7 @@ client.on('ready', async () => {
     });
 });
 client.on('message', async (message) => {
-    if (message.author.bot) return;
+    if (message.author.bot || !pool) return;
     const [value] = await pool.query(`SELECT leveling FROM servers WHERE id = ${message.guild.id};`)
     if (value[0].leveling == 1) {
         try {
@@ -96,20 +98,22 @@ client.on('message', async (message) => {
 })
 
 client.on('guildCreate', async (guild) => {
-    await pool.query(`INSERT INTO servers (id, prefix) VALUES ('${guild.id}','-')`)
-    guild.musicData = {
-        queue: [],
-        previous: [],
-        filters: [],
-        volume: 1,
-        isPlaying: false,
-        nowPlaying: null,
-        loopSong: false,
-        loopQueue: false,
-        songDispatcher: null,
-        connection: null,
-        voiceChannel: null,
-    }
+		if (pool) {
+			await pool.query(`INSERT INTO servers (id, prefix) VALUES ('${guild.id}','-')`)
+			guild.musicData = {
+					queue: [],
+					previous: [],
+					filters: [],
+					volume: 1,
+					isPlaying: false,
+					nowPlaying: null,
+					loopSong: false,
+					loopQueue: false,
+					songDispatcher: null,
+					connection: null,
+					voiceChannel: null,
+			}
+		}
     const channel = guild.channels.cache.find(channel => channel.type === 'text' && channel.permissionsFor(guild.me).has('SEND_MESSAGES'))
     const invite = {
         title: `Thank you for inviting me to \`\`${guild.name}\`\`!`,
