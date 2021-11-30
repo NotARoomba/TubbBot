@@ -98,7 +98,7 @@ client.on('guildCreate', async (guild) => {
 					loopQueue: false,
 					songDispatcher: null,
 					connection: null,
-					voiceChannel: null,
+					voiceChannel: null
 			}
 		}
     const channel = guild.channels.cache.find(channel => channel.type === 'text' && channel.permissionsFor(guild.me).has('SEND_MESSAGES'))
