@@ -29,11 +29,11 @@ module.exports = {
                 musicData.queue.push(track)
             });
 						try {
-							let sqlqueue = await getQueue(message, client)
-							if (!sqlqueue && sqlqueue !== 404) {
-									sqlqueue.forEach(track => {
-											musicData.queue.push(track)
-									});
+							let dbqueue = await getQueue(message, client)
+							if (dbqueue && dbqueue !== 404) {
+								dbqueue.forEach(track => {
+									musicData.queue.push(track)
+								});
 							}
 							await updateQueue(message, client)
 						} catch {}

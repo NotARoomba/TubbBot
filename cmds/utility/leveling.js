@@ -3,11 +3,13 @@ module.exports = {
     group: 'utility',
     usage: `leveling (true or false)`,
     permissions: ['ADMINISTRATOR'],
-    description: 'Changes the prefix for your server.',
+    description: 'Changes the leveling status for your server.',
     async execute(message, args, client) {
-        if (!args == 'true' || !args == 'false') return message.reply('that is not true or false.')
-        args = args == "true" ? 1 : 0
-        await client.pool.query(`UPDATE servers SET leveling = '${args}' WHERE id = ${message.guild.id}`);
-        message.channel.send(`Leveling updated to \`${args == 1 ? true : false}\``)
+			if (args == "" || !args == 'true' || !args == 'false') { 
+				return message.reply('that is not true or false.')
+			}
+			args = args == "true" ? 1 : 0
+			await client.pool.db("Tubb").collection("servers").updateOne({id: message.guild.id}, {$set: {leveling: args}})
+			message.channel.send(`Leveling updated to \`${args == 1 ? true : false}\``)
     }
 }

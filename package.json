@@ -1,6 +1,6 @@
 {
     "name": "tubbbot",
-    "version": "4.5.1",
+    "version": "6.6.2",
     "description": "The Utillity Bot",
     "main": "index.js",
     "scripts": {
@@ -33,6 +33,7 @@
         "mojang-api": "0.0.2",
         "moment": "^2.29.1",
         "moment-duration-format": "^2.3.2",
+        "mongodb": "^4.2.0",
         "music-metadata": "^7.8.1",
         "mysql2": "^2.2.5",
         "node-fetch": "^2.6.1",

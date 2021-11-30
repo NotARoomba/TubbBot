@@ -9,18 +9,19 @@ module.exports = {
 	usage: `help (group or command)`,
 	description: `Lists Tubb's commands!`,
 	async execute(message, args, client) {
-		const prefix = [{prefix: process.env.PREFIX}]
+		let prefix = process.env.PREFIX
 		if (client.pool != null) {
-			const [prefix] = await client.pool.query(`SELECT prefix FROM servers WHERE id = ${message.guild.id}`)
+			let result = await client.pool.db("Tubb").collection("servers").find({id: message.guild.id}).toArray()
+			prefix = result[0].prefix
 		}
 		if (!args) {
 				const embed = new Discord.MessageEmbed()
 					.setTitle(`Please Specify`)
 					.setColor('#dbc300')
-					.addField('Music Commands', `${prefix[0].prefix}help Music`, true)
-					.addField('Utility Commands', `${prefix[0].prefix}help Utility`, true)
-					.addField('Chess Commands', `${prefix[0].prefix}help Chess`, true)
-				embed.addField('Information on a Command', `${prefix[0].prefix}help [command]`, true)
+					.addField('Music Commands', `${prefix}help Music`, true)
+					.addField('Utility Commands', `${prefix}help Utility`, true)
+					.addField('Chess Commands', `${prefix}help Chess`, true)
+				embed.addField('Information on a Command', `${prefix}help [command]`, true)
 				return message.channel.send(embed)
 		}
 		let cmdarr = read('./cmds')
@@ -48,8 +49,8 @@ module.exports = {
 									.setTitle(cmd.name)
 									.setDescription(cmd.description)
 									.setColor('#dbc300')
-									.addField('Usage', `${prefix[0].prefix}${cmd.usage}`, true)
-									.addField('Aliases', `${cmd.aliases}`, true)
+									.addField('Usage', `${prefix}${cmd.usage}`, true)
+									.addField('Aliases', `${cmd.aliases.join(", ")}`, true)
 							message.channel.send(embed)
 					} else return message.reply('that is not a valid command name.')
 			break;

@@ -530,41 +530,37 @@ module.exports = {
         return group;
     },
     async updateQueue(message, client) {
-				if (!client.pool) return;
-        const queue = message.guild.musicData.queue
-        if (!queue) return
-        const [sql] = await client.pool.query(`SELECT queue FROM servers WHERE id = ${message.guild.id}`);
-        if (sql[0] == undefined) {
-            await client.pool.query(`INSERT INTO servers (id, queue) VALUES ('${message.guild.id}','${escape(JSON.stringify(queue))}}')`)
-        } else {
-            await client.pool.query(`UPDATE servers SET queue = '${escape(JSON.stringify(queue))}' WHERE id = ${message.guild.id}`);
-        }
+			if (!client.pool) return;
+      const queue = message.guild.musicData.queue
+      if (!queue) return
+      let result = await client.pool.db("Tubb").collection("servers").find({id: message.guild.id}).toArray()
+				await client.pool.db("Tubb").collection("servers").updateOne({id: message.guild.id}, {$set: {queue: escape(JSON.stringify(queue))}})
     },
     async getQueue(message, client) {
-				if (!client.pool) return null;
-        let [queue] = await client.pool.query(`SELECT queue FROM servers WHERE id = ${message.guild.id}`)
-        if (queue[0].queue == null) {
-            return 404
-        } else {
-            queue = await JSON.parse(unescape((queue[0].queue)))
-            return queue
-        }
+			if (!client.pool) return null;
+			let result = await client.pool.db("Tubb").collection("servers").find({id: message.guild.id}).toArray()
+			if (result[0].queue == null) {
+					return 404
+			} else {
+					queue = await JSON.parse(unescape((result[0].queue)))
+					return queue
+			}
     },
     isValidCommander(message) {
-        try {
-            const voiceChannel = message.member.voice.channel;
-            if (!voiceChannel) {
-                message.reply('Please join a voice channel and try again!');
-                return false
-            } else if (voiceChannel.id !== message.guild.me.voice.channel.id) {
-                message.reply(`You must be in the same voice channel as the bot's in order to use that!`);
-                return false
-            } else if (typeof message.guild.musicData.songDispatcher == 'undefined' || message.guild.musicData.songDispatcher == null) {
-                message.reply('There is no song playing right now!');
-                return false
-            }
-            return true
-        } catch (err) { }
+			try {
+					const voiceChannel = message.member.voice.channel;
+					if (!voiceChannel) {
+							message.reply('Please join a voice channel and try again!');
+							return false
+					} else if (voiceChannel.id !== message.guild.me.voice.channel.id) {
+							message.reply(`You must be in the same voice channel as the bot's in order to use that!`);
+							return false
+					} else if (typeof message.guild.musicData.songDispatcher == 'undefined' || message.guild.musicData.songDispatcher == null) {
+						message.reply('There is no song playing right now!');
+						return false
+					}
+					return true
+			} catch (err) { }
     },
     createProgressBar(message) {
         const totalTime = message.guild.musicData.nowPlaying.lengthSeconds * 1000
@@ -622,77 +618,31 @@ module.exports = {
             exp: Math.round(message.content.length / 2)
         })
         setInterval(async function () {
-            let xp = 0;
-            const [count] = await client.pool.query(`SELECT COUNT(*) FROM users WHERE id = ${message.author.id} AND guild = ${message.guild.id};`)
-            if (count[0][Object.keys(count[0])] == 0) await pool.query(`INSERT INTO users (id, guild) VALUES ('${message.author.id}','${message.guild.id}')`)
-            a.forEach(async (msg) => {
-                if (msg.exp == 0 || msg.exp == undefined) return
-                else {
-                    const [usr1] = await pool.query(`SELECT exp FROM users WHERE id = ${msg.author} AND guild = ${msg.guild};`)
-                    xp = usr1[0].exp
-                }
-                await pool.query(`UPDATE users SET exp = '${msg.exp + xp}' WHERE id = ${msg.author} AND guild = ${msg.guild}`)
-                xp = 0
-                a.shift()
-            });
-            const [usr2] = await pool.query(`SELECT * FROM users WHERE id = ${message.author.id} AND guild = ${message.guild.id};`)
-            let level = usr2[0].level;
-            let newxp = usr2[0].required;
-            while (usr2[0].exp >= newxp) {
-                newxp = newxp * 2
-                level = level + 1;
-            }
-            if (usr2[0].level !== level) message.reply(`you leveled up to level ${level}!`)
-            await pool.query(`UPDATE users SET level = '${level}', required = '${newxp}' WHERE id = ${message.author.id} AND guild = ${message.guild.id}`)
-            level = 0;
-            newxp = 0;
-        }, 5000);
-    },
-    async inGame(message, user, client) {
-        const [a] = await client.pool.query(`SELECT * FROM chessGames WHERE guild = ${message.guild.id} AND p1 = ${user.id} OR p2 = ${user.id}`)
-        let b = 0
-        if (a.length > 0) {
-            a.forEach(c => {
-                if (c.current == 1) b = 1
-            });
-        }
-        if (b == 1) return true
-        else return false
-    },
-    async hasData(user, client) {
-        const [a] = await client.pool.query(`SELECT * FROM chessData WHERE user = ${user.id}`)
-        if (a.length > 0) return true
-        else return false
-    },
-    async eloDiffCalc(win, loss, score) {
-        expectedScore = 1 / (1 + 10 ** ((loss - win) / 400))
-        currentScore = win + 25 * (score - expectedScore)
-        return Math.round(currentScore - win)
-    },
-    async getRating(user, client) {
-        const [a] = await client.pool.query(`SELECT * FROM chessData WHERE user = ${user}`)
-        return a[0].rating
-    },
-    async getBoardImage(fen) {
-        imageGenerator.loadFEN(`${fen}`)
-        let attachment;
-        await imageGenerator.generateBuffer().then(async (imageBuffer) => {
-            attachment = new Discord.MessageAttachment(imageBuffer)
-        })
-        return attachment
-    },
-    async endChessGame(message, client, winner, looser, score, draw) {
-        if (draw == true) {
-            await client.pool.query(`UPDATE chessData SET draws = draws + 1 WHERE user = ${winner}`)
-            await client.pool.query(`UPDATE chessData SET draws = draws + 1  WHERE user = ${looser}`)
-            await client.pool.query(`UPDATE chessGames SET winner = 0, current = 0 WHERE guild = ${message.guild.id} AND p1 = ${message.author.id} or p2 = ${message.author.id} AND current = 1`)
-        } else {
-            await client.pool.query(`UPDATE chessGames SET winner = ${winner}, current = 0 WHERE guild = ${message.guild.id} AND p1 = ${message.author.id} or p2 = ${message.author.id} AND current = 1`)
-            winnerRating = await module.exports.getRating(winner, client)
-            looserRating = await module.exports.getRating(looser, client)
-            const takeAway = await module.exports.eloDiffCalc(winnerRating, looserRating, score)
-            await client.pool.query(`UPDATE chessData SET rating = rating + ${takeAway}, wins = wins + 1, totalGames = totalGames + 1 WHERE user = ${winner}`)
-            await client.pool.query(`UPDATE chessData SET rating = rating - ${takeAway}, losses = losses + 1, totalGames = totalGames + 1  WHERE user = ${looser}`)
-        }
+					let xp = 0;
+					let result = await pool.db("Tubb").collection("users").find({id: message.author.id, guild: message.guild.id}).toArray()
+					if (result.length == 0) await pool.db("Tubb").collection("users").insertOne({id: message.author.id, guild: message.guild.id, xp: 0, level: 0, required: 10})
+					a.forEach(async (msg) => {
+						if (msg.exp == 0 || msg.exp == undefined) return
+						else {
+							let usr1 = await pool.db("Tubb").collection("users").find({id: msg.author, guild: msg.guild}).toArray()
+							xp = usr1[0].xp
+						}
+						await pool.db("Tubb").collection("users").updateOne({id: msg.author, guild: msg.guild}, {$set: {xp: msg.exp + xp}})
+						xp = 0
+						a.shift()
+					});
+					let usr2 = await pool.db("Tubb").collection("users").find({id: message.author.id, guild: message.guild.id}).toArray()
+					let level = usr2[0].level;
+					let newxp = usr2[0].required;
+					while (usr2[0].xp >= newxp) {
+
+							newxp = newxp * 2
+							level = level + 1;
+					}
+					if (usr2[0].level !== level) message.reply(`you leveled up to level ${level}!`)
+					await pool.db("Tubb").collection("users").updateOne({id: message.author.id, guild: message.guild.id}, {$set: {level: level, required: newxp}})
+					level = 0;
+					newxp = 0;
+      }, 5000);
     }
 }

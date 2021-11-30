@@ -9,7 +9,9 @@ module.exports = {
     aliases: ['mc'],
     description: 'Connect to the Minecraft API and display information.',
     async execute(message, args) {
-        if (!args) return message.reply(`usage: <profile/server/history> <profile name/server ip/ profile name>. Check -help minecraft for more info.`)
+			let result = await client.pool.db("Tubb").collection("servers").find({id: message.guild.id}).toArray()
+			prefix = result[0].prefix
+        if (!args) return message.reply(`usage: <profile/server/history> <profile name/server ip/ profile name>. Check ${prefix}help minecraft for more info.`)
         args = args.split(" ")
         args[0] = args[0].toLowerCase()
         let str;

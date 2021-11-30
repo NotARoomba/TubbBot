@@ -10,13 +10,13 @@ module.exports = {
             if (message.mentions.users.first().bot == true) return message.reply('that is not a user.')
             author = message.mentions.users.first()
         }
-        const [count] = await client.pool.query(`SELECT COUNT(*) FROM users WHERE guild = ${message.guild.id};`)
-        if (count[0][Object.keys(count[0])] == 0) return message.reply('leveling is off for your server, ask an admin to turn it on.')
-        const [user] = await client.pool.query(`SELECT * FROM users WHERE id = ${author.id} AND guild = ${message.guild.id};`)
-        const [server] = await client.pool.query(`SELECT * FROM users WHERE guild = ${message.guild.id} ORDER BY exp DESC`)
+				const count = await client.pool.db("Tubb").collection("servers").find({id: message.guild.id}).toArray()
+        if (count[0].leveling == 0) return message.reply('leveling is off for your server, ask an admin to turn it on.')
+				const user = await client.pool.db("Tubb").collection("users").find({id: author.id, guild: message.guild.id}).toArray()
+				const server = await client.pool.db("Tubb").collection("users").find({guild: message.guild.id}).sort({xp: -1}).toArray()
         const dashes = [];
         for (let i = 0; i < 20; i++) dashes.push('▬');
-        var percentage = Math.floor((user[0].exp / user[0].required) * 100);
+        var percentage = Math.floor((user[0].xp / user[0].required) * 100);
         var progress = Math.round(percentage / 5);
         dashes.splice(progress, 1, '/');
         const everyone = [];
@@ -27,7 +27,7 @@ module.exports = {
             .setThumbnail(author.avatarURL())
             .setColor('#DC143C')
             .addField('Level', user[0].level, true)
-            .addField('Total exp', user[0].exp, true)
+            .addField('Total exp', user[0].xp, true)
             .addField('Exp needed', user[0].required, true)
             .addField('Rank', rank, true)
             .setDescription(`Here's a cool line representing your level \n ${user[0].level} ${dashes.join("")} ${(user[0].level + 1)}`)

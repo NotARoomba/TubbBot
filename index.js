@@ -1,26 +1,10 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 require('dotenv').config();
-//TODO: ADD MYSQL
-const mysql = require("mysql2");
-var pool = mysql.createPool({
-    connectTimeout: 60 * 60 * 1000,
-    //acquireTimeout: 60 * 60 * 1000,
-    //timeout: 60 * 60 * 1000,
-    connectionLimit: 1000,
-    host: process.env.DBHOST,
-    user: process.env.DBUSER,
-    password: process.env.DBPASS,
-    database: process.env.DBNAME,
-    supportBigNumbers: true,
-    charset: "utf8mb4",
-    waitForConnections: true,
-    queueLimit: 0
-}).promise();
+const { MongoClient } = require('mongodb');
 var read = require('fs-readdir-recursive');
 const { leveling } = require('./function');
 let cmds = new Discord.Collection()
-client.pool = pool
 client.on('ready', async () => {
     client.guilds.cache.forEach(guild => {
         guild.musicData = {
@@ -38,19 +22,24 @@ client.on('ready', async () => {
         }
     });
     try {
-        await pool.query(`SELECT * FROM servers`)
-        console.log('Connection has been established successfully.');
+      let pool = new MongoClient(process.env.MONGO, { useNewUrlParser: true, useUnifiedTopology: true, keepAlive: 1});
+			await pool.connect(async (err) => {
+				console.log("Connected to the database.")
+			});
+			client.pool = pool;
     } catch (err) {
 			client.pool = null
-			pool = null
-      console.log('Unable to connect to the database:');
+      console.log('Unable to connect to the database: ' + err);
     }
     client.guilds.cache.forEach(async (guild) => {
-				if (!pool) return;
-        const [prefix] = await pool.query(`SELECT * FROM servers WHERE id = ${guild.id};`)
-        if (prefix[0].prefix == undefined) {
-            await pool.query(`INSERT INTO servers (id, prefix) VALUES ('${guild.id}','-')`)
-        }
+			if (!client.pool) return;
+			client.pool.connect(err => {
+				let result = client.pool.db("Tubb").collection("servers").find({id: guild.id}).toArray()
+				if (err) console.log(err);
+				if (result.length == 0) {
+					client.pool.db("Tubb").collection("servers").insertOne({id: guild.id, prefix: "-", leveling: 1, queue: null})
+				}
+			});
     });
     setInterval(() => {
         client.user.setActivity(`-help in ${client.guilds.cache.size} Servers`, { type: 'WATCHING' })
@@ -65,20 +54,14 @@ client.on('ready', async () => {
 });
 client.on('message', async (message) => {
     if (message.author.bot) return;
-		prefix = process.env.PREFIX
-		if (pool) {
-			const [value] = await pool.query(`SELECT leveling FROM servers WHERE id = ${message.guild.id};`)
-			if (value[0].leveling == 1) {
-					try {
-							await leveling(message, client)
-					} catch (err) { }
-			}
-			const [guildPrefix] = await pool.query(`SELECT * FROM servers WHERE id = ${message.guild.id};`)
-			let prefix = process.env.PREFIX
-			try {
-					prefix = guildPrefix[0].prefix
-			} catch (err) {
-					prefix = process.env.PREFIX
+		let prefix = process.env.PREFIX;
+		if (client.pool) {
+		const result = await client.pool.db("Tubb").collection("servers").find({id: message.guild.id}).toArray()
+			prefix = result[0].prefix
+			if (result[0].leveling == 1) {
+				try {
+					await leveling(message, client)
+				} catch (err) { console.log(err) }
 			}
 		}
     if (message.mentions.has(client.user) && !message.content.includes(`@everyone`)) message.reply(`Well... this is awkward... your server's prefix is \`${prefix}\`...`)
@@ -96,15 +79,14 @@ client.on('message', async (message) => {
             if (perms.length >= 1) return message.reply(`You need the permission(s) \`${perms.join(', ')}\``)
         }
         if (command.ownerOnly == true && message.author.id !== process.env.OWNER) return message.reply("you cant do that!")
-        if (command.NSFW == true && message.channel.nsfw !== true) return message.reply(`move it to an NSFW channel.`)
         const args = content.splice(1).join(" ");
         command.execute(message, args, client)
     }
 })
 
 client.on('guildCreate', async (guild) => {
-		if (pool) {
-			await pool.query(`INSERT INTO servers (id, prefix) VALUES ('${guild.id}','-')`)
+		if (client.pool) {
+			client.pool.db("Tubb").collection("servers").insertOne({id: guild.id, prefix: "-", leveling: 1, queue: null})
 			guild.musicData = {
 					queue: [],
 					previous: [],
