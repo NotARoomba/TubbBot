@@ -2,13 +2,13 @@ const Discord = require('discord.js');
 var read = require('fs-readdir-recursive')
 require('dotenv').config();
 const { searchForCommand, defaultEmbed } = require('../../function.js')
-const commands = []
 module.exports = {
 	name: 'help',
 	group: 'utility',
 	usage: `help (group or command)`,
 	description: `Lists Tubb's commands!`,
 	async execute(message, args, client) {
+		const commands = []
 		let prefix = process.env.PREFIX
 		if (client.pool != null) {
 			let result = await client.pool.db("Tubb").collection("servers").find({id: message.guild.id}).toArray()
