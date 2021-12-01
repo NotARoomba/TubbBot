@@ -48,6 +48,7 @@
         "soundcloud-downloader": "^0.2.4",
         "soundcloud-scraper": "^4.0.3",
         "spotify-web-api-node": "^5.0.2",
+        "systeminformation": "^5.9.15",
         "youtube-sr": "^4.0.3",
         "ytdl-core": "^4.9.1",
         "ytpl": "^2.0.5",
