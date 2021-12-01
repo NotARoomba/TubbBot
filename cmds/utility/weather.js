@@ -4,9 +4,9 @@ const { toTitleCase } = require('../../function.js')
 module.exports = {
     name: 'weather',
     group: 'utility',
-    usage: `weather (query)`,
+    usage: `weather (city)`,
     aliases: ['w'],
-    description: 'Returns the weather for a location',
+    description: 'Returns the weather for a city',
     execute(message, location) {
         axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=04222de0b070f0e94c8874434d22d029`).then(response => {
             const embed = new Discord.MessageEmbed()
