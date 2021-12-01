@@ -529,6 +529,14 @@ module.exports = {
         }
         return group;
     },
+		getGroups(array) {
+			const groups = []
+			for (var i = 0; i < array.length; i++) {
+				if (!groups.includes(array[i].group)) groups.push(array[i].group)
+				if (array[i].group ==  undefined) console.log(array[i])
+			}
+			return groups
+		},
     async updateQueue(message, client) {
 			if (!client.pool) return;
       const queue = message.guild.musicData.queue
