@@ -32,7 +32,7 @@ module.exports = {
 			});
 			try {
 				let dbqueue = await getQueue(message, client)
-				if (!dbqueue && dbqueue !== 404) {
+				if (dbqueue.length !== musicData.queue.length &&dbqueue.length + 1 !== musicData.queue.length && dbqueue !== 404) {
 					dbqueue.forEach(track => {
 						musicData.queue.push(track)
 					});
@@ -147,7 +147,6 @@ module.exports = {
 					musicData.nowPlaying = musicData.queue[0];
 					let ended = await musicData.queue.shift()
 					musicData.previous.push(ended)
-					await updateQueue(message, client)
 					module.exports.musicHandler(message, voiceChannel, client)
 				})
 			} catch (err) { }

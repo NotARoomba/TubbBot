@@ -1,10 +1,11 @@
+const { updateQueue } = require("../../function.js");
 module.exports = {
 	name: 'leave',
 	group: 'music',
 	usage: 'leave',
 	aliases: ['stop'],
 	description: 'Leaves voice channel if in one!',
-	async execute(message) {
+	async execute(message, args, client) {
 		const voiceChannel = message.member.voice.channel;
 		if (!voiceChannel) {
 			message.reply('Please join a voice channel and try again!');
@@ -14,6 +15,7 @@ module.exports = {
 			return false
 		}
 		try {
+			await updateQueue(message, client)
 			message.guild.musicData.songDispatcher.disconnect()
 		} catch (err) {
 			message.guild.me.voice.channel.leave()
