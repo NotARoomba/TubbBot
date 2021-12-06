@@ -44,7 +44,7 @@ module.exports = {
 					.setDescription(cmd.description)
 					.setColor('#dbc300')
 					.addField('Usage', `${prefix}${cmd.usage}`, true)
-					.addField('Aliases', `${cmd.aliases.join(", ")}`, true)
+					.addField('Aliases', `${cmd.aliases ? cmd.aliases.join(", ") : "None"}`, true)
 				message.channel.send(embed)
 			} else return message.reply('that is not a valid command name.')
 		}

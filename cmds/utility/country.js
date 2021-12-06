@@ -9,20 +9,20 @@ module.exports = {
 	async execute(message, query) {
 		try {
 			query => encodeURIComponent(query)
-			const { body } = await request.get(`https://restcountries.eu/rest/v2/name/${query}`);
+			const { body } = await request.get(`https://restcountries.com/v3.1/name/${query}`);
 			const data = body[0];
 			const embed = new Discord.MessageEmbed()
 				.setColor('#484848')
-				.setTitle(data.name)
-				.setThumbnail(`https://www.countryflags.io/${data.alpha2Code}/flat/64.png`)
+				.setTitle(`${data.name.common} (${data.name.official})`)
+				.setThumbnail(data.flags.png)
 				.addField('Population', formatNumber(data.population), true)
 				.addField('Capital', data.capital || 'None', true)
-				.addField('Currency', data.currencies[0].symbol, true)
+				.addField('Currency', Object.values(data.currencies)[0].symbol, true)
 				.addField('Location', data.subregion || data.region, true)
-				.addField('Demonym', data.demonym || 'None', true)
-				.addField('Native Name', data.nativeName, true)
+				.addField('Demonym', data.demonyms.eng.f || 'None', true)
+				.addField('Native Name', Object.values(data.name.nativeName).map(n => Object.values(n)).join('/'), true)
 				.addField('Area', `${formatNumber(data.area)}km`, true)
-				.addField('Languages', data.languages.map(lang => lang.name).join('/'));
+				.addField('Languages', Object.values(data.languages).map(lang => lang).join('/'));
 			return message.reply(embed);
 		} catch (err) {
 			if (err.status === 404) return message.channel.send('Could not find any results.');

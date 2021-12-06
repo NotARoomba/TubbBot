@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const { dependencies, version, engines } = require('../../package.json')
+const si = require('systeminformation');
 const moment = require('moment');
 require('moment-duration-format');
 var read = require('fs-readdir-recursive')
