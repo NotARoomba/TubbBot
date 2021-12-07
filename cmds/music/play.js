@@ -47,13 +47,13 @@ module.exports = {
 				.setURL(result[0].url)
 			if (result.length > 1) addembed.setTitle(`:musical_note: ${result.length} tracks were added.`).setThumbnail(result[0].thumbnail).setDescription(`\nThe tracks are #${musicData.queue.length} in the queue`);
 			if (typeof musicData.songDispatcher == 'undefined' || musicData.songDispatcher == null) {
-				module.exports.play(message, voiceChannel)
+				module.exports.play(message, voiceChannel, client)
 			} else message.channel.send(addembed)
 		} catch (err) {
 			console.log(err)
 		}
 	},
-	async play(message, voiceChannel) {
+	async play(message, voiceChannel, client) {
 		const musicData = message.guild.musicData
 		const npembed = new Discord.MessageEmbed()
 			.setColor('#FFED00')
@@ -84,7 +84,7 @@ module.exports = {
 		}
 		if (musicData.queue[0].type == 0) {
 			const stream = ytdl(musicData.queue[0].url, {
-				filter: "audio",
+				filter: "audioonly",
 				dlChunkSize: 0,
 				quality: 'highestaudio',
 				highWaterMark: 1 << 25,
@@ -97,6 +97,7 @@ module.exports = {
 					musicData.connection = connection
 					const dispatcher = await connection.play(stream, {
 						type: 'opus',
+						bitrate: "auto"
 					})
 					musicData.isPlaying = true;
 					musicData.songDispatcher = dispatcher
@@ -104,7 +105,7 @@ module.exports = {
 					musicData.nowPlaying = musicData.queue[0];
 					let ended = await musicData.queue.shift()
 					musicData.previous.push(ended)
-					module.exports.musicHandler(message, voiceChannel)
+					module.exports.musicHandler(message, voiceChannel, client)
 				})
 			} catch (err) { }
 		} else if (musicData.queue[0].type == 1) {
@@ -118,7 +119,8 @@ module.exports = {
 				await voiceChannel.join().then(async (connection) => {
 					musicData.connection = connection
 					const dispatcher = await connection.play(stream, {
-						type: 'opus'
+						type: 'opus',
+						bitrate: "auto"
 					})
 					musicData.isPlaying = true;
 					musicData.songDispatcher = dispatcher
@@ -139,7 +141,8 @@ module.exports = {
 				await voiceChannel.join().then(async (connection) => {
 					musicData.connection = connection
 					const dispatcher = await connection.play(stream, {
-						type: 'opus'
+						type: 'opus',
+						bitrate: "auto"
 					})
 					musicData.isPlaying = true;
 					musicData.songDispatcher = dispatcher
@@ -158,13 +161,14 @@ module.exports = {
 		dispatcher.on('finish', async () => {
 			if (musicData.loopSong) {
 				musicData.queue.unshift(musicData.nowPlaying);
+				message.guild.musicData.nowPlaying.seek = 0
 				await updateQueue(message, client)
 			} else if (musicData.loopQueue) {
 				musicData.queue.push(musicData.nowPlaying);
 				await updateQueue(message, client)
 			}
 			if (musicData.queue.length >= 1) {
-				module.exports.play(message, voiceChannel);
+				module.exports.play(message, voiceChannel, client);
 				return;
 			} else {
 				musicData.isPlaying = false;
@@ -186,7 +190,7 @@ module.exports = {
 			if (musicData.queue.length > 1) {
 				musicData.queue.shift();
 				await updateQueue(message, client)
-				module.exports.play(message, voiceChannel);
+				module.exports.play(message, voiceChannel, client);
 				return;
 			}
 			musicData.queue.length = 0;

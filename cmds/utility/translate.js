@@ -6,7 +6,7 @@ module.exports = {
 	usage: `translate (target language code) (text to translate)`,
 	description: 'Translates text to a specific language.',
 	async execute(message, args) {
-		if (!args) return message.reply(`usage: <language code to translate to (2 letter)> <text to translate>. Check -help translate for more info. Language Codes -> (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)`)
+		if (!args) return message.reply(`usage: <language code to translate to (the 2 letter code)> <text to translate>. Check -help translate for more info. Language Codes -> (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)`)
 		var i = args.indexOf(' ');
 		args = [args.slice(0, i), args.slice(i + 1)];
 		try {

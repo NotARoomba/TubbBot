@@ -12,7 +12,7 @@ module.exports = {
 		message.guild.musicData.songDispatcher.pause();
 		message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying)
 		message.guild.musicData.queue[0].seek = Math.round(parseInt(args))
-		await play(message, message.guild.musicData.queue[0].voiceChannel)
+		await play(message, message.guild.musicData.queue[0].voiceChannel, client)
 		await updateQueue(message, client)
 		message.channel.send(`Forwarding **${message.guild.musicData.nowPlaying.title}** to \`\`${Math.round(parseInt(args))}\`\` seconds :fast_forward: `)
 	}

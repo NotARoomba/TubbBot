@@ -538,14 +538,12 @@ module.exports = {
 		return groups
 	},
 	async updateQueue(message, client) {
-		if (!client.pool) return;
 		const queue = message.guild.musicData.queue
 		if (!queue) return
 		let result = await client.pool.db("Tubb").collection("servers").find({ id: message.guild.id }).toArray()
 		await client.pool.db("Tubb").collection("servers").updateOne({ id: message.guild.id }, { $set: { queue: escape(JSON.stringify(queue)) } })
 	},
 	async getQueue(message, client) {
-		if (!client.pool) return null;
 		let result = await client.pool.db("Tubb").collection("servers").find({ id: message.guild.id }).toArray()
 		if (result[0].queue == null) {
 			return 404
@@ -617,7 +615,6 @@ module.exports = {
 		}
 	},
 	async leveling(message, client) {
-		if (!client.pool) return;
 		const a = []
 		pool = client.pool
 		a.push({
