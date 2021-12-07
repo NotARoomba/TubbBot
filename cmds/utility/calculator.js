@@ -1,5 +1,8 @@
 const Discord = require('discord.js');
-var BigEval = require('bigeval')
+var math = require('mathjs')
+//const WolframAlphaAPI = require('wolfram-alpha-api');
+//const waApi = WolframAlphaAPI(process.env.WOLFRAM);
+//https://products.wolframalpha.com/api/libraries/javascript/
 module.exports = {
 	name: "calculator",
 	group: 'utility',
@@ -10,7 +13,7 @@ module.exports = {
 		try {
 			message.channel.send(`\`\`\`${await calc(args)}\`\`\``)
 			async function calc(equation) {
-				return new BigEval().exec(equation);
+				return await math.evaluate(equation);
 			}
 		} catch (err) {
 			message.reply(`An error occured \`${err}\``)

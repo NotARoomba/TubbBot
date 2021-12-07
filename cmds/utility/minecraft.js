@@ -8,7 +8,7 @@ module.exports = {
 	subcommands: 'pro/profile, server/srv, history/his',
 	aliases: ['mc'],
 	description: 'Connect to the Minecraft API and display information.',
-	async execute(message, args) {
+	async execute(message, args, client) {
 		let result = await client.pool.db("Tubb").collection("servers").find({ id: message.guild.id }).toArray()
 		prefix = result[0].prefix
 		if (!args) return message.reply(`usage: <profile/server/history> <profile name/server ip/ profile name>. Check ${prefix}help minecraft for more info.`)

@@ -6,7 +6,7 @@ module.exports = {
 	usage: `translate (target language code) (text to translate)`,
 	description: 'Translates text to a specific language.',
 	async execute(message, args) {
-		if (!args) return message.reply(`usage: <language code to translate to> <text to translate>. Check -help translate for more info. Language Codes -> (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)`)
+		if (!args) return message.reply(`usage: <language code to translate to (2 letter)> <text to translate>. Check -help translate for more info. Language Codes -> (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)`)
 		var i = args.indexOf(' ');
 		args = [args.slice(0, i), args.slice(i + 1)];
 		try {
@@ -19,7 +19,7 @@ module.exports = {
 				.addField(`To: ${translate.languages[args[0]]}`, result);
 			return message.reply(embed);
 		} catch (err) {
-			return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try a different language code as noted here: (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)`);
+			return message.reply(`Oh no, an error occurred: \`${err.message}\`. Try a different language code as noted here (use command without arguments to view usage): (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)`);
 		}
 	}
 }

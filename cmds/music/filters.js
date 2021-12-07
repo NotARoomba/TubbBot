@@ -9,7 +9,7 @@ module.exports = {
 	description: 'Adds a filter to the current song!',
 	async execute(message, args, client) {
 		if (isValidCommander(message) !== true) return
-		const [prefix] = await client.pool.query(`SELECT prefix FROM servers WHERE id = ${message.guild.id};`)
+			let prefix = await client.pool.db("Tubb").collection("servers").find({ id: message.guild.id }).toArray()
 		switch (args) {
 			case "bassboost":
 				choice = { bassboost: 'bass=g=20' }
