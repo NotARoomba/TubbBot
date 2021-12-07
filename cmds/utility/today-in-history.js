@@ -8,7 +8,6 @@ module.exports = {
 	description: 'Gives info about what important event happend today in hisotry',
 	async execute(message, args) {
 		args = args.split(" ")
-		//console.log(args)
 		let month = args[0]
 		let day = args[1]
 		const date = month && day ? `/${month}/${day}` : '';

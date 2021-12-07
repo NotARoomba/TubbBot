@@ -49,7 +49,7 @@
         "soundcloud-scraper": "^4.0.3",
         "spotify-web-api-node": "^5.0.2",
         "systeminformation": "^5.9.15",
-        "wolfram-alpha-api": "^0.2.1",
+        "wolfram-alpha-api": "https://products.wolframalpha.com/api/libraries/javascript/wolfram-alpha-api-1.0.0-rc.1.tgz",
         "youtube-sr": "^4.0.3",
         "ytdl-core": "^4.9.1",
         "ytpl": "^2.0.5",

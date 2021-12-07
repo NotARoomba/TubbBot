@@ -17,13 +17,12 @@ module.exports = {
 					.setDescription(`*${json.list[Math.floor(Math.random() * 1)].definition}*`)
 					.setURL(json.list[0].permalink)
 					.setTimestamp()
-					.setFooter('Powered by UrbanDictionary', 'https://i.pinimg.com/originals/f2/aa/37/f2aa3712516cfd0cf6f215301d87a7c2.jpg');
+					.setFooter('Powered by UrbanDictionary', message.client.user.displayAvatarURL());
 				message.channel.send(embed);
 				return;
 			})
 			.catch(() => {
-				message.channel.send('Failed to deliver definition :sob:');
-				// console.error(err); 
+				message.channel.send('Failed to deliver definition.'); 
 				return;
 			});
 	}
