@@ -5,7 +5,7 @@ module.exports = {
 	aliases: ['eval'],
 	ownerOnly: true,
 	description: 'Useful for debugging.',
-	async execute(message, args) {
+	async execute(message, args, client) {
 		try {
 			let evaled = eval(args);
 			message.channel.send(`\`\`\`${evaled}\`\`\``)
