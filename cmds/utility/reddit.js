@@ -41,7 +41,7 @@ module.exports = {
 				.setURL(`https://reddit.com${data.permalink}`)
 				.setImage(data.url)
 				.setColor('#FF5700')
-				.setFooter(`${data.ups} 👍 | ${data.downs} 👎 | ${data.num_comments} 🗨`)
+				.setFooter(`${data.ups} ⬆ | ${data.downs} ⬇ | ${data.num_comments} Comments`)
 				.setTimestamp();
 			message.channel.send(em);
 		} catch { message.reply(`use "${prefix}help reddit" for usage.`) }
