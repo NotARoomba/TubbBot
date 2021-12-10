@@ -44,6 +44,6 @@ module.exports = {
 				.setFooter(`${data.ups} ⬆ | ${data.downs} ⬇ | ${data.num_comments} Comments`)
 				.setTimestamp();
 			message.channel.send(em);
-		} catch { message.reply(`use "${prefix}help reddit" for usage.`) }
+		} catch { message.reply(`an error occured, use "${prefix}help reddit" for usage.`) }
 	}
 };
