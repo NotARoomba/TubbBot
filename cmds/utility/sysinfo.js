@@ -17,7 +17,7 @@ module.exports = {
 			.setColor('#f0c018')
 			.addField(`Node.js`, `\`${engines.node}\``, true)
 			.addField(`Discord.js`, `\`${dependencies['discord.js']}\``, true)
-			.addField(`Creator`, `\`L061571C5#5281\``, true)
+			.addField(`Creator`, `\`L061571C5#1624\``, true)
 			.addField(`Commands`, `\`${commands.length}\``, true)
 			.addField('Memory Usage', `\`${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)}MB\``, true)
 			.addField('Uptime', `\`${moment.duration(client.uptime).format('d:hh:mm:ss')}\``, true)
