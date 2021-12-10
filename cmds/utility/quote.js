@@ -3,7 +3,7 @@ module.exports = {
 	name: 'quote',
 	group: 'utility',
 	usage: `quote`,
-	description: 'Gets a quote form someone.',
+	description: 'Gets a quote from someone.',
 	execute(message) {
 		const { channel } = message
 		const quote2 = quotes[Math.floor(Math.random() * quotes.length)]
