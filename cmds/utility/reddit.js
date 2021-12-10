@@ -21,7 +21,8 @@ module.exports = {
 	aliases: ['meme', 'memes'],
 	async execute(message, args, client) {
 		try {
-			prefix = await client.pool.db("Tubb").collection("servers").find({ id: message.guild.id }).toArray()[0].prefix
+			let result = await client.pool.db("Tubb").collection("servers").find({ id: message.guild.id }).toArray()
+			prefix = result[0].prefix
 			if (typeof args !== 'object') args = args.split(" ")
 			let subreddits = ["memes", "dankmemes", "meme"];
 			let response;
