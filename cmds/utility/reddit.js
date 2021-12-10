@@ -21,8 +21,7 @@ module.exports = {
 	aliases: ['meme', 'memes'],
 	async execute(message, args, client) {
 		try {
-			let result = await client.pool.db("Tubb").collection("servers").find({ id: message.guild.id }).toArray()
-			prefix = result[0].prefix
+			prefix = await client.pool.db("Tubb").collection("servers").find({ id: message.guild.id }).toArray()[0].prefix
 			if (typeof args !== 'object') args = args.split(" ")
 			let subreddits = ["memes", "dankmemes", "meme"];
 			let response;
@@ -44,6 +43,6 @@ module.exports = {
 				.setFooter(`${data.ups} ⬆ | ${data.downs} ⬇ | ${data.num_comments} Comments`)
 				.setTimestamp();
 			message.channel.send(em);
-		} catch { message.reply(`an error occured, use "${prefix}help reddit" for usage.`) }
+		} catch (err) { message.reply(`an error occured, use "${prefix}help reddit" for usage.`) }
 	}
 };
