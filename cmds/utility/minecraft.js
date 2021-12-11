@@ -104,7 +104,7 @@ module.exports = {
 							.setColor('#000000')
 							.setTitle(res[0].name + "'s Username History")
 							.setDescription(names.join("\n"))
-							.setFooter("Last changed on " + new Date(result[result.length - 1].changedToAt), message.client.user.displayAvatarURL());
+							.setFooter(!result[result.length - 1].changedToAt ? "Never Changed" : "Last changed on " + new Date(result[result.length - 1].changedToAt), message.client.user.displayAvatarURL());
 						message.channel.send(Embed);
 					}
 				});

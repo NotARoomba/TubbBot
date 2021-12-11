@@ -1,2 +1,2 @@
 language = "bash"
-run = "npm i && node index.js"
+run = "npm i && chmod +x ./replit.sh && ./replit.sh && node index.js"

@@ -1,9 +1,9 @@
 const { isValidCommander, arrayMove, updateQueue } = require('../../function.js')
 module.exports = {
-	name: 'migrate',
+	name: 'move',
 	group: 'music',
-	usage: 'migrate',
-	description: 'Move Tubb to another voice channel!',
+	usage: 'move',
+	description: 'Move song positions!',
 	async execute(message, args, client) {
 		if (isValidCommander(message) !== true) return
 		args = args.split(" ")
@@ -14,6 +14,8 @@ module.exports = {
 			message.reply('Turn off the **loop** command before using the **move** command.');
 			return;
 		}
+		args[0] = parseInt(args[0])
+		args[1] = parseInt(args[1])
 		const songName = message.guild.musicData.queue[args[0] - 1].title;
 		arrayMove(message.guild.musicData.queue, args[0] - 1, args[1] - 1);
 		await updateQueue(message, client)
