@@ -6,7 +6,7 @@ module.exports = {
 	description: 'Resume the current playing song!',
 	async execute(message) {
 		if (isValidCommander(message) !== true) return
-		message.guild.musicData.songDispatcher.resume(); message.guild.musicData.songDispatcher.resume();
+		message.guild.musicData.songDispatcher.resume();
 		message.react("▶️")
 	}
 }
