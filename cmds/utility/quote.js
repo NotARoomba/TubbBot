@@ -1,4 +1,3 @@
-const { quotes } = require('../../assets/quotes.json')
 const request = require('node-superfetch');
 module.exports = {
 	name: 'quote',
