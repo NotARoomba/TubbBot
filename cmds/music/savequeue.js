@@ -3,7 +3,7 @@ module.exports = {
 	name: 'savequeue',
 	group: 'music',
 	usage: 'savequeue (optional name)',
-	aliases: ['save'],
+	aliases: ['sq'],
 	description: 'Saves the current song queue!',
 	async execute(message, args, client) {
 		try {

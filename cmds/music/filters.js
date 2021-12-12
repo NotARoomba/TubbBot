@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { play } = require('./play');
+const { play } = require('./play.js');
 const { isValidCommander } = require('../../function.js')
 module.exports = {
 	name: 'filters',
