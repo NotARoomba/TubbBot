@@ -554,11 +554,24 @@ module.exports = {
 	async saveQueue(message, client, name) {
 		let result = await client.pool.db("Tubb").collection("users").find({ id: message.author.id }).toArray()
 		queues = result[0].queues
-		if (!queues) {
-			queues = []
+		if (!queues) queues = []
+		name = name == "" ? queues.length + 1 : name
+		queues.push([[name], [escape(JSON.stringify(message.guild.musicData.queue))]])
+		await client.pool.db("Tubb").collection("users").updateOne({ id: message.author.id }, { $set: { queues: queues } })
+	},
+	async getQueues(message, client) {
+		let result = await client.pool.db("Tubb").collection("users").find({ id: message.author.id }).toArray()
+		queues = result[0].queues
+		if (!queues) queues = []
+		for (i = 0; i < queues.length; i++) {
+			queues[i][1] = await JSON.parse(unescape(queues[i][1]))
 		}
-		name = !name ? queues.length + 1 : name
-		queues.push({name: escape(JSON.stringify(message.guild.musicData.queue))})
+		return queues
+	},
+	async updateQueues(message, client, queues) {
+		for (i = 0; i < queues.length; i++) {
+			queues[i][1] = await escape(JSON.stringify(queues[i][1]))
+		}
 		await client.pool.db("Tubb").collection("users").updateOne({ id: message.author.id }, { $set: { queues: queues } })
 	},
 	isValidCommander(message) {
