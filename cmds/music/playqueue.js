@@ -2,10 +2,10 @@ const { getQueues } = require("../../function.js")
 const { play } = require("./play.js")
 const Pagination = require('discord-paginationembed');
 module.exports = {
-	name: 'loadqueue',
+	name: 'playqueue',
 	group: 'music',
-	usage: 'loadqueue (position of queue)',
-	aliases: ['load'],
+	usage: 'playqueue (position of queue)',
+	aliases: ['pq', 'loadqueue'],
 	description: 'Loads a saved queue!',
 	async execute(message, args, client) {
 		try {
