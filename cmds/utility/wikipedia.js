@@ -6,6 +6,7 @@ module.exports = {
 	group: 'utility',
 	usage: `wikipedia (query)`,
 	aliases: ['wiki'],
+	permission: ['EMBED_LINKS'],
 	description: 'Searches Wikipedia for your query.',
 	async execute(message, query) {
 		try {

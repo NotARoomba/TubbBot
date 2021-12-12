@@ -6,6 +6,7 @@ module.exports = {
 	name: 'help',
 	group: 'utility',
 	usage: `help (group or command)`,
+	permission: ['MANAGE_MESSAGES'],
 	description: `Lists Tubb's commands!`,
 	async execute(message, args, client) {
 		const commands = []

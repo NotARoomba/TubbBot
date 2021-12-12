@@ -4,6 +4,7 @@ module.exports = {
 	group: 'utility',
 	usage: `giphy (query)`,
 	aliases: ['gif'],
+	permission: ['EMBED_LINKS'],
 	description: 'Searches Giphy for your query.',
 	async execute(message, query) {
 		try {

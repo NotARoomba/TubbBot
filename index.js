@@ -79,6 +79,15 @@ client.on('message', async (message) => {
 			});
 			if (perms.length >= 1) return message.reply(`You need the permission(s) \`${perms.join(', ')}\``)
 		}
+		if (command.permission) {
+			let perms = []
+			command.permission.forEach(permission => {
+				if (!message.guild.me.permissions.has(permission)) {
+					perms.push(permission)
+				}
+			});
+			if (perms.length >= 1) return message.reply(`I need the permission(s) \`${perms.join(', ')}\``)
+		}
 		if (command.ownerOnly == true && message.author.id !== process.env.OWNER) return message.reply("you cant do that!")
 		const args = content.splice(1).join(" ");
 		command.execute(message, args, client)
