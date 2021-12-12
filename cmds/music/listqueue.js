@@ -15,7 +15,7 @@ module.exports = {
 			for (i = 0; i < queues.length; i++) {
 				description = ""
 				for (a = 0; a < queues[i][1].length; a++) {
-					description = description + `**${a+1}**: ${queues[i][1][a].title}\n`
+					description = description + `**${a + 1}**: ${queues[i][1][a].title}\n`
 				}
 				const embed = new Discord.MessageEmbed()
 					.setColor('#FFED00')
