@@ -113,6 +113,7 @@ module.exports = {
 			const stream = ytdl.arbitraryStream(data, {
 				opusEncoded: true,
 				seek: seek,
+				quality: 'highestaudio',
 				encoderArgs: encoderArgs,
 			})
 			try {
@@ -135,6 +136,7 @@ module.exports = {
 			const stream = ytdl.arbitraryStream(musicData.queue[0].url, {
 				opusEncoded: true,
 				seek: seek,
+				quality: 'highestaudio',
 				encoderArgs: encoderArgs,
 			})
 			try {
