@@ -3,6 +3,7 @@ module.exports = {
 	name: 'invites',
 	group: 'utility',
 	usage: `invites (optional user)`,
+	permission: ['MANAGE_GUILD'],
 	description: `Responds with information on a user's invites.`,
 	async execute(message, args) {
 		let user = message.author

@@ -39,7 +39,9 @@ module.exports = {
 			});
 			else
 				MojangAPI.profile(str, function (err, res) {
-					if (err) message.reply("there was an error trying to fetch the user's profile!");
+					if (err) {
+						message.reply("there was an error trying to fetch the user's profile!");
+						}
 					else {
 						let skin = "https://visage.surgeplay.com/full/256/" + res.id;
 
