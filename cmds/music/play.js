@@ -10,6 +10,7 @@ module.exports = {
 	aliases: ['p'],
 	description: 'Plays music!',
 	async execute(message, args, client) {
+		if (args == "") return message.reply("Specify a song name of link.")
 		const musicData = message.guild.musicData
 		const voiceChannel = message.member.voice.channel;
 		if (!voiceChannel) {
