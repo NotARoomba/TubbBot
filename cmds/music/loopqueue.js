@@ -8,7 +8,7 @@ module.exports = {
 	async execute(message) {
 		if (isValidCommander(message) !== true) return
 		else if (message.guild.musicData.queue.length == 0) {
-			message.say(`I can't loop over an empty queue!`);
+			message.reply(`I can't loop over an empty queue!`);
 			return;
 		} else if (message.guild.musicData.loopSong) {
 			message.reply('Turn off the **loop** command before using the **loopqueue** command');

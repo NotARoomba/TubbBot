@@ -15,6 +15,7 @@ module.exports = {
 			return false
 		}
 		try {
+			message.guild.musicData.loopQueue = false;
 			await updateQueue(message, client)
 			message.guild.me.voice.channel.leave()
 		} catch (err) {
