@@ -4,6 +4,7 @@ module.exports = {
 	group: 'music',
 	usage: 'queue',
 	aliases: ['song-list', 'next-songs', 'q'],
+	permission: ['MANAGE_MESSAGES'],
 	description: 'Display the song queue!',
 	async execute(message) {
 		try {

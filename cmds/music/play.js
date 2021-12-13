@@ -8,7 +8,7 @@ module.exports = {
 	group: 'music',
 	usage: 'p (song name or link)',
 	aliases: ['p'],
-	permission: ['CONNECT', 'SPEAK', 'USE_VAD'],
+	permission: ['CONNECT', 'SPEAK', 'USE_VAD', 'MANAGE_MESSAGES'],
 	description: 'Plays music!',
 	async execute(message, args, client) {
 		if (args == "") return message.reply("Specify a song name of link.")

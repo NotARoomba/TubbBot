@@ -6,6 +6,7 @@ module.exports = {
 	name: 'system',
 	group: 'utility',
 	usage: `system`,
+	permission: ['MANAGE_MESSAGES'],
 	description: `Get's (very detailed) info about me!.`,
 	async execute(message, args, client) {
 		system = Object.entries(await si.system())

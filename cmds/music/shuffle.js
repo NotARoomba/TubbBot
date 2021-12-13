@@ -4,6 +4,7 @@ module.exports = {
 	name: 'shuffle',
 	group: 'music',
 	usage: 'shuffle',
+	permission: ['MANAGE_MESSAGES'],
 	description: 'Shuffle the music queue!',
 	async execute(message, e, client) {
 		if (isValidCommander(message) !== true) return

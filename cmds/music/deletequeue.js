@@ -5,6 +5,7 @@ module.exports = {
 	group: 'music',
 	usage: 'deletequeue (position of queue)',
 	aliases: ['dq'],
+	permission: ['MANAGE_MESSAGES'],
 	description: 'Deletes a saved queue!',
 	async execute(message, args, client) {
 		try {
