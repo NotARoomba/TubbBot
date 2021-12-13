@@ -2,7 +2,7 @@ module.exports = {
 	name: 'leveling',
 	group: 'utility',
 	usage: `leveling (true or false)`,
-	permissions: ['ADMINISTRATOR'],
+	permissions: ['MANAGE_GUILD'],
 	description: 'Changes the leveling status for your server.',
 	async execute(message, args, client) {
 		if (args == "" || !args == 'true' || !args == 'false') {

@@ -6,7 +6,7 @@ module.exports = {
 	group: 'music',
 	usage: 'playqueue (position of queue)',
 	aliases: ['pq', 'loadqueue'],
-	permission: ['CONNECT', 'SPEAK', 'USE_VAD'],
+	permission: ['CONNECT', 'SPEAK', 'USE_VAD', 'MANAGE_MESSAGES'],
 	description: 'Loads a saved queue!',
 	async execute(message, args, client) {
 		try {

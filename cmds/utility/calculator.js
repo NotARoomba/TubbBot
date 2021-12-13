@@ -8,6 +8,7 @@ module.exports = {
 	group: 'utility',
 	usage: `calc (expression)`,
 	aliases: ['calc'],
+	permission: ['MANAGE_MESSAGES'],
 	description: 'Get the answer to a math problem.',
 	async execute(message, args) {
 		try {

@@ -6,6 +6,7 @@ module.exports = {
 	group: 'music',
 	usage: 'listqueues',
 	aliases: ['list'],
+	permission: ['MANAGE_MESSAGES'],
 	description: 'Gets your saved song queues!',
 	async execute(message, args, client) {
 		try {

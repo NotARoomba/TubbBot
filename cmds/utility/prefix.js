@@ -2,7 +2,7 @@ module.exports = {
 	name: 'prefix',
 	group: 'utility',
 	usage: `prefix (prefix)`,
-	permissions: ['ADMINISTRATOR'],
+	permissions: ['MANAGE_GUILD'],
 	description: 'Changes the prefix for your server.',
 	async execute(message, args, client) {
 		if (args.length === 0 || args === "") return message.reply('that is not a valid prefix.')
