@@ -127,12 +127,7 @@ client.on('guildCreate', async (guild) => {
 			},
 			{
 				name: `Link to invite me to your server`,
-				value: `[Invite me!](https://discord.com/api/oauth2/authorize?client_id=750123677739122819&permissions=414569197248&scope=bot)`,
-				inline: true,
-			},
-			{
-				name: `My server if you have any questions`,
-				value: `[Link](https://discord.com/invite/MZnHS95jx4)`,
+				value: `[Invite me!](https://discord.com/api/oauth2/authorize?client_id=750123677739122819&permissions=414569197296&scope=bot)`,
 				inline: true,
 			},
 			{

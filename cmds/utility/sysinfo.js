@@ -21,9 +21,8 @@ module.exports = {
 			.addField(`Commands`, `\`${commands.length}\``, true)
 			.addField('Memory Usage', `\`${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)}MB\``, true)
 			.addField('Uptime', `\`${moment.duration(client.uptime).format('d:hh:mm:ss')}\``, true)
-			.addField(`Server`, `[Link](https://discord.com/invite/MZnHS95jx4)`, true)
 			.addField(`Github`, `[Repo](https://github.com/L061571C5/TubbBot)`, true)
-			.addField(`My Invite`, `[Invite me!](https://discord.com/api/oauth2/authorize?client_id=750123677739122819&permissions=414569197248&scope=bot)`, true)
+			.addField(`My Invite`, `[Invite me!](https://discord.com/api/oauth2/authorize?client_id=750123677739122819&permissions=414569197296&scope=bot)`, true)
 		message.channel.send(embed)
 	}
 }
