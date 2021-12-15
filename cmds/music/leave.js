@@ -17,9 +17,9 @@ module.exports = {
 		try {
 			message.guild.musicData.loopQueue = false;
 			await updateQueue(message, client)
-			message.guild.me.voice.channel.leave()
+			message.guild.musicData.songDispatcher.disconnect()
 		} catch (err) {
-			console.log(err)
+			message.guild.me.voice.channel.leave()
 		}
 		message.channel.send(':wave:');
 	}
