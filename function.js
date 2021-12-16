@@ -6,7 +6,7 @@ const ytdl = require("ytdl-core");
 const moment = require("moment");
 require("moment-duration-format")(moment);
 const fetch = require("node-fetch")
-const puppeteer = require("puppeteer-core")
+const puppeteer = require("puppeteer")
 const muse = require("musescore-metadata").default;
 const SoundCloud = require("soundcloud-scraper");
 const sc = new SoundCloud.Client(process.env.SOUNDCLOUD);
@@ -867,8 +867,8 @@ module.exports = {
 	async getBrowser() {
 		if (!browser) browser = await puppeteer.launch({
 			args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--single-process', '--disable-gpu', "--proxy-server='direct://'", '--proxy-bypass-list=*'],
-			//headless: true,
-			//executablePath: "./assets/chromium-browser"
+			headless: false,
+			//executablePath: "/usr/bin/chromium-browser"
 		});
 		return browser;
 	},
