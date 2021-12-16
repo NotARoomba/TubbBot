@@ -869,14 +869,15 @@ module.exports = {
 			if (!browser) browser = await puppeteer.launch({
 				args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--single-process', '--disable-gpu', "--proxy-server='direct://'", '--proxy-bypass-list=*'],
 				headless: true,
-				executablePath: "/usr/bin/google-chrome"
+				executablePath: "/usr/bin/chromium-browser"
 			});
 		} catch (err) {
 			if (!browser) browser = await puppeteer.launch({
 				args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--single-process', '--disable-gpu', "--proxy-server='direct://'", '--proxy-bypass-list=*'],
 				headless: true,
 				executablePath: "/app/.apt/usr/bin/google-chrome"
-			}
+			})
+		};
 		return browser;
 		},
 		async puppet(cb) {
