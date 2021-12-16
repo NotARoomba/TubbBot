@@ -22,7 +22,6 @@ module.exports = {
 				.setFooter('Powered by OpenWeatherMap.org');
 			message.channel.send(embed);
 		}).catch(err => {
-			console.log(err)
 			message.reply(`Enter a valid city name`)
 		})
 	}

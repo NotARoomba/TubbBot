@@ -21,6 +21,7 @@ module.exports = {
 	group: 'utility',
 	usage: `musescore`,
 	aliases: ['muse'],
+	permission: ['ATTACH_FILES', 'MANAGE_MESSAGES'],
 	description: 'Get music from musescore!',
 	async execute(message, args, client) {
 		if (!validMSURL(args)) return await this.search(message, args, client);
