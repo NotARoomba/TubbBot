@@ -62,6 +62,7 @@ module.exports = {
 					await mesg.edit(`Failed to generate PDF! \`${err.message}\``);
 				}
 			} catch (err) {
+				console.log(err)
 				await message.reply("there was an error trying to send the files!");
 			}
 		} catch (err) {
