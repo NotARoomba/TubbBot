@@ -47,6 +47,7 @@
         "opusscript": "0.0.8",
         "pdfkit": "^0.13.0",
         "puppeteer-core": "^13.0.0",
+        "puppeteer": "^4.0.0",
         "reddit-wrapper-v2": "^1.1.6",
         "request-promise-native": "^1.0.9",
         "rule34js": "^2.2.0",
@@ -62,5 +63,6 @@
         "ytdl-core": "^4.9.1",
         "ytpl": "^2.0.5",
         "ytsr": "^3.3.1"
-    }
+    },
+    "devDependencies": {}
 }
