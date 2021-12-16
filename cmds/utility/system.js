@@ -30,7 +30,7 @@ module.exports = {
 				return `**${e[0]}**:  ${e[1]}`;
 			})
 			.setPageIndicator('footer', (page, pages) => `Page ${page} of ${pages}`)
-		embed.embed.setColor('#dbc300').setTitle(`${title} Info`).setFooter('', `${client.user.avatarURL('webp', 16)}`);;
+		embed.embed.setColor('#dbc300').setTitle(`${title} Info`).setFooter('', `${client.user.avatarURL('webp', 16)}`);
 		embed.build();
 	}
 }

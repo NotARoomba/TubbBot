@@ -6,6 +6,8 @@ const ytdl = require("ytdl-core");
 const moment = require("moment");
 require("moment-duration-format")(moment);
 const fetch = require("node-fetch")
+const puppeteer = require("puppeteer-core")
+const muse = require("musescore-metadata").default;
 const SoundCloud = require("soundcloud-scraper");
 const sc = new SoundCloud.Client(process.env.SOUNDCLOUD);
 var SpotifyWebApi = require('spotify-web-api-node');
@@ -22,6 +24,23 @@ var ChessImageGenerator = require('chess-image-generator');
 var imageGenerator = new ChessImageGenerator({
 	size: 1200,
 	style: 'cburnett'
+});
+var browser, timeout;
+const sanitize = require("sanitize-filename");
+const PDFDocument = require('pdfkit');
+const SVGtoPDF = require('svg-to-pdfkit');
+const PNGtoPDF = (doc, url) => new Promise(async (resolve, reject) => {
+	const res = await fetch(url).then(res => res.body);
+	const chunks = [];
+	res.on("data", chunk => chunks.push(chunk));
+	res.on("end", () => {
+		try {
+			doc.image(Buffer.concat(chunks), 0, 0, { width: doc.page.width, height: doc.page.height });
+			resolve();
+		} catch (err) {
+			reject(err);
+		}
+	});
 });
 module.exports = {
 	list(arr, conj = 'and') {
@@ -47,6 +66,15 @@ module.exports = {
 	validGDURL: (str) => !!str.match(/^(https?)?:\/\/drive\.google\.com\/(file\/d\/(?<id>.*?)\/(?:edit|view)\?usp=sharing|open\?id=(?<id1>.*?)$)/),
 	validGDFolderURL: (str) => !!str.match(/^(https?)?:\/\/drive\.google\.com\/drive\/folders\/[\w\-]+(\?usp=sharing)?$/),
 	validSCURL: (str) => !!str.match(/^https?:\/\/(soundcloud\.com|snd\.sc)\/(.+)?/),
+	validMSURL: (str) => !!str.match(/^(https?:\/\/)?musescore\.com\/(user\/\d+\/scores\/\d+|[\w-]+\/(scores\/\d+|[\w-]+))[#\?]?$/),
+	async requestStream(url) {
+		const fetch = require("node-fetch").default;
+		return await fetch(url).then(res => res.body);
+	},
+  findValueByPrefix(object, prefix) {
+    for (const property in object) if (object[property] && property.toString().startsWith(prefix)) return object[property];
+    return undefined;
+  },
 	toTitleCase(str) {
 		return str.replace(/\w\S*/g, function (txt) {
 			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -671,5 +699,192 @@ module.exports = {
 			level = 0;
 			newxp = 0;
 		}, 5000);
+	},
+	async getMP3(url) {
+		const a = await module.exports.puppet(async (page) => {
+			var result = { error: true };
+			const start = Date.now();
+			try {
+				await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36');
+				await page.setRequestInterception(true);
+				page.on('request', (req) => {
+					if (["image", "font", "stylesheet", "media"].includes(req.resourceType())) req.abort();
+					else req.continue();
+				});
+				await page.goto(url, { waitUntil: "domcontentloaded" });
+				await page.waitForSelector("button[title='Toggle Play']").then(el => el.click());
+				const mp3 = await page.waitForRequest(req => req.url().startsWith("https://s3.ultimate-guitar.com/") || req.url().startsWith("https://www.youtube.com/embed/"));
+				result.url = mp3.url();
+				result.error = false;
+			} catch (err) {
+				result.error = true
+				result.message = err.message;
+			} finally {
+				result.timeTaken = Date.now() - start;
+				return result;
+			}
+		})
+		return a
+	},
+	async getMIDI(url) {
+		const a = await module.exports.puppet(async (page) => {
+			var result = { error: true };
+			const start = Date.now();
+			try {
+				await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36');
+				await page.setRequestInterception(true);
+				page.on('request', (req) => {
+					if (["image", "font", "stylesheet", "media"].includes(req.resourceType())) req.abort();
+					else req.continue();
+				});
+				await page.goto(url, { waitUntil: "domcontentloaded" });
+				await page.waitForSelector("button[hasaccess]").then(el => el.click());
+				const midi = await page.waitForResponse(res => {
+					const url = res.url();
+					return url.startsWith("https://musescore.com/api/jmuse") && url.includes("type=midi");
+				});
+				result.url = (await midi.json()) ?.info ?.url;
+				result.error = false;
+			} catch (err) {
+				console.log(err)
+				result.message = err.message;
+			} finally {
+				result.timeTaken = Date.now() - start;
+				return result;
+			}
+		})
+		return a
+	},
+	async getPDF(url, data) {
+		if (!data) { data = await muse(url); }
+		var result = { doc: null, hasPDF: false };
+		var score = data.firstPage.replace(/png$/, "svg");
+		var fetched = await fetch(score);
+		if (!fetched.ok) {
+			score = data.firstPage;
+			var fetched = await fetch(score);
+			if (!fetched.ok) {
+				result.err = "Received Non-200 HTTP Status Code";
+				return result;
+			}
+		}
+		var pdf = [score];
+		if (data.pageCount > 1) {
+			const pdfapi = await module.exports.puppet(async (page) => {
+				var result = { error: true };
+				const start = Date.now();
+				const pageCount = data.pageCount;
+				try {
+					const pattern = /^(https?:\/\/)?s3\.ultimate-guitar\.com\/musescore\.scoredata\/g\/\w+\/score\_\d+\.svg/;
+					await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36');
+					await page.setRequestInterception(true);
+					const pages = result.pdf ? result.pdf : [];
+					await page.setViewport({
+						width: 1280,
+						height: 720
+					});
+					page.on('request', (req) => {
+						req.continue();
+						if (req.url().match(pattern)) pages.push(req.url());
+					});
+					await page.goto(url, { waitUntil: "domcontentloaded" });
+					const thumb = await page.waitForSelector("meta[property='og:image']");
+					var png = (await (await thumb.getProperty("content")).jsonValue()).split("@")[0];
+					var svg = png.split(".").slice(0, -1).join(".") + ".svg";
+					var el;
+					try {
+						el = await page.waitForSelector(`img[src^="${svg}"]`, { timeout: 10000 });
+						pages.push(svg);
+					} catch (err) {
+						el = await page.waitForSelector(`img[src^="${png}"]`, { timeout: 10000 });
+						pages.push(png);
+					}
+					const height = (await el.boxModel()).height;
+					await el.hover();
+					var scrolled = 0;
+					while (pages.length < pageCount && scrolled <= pageCount) {
+						await page.mouse.wheel({ deltaY: height });
+						await page.waitForRequest(req => req.url().match(pattern));
+						scrolled++;
+					}
+					result.pdf = pages;
+					result.error = false;
+				} catch (err) {
+					result.message = err.message;
+				} finally {
+					result.timeTaken = Date.now() - start;
+					return result;
+				}
+			});
+			if (pdfapi.error) return { doc: undefined, hasPDF: false };
+			pdf = pdfapi.pdf;
+		}
+		const doc = new PDFDocument();
+		var hasPDF = true;
+		for (let i = 0; i < pdf.length; i++) {
+			const page = pdf[i];
+			try {
+				const ext = page.split("?")[0].split(".").slice(-1)[0];
+				if (ext === "svg") try {
+					SVGtoPDF(doc, await streamToString(await requestStream(page)), 0, 0, { preserveAspectRatio: "xMinYMin meet" });
+				} catch (err) {
+					SVGtoPDF(doc, await fetch(page).then(res => res.text()), 0, 0, { preserveAspectRatio: "xMinYMin meet" });
+				}
+				else await PNGtoPDF(doc, page);
+				if (i + 1 < data.pageCount) doc.addPage();
+			} catch (err) {
+				console.log(err)
+				result.err = err.message;
+				hasPDF = false;
+				break;
+			}
+		}
+		doc.end();
+		return { doc: doc, hasPDF: hasPDF, pages: pdf };
+	},
+	async getMCSZ(data) {
+		const IPNS_KEY = 'QmSdXtvzC8v8iTTZuj5cVmiugnzbR1QATYRcGix4bBsioP';
+		const IPNS_RS_URL = `https://ipfs.io/api/v0/dag/resolve?arg=/ipns/${IPNS_KEY}`;
+		const r = await fetch(IPNS_RS_URL);
+		if (!r.ok) return { error: true, err: "Received HTTP Status Code: " + r.status };
+		const json = await r.json();
+		const mainCid = json.Cid['/'];
+		const url = `https://ipfs.infura.io:5001/api/v0/block/stat?arg=/ipfs/${mainCid}/${data.id % 20}/${data.id}.mscz`;
+		const r0 = await fetch(url);
+		if (!r0.ok) return { error: true, err: "Received HTTP Status Code: " + r.status };
+		const cidRes = await r0.json();
+		const cid = cidRes.Key
+		if (!cid) {
+			const err = cidRes.Message
+			if (err.includes('no link named')) return { error: true, err: "Score not in dataset" };
+			else return { error: true, err: err };
+		}
+		const msczUrl = `https://ipfs.infura.io/ipfs/${cid}`;
+		const r1 = await fetch(msczUrl);
+		if (!r1.ok) return { error: true, err: "Received HTTP Status Code: " + r.status };
+		return { error: false, url: msczUrl };
+	},
+	async getBrowser() {
+		if (!browser) browser = await puppeteer.launch({
+			args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--single-process', '--disable-gpu', "--proxy-server='direct://'", '--proxy-bypass-list=*'],
+			headless: true,
+			executablePath: "/usr/bin/chromium-browser"
+		});
+		return browser;
+	},
+	async puppet(cb) {
+		if (timeout) {
+			clearTimeout(timeout);
+			timeout = undefined;
+		}
+		const b = await module.exports.getBrowser();
+		const page = await b.newPage();
+		const result = await cb(page);
+		page.close();
+		timeout = setTimeout(() => {
+			browser.close();
+			browser = undefined;
+		}, 10000);
+		return result;
 	}
 }
