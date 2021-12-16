@@ -867,8 +867,8 @@ module.exports = {
 	async getBrowser() {
 		if (!browser) browser = await puppeteer.launch({
 			args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--single-process', '--disable-gpu', "--proxy-server='direct://'", '--proxy-bypass-list=*'],
-			headless: true,
-			executablePath: "./assets/chromium-browser"
+			//headless: true,
+			//executablePath: "./assets/chromium-browser"
 		});
 		return browser;
 	},
