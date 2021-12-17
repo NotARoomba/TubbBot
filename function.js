@@ -71,10 +71,10 @@ module.exports = {
 		const fetch = require("node-fetch").default;
 		return await fetch(url).then(res => res.body);
 	},
-	findValueByPrefix(object, prefix) {
-		for (const property in object) if (object[property] && property.toString().startsWith(prefix)) return object[property];
-		return undefined;
-	},
+	async findValueByPrefix(object, prefix) {
+    for (const property in object) if (object[property] && property.toString().startsWith(prefix)) return object[property];
+    return undefined;
+  },
 	toTitleCase(str) {
 		return str.replace(/\w\S*/g, function (txt) {
 			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();

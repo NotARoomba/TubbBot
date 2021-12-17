@@ -24,7 +24,7 @@ module.exports = {
 	permission: ['ATTACH_FILES', 'MANAGE_MESSAGES'],
 	description: 'Get music from musescore!',
 	async execute(message, args, client) {
-		if (!validMSURL(args)) return await this.search(message, args, client);
+		if (!validMSURL(args)) return this.search(message, args, client);
 		try {
 			var data = await muse(args);
 		} catch (err) {
@@ -72,6 +72,7 @@ module.exports = {
 	},
 	async search(message, args, client) {
 		let prefix = process.env.PREFIX
+		const embeds = [];
 		if (client.pool != null) {
 			let result = await client.pool.db("Tubb").collection("servers").find({ id: message.guild.id }).toArray()
 			prefix = result[0].prefix
@@ -81,34 +82,41 @@ module.exports = {
 			if (Math.floor(response.statusCode / 100) !== 2) return message.channel.send(`Received HTTP status code ${response.statusCode} when fetching data.`);
 			var body = response.body;
 		} catch (err) {
+			console.log(err)
 			return message.reply("there was an error trying to search for scores!");
 		}
-		var $ = cheerio.load(body);
-		const stores = Array.from($('div[class^="js-"]'));
-		const store = findValueByPrefix(stores.find(x => x.attribs && x.attribs.class && x.attribs.class.match(/^js-\w+$/)).attribs, "data-");
-		var data = JSON.parse(store);
-		const embeds = [];
-		var scores = data.store.page.data.scores;
-		var msg = await message.channel.send("Searching for scores...")
-		for (i = 0; i < 10; i++) {
-			data = await muse(scores[i].share.publicUrl);
-			const em = new Discord.MessageEmbed()
-				.setColor('#1F74BD')
-				.setTitle(data.title)
-				.setURL(data.url)
-				.setThumbnail(data.thumbnail)
-				.setDescription(`Description: **${data.description}**\n\nTo download, please copy the URL and use \`${prefix}${this.name} <link>\``)
-				.addField("ID", data.id, true)
-				.addField("Author", data.user.name, true)
-				.addField("Duration", data.duration, true)
-				.addField("Page Count", data.pageCount, true)
-				.addField("Date Created", new Date(data.created * 1000).toLocaleString(), true)
-				.addField("Date Updated", new Date(data.updated * 1000).toLocaleString(), true)
-				.addField(`Tags [${data.tags.length}]`, data.tags.length > 0 ? data.tags.join(", ") : "None")
-				.addField(`Parts [${data.parts.length}]`, data.parts.length > 0 ? data.parts.join(", ") : "None")
-				.setFooter('', `${client.user.avatarURL('webp', 16)}`)
-			embeds.push(em);
+		try {
+			var msg = await message.channel.send("Searching for scores...")
+			var $ = await cheerio.load(body);
+			const stores = await Array.from($('div[class^="js-"]'));
+			const store = await findValueByPrefix(stores.find(x => x.attribs && x.attribs.class && x.attribs.class.match(/^js-\w+$/)).attribs, "data-");
+			var data = JSON.parse(store);
+			var scores = data.store.page.data.scores;
+			for (i = 0; i < scores.length - 1; i++) {
+				if (scores[i].user.id !== 39593115 && scores[i].user.id !== 39593079) {
+					var data = await muse(scores[i].url);
+					const em = new Discord.MessageEmbed()
+						.setColor('#1F74BD')
+						.setTitle(data.title)
+						.setURL(data.url)
+						.setThumbnail(data.thumbnail)
+						.setDescription(`Description: **${data.description}**\n\nTo download, please copy the URL and use \`${prefix}${this.name} <link>\``)
+						.addField("ID", data.id, true)
+						.addField("Author", data.user.name, true)
+						.addField("Duration", data.duration, true)
+						.addField("Page Count", data.pageCount, true)
+						.addField("Date Created", new Date(data.created * 1000).toLocaleString(), true)
+						.addField("Date Updated", new Date(data.updated * 1000).toLocaleString(), true)
+						.addField(`Tags [${data.tags.length}]`, data.tags.length > 0 ? data.tags.join(", ") : "None")
+						.addField(`Parts [${data.parts.length}]`, data.parts.length > 0 ? data.parts.join(", ") : "None")
+						.setFooter('', `${client.user.avatarURL('webp', 16)}`)
+					embeds.push(em);
+				}
+			}
+		} catch (err) {
+			console.log(err)
 		}
+		if (embeds.length < 1) return message.channel.send("No score was found!");
 		const embed = new Pagination.Embeds()
 			.setArray(embeds)
 			.setAuthorizedUsers([message.author.id])
