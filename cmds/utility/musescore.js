@@ -19,7 +19,7 @@ const { getMP3, getPDF, getMIDI, validMSURL, requestStream, getMSCZ, findValueBy
 module.exports = {
 	name: 'musescore',
 	group: 'utility',
-	usage: `musescore`,
+	usage: `musescore (link or search query)`,
 	aliases: ['muse'],
 	permission: ['ATTACH_FILES', 'MANAGE_MESSAGES'],
 	description: 'Get music from musescore!',
@@ -113,9 +113,7 @@ module.exports = {
 					embeds.push(em);
 				}
 			}
-		} catch (err) {
-			console.log(err)
-		}
+		} catch (err) {}
 		if (embeds.length < 1) return message.channel.send("No score was found!");
 		const embed = new Pagination.Embeds()
 			.setArray(embeds)
