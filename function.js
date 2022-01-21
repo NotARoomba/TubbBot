@@ -72,9 +72,9 @@ module.exports = {
 		return await fetch(url).then(res => res.body);
 	},
 	async findValueByPrefix(object, prefix) {
-    for (const property in object) if (object[property] && property.toString().startsWith(prefix)) return object[property];
-    return undefined;
-  },
+		for (const property in object) if (object[property] && property.toString().startsWith(prefix)) return object[property];
+		return undefined;
+	},
 	toTitleCase(str) {
 		return str.replace(/\w\S*/g, function (txt) {
 			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -879,21 +879,55 @@ module.exports = {
 			})
 		};
 		return browser;
-		},
-		async puppet(cb) {
-			if (timeout) {
-				clearTimeout(timeout);
-				timeout = undefined;
-			}
-			const b = await module.exports.getBrowser();
-			const page = await b.newPage();
-			const result = await cb(page);
-			page.close();
-			timeout = setTimeout(() => {
-				browser.close();
-				browser = undefined;
-			}, 10000);
-			return result;
+	},
+	async puppet(cb) {
+		if (timeout) {
+			clearTimeout(timeout);
+			timeout = undefined;
 		}
+		const b = await module.exports.getBrowser();
+		const page = await b.newPage();
+		const result = await cb(page);
+		page.close();
+		timeout = setTimeout(() => {
+			browser.close();
+			browser = undefined;
+		}, 10000);
+		return result;
+	},
+	async getPrefix(client, message) {
+		let prefix = process.env.PREFIX
+		if (client.pool != null) {
+			let result = await client.pool.db("Tubb").collection("servers").find({ id: message.guild.id }).toArray()
+			prefix = result[0].prefix
+		}
+		return prefix
+	},
+	async checkIfInGame(author, message, game) {
+		for (i = 0; i < message.guild.games.length; i++) {
+			if (message.guild.games[i].id == author && message.guild.games[i].game == game) return true
+		}
+		return false
+	},
+	async preGame(message, args, name, instructions, extra) {
+		if (await module.exports.checkIfInGame(message.author.id, message, name) && args == "" || args == null) {
+			message.reply(`${instructions} or type \`\`\`EXIT\`\`\` to stop playing`)
+		} else if (!await module.exports.checkIfInGame(message.author.id, message, name)) {
+			message.guild.games.push({
+				id: message.author.id,
+				game: name,
+				...extra
+			})
+		}
+		if (args == "EXIT") {
+			for (i = 0; i < message.guild.games.length; i++) {
+				if (message.guild.games[i].id == message.author.id) {
+					message.guild.games.splice(i)
+					message.reply(`Stopped playing ${name}`)
+					return true
+				}
+			}
+		}
+		return false
 	}
-///test
+}

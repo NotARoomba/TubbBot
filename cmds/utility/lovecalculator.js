@@ -1,5 +1,6 @@
 var axios = require("axios").default;
 const Discord = require('discord.js');
+const { getPrefix } = require("../../function.js")
 module.exports = {
 	name: 'lovecalculator',
 	group: 'utility',
@@ -8,11 +9,7 @@ module.exports = {
 	description: 'Calculates love between two people.',
 	async execute(message, args, client) {
 		args = args.split(" ")
-		let prefix = process.env.PREFIX
-		if (client.pool != null) {
-			let result = await client.pool.db("Tubb").collection("servers").find({ id: message.guild.id }).toArray()
-			prefix = result[0].prefix
-		}
+		let prefix = await getPrefix(client, message)
 		if (args.length < 2) return message.reply(`usage: ${prefix}${module.exports.usage}`)
 		let response = await axios.request({
 			method: 'GET',
