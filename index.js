@@ -66,7 +66,7 @@ client.on('message', async (message) => {
 			} catch (err) { console.log(err) }
 		}
 	}
-	if (message.mentions.has(client.user) && !message.content.includes(`@everyone`) && message.type != 'REPLY') message.reply(`Well... this is awkward... your server's prefix is \`${prefix}\`...`)
+	if (message.mentions.has(client.user.id) && !message.content.includes(`@everyone`) || !message.content.includes("@here") || message.type !== "REPLY") message.channel.send(`Well... this is awkward... your server's prefix is \`${prefix}\`...`)
 	if (message.content.startsWith(prefix)) {
 		let content = message.content.slice(prefix.length).split(" ");
 		const command = cmds.get(content[0]) || cmds.find(cmd => cmd.aliases && cmd.aliases.includes(content[0]));
