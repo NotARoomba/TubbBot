@@ -1,2 +1,2 @@
 language = "bash"
-run = "npm i && chmod +x ./replit.sh && ./replit.sh"
+run = "chmod +x ./replit.sh && ./replit.sh"

@@ -6,7 +6,7 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'play',
 	group: 'music',
-	usage: 'p (song name or link)',
+	usage: 'play (song name or link)',
 	aliases: ['p'],
 	permission: ['CONNECT', 'SPEAK', 'USE_VAD', 'MANAGE_MESSAGES'],
 	description: 'Plays music!',

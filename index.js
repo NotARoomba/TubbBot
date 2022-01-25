@@ -1,10 +1,11 @@
 const Discord = require('discord.js');
-const client = new Discord.Client();
+const { Intents } = require('discord.js');
+const client = new Discord.Client({ intents: [Intents.FLAGS.GUILDS] });
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
 var read = require('fs-readdir-recursive');
 const { leveling } = require('./function');
-let cmds = new Discord.Collection()
+let cmds = new Discord.Collection();
 client.on('ready', async () => {
 	client.guilds.cache.forEach(guild => {
 		guild.musicData = {
@@ -28,30 +29,31 @@ client.on('ready', async () => {
 			console.log("Connected to the database.")
 		});
 		client.pool = pool;
+		client.guilds.cache.forEach(async (guild) => {
+			if (!client.pool) return;
+			client.pool.connect(err => {
+				let result = client.pool.db("Tubb").collection("servers").find({ id: guild.id }).toArray()
+				if (err) console.log(err);
+				if (result.length == 0) {
+					client.pool.db("Tubb").collection("servers").insertOne({ id: guild.id, prefix: "-", leveling: 1, queue: null })
+				}
+			});
+		});
+		setInterval(() => {
+			client.user.setActivity(`-help in ${client.guilds.cache.size} Servers`, { type: 'WATCHING' })
+		}, 60000);
+		console.log('Done!')
+		let cmddirs = read('./cmds');
+		let commands = []
+		cmddirs.forEach(e => {
+			let cmd = e.replace(`\\`, '/')
+			let cmdpath = require(`./cmds/${cmd}`)
+			cmds.set(cmdpath.name, cmdpath);
+		});
 	} catch (err) {
 		client.pool = null
 		console.log('Unable to connect to the database: ' + err);
 	}
-	client.guilds.cache.forEach(async (guild) => {
-		if (!client.pool) return;
-		client.pool.connect(err => {
-			let result = client.pool.db("Tubb").collection("servers").find({ id: guild.id }).toArray()
-			if (err) console.log(err);
-			if (result.length == 0) {
-				client.pool.db("Tubb").collection("servers").insertOne({ id: guild.id, prefix: "-", leveling: 1, queue: null })
-			}
-		});
-	});
-	setInterval(() => {
-		client.user.setActivity(`-help in ${client.guilds.cache.size} Servers`, { type: 'WATCHING' })
-	}, 60000);
-	console.log('Done!')
-	let cmddirs = read('./cmds');
-	cmddirs.forEach(e => {
-		let cmd = e.replace(`\\`, '/')
-		let cmdpath = require(`./cmds/${cmd}`)
-		cmds.set(cmdpath.name, cmdpath);
-	});
 });
 client.on('message', async (message) => {
 	if (message.channel.type == "dm") return;
