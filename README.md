@@ -1,4 +1,4 @@
-# TubbBot
+# <div align="center">TubbBot</div>
 [![CodeFactor](https://www.codefactor.io/repository/github/notaroomba/tubbbot/badge)](https://www.codefactor.io/repository/github/notaroomba/tubbbot)
 ### (The Utility Bot)
 Just a Discord.js bot that I put together.
