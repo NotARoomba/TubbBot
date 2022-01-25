@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-var math = require('mathjs')
 const Pagination = require('discord-paginationembed');
 const WolframAlphaAPI = require('wolfram-alpha-api');
 const waApi = WolframAlphaAPI(process.env.WOLFRAM);

@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 let RedditAPI = require("reddit-wrapper-v2");
-const { validImgurURL } = require("../../function.js")
+const { validImgurURL, getPrefix } = require("../../function.js")
 let redditConn = new RedditAPI({
 	// Options for Reddit Wrapper
 	username: process.env.REDDIT_USERNAME,
@@ -21,8 +21,7 @@ module.exports = {
 	aliases: ['meme', 'memes'],
 	async execute(message, args, client) {
 		try {
-			let result = await client.pool.db("Tubb").collection("servers").find({ id: message.guild.id }).toArray()
-			prefix = result[0].prefix
+			let prefix = await getPrefix(client, message)
 			if (typeof args !== 'object') args = args.split(" ")
 			let subreddits = ["memes", "dankmemes", "meme"];
 			let response;

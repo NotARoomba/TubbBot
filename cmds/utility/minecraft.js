@@ -1,6 +1,7 @@
 const MojangAPI = require("mojang-api");
 const Discord = require('discord.js');
 const fetch = require("node-fetch");
+const {getPrefix} = require("../../function.js")
 module.exports = {
 	name: 'minecraft',
 	group: 'utility',
@@ -9,8 +10,7 @@ module.exports = {
 	aliases: ['mc'],
 	description: 'Connect to the Minecraft API and display information.',
 	async execute(message, args, client) {
-		let result = await client.pool.db("Tubb").collection("servers").find({ id: message.guild.id }).toArray()
-		prefix = result[0].prefix
+		let prefix = await getPrefix(client, message)
 		if (!args) return message.reply(`usage: <profile/server/history> <profile name/server ip/ profile name>. Check ${prefix}help minecraft for more info.`)
 		args = args.split(" ")
 		args[0] = args[0].toLowerCase()

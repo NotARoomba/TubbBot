@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 var read = require('fs-readdir-recursive')
 require('dotenv').config();
-const { searchForCommand, defaultEmbed, getGroups } = require('../../function.js')
+const { searchForCommand, defaultEmbed, getGroups, getPrefix } = require('../../function.js')
 module.exports = {
 	name: 'help',
 	group: 'utility',
@@ -16,18 +16,14 @@ module.exports = {
 			let cmdpath = require(`../${cmd}`)
 			commands.push(cmdpath)
 		});
-		let prefix = process.env.PREFIX
-		if (client.pool != null) {
-			let result = await client.pool.db("Tubb").collection("servers").find({ id: message.guild.id }).toArray()
-			prefix = result[0].prefix
-		}
+		let prefix = await getPrefix(client, message)
 		const groups = getGroups(commands)
 		if (!args) {
 			const embed = new Discord.MessageEmbed()
 				.setTitle(`Please Specify`)
 				.setColor('#dbc300')
 			for (i = 0; i < groups.length; i++) {
-				embed.addField(`${groups[i][0].toUpperCase() + groups[i].slice(1)} Commands`, `${prefix}help ${groups[i][0].toUpperCase() + groups[i].slice(1)}`, true)
+				embed.addField(`${groups[i][0].toUpperCase() + groups[i].slice(1)} Commands`, `\`\`\`${prefix}help ${groups[i]}\`\`\``, true)
 			}
 			embed.addField('Information on a Command', `${prefix}help [command]`, true)
 			return message.channel.send(embed)
@@ -44,7 +40,7 @@ module.exports = {
 					.setTitle(cmd.name)
 					.setDescription(cmd.description)
 					.setColor('#dbc300')
-					.addField('Usage', `${prefix}${cmd.usage}`, true)
+					.addField('Usage', `\`\`\`${prefix}${cmd.usage}\`\`\``, true)
 					.addField('Aliases', `${cmd.aliases ? cmd.aliases.join(", ") : "None"}`, true)
 				message.channel.send(embed)
 			} else return message.reply('that is not a valid command name.')
