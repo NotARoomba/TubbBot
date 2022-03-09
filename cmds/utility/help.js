@@ -23,19 +23,22 @@ module.exports = {
 				.setTitle(`Please Specify`)
 				.setColor('#dbc300')
 			for (i = 0; i < groups.length; i++) {
+				if (groups[i] == "NSFW" && message.channel.nsfw !== true) continue
 				embed.addField(`${groups[i][0].toUpperCase() + groups[i].slice(1)} Commands`, `\`\`\`${prefix}help ${groups[i]}\`\`\``, true)
 			}
 			embed.addField('Information on a Command', `${prefix}help [command]`, true)
 			return message.channel.send(embed)
 		} else {
 			for (i = 0; i < groups.length; i++) {
-				if (args.toLowerCase() == groups[i]) {
+				if (args.toLowerCase() == groups[i].toLowerCase()) {
+					if (groups[i] == "NSFW" && message.channel.nsfw !== true) return message.reply(`move it to an NSFW channel.`)
 					return defaultEmbed(message, commands, groups[i][0].toUpperCase() + groups[i].slice(1), client, groups[i])
 				}
 			}
 			args = args.toLowerCase()
 			const cmd = searchForCommand(args, commands)
 			if (cmd) {
+			if (cmd.NSFW == true && message.channel.nsfw !== true) return message.reply(`move it to an NSFW channel.`)
 				var embed = new Discord.MessageEmbed()
 					.setTitle(cmd.name)
 					.setDescription(cmd.description)
