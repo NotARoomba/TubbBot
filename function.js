@@ -130,7 +130,7 @@ module.exports = {
 	},
 	async addSPURL(message, query, voiceChannel) {
 		const results = []
-		let msg;
+		let msg = null;
 		let f;
 		const d = await spotifyApi.clientCredentialsGrant();
 		spotifyApi.setAccessToken(d.body.access_token);
@@ -314,7 +314,9 @@ module.exports = {
 				}
 				break;
 		}
-		msg.delete()
+		if (msg !== null) {
+			msg.delete()
+		}
 		return results
 	},
 	async addSCURL(message, query, voiceChannel) {
