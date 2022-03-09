@@ -47,7 +47,6 @@
         "puppeteer-core": "^9.1.1",
         "reddit-wrapper-v2": "^1.1.6",
         "request-promise-native": "^1.0.9",
-        "rule34js": "^2.2.0",
         "sanitize-filename": "^1.6.3",
         "simple-youtube-api": "^5.2.1",
         "soundcloud-downloader": "^0.2.4",
