@@ -12,6 +12,6 @@ module.exports = {
     let name = queue[args - 1].title
 		queue.splice(args - 1, 1);
 		await updateQueue(message, client)
-		message.channel.send(`:wastebasket: Removed \`${name}\`` from queue!`);
+		message.channel.send(`:wastebasket: Removed \`${name}\` from queue!`);
 	}
 }

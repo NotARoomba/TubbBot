@@ -24,21 +24,25 @@ client.on('ready', async () => {
 		guild.games = []
 	});
 	try {
-		let pool = new MongoClient(process.env.MONGO, { useNewUrlParser: true, useUnifiedTopology: true, keepAlive: true });
-		await pool.connect(async (err) => {
-			console.log("Connected to the database.")
-		});
+		let pool = await MongoClient.connect(process.env.MONGO, { useNewUrlParser: true, useUnifiedTopology: true, keepAlive: true }).catch((err) => {
+        console.log(err)
+    });
+		console.log("Connected to the database.")
 		client.pool = pool;
 		client.guilds.cache.forEach(async (guild) => {
 			if (!client.pool) return;
 			client.pool.connect(err => {
-				let result = client.pool.db("Tubb").collection("servers").find({ id: guild.id }).toArray()
+				let result = client.pool.db("Tubb").collection("servers").find({ id: guild.id }).toArray();
 				if (err) console.log(err);
 				if (result.length == 0) {
 					client.pool.db("Tubb").collection("servers").insertOne({ id: guild.id, prefix: "-", leveling: 1, queue: null })
 				}
 			});
 		});
+	} catch (err) {
+		client.pool = null
+		console.log('Unable to connect to the database: ' + err);
+	}
 		setInterval(() => {
 			client.user.setActivity(`-help in ${client.guilds.cache.size} Servers`, { type: 'WATCHING' })
 		}, 60000);
@@ -50,10 +54,6 @@ client.on('ready', async () => {
 			let cmdpath = require(`./cmds/${cmd}`)
 			cmds.set(cmdpath.name, cmdpath);
 		});
-	} catch (err) {
-		client.pool = null
-		console.log('Unable to connect to the database: ' + err);
-	}
 });
 client.on('message', async (message) => {
 	if (message.channel.type == "dm") return;
