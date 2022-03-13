@@ -21,9 +21,9 @@ module.exports = {
 					return `**${queues.indexOf(e) + 1}**:  ${e[0][0]}`;
 				});
 			queueEmbed.embed.setColor('#dbc300').setTitle('Saved Queues');
-			queueEmbed.build();
+			await queueEmbed.build();
 			if (args == 0 || args > queues.length || args.includes('.')) return message.reply(`that is not a valid queue position.`);
-			queues.splice(args - 1, 1);
+			await queues.splice(args - 1, 1);
 			await updateQueues(message, client, queues)
 			message.reply(`:wastebasket: Removed queue number ${args}!`);
 		} catch (err) {
