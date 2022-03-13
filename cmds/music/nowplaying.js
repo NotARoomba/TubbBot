@@ -14,7 +14,6 @@ module.exports = {
 			.setTitle(`:notes: ${track.title}`)
 			.setThumbnail(track.thumbnail)
 			.setURL(track.url)
-      .addField("Live", track.isLive, true)
 			.setDescription(`${createProgressBar(message)}`)
     .setFooter(`Requested by ${track.memberDisplayName}!`, track.memberAvatar);
 		message.channel.send(embed);
