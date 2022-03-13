@@ -109,7 +109,7 @@ module.exports = {
 					musicData.previous.push(ended)
 					module.exports.musicHandler(message, voiceChannel, client)
 				})
-			} catch (err) { }
+			} catch (err) { console.log(err) }
 		} else if (musicData.queue[0].type == 1) {
 			const data = await scdl.download(musicData.queue[0].url)
 			const stream = ytdl.arbitraryStream(data, {
@@ -133,7 +133,7 @@ module.exports = {
 					musicData.previous.push(ended)
 					module.exports.musicHandler(message, voiceChannel, client)
 				})
-			} catch (err) { }
+			} catch (err) { console.log(err) }
 		} else if (musicData.queue[0].type == 2) {
 			const stream = ytdl.arbitraryStream(musicData.queue[0].url, {
 				opusEncoded: true,
@@ -156,7 +156,7 @@ module.exports = {
 					musicData.previous.push(ended)
 					module.exports.musicHandler(message, voiceChannel, client)
 				})
-			} catch (err) { }
+			} catch (err) { console.log(err) }
 		}
 	},
 	musicHandler(message, voiceChannel, client) {
