@@ -147,12 +147,12 @@ module.exports = {
 		if (type === '') type = url_array[3]
 		switch (type) {
 			case "playlist":
-				var musics = await spotifyApi.getPlaylist(musicID, { limit: 50 });
+				var musics = await spotifyApi.getPlaylistTracks(musicID, { limit: 50 });
 				var tracks = musics.body.tracks.items;
 				async function checkAll() {
 					if (musics.body.tracks.next) {
 						var offset = musics.body.tracks.offset + 50;
-						musics = await spotifyApi.getPlaylist(musicID, { limit: 50, offset: offset });
+						musics = await spotifyApi.getPlaylistTracks(musicID, { limit: 50, offset: offset });
 						tracks = tracks.concat(musics.body.tracks.items);
 						return await checkAll();
 					}
