@@ -1,4 +1,4 @@
-const { validYTURL, validSPURL, validGDURL, updateQueue, getQueue, validYTPlaylistURL, validSCURL, validURL, addYTURL, addYTPlaylist, addSPURL, addSCURL, addGDURL, addAttachment, addURL, search } = require("../../function.js");
+const { validYTURL, validSPURL, validGDURL, updateQueue, getQueue, validYTPlaylistURL, validSCURL, validURL, validMSURL, addYTURL, addYTPlaylist, addSPURL, addSCURL, addGDURL, addMSURL, addAttachment, addURL, search } = require("../../function.js");
 const ytdl = require('discord-ytdl-core');
 const scdl = require('soundcloud-downloader').default
 var cookie = { cookie: process.env.COOKIE, id: 0 };
@@ -26,6 +26,7 @@ module.exports = {
 			else if (validSPURL(args)) result = await addSPURL(message, args, voiceChannel);
 			else if (validSCURL(args)) result = await addSCURL(message, args, voiceChannel);
 			else if (validGDURL(args)) result = await addGDURL(message, args, voiceChannel);
+        else if (validMSURL(args)) result = await addMSURL(message, args, voiceChannel);
 			else if (validURL(args)) result = await addURL(message, args, voiceChannel);
 			else if (message.attachments.size > 0) result = await addAttachment(message, voiceChannel);
 			else result = await search(message, args, voiceChannel);

@@ -14,7 +14,6 @@ module.exports = {
 			.setTitle(`:notes: ${track.title}`)
 			.setThumbnail(track.thumbnail)
 			.setURL(track.url)
-      .addField("Artist", track.artist, true)
       .addField("Live", track.isLive, true)
 			.setDescription(`${createProgressBar(message)}`)
     .setFooter(`Requested by ${track.memberDisplayName}!`, track.memberAvatar);

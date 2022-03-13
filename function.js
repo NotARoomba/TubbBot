@@ -478,6 +478,42 @@ module.exports = {
 		});
 		return results
 	},
+  async addMSURL(message, query, voiceChannel) {
+    let results = []
+    let length, songLength, type;
+    const mp3 = await module.exports.getMP3(query);
+					if (mp3.error) throw new Error(mp3.message);
+					if (mp3.url.startsWith("https://www.youtube.com/embed/")) {
+						const ytid = mp3.url.split("/").slice(-1)[0].split("?")[0];
+						var url = `https://www.youtube.com/watch?v=${ytid}`;
+            const metadata = await (await ytdl.getBasicInfo(url)).videoDetails
+            length = metadata.lengthSeconds
+            songLength = moment.duration(metadata.lengthSeconds, "seconds").format()
+            type = 0
+					} else {
+            var url = mp3.url
+            var stream = await fetch(url).then(res => res.body);
+			      var metadata = await mm.parseStream(stream, {}, { duration: true });
+           length = Math.round(metadata.format.duration);
+		songLength = moment.duration(length, "seconds").format();
+            type = 2
+          }
+    var data = await muse(query);
+    results.push({
+			title: data.title,
+			url: url,
+			thumbnail: data.thumbnail,
+			isLive: false,
+			lengthFormatted: songLength,
+			lengthSeconds: length,
+			seek: 0,
+			type: type,
+			voiceChannel: voiceChannel,
+			memberDisplayName: message.member.user.username,
+			memberAvatar: message.member.user.avatarURL('webp', false, 16)
+		})
+		return results
+  },
 	async search(message, query, voiceChannel) {
 		const results = []
 		const videos = await ytsr2.search(query, { limit: 1 }).catch(async function () {
