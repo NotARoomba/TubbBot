@@ -43,7 +43,7 @@ module.exports = {
 				await updateQueue(message, client)
 			} catch { }
 			const addembed = new Discord.MessageEmbed()
-				.setColor('#FFED00')
+				.setColor(result[0].color)
 				.setTitle(`:musical_note: ${result[0].title}`)
 				.setDescription(`Has been added to the queue.\nThis track is #${musicData.queue.length} in the queue`)
 				.setThumbnail(result[0].thumbnail)
@@ -59,7 +59,7 @@ module.exports = {
 	async play(message, voiceChannel, client) {
 		const musicData = message.guild.musicData
 		const npembed = new Discord.MessageEmbed()
-			.setColor('#FFED00')
+			.setColor(musicData.queue[0].color)
 			.setTitle(`:notes: Now Playing: ${musicData.queue[0].title}`)
 			.addFields([
 				{

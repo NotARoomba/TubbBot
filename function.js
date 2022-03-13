@@ -92,6 +92,7 @@ module.exports = {
 			lengthSeconds: video.lengthSeconds,
 			type: 0,
 			seek: 0,
+      color: "#FF0000",
 			voiceChannel: voiceChannel,
 			memberDisplayName: message.member.user.username,
 			memberAvatar: message.member.user.avatarURL('webp', false, 16)
@@ -121,6 +122,7 @@ module.exports = {
 				lengthSeconds: video.durationSec,
 				seek: 0,
 				type: 0,
+        color: "#FF0000",
 				voiceChannel: voiceChannel,
 				memberDisplayName: message.member.user.username,
 				memberAvatar: message.member.user.avatarURL('webp', false, 16)
@@ -187,6 +189,7 @@ module.exports = {
 								lengthSeconds: null,
 								seek: 0,
 								type: 0,
+                color: "#1DB954",
 								voiceChannel: voiceChannel,
 								memberDisplayName: message.member.user.username,
 								memberAvatar: message.member.user.avatarURL('webp', false, 16)
@@ -245,6 +248,7 @@ module.exports = {
 								lengthSeconds: null,
 								seek: 0,
 								type: 0,
+                color: "#1DB954",
 								voiceChannel: voiceChannel,
 								memberDisplayName: message.member.user.username,
 								memberAvatar: message.member.user.avatarURL('webp', false, 16)
@@ -287,6 +291,7 @@ module.exports = {
 								lengthSeconds: null,
 								seek: 0,
 								type: 0,
+                color: "#1DB954",
 								voiceChannel: voiceChannel,
 								memberDisplayName: message.member.user.username,
 								memberAvatar: message.member.user.avatarURL('webp', false, 16)
@@ -321,6 +326,7 @@ module.exports = {
 						lengthSeconds: length,
 						seek: 0,
 						type: 1,
+            color: "#FE5000",
 						voiceChannel: voiceChannel,
 						memberDisplayName: message.member.user.username,
 						memberAvatar: message.member.user.avatarURL('webp', false, 16)
@@ -341,6 +347,7 @@ module.exports = {
 					lengthSeconds: length,
 					seek: 0,
 					type: 1,
+          color: "#FE5000",
 					voiceChannel: voiceChannel,
 					memberDisplayName: message.member.user.username,
 					memberAvatar: message.member.user.avatarURL('webp', false, 16)
@@ -382,6 +389,7 @@ module.exports = {
 			lengthSeconds: length,
 			seek: 0,
 			type: 2,
+      color: "#2c2f33",
 			voiceChannel: voiceChannel,
 			memberDisplayName: message.member.user.username,
 			memberAvatar: message.member.user.avatarURL('webp', false, 16)
@@ -422,6 +430,7 @@ module.exports = {
 				lengthSeconds: length,
 				seek: 0,
 				type: 2,
+        color: "#2c2f33",
 				voiceChannel: voiceChannel,
 				memberDisplayName: message.member.user.username,
 				memberAvatar: message.member.user.avatarURL('webp', false, 16)
@@ -472,6 +481,7 @@ module.exports = {
 			lengthSeconds: length,
 			seek: 0,
 			type: 2,
+      color: ["#1FA463", "#FFD04B", "#4688F4"][Math.floor(Math.random() * 3)],
 			voiceChannel: voiceChannel,
 			memberDisplayName: message.member.user.username,
 			memberAvatar: message.member.user.avatarURL('webp', false, 16)
@@ -508,6 +518,7 @@ module.exports = {
 			lengthSeconds: length,
 			seek: 0,
 			type: type,
+      color: "#1F74BD",
 			voiceChannel: voiceChannel,
 			memberDisplayName: message.member.user.username,
 			memberAvatar: message.member.user.avatarURL('webp', false, 16)
@@ -534,6 +545,7 @@ module.exports = {
 			lengthSeconds: length,
 			seek: 0,
 			type: 0,
+      color: "#FF0000",
 			voiceChannel: voiceChannel,
 			memberDisplayName: message.member.user.username,
 			memberAvatar: message.member.user.avatarURL('webp', false, 16)

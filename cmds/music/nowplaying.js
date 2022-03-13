@@ -10,7 +10,7 @@ module.exports = {
 		if (message.guild.musicData.isPlaying !== true) return message.reply(`there is nothing playing.`)
 		let track = message.guild.musicData.nowPlaying
 		const embed = new Discord.MessageEmbed()
-			.setColor('#FFED00')
+			.setColor(track.color)
 			.setTitle(`:notes: ${track.title}`)
 			.setThumbnail(track.thumbnail)
 			.setURL(track.url)
