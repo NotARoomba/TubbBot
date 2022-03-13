@@ -10,22 +10,25 @@ module.exports = {
 	async execute(message, args, client) {
 		try {
 			let queues = await getQueues(message, client)
+      let queuesClone = queues
 			if (queues.length == 0) return message.reply("you have no saved queues!")
 			if (isNaN(Number(args))) return message.reply(`that is not a number.`)
 			const queueEmbed = new Pagination.FieldsEmbed()
-				.setArray(queues)
+				.setArray(queuesClone)
 				.setAuthorizedUsers([message.author.id])
 				.setChannel(message.channel)
 				.setElementsPerPage(10)
 				.formatField('# - Song', function (e) {
-					return `**${queues.indexOf(e) + 1}**:  ${e[0][0]}`;
+					return `**${queuesClone.indexOf(e) + 1}**:  ${e[0][0]}`;
 				});
 			queueEmbed.embed.setColor('#dbc300').setTitle('Saved Queues');
-			await queueEmbed.build();
-			if (args == 0 || args > queues.length || args.includes('.')) return message.reply(`that is not a valid queue position.`);
-			await queues.splice(args - 1, 1);
+			if (args == 0 || args > queues.length || args.includes('.')) {
+			  queueEmbed.build();
+        return message.reply(`that is not a valid queue position.`);
+      }
+			queues.splice(args - 1, 1);
 			await updateQueues(message, client, queues)
-			message.reply(`:wastebasket: Removed queue number ${args}!`);
+			message.reply(`:wastebasket: Removed \`${queuesClone[args - 1][0][0]}\` from your saved queues!`);
 		} catch (err) {
 			message.channel.send(`There was an error removing the queue, \`\`\`${err}\`\`\``)
 		}
