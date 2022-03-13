@@ -4,6 +4,8 @@ export NVM_DIR="/config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  &&
 
-nvm install 14.16.1 &&
-nvm use 14.16.1 &&
+nvm install 16.14.0 &&
+nvm use 16.14.0 &&
+npm update &&
+npm install &&
 node index.js

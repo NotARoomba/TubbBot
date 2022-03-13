@@ -7,7 +7,7 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "engines": {
-        "node": "14.16.1"
+        "node": "16.14.0"
     },
     "author": "L061571C5",
     "license": "ISC",
@@ -38,10 +38,10 @@
         "mongodb": "^4.2.0",
         "musescore-metadata": "^1.0.3",
         "music-metadata": "^7.8.1",
-        "node": "^14.16.1",
         "node-fetch": "^2.6.6",
         "node-opus": "^0.3.3",
         "node-superfetch": "^0.1.11",
+        "npm-check": "^4.1.4",
         "opusscript": "0.0.8",
         "pdfkit": "^0.13.0",
         "puppeteer-core": "^9.1.1",

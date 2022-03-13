@@ -147,17 +147,8 @@ module.exports = {
 		if (type === '') type = url_array[3]
 		switch (type) {
 			case "playlist":
-				var musics = await spotifyApi.getPlaylist(musicID, { limit: 50 });
+				var musics = await spotifyApi.getPlaylist(musicID);
 				var tracks = musics.body.tracks.items;
-				async function checkAll() {
-					if (musics.body.tracks.next) {
-						var offset = musics.body.tracks.offset + 50;
-						musics = await spotifyApi.getPlaylist(musicID, { limit: 50, offset: offset });
-						tracks = tracks.concat(musics.body.tracks.items);
-						return await checkAll();
-					}
-				}
-				await checkAll();
 				f = 0;
 				msg = await message.channel.send(`Adding track ${f}/${tracks.length}`)
 				for (var i = 0; i < tracks.length; i++) {
@@ -210,16 +201,8 @@ module.exports = {
 				if (!highlight) {
 					const album = await spotifyApi.getAlbums([musicID]);
 					image = album.body.albums[0].images[0].url;
-					let data = await spotifyApi.getAlbumTracks(musicID, { limit: 50 });
+					let data = await spotifyApi.getAlbumTracks(musicID);
 					tracks = data.body.items;
-					async function checkAll() {
-						if (!data.body.next) return;
-						var offset = data.body.offset + 50;
-						data = await spotifyApi.getAlbumTracks(musicID, { limit: 50, offset: offset });
-						tracks = tracks.concat(data.body.items);
-						return await checkAll();
-					}
-					await checkAll();
 				} else {
 					const data = await spotifyApi.getTracks([musicID]);
 					tracks = data.body.tracks;

@@ -24,7 +24,7 @@ client.on('ready', async () => {
 		guild.games = []
 	});
 	try {
-		let pool = new MongoClient(process.env.MONGO, { useNewUrlParser: true, useUnifiedTopology: true, keepAlive: 1 });
+		let pool = new MongoClient(process.env.MONGO, { useNewUrlParser: true, useUnifiedTopology: true, keepAlive: true });
 		await pool.connect(async (err) => {
 			console.log("Connected to the database.")
 		});
