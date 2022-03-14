@@ -88,7 +88,6 @@ module.exports = {
 		if (musicData.queue[0].type == 0) {
 			const stream = ytdl(musicData.queue[0].url, {
 				filter: "audioonly",
-				dlChunkSize: 20,
 				quality: 'highestaudio',
 				highWaterMark: 1 << 25,
 				opusEncoded: true,
