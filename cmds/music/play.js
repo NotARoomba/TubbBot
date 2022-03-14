@@ -91,8 +91,6 @@ module.exports = {
 		if (musicData.queue[0].type == 0) {
 			const stream = ytdl(musicData.queue[0].url, {
 				filter: "audioonly",
-				quality: 'highestaudio',
-				highWaterMark: 1 << 25,
 				opusEncoded: true,
 				seek: seek,
 				encoderArgs: encoderArgs,
@@ -119,7 +117,6 @@ module.exports = {
 			const stream = ytdl.arbitraryStream(data, {
 				opusEncoded: true,
 				seek: seek,
-				quality: 'highestaudio',
 				encoderArgs: encoderArgs,
 			})
 			try {
@@ -143,7 +140,6 @@ module.exports = {
 			const stream = ytdl.arbitraryStream(musicData.queue[0].url, {
 				opusEncoded: true,
 				seek: seek,
-				quality: 'highestaudio',
 				encoderArgs: encoderArgs,
 			})
 			try {
