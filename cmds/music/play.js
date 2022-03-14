@@ -193,6 +193,7 @@ module.exports = {
 message.guild.musicData.queue.unshift(message.guild.musicData.previous[message.guild.musicData.previous.length - 1] == message.guild.musicData.nowPlaying ? message.guild.musicData.previous[message.guild.musicData.previous.length - 2] : message.guild.musicData.previous[message.guild.musicData.previous.length - 1])
 			await updateQueue(message, client)
       module.exports.play(message, voiceChannel, client);
+      return;
 			//console.log(e);
 			if (musicData.queue.length > 1) {
 				musicData.queue.shift();
