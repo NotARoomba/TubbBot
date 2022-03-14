@@ -10,20 +10,7 @@ module.exports = {
 	async execute(message, args, client) {
 		if (isValidCommander(message) !== true) return
 			let prefix = await client.pool.db("Tubb").collection("servers").find({ id: message.guild.id }).toArray()
-    args = args.split(" ")
-    choice = module.exports.getFilter(args[0], message)
-		if (choice === 404) return;
-		try {
-			message.guild.musicData.songDispatcher.pause();
-			message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying)
-			message.guild.musicData.queue[0].seek = Math.round(message.guild.musicData.songDispatcher.streamTime / 1000)
-			choice === 403 ? !args[1] ? message.guild.musicData.filters.length = 0 : message.guild.musicData.filters = message.guild.musicData.filters.filter(function(e) { return e != module.exports.getFilter(args[1], message); })  : message.guild.musicData.filters.push(choice)
-			await play(message, message.guild.musicData.voiceChannel, client)
-			message.channel.send(`Succesfully applied the filter: ${args}`)
-		} catch (err) { }
-	},
-async getFilter(args, message) {
-  switch (args) {
+		switch (args) {
 			case "bassboost":
 				choice = { bassboost: 'bass=g=20' }
 				break;
@@ -113,7 +100,7 @@ async getFilter(args, message) {
 				break;
 			default:
 				choice = 404;
-      const embed = new Discord.MessageEmbed()
+				const embed = new Discord.MessageEmbed()
 					.setColor("#c219d8")
 					.setTitle("Not a valid Filter, use one of those:")
 					.setDescription(`
@@ -146,12 +133,19 @@ async getFilter(args, message) {
                 \`chorus3d\`
                 \`fadein\`
                 \`clear\`   ---  removes all filters
-                \`clear (filter)\` --- clears the specified filter\n
-Currently active filters: ${message.guild.musicData.filters.join(", ")}`)
+Currently active filters: \`${message.guild.musicData.filters.map(object => Object.keys(object)[0]).join(", ")}\``)
 					.setFooter(`Example: ${prefix[0].prefix}filter bassboost`)
 				message.channel.send(embed)
 				break;
-      return choice
-    }
-  }
+		}
+		if (choice === 404) return;
+		try {
+			message.guild.musicData.songDispatcher.pause();
+			message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying)
+			message.guild.musicData.queue[0].seek = Math.round(message.guild.musicData.songDispatcher.streamTime / 1000)
+			choice === 403 ? message.guild.musicData.filters.length = 0 : message.guild.musicData.filters.push(choice)
+			await play(message, message.guild.musicData.voiceChannel, client)
+			message.channel.send(`Succesfully applied the filter: ${args}`)
+		} catch (err) { }
+	}
 }
