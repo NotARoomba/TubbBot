@@ -11,7 +11,6 @@ module.exports = {
 		try {
 			const dbqueue = await getQueue(message, client) 
 			const queueClone = message.guild.musicData.queue.length == 0 && dbqueue.length !== message.guild.musicData.queue.length + 1? dbqueue : message.guild.musicData.queue;
-			console.log("Queue", (await getQueue(message, client)).length, message.guild.musicData.queue.length)
       if (queueClone.length == 0) throw err;
 			const queueEmbed = new Pagination.FieldsEmbed()
 				.setArray(queueClone)
