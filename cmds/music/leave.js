@@ -22,7 +22,6 @@ module.exports = {
       message.guild.musicData.songDispatcher = undefined;
 		} catch (err) {
 			message.guild.musicData.loopQueue = false;
-      await updateQueue(message, client)
 			message.guild.musicData.queue.length = 0
 			message.guild.me.voice.channel.leave()
        message.guild.musicData.songDispatcher = undefined;
