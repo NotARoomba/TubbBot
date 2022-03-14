@@ -110,6 +110,7 @@ module.exports = {
 					musicData.nowPlaying = musicData.queue[0];
 					let ended = await musicData.queue.shift()
 					musicData.previous.push(ended)
+				  await updateQueue(message, client)
 					module.exports.musicHandler(message, voiceChannel, client)
 				})
 			} catch (err) { console.log(err) }
@@ -134,6 +135,7 @@ module.exports = {
 					musicData.nowPlaying = musicData.queue[0];
 					let ended = await musicData.queue.shift()
 					musicData.previous.push(ended)
+				  await updateQueue(message, client)
 					module.exports.musicHandler(message, voiceChannel, client)
 				})
 			} catch (err) { console.log(err) }
@@ -157,6 +159,7 @@ module.exports = {
 					musicData.nowPlaying = musicData.queue[0];
 					let ended = await musicData.queue.shift()
 					musicData.previous.push(ended)
+				  await updateQueue(message, client)
 					module.exports.musicHandler(message, voiceChannel, client)
 				})
 			} catch (err) { console.log(err) }
