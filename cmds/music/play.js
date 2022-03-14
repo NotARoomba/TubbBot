@@ -35,12 +35,15 @@ module.exports = {
 				musicData.queue.push(track)
 			});
 			try {
-				if (dbqueue.length !== musicData.queue.length &&dbqueue.length + 1 !== musicData.queue.length && dbqueue !== 404) {
+				console.log("play1", (await getQueue(message, client)).length, message.guild.musicData.queue.length)
+				if (dbqueue.length !== musicData.queue.length && dbqueue.length + 1 !== musicData.queue.length && dbqueue !== 404) {
 					dbqueue.forEach(track => {
 						musicData.queue.push(track)
 					});
 				}
+				console.log("play2", (await getQueue(message, client)).length, message.guild.musicData.queue.length)
 				await updateQueue(message, client)
+				console.log("play3", (await getQueue(message, client)).length, message.guild.musicData.queue.length)
 			} catch { }
 			const addembed = new Discord.MessageEmbed()
 				.setColor(result[0].color)

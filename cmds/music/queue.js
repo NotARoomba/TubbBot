@@ -9,7 +9,9 @@ module.exports = {
 	description: 'Display the song queue!',
 	async execute(message, args, client) {
 		try {
-			const queueClone = message.guild.musicData.queue.length == 0? await getQueue(message, client) : message.guild.musicData.queue;
+			const dbqueue = await getQueue(message, client) 
+			const queueClone = message.guild.musicData.queue.length == 0 && dbqueue.length !== message.guild.musicData.queue.length + 1? dbqueue : message.guild.musicData.queue;
+			console.log("Queue", (await getQueue(message, client)).length, message.guild.musicData.queue.length)
       if (queueClone.length == 0) throw err;
 			const queueEmbed = new Pagination.FieldsEmbed()
 				.setArray(queueClone)
