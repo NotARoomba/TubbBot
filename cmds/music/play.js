@@ -189,7 +189,11 @@ module.exports = {
 		})
 		dispatcher.on('error', async function (e) {
 			message.channel.send('Cannot play song!');
-			console.log(e);
+      message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying)
+message.guild.musicData.queue.unshift(message.guild.musicData.previous[message.guild.musicData.previous.length - 1] == message.guild.musicData.nowPlaying ? message.guild.musicData.previous[message.guild.musicData.previous.length - 2] : message.guild.musicData.previous[message.guild.musicData.previous.length - 1])
+			await updateQueue(message, client)
+      module.exports.play(message, voiceChannel, client);
+			//console.log(e);
 			if (musicData.queue.length > 1) {
 				musicData.queue.shift();
 				await updateQueue(message, client)
