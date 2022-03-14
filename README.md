@@ -3,7 +3,7 @@
 ### (The Utility Bot)
 Just a Discord.js bot that I put together.
 
-Use Node.js version `14.16.1`
+Use Node.js version `16.14.0`
 
 [Invite Link](https://top.gg/bot/750123677739122819)
 
