@@ -8,6 +8,7 @@ module.exports = {
 	description: 'Shuffle the music queue!',
 	async execute(message, args, client) {
 		if (isValidCommander(message) !== true) return
+    if (message.guild.musicData.queue.length == 0) return message.reply('there are no songs in queue!');
 		shuffleQueue(message.guild.musicData.queue);
 		let queue = message.guild.musicData.queue
 		const queueClone = queue;
