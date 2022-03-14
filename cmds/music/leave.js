@@ -15,6 +15,8 @@ module.exports = {
 			return false
 		}
 		try {
+      message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying)
+  message.guild.musicData.queue.unshift(message.guild.musicData.previous[message.guild.musicData.previous.length - 1] == message.guild.musicData.nowPlaying ? message.guild.musicData.previous[message.guild.musicData.previous.length - 2] : message.guild.musicData.previous[message.guild.musicData.previous.length - 1])
 			message.guild.musicData.loopQueue = false;
 			await updateQueue(message, client)
 			message.guild.musicData.queue.length = 0
