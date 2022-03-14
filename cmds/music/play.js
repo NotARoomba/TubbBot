@@ -1,7 +1,6 @@
 const { validYTURL, validSPURL, validGDURL, updateQueue, getQueue, validYTPlaylistURL, validSCURL, validURL, validMSURL, addYTURL, addYTPlaylist, addSPURL, addSCURL, addGDURL, addMSURL, addAttachment, addURL, search } = require("../../function.js");
 const ytdl = require('discord-ytdl-core');
 const scdl = require('soundcloud-downloader').default
-var cookie = { cookie: process.env.COOKIE, id: 0 };
 const Discord = require('discord.js');
 module.exports = {
 	name: 'play',
@@ -11,7 +10,6 @@ module.exports = {
 	permission: ['CONNECT', 'SPEAK', 'USE_VAD', 'MANAGE_MESSAGES'],
 	description: 'Plays music!',
 	async execute(message, args, client) {
-		if (args == "") return message.reply("Specify a song name of link.")
 		const musicData = message.guild.musicData
 		const voiceChannel = message.member.voice.channel;
 		if (!voiceChannel) {
@@ -21,6 +19,7 @@ module.exports = {
 		musicData.voiceChannel = voiceChannel
 		try {
 			let result;
+			let dbqueue = await getQueue(message, client)
 			if (validYTPlaylistURL(args)) result = await addYTPlaylist(message, args, voiceChannel);
 			else if (validYTURL(args)) result = await addYTURL(message, args, voiceChannel);
 			else if (validSPURL(args)) result = await addSPURL(message, args, voiceChannel);
@@ -29,12 +28,13 @@ module.exports = {
         else if (validMSURL(args)) result = await addMSURL(message, args, voiceChannel);
 			else if (validURL(args)) result = await addURL(message, args, voiceChannel);
 			else if (message.attachments.size > 0) result = await addAttachment(message, voiceChannel);
-			else result = await search(message, args, voiceChannel);
+			else if (args !== "") result = await search(message, args, voiceChannel);
+      else if (args == "" && dbqueue.length !== 0 && dbqueue !== 404) result = dbqueue;
+      else return message.reply("Specify a song name of link.");
 			result.forEach(track => {
 				musicData.queue.push(track)
 			});
 			try {
-				let dbqueue = await getQueue(message, client)
 				if (dbqueue.length !== musicData.queue.length &&dbqueue.length + 1 !== musicData.queue.length && dbqueue !== 404) {
 					dbqueue.forEach(track => {
 						musicData.queue.push(track)

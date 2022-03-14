@@ -18,8 +18,10 @@ module.exports = {
 			message.guild.musicData.loopQueue = false;
 			await updateQueue(message, client)
 			message.guild.musicData.songDispatcher.disconnect()
+      message.guild.musicData.songDispatcher = undefined;
 		} catch (err) {
 			message.guild.me.voice.channel.leave()
+      message.guild.musicData.songDispatcher = undefined;
 		}
 		message.channel.send(':wave:');
 	}

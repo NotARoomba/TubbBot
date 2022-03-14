@@ -143,7 +143,7 @@ module.exports = {
 			message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying)
 			message.guild.musicData.queue[0].seek = Math.round(message.guild.musicData.songDispatcher.streamTime / 1000)
 			choice === 403 ? message.guild.musicData.filters.length = 0 : message.guild.musicData.filters.push(choice)
-			await play(message, message.guild.musicData.queue[0].voiceChannel)
+			await play(message, message.guild.musicData.voiceChannel, client)
 			message.channel.send(`Succesfully applied the filter: ${args}`)
 		} catch (err) { }
 	}

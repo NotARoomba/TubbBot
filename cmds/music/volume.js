@@ -8,6 +8,7 @@ module.exports = {
 	async execute(message, args) {
 		if (isValidCommander(message) !== true) return
 		if (isNaN(Number(args))) return message.reply(`that is not a number.`);
+    if (args.length < 1000) args = args.splice(1999)
 		const volume = Number(args) / 100;
 		message.guild.musicData.volume = volume;
 		message.guild.musicData.songDispatcher.setVolume(volume);
