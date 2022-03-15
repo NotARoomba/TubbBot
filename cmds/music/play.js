@@ -91,8 +91,7 @@ module.exports = {
 				encoderArgs: encoderArgs,
 				requestOptions: {
 					headers: {
-						'content-type': 'application/json', 
-						cookie: process.env.COOKIE,
+						Cookie: process.env.COOKIE,
 					}
 				}
 			})
