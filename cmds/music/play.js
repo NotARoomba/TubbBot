@@ -187,31 +187,8 @@ module.exports = {
 				}
 			}
 		})
-    musicData.connection.on('disconnect', async function (e) {
-      	try {
-      if(musicData.nowPlaying !== null) musicData.queue.unshift(musicData.nowPlaying)
-      musicData.nowPlaying = null
-			musicData.loopQueue = false;
-			await updateQueue(message, client)
-			musicData.queue.length = 0
-      musicData.songDispatcher = undefined;
-		} catch (err) {
-      musicData.nowPlaying = null
-			musicData.loopQueue = false;
-			musicData.queue.length = 0
-       musicData.songDispatcher = undefined;
-		}
-      return;
-    })
 		dispatcher.on('error', async function (e) {
 			message.channel.send('Cannot play song!');
-if(musicData.nowPlaying !== null) musicData.queue.unshift(musicData.nowPlaying)
-      musicData.isPlaying = false;
-				musicData.nowPlaying = null;
-				musicData.songDispatcher = null;
-      musicData.connection = null;
-			await updateQueue(message, client)
-      return;
 			if (musicData.queue.length > 1) {
 				musicData.queue.shift();
 				await updateQueue(message, client)
