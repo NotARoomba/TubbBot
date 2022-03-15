@@ -9,7 +9,6 @@ module.exports = {
 		if (isValidCommander(message) !== true) return
 		message.guild.musicData.loopSong = false;
 		await message.guild.musicData.songDispatcher.end();
-		await updateQueue(message, client)
 		message.react("👌");
 	}
 }
