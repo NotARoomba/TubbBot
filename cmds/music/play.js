@@ -10,13 +10,12 @@ module.exports = {
 	permission: ['CONNECT', 'SPEAK', 'USE_VAD', 'MANAGE_MESSAGES'],
 	description: 'Plays music!',
 	async execute(message, args, client) {
-		const musicData = message.guild.musicData
 		const voiceChannel = message.member.voice.channel;
 		if (!voiceChannel) {
 			message.reply('please join a voice channel and try again!');
 			return;
 		}
-		musicData.voiceChannel = voiceChannel
+		message.guild.musicData.voiceChannel = voiceChannel
 		try {
 			let result;
 			let dbqueue = await getQueue(message, client)
@@ -32,12 +31,12 @@ module.exports = {
       else if (args == "" && dbqueue.length !== 0 && dbqueue !== 404) result = dbqueue;
       else return message.reply("Specify a song name of link.");
 			result.forEach(track => {
-				musicData.queue.push(track)
+				message.guild.musicData.queue.push(track)
 			});
 			try {
-				if (dbqueue.length !== musicData.queue.length && dbqueue.length + 1 !== musicData.queue.length && dbqueue !== 404) {
+				if (dbqueue.length !== message.guild.musicData.queue.length && dbqueue.length + 1 !== message.guild.musicData.queue.length && dbqueue !== 404) {
 					dbqueue.forEach(track => {
-						musicData.queue.push(track)
+						message.guild.musicData.queue.push(track)
 					});
 				}
 				await updateQueue(message, client)
@@ -45,11 +44,11 @@ module.exports = {
 			const addembed = new Discord.MessageEmbed()
 				.setColor(result[0].color)
 				.setTitle(`:musical_note: ${result[0].title}`)
-				.setDescription(`Has been added to the queue.\nThis track is #${musicData.queue.length} in the queue`)
+				.setDescription(`Has been added to the queue.\nThis track is #${message.guild.musicData.queue.length} in the queue`)
 				.setThumbnail(result[0].thumbnail)
 				.setURL(result[0].url)
-			if (result.length > 1) addembed.setTitle(`:musical_note: ${result.length} tracks were added.`).setThumbnail(result[0].thumbnail).setDescription(`\nThe tracks are #${musicData.queue.length} in the queue`);
-			if (typeof musicData.songDispatcher == 'undefined' || musicData.songDispatcher == null) {
+			if (result.length > 1) addembed.setTitle(`:musical_note: ${result.length} tracks were added.`).setThumbnail(result[0].thumbnail).setDescription(`\nThe tracks are #${message.guild.musicData.queue.length} in the queue`);
+			if (typeof message.guild.musicData.songDispatcher == 'undefined' || message.guild.musicData.songDispatcher == null) {
 				module.exports.play(message, voiceChannel, client)
 			} else message.channel.send(addembed)
 		} catch (err) {
@@ -57,24 +56,23 @@ module.exports = {
 		}
 	},
 	async play(message, voiceChannel, client) {
-		const musicData = message.guild.musicData
 		const npembed = new Discord.MessageEmbed()
-			.setColor(musicData.queue[0].color)
-			.setTitle(`:notes: Now Playing: ${musicData.queue[0].title}`)
+			.setColor(message.guild.musicData.queue[0].color)
+			.setTitle(`:notes: Now Playing: ${message.guild.musicData.queue[0].title}`)
 			.addFields([
 				{
 					name: `:stopwatch: Duration:`,
-					value: musicData.queue[0].lengthFormatted
+					value: message.guild.musicData.queue[0].lengthFormatted
 				}
 			])
-			.setThumbnail(musicData.queue[0].thumbnail)
-			.setURL(musicData.queue[0].url)
-			.setFooter(`Requested by ${musicData.queue[0].memberDisplayName}!`, musicData.queue[0].memberAvatar)
-		if (musicData.queue[0].isLive == true) npembed.fields = [], npembed.addFields([{ name: `:stopwatch: Duration:`, value: ':red_circle: Live Stream' }])
+			.setThumbnail(message.guild.musicData.queue[0].thumbnail)
+			.setURL(message.guild.musicData.queue[0].url)
+			.setFooter(`Requested by ${message.guild.musicData.queue[0].memberDisplayName}!`, message.guild.musicData.queue[0].memberAvatar)
+		if (message.guild.musicData.queue[0].isLive == true) npembed.fields = [], npembed.addFields([{ name: `:stopwatch: Duration:`, value: ':red_circle: Live Stream' }])
 		let seek = 0
-		musicData.queue[0].seek !== 0 ? seek = musicData.queue[0].seek : message.channel.send(npembed)
+		message.guild.musicData.queue[0].seek !== 0 ? seek = message.guild.musicData.queue[0].seek : message.channel.send(npembed)
 		const encoderArgsFilters = []
-		musicData.filters.forEach(filter => {
+		message.guild.musicData.filters.forEach(filter => {
 			if (filter[Object.keys(filter)[0]] !== '') {
 				encoderArgsFilters.push(filter[Object.keys(filter)[0]])
 			}
@@ -85,8 +83,8 @@ module.exports = {
 		} else {
 			encoderArgs = ['-af', encoderArgsFilters.join(',')]
 		}
-		if (musicData.queue[0].type == 0) {
-			const stream = ytdl(musicData.queue[0].url, {
+		if (message.guild.musicData.queue[0].type == 0) {
+			const stream = ytdl(message.guild.musicData.queue[0].url, {
 				filter: "audioonly",
 				opusEncoded: true,
 				seek: seek,
@@ -94,23 +92,22 @@ module.exports = {
 			})
 			try {
 				await voiceChannel.join().then(async (connection) => {
-					musicData.connection = connection
-					const dispatcher = await connection.play(stream, {
+					message.guild.musicData.connection = connection
+					const message.guild.musicData.songDispatcher = await connection.play(stream, {
 						type: 'opus',
 						bitrate: "auto"
 					})
-					musicData.isPlaying = true;
-					musicData.songDispatcher = dispatcher
-					dispatcher.setVolume(musicData.volume);
-					musicData.nowPlaying = musicData.queue[0];
-					let ended = await musicData.queue.shift()
-					musicData.previous.push(ended)
+					message.guild.musicData.isPlaying = true;
+					message.guild.musicData.songDispatcher.setVolume(message.guild.musicData.volume);
+					message.guild.musicData.nowPlaying = message.guild.musicData.queue[0];
+					let ended = await message.guild.musicData.queue.shift()
+					message.guild.musicData.previous.push(ended)
 				  await updateQueue(message, client)
 					module.exports.musicHandler(message, voiceChannel, client)
 				})
 			} catch (err) { console.log(err) }
-		} else if (musicData.queue[0].type == 1) {
-			const data = await scdl.download(musicData.queue[0].url)
+		} else if (message.guild.musicData.queue[0].type == 1) {
+			const data = await scdl.download(message.guild.musicData.queue[0].url)
 			const stream = ytdl.arbitraryStream(data, {
 				opusEncoded: true,
 				seek: seek,
@@ -118,40 +115,38 @@ module.exports = {
 			})
 			try {
 				await voiceChannel.join().then(async (connection) => {
-					musicData.connection = connection
-					const dispatcher = await connection.play(stream, {
+					message.guild.musicData.connection = connection
+					const message.guild.musicData.songDispatcher = await connection.play(stream, {
 						type: 'opus',
 						bitrate: "auto"
 					})
-					musicData.isPlaying = true;
-					musicData.songDispatcher = dispatcher
-					dispatcher.setVolume(musicData.volume);
-					musicData.nowPlaying = musicData.queue[0];
-					let ended = await musicData.queue.shift()
-					musicData.previous.push(ended)
+					message.guild.musicData.isPlaying = true;
+					message.guild.musicData.songDispatcher.setVolume(message.guild.musicData.volume);
+					message.guild.musicData.nowPlaying = message.guild.musicData.queue[0];
+					let ended = await message.guild.musicData.queue.shift()
+					message.guild.musicData.previous.push(ended)
 				  await updateQueue(message, client)
 					module.exports.musicHandler(message, voiceChannel, client)
 				})
 			} catch (err) { console.log(err) }
-		} else if (musicData.queue[0].type == 2) {
-			const stream = ytdl.arbitraryStream(musicData.queue[0].url, {
+		} else if (message.guild.musicData.queue[0].type == 2) {
+			const stream = ytdl.arbitraryStream(message.guild.musicData.queue[0].url, {
 				opusEncoded: true,
 				seek: seek,
 				encoderArgs: encoderArgs,
 			})
 			try {
 				await voiceChannel.join().then(async (connection) => {
-					musicData.connection = connection
-					const dispatcher = await connection.play(stream, {
+					message.guild.musicData.connection = connection
+					const message.guild.musicData.songDispatcher = await connection.play(stream, {
 						type: 'opus',
 						bitrate: "auto"
 					})
-					musicData.isPlaying = true;
-					musicData.songDispatcher = dispatcher
-					dispatcher.setVolume(musicData.volume);
-					musicData.nowPlaying = musicData.queue[0];
-					let ended = await musicData.queue.shift()
-					musicData.previous.push(ended)
+					message.guild.musicData.isPlaying = true;
+        message.guild.musicData.songDispatcher.setVolume(message.guild.musicData.volume);
+					message.guild.musicData.nowPlaying = message.guild.musicData.queue[0];
+					let ended = await message.guild.musicData.queue.shift()
+					message.guild.musicData.previous.push(ended)
 				  await updateQueue(message, client)
 					module.exports.musicHandler(message, voiceChannel, client)
 				})
@@ -159,27 +154,25 @@ module.exports = {
 		}
 	},
 	musicHandler(message, voiceChannel, client) {
-		const musicData = message.guild.musicData
-		const dispatcher = musicData.songDispatcher
-		dispatcher.on('finish', async () => {
-			if (musicData.loopSong) {
-				musicData.queue.unshift(musicData.nowPlaying);
+		message.guild.musicData.songDispatcher.on('finish', async () => {
+			if (message.guild.musicData.loopSong) {
+				message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying);
 				message.guild.musicData.nowPlaying.seek = 0
 				await updateQueue(message, client)
-			} else if (musicData.loopQueue) {
-				musicData.queue.push(musicData.nowPlaying);
+			} else if (message.guild.musicData.loopQueue) {
+				message.guild.musicData.queue.push(message.guild.musicData.nowPlaying);
 				await updateQueue(message, client)
 			}
-			if (musicData.queue.length >= 1) {
+			if (message.guild.musicData.queue.length >= 1) {
 				module.exports.play(message, voiceChannel, client);
 				return;
 			} else {
-				musicData.isPlaying = false;
-				musicData.nowPlaying = null;
-				musicData.songDispatcher = null;
+				message.guild.musicData.isPlaying = false;
+				message.guild.musicData.nowPlaying = null;
+				message.guild.musicData.songDispatcher = null;
 				if (message.guild.me.voice.channel) {
 					setTimeout(function onTimeOut() {
-						if (musicData.isPlaying == false && message.guild.me.voice.channel) {
+						if (message.guild.musicData.isPlaying == false && message.guild.me.voice.channel) {
 							message.guild.me.voice.channel.leave();
 							message.channel.send(':zzz: Left channel due to inactivity.');
 						}
@@ -187,19 +180,19 @@ module.exports = {
 				}
 			}
 		})
-		dispatcher.on('error', async function (e) {
+		message.guild.musicData.songDispatcher.on('error', async function (e) {
 			message.channel.send('Cannot play song!');
-			if (musicData.queue.length > 1) {
-				musicData.queue.shift();
+			if (message.guild.musicData.queue.length > 1) {
+				message.guild.musicData.queue.shift();
 				await updateQueue(message, client)
 				module.exports.play(message, voiceChannel, client);
 				return;
 			}
-			musicData.queue.length = 0;
-			musicData.isPlaying = false;
-			musicData.nowPlaying = null;
-			musicData.loopSong = false;
-			musicData.songDispatcher = null;
+			message.guild.musicData.queue.length = 0;
+			message.guild.musicData.isPlaying = false;
+			message.guild.musicData.nowPlaying = null;
+			message.guild.musicData.loopSong = false;
+			message.guild.musicData.songDispatcher = null;
 			message.guild.me.voice.channel.leave();
 			return;
 		});

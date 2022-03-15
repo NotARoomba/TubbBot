@@ -24,13 +24,12 @@ module.exports = {
 			queueEmbed.embed.setColor('#dbc300').setTitle('Saved Queues');
 			queueEmbed.build();
 			if (args == 0 || args > queues.length || args.includes('.')) return message.reply(`that is not a valid queue position.`);
-			const musicData = message.guild.musicData
 			const voiceChannel = message.member.voice.channel;
 			if (!voiceChannel) {
 				message.reply('please join a voice channel and try again!');
 				return;
 			}
-			musicData.voiceChannel = voiceChannel
+			message.guild.musicData.voiceChannel = voiceChannel
 			args = parseInt(args) - 1
 			message.guild.musicData.queue = queues[args][1]
 			if (message.guild.musicData.songDispatcher !== null) {

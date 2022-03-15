@@ -7,10 +7,9 @@ module.exports = {
 	async execute(message, args, client) {
 		if (isValidCommander(message) !== true) return
 		if (isNaN(Number(args))) return message.reply(`that is not a number.`)
-		queue = message.guild.musicData.queue
-		if (args == 0 || args > queue.length || args.includes('.')) return message.reply(`that is not a valid queued song.`);
-    let name = queue[args - 1].title
-		queue.splice(args - 1, 1);
+		if (args == 0 || args > message.guild.musicData.queue.length || args.includes('.')) return message.reply(`that is not a valid queued song.`);
+    let name = message.guild.musicData.queue[args - 1].title
+		message.guild.musicData.queue.splice(args - 1, 1);
 		await updateQueue(message, client)
 		message.channel.send(`:wastebasket: Removed \`${name}\` from queue!`);
 	}
