@@ -212,9 +212,7 @@ if(musicData.nowPlaying !== null) musicData.queue.unshift(musicData.nowPlaying)
 				musicData.songDispatcher = null;
       musicData.connection = null;
 			await updateQueue(message, client)
-      module.exports.play(message, voiceChannel, client);
       return;
-			//console.log(e);
 			if (musicData.queue.length > 1) {
 				musicData.queue.shift();
 				await updateQueue(message, client)
