@@ -7,7 +7,6 @@ module.exports = {
 	async execute(message) {
 		if (isValidCommander(message) !== true) return
 		message.guild.musicData.songDispatcher.pause();
-		message.guild.musicData.songDispatcher.pause();
 		message.react("⏸️")
 	}
 }
