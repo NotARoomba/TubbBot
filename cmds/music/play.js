@@ -89,6 +89,11 @@ module.exports = {
 				opusEncoded: true,
 				seek: seek,
 				encoderArgs: encoderArgs,
+				requestOptions: {
+					headers: {
+						cookie: process.env.COOKIE,
+					}
+				}
 			})
 			try {
 				await voiceChannel.join().then(async (connection) => {
