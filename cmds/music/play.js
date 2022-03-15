@@ -201,7 +201,6 @@ module.exports = {
 			musicData.queue.length = 0
        musicData.songDispatcher = undefined;
 		}
-		message.channel.send(':wave:');
       return;
     })
 		dispatcher.on('error', async function (e) {
