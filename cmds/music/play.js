@@ -206,6 +206,10 @@ module.exports = {
 		dispatcher.on('error', async function (e) {
 			message.channel.send('Cannot play song!');
 if(musicData.nowPlaying !== null) musicData.queue.unshift(musicData.nowPlaying)
+      musicData.isPlaying = false;
+				musicData.nowPlaying = null;
+				musicData.songDispatcher = null;
+      musicData.connection = null;
 			await updateQueue(message, client)
       module.exports.play(message, voiceChannel, client);
       return;
