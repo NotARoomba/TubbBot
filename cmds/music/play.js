@@ -93,7 +93,7 @@ module.exports = {
 			try {
 				await voiceChannel.join().then(async (connection) => {
 					message.guild.musicData.connection = connection
-					const message.guild.musicData.songDispatcher = await connection.play(stream, {
+					 message.guild.musicData.songDispatcher = await connection.play(stream, {
 						type: 'opus',
 						bitrate: "auto"
 					})
@@ -116,7 +116,7 @@ module.exports = {
 			try {
 				await voiceChannel.join().then(async (connection) => {
 					message.guild.musicData.connection = connection
-					const message.guild.musicData.songDispatcher = await connection.play(stream, {
+					message.guild.musicData.songDispatcher = await connection.play(stream, {
 						type: 'opus',
 						bitrate: "auto"
 					})
@@ -138,7 +138,7 @@ module.exports = {
 			try {
 				await voiceChannel.join().then(async (connection) => {
 					message.guild.musicData.connection = connection
-					const message.guild.musicData.songDispatcher = await connection.play(stream, {
+					message.guild.musicData.songDispatcher = await connection.play(stream, {
 						type: 'opus',
 						bitrate: "auto"
 					})
@@ -180,6 +180,20 @@ module.exports = {
 				}
 			}
 		})
+    message.guild.musicData.connection.on('disconnect', async function (e) {
+      try {
+      if (message.guild.musicData.nowPlaying !== null) message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying);
+			await updateQueue(message, client)
+			message.guild.musicData.loopQueue = false
+			message.guild.musicData.queue.length = 0
+      message.guild.musicData.songDispatcher = undefined;
+		} catch (err) {
+			message.guild.musicData.loopQueue = false;
+			message.guild.musicData.queue.length = 0
+       message.guild.musicData.songDispatcher = undefined;
+		}
+		message.channel.send(':wave:');
+    })
 		message.guild.musicData.songDispatcher.on('error', async function (e) {
 			message.channel.send('Cannot play song!');
 			if (message.guild.musicData.queue.length > 1) {
