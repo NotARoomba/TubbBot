@@ -187,10 +187,28 @@ module.exports = {
 				}
 			}
 		})
+    musicData.connection.on('disconnect', async function (e) {
+      console.log("a")
+      	try {
+      if(musicData.nowPlaying !== null) musicData.queue.unshift(musicData.nowPlaying)
+        musicData.queue.unshift(musicData.previous[musicData.previous.length - 1] == musicData.nowPlaying ? musicData.previous[musicData.previous.length - 2] : musicData.previous[musicData.previous.length - 1])
+      musicData.nowPlaying = null
+			musicData.loopQueue = false;
+			await updateQueue(message, client)
+			musicData.queue.length = 0
+      musicData.songDispatcher = undefined;
+		} catch (err) {
+      musicData.nowPlaying = null
+			musicData.loopQueue = false;
+			musicData.queue.length = 0
+       musicData.songDispatcher = undefined;
+		}
+		message.channel.send(':wave:');
+    })
 		dispatcher.on('error', async function (e) {
 			message.channel.send('Cannot play song!');
-      message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying)
-message.guild.musicData.queue.unshift(message.guild.musicData.previous[message.guild.musicData.previous.length - 1] == message.guild.musicData.nowPlaying ? message.guild.musicData.previous[message.guild.musicData.previous.length - 2] : message.guild.musicData.previous[message.guild.musicData.previous.length - 1])
+if(musicData.nowPlaying !== null) musicData.queue.unshift(musicData.nowPlaying)
+      console.log(message.guild.musicData.queue)
 			await updateQueue(message, client)
       module.exports.play(message, voiceChannel, client);
       return;
