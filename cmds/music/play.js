@@ -202,6 +202,7 @@ module.exports = {
        musicData.songDispatcher = undefined;
 		}
 		message.channel.send(':wave:');
+      return;
     })
 		dispatcher.on('error', async function (e) {
 			message.channel.send('Cannot play song!');
