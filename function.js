@@ -599,9 +599,8 @@ module.exports = {
 		return groups
 	},
 	async updateQueue(message, client) {
-		const queue = message.guild.musicData.queue
-		if (!queue) return
-		await client.pool.db("Tubb").collection("servers").updateOne({ id: message.guild.id }, { $set: { queue: escape(JSON.stringify(queue)) } })
+		if (!message.guild.musicData.queue || !client.pool) return
+		await client.pool.db("Tubb").collection("servers").updateOne({ id: message.guild.id }, { $set: { queue: escape(JSON.stringify(message.guild.musicData.queue)) } })
 	},
 	async getQueue(message, client) {
 		let result = await client.pool.db("Tubb").collection("servers").find({ id: message.guild.id }).toArray()

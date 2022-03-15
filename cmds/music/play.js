@@ -93,7 +93,7 @@ module.exports = {
 			try {
 				await voiceChannel.join().then(async (connection) => {
 					message.guild.musicData.connection = connection
-					 message.guild.musicData.songDispatcher = await connection.play(stream, {
+					 message.guild.musicData.songDispatcher = await message.guild.musicData.connection.play(stream, {
 						type: 'opus',
 						bitrate: "auto"
 					})
@@ -116,7 +116,7 @@ module.exports = {
 			try {
 				await voiceChannel.join().then(async (connection) => {
 					message.guild.musicData.connection = connection
-					message.guild.musicData.songDispatcher = await connection.play(stream, {
+					message.guild.musicData.songDispatcher = await message.guild.musicData.connection.play(stream, {
 						type: 'opus',
 						bitrate: "auto"
 					})
@@ -138,12 +138,12 @@ module.exports = {
 			try {
 				await voiceChannel.join().then(async (connection) => {
 					message.guild.musicData.connection = connection
-					message.guild.musicData.songDispatcher = await connection.play(stream, {
+					message.guild.musicData.songDispatcher = await message.guild.musicData.connection.play(stream, {
 						type: 'opus',
 						bitrate: "auto"
 					})
 					message.guild.musicData.isPlaying = true;
-        message.guild.musicData.songDispatcher.setVolume(message.guild.musicData.volume);
+message.guild.musicData.songDispatcher.setVolume(message.guild.musicData.volume);
 					message.guild.musicData.nowPlaying = message.guild.musicData.queue[0];
 					let ended = await message.guild.musicData.queue.shift()
 					message.guild.musicData.previous.push(ended)
@@ -156,11 +156,11 @@ module.exports = {
 	musicHandler(message, voiceChannel, client) {
 		message.guild.musicData.songDispatcher.on('finish', async () => {
 			if (message.guild.musicData.loopSong) {
-				message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying);
+				if (message.guild.musicData.nowPlaying !== null) message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying);
 				message.guild.musicData.nowPlaying.seek = 0
 				await updateQueue(message, client)
 			} else if (message.guild.musicData.loopQueue) {
-				message.guild.musicData.queue.push(message.guild.musicData.nowPlaying);
+				if (message.guild.musicData.nowPlaying !== null) message.guild.musicData.queue.push(message.guild.musicData.nowPlaying);
 				await updateQueue(message, client)
 			}
 			if (message.guild.musicData.queue.length >= 1) {
@@ -182,22 +182,24 @@ module.exports = {
 		})
     message.guild.musicData.connection.on('disconnect', async function (e) {
       try {
-      if (message.guild.musicData.nowPlaying !== null) message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying);
+      if (message.guild.musicData.nowPlaying !== null) if (message.guild.musicData.nowPlaying !== null) message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying);
 			await updateQueue(message, client)
+			message.guild.musicData.isPlaying = false;
 			message.guild.musicData.loopQueue = false
 			message.guild.musicData.queue.length = 0
       message.guild.musicData.songDispatcher = undefined;
 		} catch (err) {
+			message.guild.musicData.isPlaying = false;
 			message.guild.musicData.loopQueue = false;
 			message.guild.musicData.queue.length = 0
        message.guild.musicData.songDispatcher = undefined;
 		}
-		message.channel.send(':wave:');
     })
 		message.guild.musicData.songDispatcher.on('error', async function (e) {
 			message.channel.send('Cannot play song!');
 			if (message.guild.musicData.queue.length > 1) {
-				message.guild.musicData.queue.shift();
+				let ended = await message.guild.musicData.queue.shift()
+				message.guild.musicData.previous.push(ended)
 				await updateQueue(message, client)
 				module.exports.play(message, voiceChannel, client);
 				return;

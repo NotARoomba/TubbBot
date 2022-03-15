@@ -16,12 +16,14 @@ module.exports = {
 		}
 		try {
       if (message.guild.musicData.nowPlaying !== null) message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying)
-			message.guild.musicData.loopQueue = false;
 			await updateQueue(message, client)
+			message.guild.musicData.loopQueue = false;
+			message.guild.musicData.isPlaying = false;
 			message.guild.musicData.queue.length = 0
     message.guild.musicData.songDispatcher.disconnect()
       message.guild.musicData.songDispatcher = undefined;
 		} catch (err) {
+			message.guild.musicData.isPlaying = false;
 			message.guild.musicData.loopQueue = false;
 			message.guild.musicData.queue.length = 0
 			message.guild.me.voice.channel.leave()
