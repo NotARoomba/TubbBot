@@ -107,7 +107,7 @@ module.exports = {
 					message.guild.musicData.nowPlaying = message.guild.musicData.queue[0];
 					let ended = await message.guild.musicData.queue.shift()
 					message.guild.musicData.previous.push(ended)
-				  await updateQueue(message, client)
+				  	await updateQueue(message, client)
 					module.exports.musicHandler(message, voiceChannel, client)
 				})
 			} catch (err) { console.log(err) }
