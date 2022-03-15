@@ -190,7 +190,6 @@ module.exports = {
     musicData.connection.on('disconnect', async function (e) {
       	try {
       if(musicData.nowPlaying !== null) musicData.queue.unshift(musicData.nowPlaying)
-if (musicData.previous.length !== 0) musicData.queue.unshift(musicData.previous[musicData.previous.length - 1] == musicData.nowPlaying ? musicData.previous[musicData.previous.length - 2] : musicData.previous[musicData.previous.length - 1])
       musicData.nowPlaying = null
 			musicData.loopQueue = false;
 			await updateQueue(message, client)
@@ -207,7 +206,6 @@ if (musicData.previous.length !== 0) musicData.queue.unshift(musicData.previous[
 		dispatcher.on('error', async function (e) {
 			message.channel.send('Cannot play song!');
 if(musicData.nowPlaying !== null) musicData.queue.unshift(musicData.nowPlaying)
-      if (musicData.previous.length !== 0) musicData.queue.unshift(musicData.previous[musicData.previous.length - 1] == musicData.nowPlaying ? musicData.previous[musicData.previous.length - 2] : musicData.previous[musicData.previous.length - 1])
 			await updateQueue(message, client)
       module.exports.play(message, voiceChannel, client);
       return;
