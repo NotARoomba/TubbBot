@@ -599,7 +599,6 @@ module.exports = {
 		return groups
 	},
 	async updateQueue(message, client) {
-		console.log(message, client)
 		if (!message.guild.musicData.queue || !client.pool) return
 		await client.pool.db("Tubb").collection("servers").updateOne({ id: message.guild.id }, { $set: { queue: escape(JSON.stringify(message.guild.musicData.queue)) } })
 	},
