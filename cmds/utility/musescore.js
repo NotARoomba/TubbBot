@@ -1,5 +1,5 @@
 //Thanks to North-West-Wind https://github.com/North-West-Wind/NWWbot
-const muse = require("musescore-metadata").default;
+const { muse } = require("musescore-metadata");
 const Discord = require("discord.js")
 const Pagination = require('discord-paginationembed');
 const rp = require("request-promise-native");
@@ -92,6 +92,7 @@ module.exports = {
 			const store = await findValueByPrefix(stores.find(x => x.attribs && x.attribs.class && x.attribs.class.match(/^js-\w+$/)).attribs, "data-");
 			var data = JSON.parse(store);
 			var scores = data.store.page.data.scores;
+      console.log(scores)
 			for (i = 0; i < scores.length - 1; i++) {
 				if (scores[i].user.id !== 39593115 && scores[i].user.id !== 39593079) {
 					var data = await muse(scores[i].url);
