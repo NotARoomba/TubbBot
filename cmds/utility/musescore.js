@@ -92,7 +92,6 @@ module.exports = {
 			const store = await findValueByPrefix(stores.find(x => x.attribs && x.attribs.class && x.attribs.class.match(/^js-\w+$/)).attribs, "data-");
 			var data = JSON.parse(store);
 			var scores = data.store.page.data.scores;
-      console.log(scores)
 			for (i = 0; i < scores.length - 1; i++) {
 				if (scores[i].user.id !== 39593115 && scores[i].user.id !== 39593079) {
 					var data = await muse(scores[i].url);
@@ -101,15 +100,15 @@ module.exports = {
 						.setTitle(data.title)
 						.setURL(data.url)
 						.setThumbnail(data.thumbnail)
-						.setDescription(`Description: **${data.description}**\n\nTo download, please copy the URL and use \`${prefix}${this.name} <link>\``)
+						.setDescription(`**${data.body}**\n\nTo download, please use \`${prefix}${this.name} ${data.url}\``)
 						.addField("ID", data.id, true)
 						.addField("Author", data.user.name, true)
 						.addField("Duration", data.duration, true)
-						.addField("Page Count", data.pageCount, true)
-						.addField("Date Created", new Date(data.created * 1000).toLocaleString(), true)
-						.addField("Date Updated", new Date(data.updated * 1000).toLocaleString(), true)
+						.addField("Page Count", data.pages_count, true)
+						.addField("Date Created", new Date(data.date_created * 1000).toLocaleString(), true)
+						.addField("Date Updated", new Date(data.date_updated * 1000).toLocaleString(), true)
 						.addField(`Tags [${data.tags.length}]`, data.tags.length > 0 ? data.tags.join(", ") : "None")
-						.addField(`Parts [${data.parts.length}]`, data.parts.length > 0 ? data.parts.join(", ") : "None")
+						.addField(`Parts [${data.parts_names.length}]`, data.parts_names.length > 0 ? data.parts_names.join(", ") : "None")
 						.setFooter('', `${client.user.avatarURL('webp', 16)}`)
 					embeds.push(em);
 				}
