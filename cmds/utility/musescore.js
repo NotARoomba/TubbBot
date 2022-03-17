@@ -48,7 +48,8 @@ module.exports = {
 					await mesg.delete();
 				} catch (err) {
           if (err.name == "DiscordAPIError") {
-            await mesg.edit(mp3.url)
+					await mesg.delete();      
+          message.channel.send(new Discord.MessageEmbed().setColor('#1F74BD').setDescription(`The mp3 was too big to send through Discord. You can download the mp3 [here](${mp3.url}).`).setTitle("Failed to send MP3!"))
           } else {
 					console.log(err)
 					await mesg.edit(`Failed to generate MP3! \`${err.message}\``);
