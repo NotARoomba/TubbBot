@@ -155,7 +155,7 @@ module.exports = {
 				msg = await message.channel.send(`Adding track ${f}/${tracks.length}`)
 				for (var i = 0; i < tracks.length; i++) {
 					f++;
-					msg.edit(`Adding track ${f}/${tracks.length}`)
+					await msg.edit(`Adding track ${f}/${tracks.length}`)
 					var returned = [];
 					try {
 						const searched = await ytsr(`${tracks[i].track.artists[0].name} - ${tracks[i].track.name}`, { limit: 20 });
@@ -214,7 +214,7 @@ module.exports = {
 				msg = await message.channel.send(`Adding track ${f}/${tracks.length}`)
 				for (var i = 0; i < tracks.length; i++) {
 					f++;
-					msg.edit(`Adding track ${f}/${tracks.length}`)
+					await msg.edit(`Adding track ${f}/${tracks.length}`)
 					var returned = [];
 					try {
 						const searched = await ytsr(`${tracks[i].artists[0].name} - ${tracks[i].name}`, { limit: 20 });
@@ -314,7 +314,11 @@ module.exports = {
 		} catch (err) {
 			if (err) {
 				const data = await sc.getPlaylist(query)
+        f = 0;
+        msg = await message.channel.send(`Adding track ${f}/${data.tracks.length}`)
 				for (const track of data.tracks) {
+          f++;
+          await msg.edit(`Adding track ${f}/${data.tracks.length}`)
 					const length = Math.round(track.duration / 1000);
 					const songLength = moment.duration(length, "seconds").format();
 					results.push({

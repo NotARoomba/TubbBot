@@ -47,7 +47,7 @@
         "sanitize-filename": "^1.6.3",
         "simple-youtube-api": "^5.2.1",
         "soundcloud-downloader": "^1.0.0",
-        "soundcloud-scraper": "^5.0.2",
+        "soundcloud-scraper": "4.0.1",
         "spotify-web-api-node": "^5.0.2",
         "svg-to-pdfkit": "^0.1.8",
         "systeminformation": "^5.11.8",
