@@ -112,7 +112,7 @@ module.exports = {
 				})
 			} catch (err) { console.log(err) }
 		} else if (message.guild.musicData.queue[0].type == 1) {
-			const data = await scdl.download(message.guild.musicData.queue[0].url)
+			const data = await scdl.download(message.guild.musicData.queue[0].url, process.env.SCID)
 			const stream = ytdl.arbitraryStream(data, {
 				opusEncoded: true,
 				seek: seek,
