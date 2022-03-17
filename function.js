@@ -8,8 +8,7 @@ require("moment-duration-format")(moment);
 const fetch = require("node-fetch")
 const puppeteer = require("puppeteer-core")
 const muse = require("musescore-metadata").default;
-const SoundCloud = require("soundcloud-scraper");
-const sc = new SoundCloud.Client(process.env.SOUNDCLOUD);
+const scdl = require('soundcloud-downloader').default
 var SpotifyWebApi = require('spotify-web-api-node');
 var spotifyApi = new SpotifyWebApi({
 	clientId: process.env.SPOTIFY_CLIENT_ID,
@@ -65,7 +64,7 @@ module.exports = {
 	validSPURL: (str) => !!str.match(/open.spotify.com\/.*/),
 	validGDURL: (str) => !!str.match(/^(https?)?:\/\/drive\.google\.com\/(file\/d\/(?<id>.*?)\/(?:edit|view)\?usp=sharing|open\?id=(?<id1>.*?)$)/),
 	validGDFolderURL: (str) => !!str.match(/^(https?)?:\/\/drive\.google\.com\/drive\/folders\/[\w\-]+(\?usp=sharing)?$/),
-	validSCURL: (str) => !!str.match(/^https?:\/\/(soundcloud\.com|snd\.sc)\/(.+)?/),
+	validSCURL: (str) => !!str.match(/^https?:\/\/(api\.|m\.)?(soundcloud\.com|snd\.sc)\/(.*)$/),
 	validMSURL: (str) => !!str.match(/^(https?:\/\/)?musescore\.com\/(user\/\d+\/scores\/\d+|[\w-]+\/(scores\/\d+|[\w-]+))[#\?]?$/),
 	async requestStream(url) {
 		const fetch = require("node-fetch").default;
@@ -309,22 +308,20 @@ module.exports = {
 	},
 	async addSCURL(message, query, voiceChannel) {
 		const results = []
-		try {
-			await sc.getSongInfo(query)
-		} catch (err) {
-			if (err) {
-				const data = await sc.getPlaylist(query)
+		if (scdl.isPlaylistURL(query)) {
+				const data = await scdl.getSetInfo(query)
         f = 0;
         msg = await message.channel.send(`Adding track ${f}/${data.tracks.length}`)
 				for (const track of data.tracks) {
           f++;
+          console.log(track)
           await msg.edit(`Adding track ${f}/${data.tracks.length}`)
 					const length = Math.round(track.duration / 1000);
 					const songLength = moment.duration(length, "seconds").format();
 					results.push({
 						title: track.title,
-						url: track.url,
-						thumbnail: track.thumbnail,
+						url: track.uri,
+						thumbnail: track.artwork_url,
 						isLive: false,
 						lengthFormatted: songLength,
 						lengthSeconds: length,
@@ -335,17 +332,15 @@ module.exports = {
 						memberDisplayName: message.member.user.username,
 						memberAvatar: message.member.user.avatarURL('webp', false, 16)
 					});
-
 				}
-				return results
 			} else {
-				const data = await sc.getSongInfo(query)
+				const data = await scdl.getInfo(query)
 				const length = Math.round(data.duration / 1000);
 				const songLength = moment.duration(length, "seconds").format();
 				results.push({
 					title: data.title,
-					url: data.url,
-					thumbnail: data.thumbnail,
+					url: data.uri,
+					thumbnail: data.artwork_url,
 					isLive: false,
 					lengthFormatted: songLength,
 					lengthSeconds: length,
@@ -356,9 +351,8 @@ module.exports = {
 					memberDisplayName: message.member.user.username,
 					memberAvatar: message.member.user.avatarURL('webp', false, 16)
 				});
-				return results
-			}
 		}
+return results
 	},
 	async addURL(message, query, voiceChannel) {
 		const results = []
