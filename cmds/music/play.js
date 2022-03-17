@@ -201,6 +201,7 @@ message.guild.musicData.songDispatcher.setVolume(message.guild.musicData.volume)
 		}
     })
 		message.guild.musicData.songDispatcher.on('error', async function (e) {
+      console.log(e)
 			message.channel.send('Cannot play song!');
 			if (message.guild.musicData.queue.length > 1) {
 				let ended = await message.guild.musicData.queue.shift()
