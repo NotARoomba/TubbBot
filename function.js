@@ -314,7 +314,6 @@ module.exports = {
         msg = await message.channel.send(`Adding track ${f}/${data.tracks.length}`)
 				for (const track of data.tracks) {
           f++;
-          console.log(track)
           await msg.edit(`Adding track ${f}/${data.tracks.length}`)
 					const length = Math.round(track.duration / 1000);
 					const songLength = moment.duration(length, "seconds").format();
