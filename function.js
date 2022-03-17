@@ -7,7 +7,7 @@ const moment = require("moment");
 require("moment-duration-format")(moment);
 const fetch = require("node-fetch")
 const puppeteer = require("puppeteer-core")
-const muse = require("musescore-metadata").default;
+const { muse } = require("musescore-metadata");
 const scdl = require('soundcloud-downloader').default
 var SpotifyWebApi = require('spotify-web-api-node');
 var spotifyApi = new SpotifyWebApi({
