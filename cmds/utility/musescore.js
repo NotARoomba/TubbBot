@@ -47,8 +47,12 @@ module.exports = {
 					else await message.channel.send(att);
 					await mesg.delete();
 				} catch (err) {
+          if (err.name == "DiscordAPIError") {
+            await mesg.edit(mp3.url)
+          } else {
 					console.log(err)
 					await mesg.edit(`Failed to generate MP3! \`${err.message}\``);
+          }
 				}
 				mesg = await message.channel.send("Generating PDF...");
 				const { doc, hasPDF, err } = await getPDF(args, data);
