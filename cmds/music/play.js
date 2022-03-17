@@ -86,7 +86,7 @@ module.exports = {
 		if (message.guild.musicData.queue[0].type == 0) {
 			const stream = ytdl(message.guild.musicData.queue[0].url, {
 				filter: "audioonly",
-        highWaterMark: 1 << 25;
+        highWaterMark: 1 << 25,
 				opusEncoded: true,
 				seek: seek,
 				encoderArgs: encoderArgs,
