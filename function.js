@@ -598,9 +598,6 @@ return results
 	},
 	async updateQueue(message, client) {
 		if (!message.guild.musicData.queue) return
-    client.pool = await MongoClient.connect(process.env.MONGO, { useNewUrlParser: true, useUnifiedTopology: true, keepAlive: true }).catch((err) => {
-        console.log(err)
-    });
 		await client.pool.db("Tubb").collection("servers").updateOne({ id: message.guild.id }, { $set: { queue: escape(JSON.stringify(message.guild.musicData.queue)) } })
 	},
 	async getQueue(message, client) {
