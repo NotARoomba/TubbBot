@@ -170,7 +170,7 @@ message.guild.musicData.songDispatcher.setVolume(message.guild.musicData.volume)
 				await updateQueue(message, client)
 			}
 			if (message.guild.musicData.queue.length >= 1) {
-				module.exports.play(message, voiceChannel, client);
+				module.exports.play(message, message.guild.musicData.voiceChannel, client);
 				return;
 			} else {
 				message.guild.musicData.isPlaying = false;
@@ -208,7 +208,7 @@ message.guild.musicData.songDispatcher.setVolume(message.guild.musicData.volume)
 				let ended = await message.guild.musicData.queue.shift()
 				message.guild.musicData.previous.push(ended)
 				await updateQueue(message, client)
-				module.exports.play(message, voiceChannel, client);
+				module.exports.play(message, message.guild.musicData.voiceChannel, client);
 				return;
 			}
 			message.guild.musicData.queue.length = 0;
