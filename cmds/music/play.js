@@ -160,7 +160,7 @@ message.guild.musicData.songDispatcher.setVolume(message.guild.musicData.volume)
 		}
 	},
 	musicHandler(message, voiceChannel, client) {
-		message.guild.musicData.songDispatcher.on('finish', async () => {
+		message.guild.musicData.songDispatcher.once('finish', async () => {
 			if (message.guild.musicData.loopSong) {
 				if (message.guild.musicData.nowPlaying !== null) message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying);
 				message.guild.musicData.nowPlaying.seek = 0
@@ -186,7 +186,7 @@ message.guild.musicData.songDispatcher.setVolume(message.guild.musicData.volume)
 				}
 			}
 		})
-    message.guild.musicData.connection.on('disconnect', async function (e) {
+    message.guild.musicData.connection.once('disconnect', async function (e) {
       try {
       if (message.guild.musicData.nowPlaying !== null) if (message.guild.musicData.nowPlaying !== null) message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying);
 			await updateQueue(message, client)
@@ -201,7 +201,7 @@ message.guild.musicData.songDispatcher.setVolume(message.guild.musicData.volume)
        message.guild.musicData.songDispatcher = undefined;
 		}
     })
-		message.guild.musicData.songDispatcher.on('error', async function (e) {
+		message.guild.musicData.songDispatcher.once('error', async function (e) {
       console.log(e)
 			message.channel.send('Cannot play song!');
 			if (message.guild.musicData.queue.length > 1) {
