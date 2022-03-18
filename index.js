@@ -154,10 +154,6 @@ client.once('voiceStateUpdate', async (___, newState) => {
 	}
 	if (newState.member.user.bot && newState.channelID && newState.member.user.id == client.user.id && !newState.selfDeaf) {
 		newState.setSelfDeaf(true);
-    if (___ != newState) {
-      newState.guild.musicData.voiceChannel = newState;
-      await newState.join();
-  }
 	}
 });
 
