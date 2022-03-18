@@ -3,6 +3,7 @@ const ytsr2 = require("youtube-sr").default;
 const ytpl = require("ytpl");
 const Discord = require('discord.js');
 const ytdl = require("ytdl-core");
+const { MongoClient } = require('mongodb');
 const moment = require("moment");
 require("moment-duration-format")(moment);
 const fetch = require("node-fetch")
@@ -596,7 +597,10 @@ return results
 		return groups
 	},
 	async updateQueue(message, client) {
-		if (!message.guild.musicData.queue || !client.pool) return
+		if (!message.guild.musicData.queue) return
+    client.pool = await MongoClient.connect(process.env.MONGO, { useNewUrlParser: true, useUnifiedTopology: true, keepAlive: true }).catch((err) => {
+        console.log(err)
+    });
 		await client.pool.db("Tubb").collection("servers").updateOne({ id: message.guild.id }, { $set: { queue: escape(JSON.stringify(message.guild.musicData.queue)) } })
 	},
 	async getQueue(message, client) {

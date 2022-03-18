@@ -9,8 +9,7 @@ module.exports = {
 		if (isValidCommander(message) !== true) return
 		if (isNaN(parseInt(args))) return message.reply(`that is not a parseInt.`)
 		if (parseInt(args) < 0 || parseInt(args) > message.guild.musicData.nowPlaying.lengthSeconds) return message.reply(`that is not a valid time.`);
-		message.guild.musicData.songDispatcher.pause();
-		message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying)
+		message.guild.musicData.songDispatcher.pause(); message.guild.musicData.queue.unshift(message.guild.musicData.nowPlaying)
 		message.guild.musicData.queue[0].seek = Math.round(parseInt(args))
 		await play(message, message.guild.musicData.queue[0].voiceChannel, client)
 		await updateQueue(message, client)
