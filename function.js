@@ -159,7 +159,7 @@ module.exports = {
 					var returned = [];
 					try {
 						const searched = await ytsr(`${tracks[i].track.artists[0].name} - ${tracks[i].track.name}`, { limit: 20 });
-						returned = searched.items.filter(x => x.type === "video" && x.duration.split(":").length < 3);
+						returned = searched.items.filter(x => x.type === "video" && .xduration !== null && x.duration.split(":").length < 3);
 					} catch (err) {
 						console.log(err)
 						try {
