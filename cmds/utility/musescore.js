@@ -110,6 +110,7 @@ module.exports = {
 						.addField("Author", data.user.name, true)
 						.addField("Duration", data.duration, true)
 						.addField("Page Count", data.pages_count, true)
+            .addField("Key Signature", data.keysig, true)
 						.addField("Date Created", new Date(data.date_created * 1000).toLocaleString(), true)
 						.addField("Date Updated", new Date(data.date_updated * 1000).toLocaleString(), true)
 						.addField(`Tags [${data.tags.length}]`, data.tags.length > 0 ? data.tags.join(", ") : "None")
