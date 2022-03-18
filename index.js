@@ -156,6 +156,7 @@ client.once('voiceStateUpdate', async (___, newState) => {
 		newState.setSelfDeaf(true);
     if (___ != newState) {
       newState.guild.musicData.voiceChannel = newState;
+      await newState.join();
   }
 	}
 });
