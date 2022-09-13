@@ -1,6 +1,11 @@
 const Discord = require('discord.js');
-const { Intents } = require('discord.js');
-const client = new Discord.Client({ intents: [Intents.FLAGS.GUILDS] });
+const { REST } = require('@discordjs/rest');
+const { Routes, GatewayIntentBits } = require('discord.js');
+const client = new Discord.Client({ intents: [
+	GatewayIntentBits.Guilds,
+	GatewayIntentBits.GuildMessages,
+	GatewayIntentBits.MessageContent,
+	GatewayIntentBits.GuildMembers,] });
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
 var read = require('fs-readdir-recursive');
@@ -52,7 +57,27 @@ client.on('ready', async () => {
 			let cmd = e.replace(`\\`, '/')
 			let cmdpath = require(`./cmds/${cmd}`)
 			cmds.set(cmdpath.name, cmdpath);
+			if (cmdpath.data!=undefined) {
+				commands.push(cmdpath.data.toJSON());
+			}
 		});
+		const rest = new REST({ version: '10' }).setToken(token);
+
+	(async () => {
+	try {
+		console.log(`Started refreshing ${commands.length} application (/) commands.`);
+
+		const data = await rest.put(
+			Routes.applicationGuildCommands(clientId, guildId),
+			{ body: commands },
+		);
+
+		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+	} catch (error) {
+		console.error(error);
+	}
+})();
+
 });
 client.on('message', async (message) => {
 	if (message.channel.type == "dm") return;

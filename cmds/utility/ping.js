@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	name: 'ping',
 	group: 'utility',
@@ -12,3 +13,6 @@ module.exports = {
 		message.reply(waitEmbed)
 	}
 }
+const data = new SlashCommandBuilder()
+.setName(this.name)
+.setDescription(this.description)
